@@ -5,7 +5,7 @@
     using UnityEngine;
     using UnityEditor;
 
-    public class ScreenEditor : UnityChoseKunEditor
+    public class ScreenEditor
     {
         ScreenKun m_screenKun;
         ScreenKun screenKun {
@@ -108,12 +108,12 @@
             EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Pull"))
             {                
-                SendMessage<ScreenKun>(UnityChoseKun.MessageID.ScreenPull, screenKun);
+                UnityChoseKunEditor.SendMessage<ScreenKun>(UnityChoseKun.MessageID.ScreenPull, screenKun);
             }
 
             if (GUILayout.Button("Push"))
             {                
-                SendMessage<ScreenKun>(UnityChoseKun.MessageID.ScreenPush,screenKun);
+                UnityChoseKunEditor.SendMessage<ScreenKun>(UnityChoseKun.MessageID.ScreenPush,screenKun);
             }
             EditorGUILayout.EndHorizontal();
 

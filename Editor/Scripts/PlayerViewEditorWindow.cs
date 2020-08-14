@@ -1,4 +1,4 @@
-﻿namespace Utj.UnityPlayerViewerKun
+﻿namespace Utj.UnityChoseKun
 {
     using System.Collections;
     using System.Collections.Generic;
@@ -12,18 +12,18 @@
 
     // UnityPlayerViewerKunのEditorEditor側の処理
     // Katsumasa Kimura
-    public class UnityPlayerViewerKunEditorWindow : EditorWindow
+    public class PlayerViewKunEditorWindow : EditorWindow
     {
 
         /// <summary>
         /// 変数の定義 
         /// </summary>
         
-        static UnityPlayerViewerKunEditorWindow window;        
+        static PlayerViewKunEditorWindow window;        
         IConnectionState attachProfilerState;                
-        UnityPlayerViewerKun.EditorSendData editorSendData;
+        PlayerView.EditorSendData editorSendData;
         Texture2D playerViewTexture;
-        bool isInit = false;
+        
 
         /// <summary>
         /// 関数の定義 
@@ -33,7 +33,7 @@
         {
             if (window == null)
             {
-                window = (UnityPlayerViewerKunEditorWindow)EditorWindow.GetWindow(typeof(UnityPlayerViewerKunEditorWindow));
+                window = (PlayerViewKunEditorWindow)EditorWindow.GetWindow(typeof(PlayerViewKunEditorWindow));
             }
             window.titleContent = new GUIContent("Player");
             window.wantsMouseMove = true;
@@ -47,11 +47,9 @@
         //
         
         private void Awake()
-        {
-            
+        {            
             UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Initialize();
-            UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Register(UnityPlayerViewerKun.kMsgSendPlayerToEditor, OnMessageEvent);
-
+            UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Register(PlayerView.kMsgSendPlayerToEditor, OnMessageEvent);
             playerViewTexture = new Texture2D(2960, 1140, TextureFormat.RGBA32, false);
             editorSendData.frameCount = 1;
         }
@@ -59,12 +57,10 @@
         //
         private void OnDestroy()
         {            
-            UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Unregister(UnityPlayerViewerKun.kMsgSendPlayerToEditor, OnMessageEvent);
+            UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Unregister(PlayerView.kMsgSendPlayerToEditor, OnMessageEvent);
             UnityEditor.Networking.PlayerConnection.EditorConnection.instance.DisconnectAll();
-
             if (playerViewTexture == null)
                 DestroyImmediate(playerViewTexture);
-
             window = null;
         }
 
@@ -171,7 +167,7 @@
             Debug.Log("SendMessage");
             var json = JsonUtility.ToJson(obj);
             var bytes = System.Text.Encoding.ASCII.GetBytes(json);
-            EditorConnection.instance.Send(UnityPlayerViewerKun.kMsgSendEditorToPlayer, bytes);
+            EditorConnection.instance.Send(PlayerView.kMsgSendEditorToPlayer, bytes);
         }
 
 
@@ -212,13 +208,13 @@
             EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Play"))
             {             
-                editorSendData.command = UnityPlayerViewerKun.Command.Play;
+                editorSendData.command = PlayerView.Command.Play;
                 SendMessage(editorSendData);
             }
 
             if (GUILayout.Button("Stop"))
             {
-                editorSendData.command = UnityPlayerViewerKun.Command.Stop;
+                editorSendData.command = PlayerView.Command.Stop;
                 SendMessage(editorSendData);
             }
             EditorGUILayout.EndHorizontal();

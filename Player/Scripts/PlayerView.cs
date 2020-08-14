@@ -1,4 +1,4 @@
-﻿namespace Utj.UnityPlayerViewerKun
+﻿namespace Utj.UnityChoseKun
 {
     using System.Collections;
     using System.Collections.Generic;
@@ -7,7 +7,7 @@
 
     // UnityPlayerViewewKunの共通クラス
     // Katsumasa Kimura
-    public class UnityPlayerViewerKun
+    public class PlayerView
     {
         
 
@@ -26,7 +26,7 @@
         public struct EditorSendData
         {
             
-            public UnityPlayerViewerKun.Command command;
+            public PlayerView.Command command;
             public int frameCount;
             public bool isUseAsyncGPUReadback;
 

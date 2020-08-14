@@ -21,18 +21,18 @@
    
 
     // <summary>UnityChoseKunのEditorWindow部分</summary>
-    public class UnityChoseKunEditorWindow : EditorWindow
+    public class InspectorViewEditorWindow : EditorWindow
     {
         public static class Styles
         {                    
-            public static readonly GUIContent TitleContent = new GUIContent("InspectorKun", (Texture2D)EditorGUIUtility.Load("d_UnityEditor.InspectorWindow"));
+            public static readonly GUIContent TitleContent = new GUIContent("Player Inspector", (Texture2D)EditorGUIUtility.Load("d_UnityEditor.InspectorWindow"));
         }
 
         delegate void Task();
         delegate void OnMessageFunc(string json);
         IConnectionState m_attachProfilerState;
         bool m_registered = false;
-        static UnityChoseKunEditorWindow window;
+        static InspectorViewEditorWindow window;
         int toolbarIdx = 0;
         ScreenEditor m_editorScrren;
         ScreenEditor editorScrren{get {if(m_editorScrren == null ){m_editorScrren = new ScreenEditor();}return m_editorScrren;}}        
@@ -51,7 +51,7 @@
         {
             if (window == null)
             {
-                window = (UnityChoseKunEditorWindow)EditorWindow.GetWindow(typeof(UnityChoseKunEditorWindow));
+                window = (InspectorViewEditorWindow)EditorWindow.GetWindow(typeof(InspectorViewEditorWindow));
             }            
             window.titleContent = Styles.TitleContent;
             window.wantsMouseMove = true;

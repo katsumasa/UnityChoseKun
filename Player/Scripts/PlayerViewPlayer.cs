@@ -1,4 +1,4 @@
-﻿namespace Utj.UnityPlayerViewerKun
+﻿namespace Utj.UnityChoseKun
 {
     using System.Collections;
     using System.Collections.Generic;
@@ -9,7 +9,7 @@
     using Unity.Collections;
 
     
-    public class UnityPlayerViewerKunPlayer : MonoBehaviour
+    public class PlayerViewPlayer : MonoBehaviour
     {
 
         enum CaptureMode
@@ -32,7 +32,7 @@
         bool isAsyncGPUReadBackFinish;
         
        
-        UnityPlayerViewerKun.EditorSendData editorSendData;
+        PlayerView.EditorSendData editorSendData;
 
 
 
@@ -60,7 +60,7 @@
         private void OnEnable()
         {
             Debug.Log("OnEnable");
-            PlayerConnection.instance.Register(UnityPlayerViewerKun.kMsgSendEditorToPlayer, OnMessageEvent);
+            PlayerConnection.instance.Register(PlayerView.kMsgSendEditorToPlayer, OnMessageEvent);
         }
 
 
@@ -68,7 +68,7 @@
         private void OnDisable()
         {
             Debug.Log("OnDisable");
-            PlayerConnection.instance.Unregister(UnityPlayerViewerKun.kMsgSendEditorToPlayer, OnMessageEvent);
+            PlayerConnection.instance.Unregister(PlayerView.kMsgSendEditorToPlayer, OnMessageEvent);
         }
 
 
@@ -89,10 +89,10 @@
         {
             Debug.Log("OnMessageEvent");
             var json = System.Text.Encoding.ASCII.GetString(args.data);
-            editorSendData = JsonUtility.FromJson<UnityPlayerViewerKun.EditorSendData>(json);
+            editorSendData = JsonUtility.FromJson<PlayerView.EditorSendData>(json);
             switch (editorSendData.command)
             {
-                case UnityPlayerViewerKun.Command.Play:
+                case PlayerView.Command.Play:
                     {
                         frameCountMax = editorSendData.frameCount;
                         frameCount = editorSendData.frameCount;
@@ -111,13 +111,13 @@
                     }
                     break;
 
-                case UnityPlayerViewerKun.Command.Pause:
+                case PlayerView.Command.Pause:
                     {
                         isPause = !isPause;
                     }
                     break;
 
-                case UnityPlayerViewerKun.Command.Stop:
+                case PlayerView.Command.Stop:
                     {
                         isPlay = false;
                     }
@@ -188,7 +188,7 @@
                             idx += SetInt32ToBytes(0, bytes, idx);
                             System.Array.Copy(texture2D.GetRawTextureData(), 0, bytes, idx, texture2D.GetRawTextureData().Length);                                                     
                             PlayerConnection.instance.Send(
-                                UnityPlayerViewerKun.kMsgSendPlayerToEditor,
+                                PlayerView.kMsgSendPlayerToEditor,
                                 bytes
                             );
                             Destroy(texture2D);
@@ -219,7 +219,7 @@
                 idx += SetInt32ToBytes(1, bytes, idx);
                 NativeArray<byte>.Copy(request.GetData<byte>(), 0,bytes, idx, request.GetData<byte>().Length);
                 PlayerConnection.instance.Send(
-                    UnityPlayerViewerKun.kMsgSendPlayerToEditor,
+                    PlayerView.kMsgSendPlayerToEditor,
                     bytes
                     );
             }

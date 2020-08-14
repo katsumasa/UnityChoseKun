@@ -7,19 +7,13 @@
     using UnityEditor;
     using System.Linq;
 
-    public class TimeEditor : UnityChoseKunEditor
+    public class TimeEditor
     {
         TimeKun m_timeKun;
         TimeKun timeKun {
-            get {
-                if(m_timeKun == null){
-                    m_timeKun = new TimeKun();
-                }
-                return m_timeKun;                
-            }
+            get {if(m_timeKun == null){m_timeKun = new TimeKun();}return m_timeKun;}
             set {m_timeKun = value;}
         }
-
 
         public void OnGUI()
         {
@@ -50,21 +44,19 @@
             }
             if (GUILayout.Button("Pull"))
             {                
-                SendMessage<TimeKun>(UnityChoseKun.MessageID.TimePull,timeKun);
+                UnityChoseKunEditor.SendMessage<TimeKun>(UnityChoseKun.MessageID.TimePull,timeKun);
             }
             if (GUILayout.Button("Push"))
             {                
-                SendMessage<TimeKun>(UnityChoseKun.MessageID.TimePush,timeKun);
+                UnityChoseKunEditor.SendMessage<TimeKun>(UnityChoseKun.MessageID.TimePush,timeKun);
             }
             EditorGUILayout.EndHorizontal();
         }
-
 
         public void OnMessageEvent(string json)
         {
             timeKun = JsonUtility.FromJson<TimeKun>(json);
         }
-
 
     }
 }

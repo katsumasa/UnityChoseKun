@@ -7,7 +7,7 @@
     using UnityEditor;
 
     
-    public class ComponentEditor : UnityChoseKunEditor
+    public class ComponentEditor
     {
         private static class Styles {                        
             public static GUIContent componentPopupContent = EditorGUIUtility.TrTextContent("Select Component","検索するComponentを選択して下さい");                    
@@ -145,14 +145,12 @@
             }
         }
 
-
         void ReloadComponentView()
         {
             if(selectObjectIndex < 0 || selectObjectIndex >= instanceIDs.Length){
                 Debug.LogWarning("selectObjectIndex Invalid");
                 return;
             }
-
             var id = instanceIDs[selectObjectIndex];
             var gameObjectKun = gameObjectKuns[id];                    
             componentViewTransform.SetJson(gameObjectKun.transformJson);                
