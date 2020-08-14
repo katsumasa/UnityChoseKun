@@ -82,7 +82,6 @@
                     currentComponentView.OnGUI();                        
                 }
                 EditorGUILayout.Space();
-
             }
 
             EditorGUILayout.BeginHorizontal();
@@ -114,10 +113,15 @@
         {
             Debug.Log("OnMessageEvent");
             gameObjectKuns.Clear();
-            var data = JsonUtility.FromJson<SceneKun>(json);
-            for(var i = 0; i < data.gameObjectKuns.Length; i++){
-                gameObjectKuns.Add(data.gameObjectKuns[i].instanceID,data.gameObjectKuns[i]);
+            var sceneKun = JsonUtility.FromJson<SceneKun>(json);
+            for(var i = 0; i < sceneKun.gameObjectKuns.Length; i++){
+                gameObjectKuns.Add(sceneKun.gameObjectKuns[i].instanceID,sceneKun.gameObjectKuns[i]);
             }            
+            if(PlayerHierarchyWindow.window != null){
+                PlayerHierarchyWindow.window.sceneKun = sceneKun;
+            }
+
+
             ReloadPopupObject();
             ReloadComponentView();
         }

@@ -14,10 +14,22 @@
         public ComponentKun.ComponentType [] types;
         public string[] componentDataJsons;
 
+        private TransformKun m_transformKun;
+        public TransformKun transformKun {
+            get {
+                if(m_transformKun == null){
+                    m_transformKun = JsonUtility.FromJson<TransformKun>(transformJson);
+                }
+                return m_transformKun;
+            }
+        }
+
         private readonly System.Type [,] typeConverterTbls = {
             {typeof(Camera),typeof(CameraKun)},
             {typeof(Light),typeof(LightKun)},
         };
+
+
 
         public GameObjectKun():this(null){}
         public GameObjectKun(GameObject go){

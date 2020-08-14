@@ -10,18 +10,9 @@
     {                           
         public void OnMessageEventPull(string json)
         {
-            Debug.Log("OnMessageEventPull");
-            var list = new List<GameObjectKun>();
-            foreach (var obj in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
-            {
-                AddGameObjectKunInChildren(obj,list);             
-            }            
-            var msg = new SceneKun();
-            if(msg != null)
-            {                
-                msg.gameObjectKuns = list.ToArray();                
-                UnityChoseKunPlayer.SendMessage<SceneKun>(UnityChoseKun.MessageID.GameObjectPull,msg);
-            }
+            Debug.Log("OnMessageEventPull");            
+            var scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();            
+            UnityChoseKunPlayer.SendMessage<SceneKun>(UnityChoseKun.MessageID.GameObjectPull,new SceneKun(scene));            
         }
 
 
@@ -38,23 +29,6 @@
                 }
             }
         }
-
-        private void AddGameObjectKunInChildren(GameObject go,List<GameObjectKun> list)
-        {
-            Debug.Log("AddAllGameObject");
-            if(go == null || list == null){
-                return;
-            }            
-            var gk = new GameObjectKun(go);
-            list.Add(gk);
-            if(go.transform != null){
-                for(var i = 0; i < go.transform.childCount; i++)
-                {
-                    AddGameObjectKunInChildren(go.transform.GetChild(i).gameObject,list);
-                }
-            }            
-        }
-
 
 
         // <summary> instanceIDをキーにしてGameObjectを再帰的に検索する </summary>
