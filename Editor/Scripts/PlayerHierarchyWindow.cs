@@ -32,19 +32,18 @@
         delegate void Task();
         delegate void OnMessageFunc(string json);
         
-        // 変数の定義
-        IConnectionState m_attachProfilerState;
+        // 変数の定義        
         static PlayerHierarchyWindow m_window;
         public static PlayerHierarchyWindow window{
             get {return m_window;}            
             private set {m_window = value;}
         }
 
-        SearchField m_searchField;  
-        
+
+        [SerializeField] SearchField m_searchField;          
         [SerializeField] TreeViewState treeViewState;
         HierarchyTreeView hierarchyTreeView;
-
+        
         public SceneKun sceneKun {
             set {
                 treeViewState = new TreeViewState();
@@ -80,8 +79,12 @@
             hierarchyTreeView = new HierarchyTreeView(treeViewState);
             hierarchyTreeView.Reload();
 
-            m_searchField = new SearchField();
-            m_searchField.downOrUpArrowKeyPressed += hierarchyTreeView.SetFocusAndEnsureSelectedItem;
+            
+
+            if(m_searchField == null){
+                m_searchField = new SearchField();
+                m_searchField.downOrUpArrowKeyPressed += hierarchyTreeView.SetFocusAndEnsureSelectedItem;
+            }            
         }
 
         private void OnDisable()
@@ -94,15 +97,12 @@
         }
 
         private void OnGUI() {
-            using (new EditorGUILayout.HorizontalScope(EditorStyles.toolbar)) {
-                //GUILayout.Space (100);
-                //GUILayout.FlexibleSpace();
+            using (new EditorGUILayout.HorizontalScope(EditorStyles.toolbar)) {                
+                GUILayout.FlexibleSpace();
                 hierarchyTreeView.searchString = m_searchField.OnToolbarGUI(hierarchyTreeView.searchString);   
             }
             var rect = EditorGUILayout.GetControlRect(false,position.height - 16); 
-            hierarchyTreeView.OnGUI(rect);
-
-            
+            hierarchyTreeView.OnGUI(rect);            
         }
 
 

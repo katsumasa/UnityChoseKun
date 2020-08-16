@@ -16,30 +16,24 @@
             public static Texture2D sceneAssetIcon = (Texture2D)EditorGUIUtility.Load("d_SceneAsset Icon");
         }
 
-        SceneKun m_sceneKun;
+        
+        [SerializeField]  SceneKun m_sceneKun;
         public SceneKun sceneKun {
             get {if(m_sceneKun == null){m_sceneKun = new SceneKun();}return m_sceneKun;}
             set {m_sceneKun = value;}
         }
 
 
-        public HierarchyTreeView(TreeViewState state) : base(state)
-        {                        
-        }
-        
-
+        public HierarchyTreeView(TreeViewState state) : base(state){}
+                                
         protected override TreeViewItem BuildRoot()
         {
-            var root = new TreeViewItem(id:-1,depth:-1,displayName:"Root");
-            
-            
-            root.children = new List<TreeViewItem>();            
-            var scene = new TreeViewItem(id:0,depth:0,displayName:sceneKun.name);
-            root.children.Add(scene);
-            
-                
-            if(sceneKun != null && sceneKun.gameObjectKuns != null){
+            var root = new TreeViewItem(id:-1,depth:-1,displayName:"Root");                        
+            root.children = new List<TreeViewItem>();                            
+            if(sceneKun != null && sceneKun.gameObjectKuns != null){                
+                var scene = new TreeViewItem(id:0,depth:0,displayName:sceneKun.name);
                 scene.children = new List<TreeViewItem>();
+                root.children.Add(scene);                            
                 var parents =  sceneKun.gameObjectKuns.Where((q)=>q.transformKun.parentInstanceID == 0);
                 if(parents != null && parents.Count()!=0){
                     foreach(var parent in parents)
