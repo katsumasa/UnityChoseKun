@@ -13,6 +13,23 @@
         };
         // -----------------------
         public ComponentType type;                
+
+        
+
         public abstract void WriteBack(Component component);
+
+
+        static readonly System.Type [,] typeConverterTbls = {
+            {typeof(Camera),typeof(CameraKun)},
+            {typeof(Light),typeof(LightKun)},
+        };
+
+        public static System.Type GetSystemType(ComponentType componentType,bool isComponentKun)
+        {
+            return typeConverterTbls[(int)componentType,isComponentKun?1:0];
+        }
+
+        
+
     }
 }

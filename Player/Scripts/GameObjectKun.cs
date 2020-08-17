@@ -8,8 +8,13 @@
     
     [System.Serializable]
     public class GameObjectKun {
+        public bool activeSelf;
+        public bool isStatic;
+        public int layer;
+        public string tag;
         public int instanceID;
         public string name;
+        
         public string transformJson;
         public ComponentKun.ComponentType [] types;
         public string[] componentDataJsons;
@@ -36,6 +41,10 @@
             if(go == null){
                 return;
             }
+            activeSelf = go.activeSelf;
+            isStatic = go.isStatic;
+            layer = go.layer;
+            tag = go.tag;
             instanceID = go.GetInstanceID();
             name = go.name;                                
             transformJson = JsonUtility.ToJson(new TransformKun(go.transform));                
@@ -68,6 +77,13 @@
         public void StoreGameObject(GameObject gameObject)
         {
             Debug.Log("GameObjectKun::StoreGameObject");
+
+            gameObject.SetActive(activeSelf);
+            gameObject.isStatic = isStatic;
+            gameObject.layer = layer;
+            gameObject.tag = tag;
+            gameObject.name = name;
+
 
             var transFormKun = JsonUtility.FromJson<TransformKun>(transformJson);
             if(transFormKun != null){

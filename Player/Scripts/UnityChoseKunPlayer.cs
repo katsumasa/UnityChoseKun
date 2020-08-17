@@ -46,6 +46,10 @@ namespace Utj.UnityChoseKun
                 {UnityChoseKun.MessageID.GameObjectPull,componentPlayer.OnMessageEventPull},
                 {UnityChoseKun.MessageID.GameObjectPush,componentPlayer.OnMessageEventPush },                
             };
+
+            
+            
+            
         }
 
         // Start is called before the first frame update

@@ -21,7 +21,7 @@
             new Vector2(70.41f, 52.63f), // 70mm IMAX
         };
 
-        
+        public bool enabled;    
 
         public CameraClearFlags clearFlags;
         public Color backgroundColor;
@@ -53,9 +53,12 @@
 
         public CameraKun(): this(null){}
         
-        public CameraKun(Camera camera)
+        public CameraKun(Component component)
         {                                    
+            var camera = component as Camera;
+
             if(camera != null){
+                enabled = camera.enabled;
                 clearFlags = camera.clearFlags;
                 backgroundColor = camera.backgroundColor;
                 cullingMask = camera.cullingMask;
@@ -88,6 +91,7 @@
             Debug.Log("SetComponent");
             var camera = component as Camera;
 
+            camera.enabled = enabled;
             camera.clearFlags = clearFlags;
             camera.backgroundColor = backgroundColor;
             camera.cullingMask = cullingMask;

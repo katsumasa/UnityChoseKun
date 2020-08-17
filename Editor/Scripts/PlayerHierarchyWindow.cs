@@ -40,20 +40,58 @@
         }
 
 
+
+
         [SerializeField] SearchField m_searchField;          
-        [SerializeField] TreeViewState treeViewState;
-        HierarchyTreeView hierarchyTreeView;
-        
-        public SceneKun sceneKun {
+        [SerializeField] TreeViewState m_treeViewState;
+
+        TreeViewState treeViewState {
+            get{if(m_treeViewState == null){m_treeViewState = new TreeViewState();}return m_treeViewState;}
+            set {m_treeViewState = value;}
+        }
+
+        HierarchyTreeView m_hierarchyTreeView;        
+        HierarchyTreeView hierarchyTreeView{
+            get {
+                if(m_hierarchyTreeView == null){
+                    m_hierarchyTreeView = new HierarchyTreeView(treeViewState);
+                }
+                return m_hierarchyTreeView;
+            }
             set {
-                treeViewState = new TreeViewState();
-                hierarchyTreeView = new HierarchyTreeView(treeViewState);
-                hierarchyTreeView.sceneKun = value;                
-                hierarchyTreeView.Reload();
+                m_hierarchyTreeView = value;
+            }
+        }
+        HierarchyTreeView.SelectionChangedCB m_selectionChangedCB;
+        public HierarchyTreeView.SelectionChangedCB selectionChangedCB{
+            private get {return m_selectionChangedCB;}
+            set {
+                m_selectionChangedCB = value;
+                hierarchyTreeView.selectionChangeCB = value;
             }
         }
 
-        
+        SceneKun m_sceneKun;
+
+        public SceneKun sceneKun {
+            set {                
+                m_sceneKun = value;
+                hierarchyTreeView.sceneKun = value;
+            }
+            get {
+                return m_sceneKun;
+            }
+        }
+
+        public int lastClickedID {
+            get {
+                if(treeViewState == null){
+                    return -1;
+                }
+                return treeViewState.lastClickedID;
+            }
+        }                
+
 
         // 関数の定義
 
@@ -71,12 +109,24 @@
 
         }
 
+        public void Reload()
+        {
+            if(hierarchyTreeView != null){
+                hierarchyTreeView.selectionChangeCB = selectionChangedCB;
+                hierarchyTreeView.sceneKun = sceneKun;
+                hierarchyTreeView.Reload();
+            }
+            Repaint();
+        }
+
         private void OnEnable() {            
             
             if(treeViewState == null){
                 treeViewState = new TreeViewState();
             }
             hierarchyTreeView = new HierarchyTreeView(treeViewState);
+            hierarchyTreeView.selectionChangeCB = selectionChangedCB;
+            hierarchyTreeView.sceneKun = sceneKun;
             hierarchyTreeView.Reload();
 
             
@@ -105,6 +155,6 @@
             hierarchyTreeView.OnGUI(rect);            
         }
 
-
+        
     }
 }

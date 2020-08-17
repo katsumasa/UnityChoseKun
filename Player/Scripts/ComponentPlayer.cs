@@ -9,7 +9,7 @@
     public class ComponentPlayer :  BasePlayer
     {                           
         public void OnMessageEventPull(string json)
-        {
+        {                
             Debug.Log("OnMessageEventPull");            
             var scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();            
             UnityChoseKunPlayer.SendMessage<SceneKun>(UnityChoseKun.MessageID.GameObjectPull,new SceneKun(scene));            

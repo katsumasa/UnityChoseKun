@@ -11,8 +11,9 @@ namespace  Utj.UnityChoseKun
     {
         public sealed class Settings
         {
-            private LightKun m_lightKun;
+            [SerializeField] private LightKun m_lightKun;
             public LightKun lightKun {get {if(m_lightKun == null){m_lightKun = new LightKun();}return m_lightKun;} set {m_lightKun = value;}}
+            public bool enabled {get{return lightKun.enabled;} private set {lightKun.enabled = value;}}
             public LightType lightType {get {return lightKun.lightType;} private set {lightKun.lightType = value;}}            
             public LightShape lightShape { get{return lightKun.lightShape;}  private set{lightKun.lightShape = value;}}
             public float range { get{return lightKun.range;}  private set {lightKun.range = value;}}
@@ -43,7 +44,7 @@ namespace  Utj.UnityChoseKun
             public bool isAreaLightType { get { return lightType == LightType.Rectangle || lightType  == LightType.Disc; } }
 
             
-            Texture2D m_KelvinGradientTexture;
+            
             const float kMinKelvin = 1000f;
             const float kMaxKelvin = 20000f;
             const float kSliderPower = 2f;
@@ -62,7 +63,7 @@ namespace  Utj.UnityChoseKun
                 lightKun = JsonUtility.FromJson<LightKun>(json);
             }
 
-
+        public static readonly GUIContent LightContent = new GUIContent("", (Texture2D)EditorGUIUtility.Load("d_AreaLight Icon"));
             private static class Styles
             {
                 public static readonly GUIContent Type = EditorGUIUtility.TrTextContent("Type", "Specifies the current type of light. Possible types are Directional, Spot, Point, and Area lights.");
@@ -112,6 +113,23 @@ namespace  Utj.UnityChoseKun
                 public static readonly int[] AreaLightShapeValues = { (int)AreaLightShape.Rectangle, (int)AreaLightShape.Disc };
             }
 
+            public bool DrawEnabled(bool foldout)
+            {
+                EditorGUILayout.Space();
+                GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));            
+                EditorGUILayout.BeginHorizontal();
+                foldout = EditorGUILayout.Foldout(foldout,LightContent);
+                var r = EditorGUILayout.GetControlRect();
+                r.x -= 12;
+                r.xMin -= 12;
+                enabled = EditorGUI.ToggleLeft(r,"Light",enabled);
+                //enabled = EditorGUILayout.ToggleLeft("Light",enabled);
+                GUILayout.FlexibleSpace();
+                EditorGUILayout.EndHorizontal();
+                GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));
+                EditorGUILayout.Space();
+                return foldout;
+            }
 
             public void DrawType()
             {
@@ -290,17 +308,10 @@ namespace  Utj.UnityChoseKun
             }               
         }
  
-        Settings m_settings;
+        [SerializeField] Settings m_settings;
         Settings settings {
-            get {
-                if(m_settings == null){
-                    m_settings = new Settings();
-                }
-                return m_settings;
-            }
-            set {
-                m_settings = value;
-            }
+            get {if(m_settings == null){m_settings = new Settings();}return m_settings;}
+            set {m_settings = value;}
         }
         
         private static class StylesEx
@@ -311,8 +322,8 @@ namespace  Utj.UnityChoseKun
             public static readonly GUIContent noDiscLightInEnlighten = EditorGUIUtility.TrTextContent("Only the Progressive lightmapper supports Disc lights. The Enlighten lightmapper doesn't so please consider using a different light shape instead or switch to Progressive in the Lighting window.");
         }
 
-        bool foldout = true;
-        public static readonly GUIContent LightContent = new GUIContent("Light", (Texture2D)EditorGUIUtility.Load("d_AreaLight Icon"));
+        [SerializeField] bool foldout = true;
+        
 
 
 
@@ -330,11 +341,8 @@ namespace  Utj.UnityChoseKun
         // <summary> OnGUIから呼び出す処理 </summary>
         public override void OnGUI()
         {
-            EditorGUILayout.Space();
-            GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));
-            foldout = EditorGUILayout.Foldout(foldout,LightContent);
-            GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));
-            EditorGUILayout.Space();
+            
+            foldout =  settings.DrawEnabled(foldout);
             if(foldout){
                 using (new EditorGUI.IndentLevelScope())
                 {

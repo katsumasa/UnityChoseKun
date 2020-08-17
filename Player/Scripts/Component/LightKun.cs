@@ -8,6 +8,7 @@ namespace  Utj.UnityChoseKun
     [System.Serializable]
     public class LightKun : ComponentKun
     {
+        public bool enabled;
         public LightType lightType;
         public LightShape lightShape;
         public float range;
@@ -40,14 +41,16 @@ namespace  Utj.UnityChoseKun
         {
         }
 
-        public LightKun(Light light)
+        public LightKun(Component component)
         {
-            
             Debug.Log("LightKun");
             type = ComponentType.Light;            
+
+            var light = component as Light;
             if(light == null){
                 return;
             }
+            enabled = light.enabled;
             lightType = light.type;
             lightShape = light.shape;
             range = light.range;
@@ -86,7 +89,10 @@ namespace  Utj.UnityChoseKun
             Debug.Log("WriteBack");            
 
             var light = component as Light;
-
+            if(light == null){
+                return;
+            }
+            light.enabled = enabled;
             light.type = lightType;
             light.shape = lightShape;
             light.range = range;

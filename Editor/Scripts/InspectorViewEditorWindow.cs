@@ -30,29 +30,40 @@
 
         delegate void Task();
         delegate void OnMessageFunc(string json);
+
         IConnectionState m_attachProfilerState;
         bool m_registered = false;
-        static InspectorViewEditorWindow window;
-        int toolbarIdx = 0;
-        ScreenEditor m_editorScrren;
+        static InspectorViewEditorWindow m_window;
+
+        public static InspectorViewEditorWindow window
+        {
+            get {               
+                return m_window;
+            }
+            private set {m_window = value;}
+        }
+
+
+        [SerializeField] int toolbarIdx = 0;
+        [SerializeField] ScreenEditor m_editorScrren;
         ScreenEditor editorScrren{get {if(m_editorScrren == null ){m_editorScrren = new ScreenEditor();}return m_editorScrren;}}        
-        TimeEditor m_editorTime;
+        [SerializeField] TimeEditor m_editorTime;
         TimeEditor editorTime{get {if(m_editorTime == null){m_editorTime = new TimeEditor();}return m_editorTime;}}        
-        ComponentEditor m_editorComponent ;
+        [SerializeField] ComponentEditor m_editorComponent ;
         ComponentEditor editorComponent {
             get {if(m_editorComponent == null){m_editorComponent = new ComponentEditor();}return m_editorComponent;}
         }
-        Dictionary<string,Action> onGUILayoutFuncDict;
+        [SerializeField] Dictionary<string,Action> onGUILayoutFuncDict;
         Dictionary<UnityChoseKun.MessageID, OnMessageFunc> onMessageFuncDict;
+        [SerializeField] Vector2 scrollPos;
 
 
         [MenuItem("Window/UnityChoseKun/Inspector")]
         static void Create()
         {
-            if (window == null)
-            {
+            if(window == null){
                 window = (InspectorViewEditorWindow)EditorWindow.GetWindow(typeof(InspectorViewEditorWindow));
-            }            
+            }
             window.titleContent = Styles.TitleContent;
             window.wantsMouseMove = true;
             window.autoRepaintOnSceneChange = true;
@@ -60,10 +71,10 @@
         }
 
         private void Update()
-        {
+        {            
         }
 
-        Vector2 scrollPos;
+
         //
         private void OnGUI()
         {                        
@@ -117,16 +128,18 @@
         // SampleのようにOnEnable/OnDisableで処理すると通信が不安体になる
         private void OnEnable()
         {
-            if (m_attachProfilerState == null)
-            {
-                m_attachProfilerState = ConnectionUtility.GetAttachToPlayerState(this);
+            if (m_attachProfilerState == null){            
+                m_attachProfilerState = ConnectionUtility.GetAttachToPlayerState(this);            
             }
+            Initialize();
         }
 
         private void OnDisable()
         {
             m_attachProfilerState.Dispose();
             m_attachProfilerState = null;
+
+            
         }        
 
         private void OnDestroy()
@@ -163,9 +176,9 @@
                 {
                     onGUILayoutFuncDict = new Dictionary<string, Action>()
                     {
-                        {"Screen", editorScrren.OnGUI },
-                        { "Time", editorTime.OnGUI},                        
-                        {"Component",editorComponent .OnGUI},
+                        {"Screen",      editorScrren.OnGUI },
+                        { "Time",       editorTime.OnGUI},                        
+                        {"Component",   editorComponent .OnGUI},
                         // 機能をここに追加していく                                              
                     };                    
                 }

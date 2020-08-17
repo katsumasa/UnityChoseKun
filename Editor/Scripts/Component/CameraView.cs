@@ -8,7 +8,7 @@
     {
         private static class Styles
         {
-            public static GUIContent cameraFoldout = new GUIContent("Camera", (Texture2D)EditorGUIUtility.Load("d_Camera Icon"));
+            public static GUIContent cameraFoldout = new GUIContent("", (Texture2D)EditorGUIUtility.Load("d_Camera Icon"));
             
             public static GUIContent iconRemove = EditorGUIUtility.TrIconContent("Toolbar Minus", "Remove command buffer");
             public static GUIContent clearFlags = EditorGUIUtility.TrTextContent("Clear Flags", "What to display in empty areas of this Camera's view.\n\nChoose Skybox to display a skybox in empty areas, defaulting to a background color if no skybox is found.\n\nChoose Solid Color to display a background color in empty areas.\n\nChoose Depth Only to display nothing in empty areas.\n\nChoose Don't Clear to display whatever was displayed in the previous frame in empty areas.");
@@ -135,7 +135,14 @@
             {
                 EditorGUILayout.Space();
                 GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(1));
+                EditorGUILayout.BeginHorizontal();
                 foldout =  EditorGUILayout.Foldout(foldout,Styles.cameraFoldout);
+                var r = EditorGUILayout.GetControlRect();
+                r.x -= 12;
+                r.xMin -= 12;
+                cameraKun.enabled = EditorGUI.ToggleLeft(r,"Camera",cameraKun.enabled);
+                GUILayout.FlexibleSpace();
+                EditorGUILayout.EndHorizontal();
                 GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(1));
                 EditorGUILayout.Space();
                 return foldout;

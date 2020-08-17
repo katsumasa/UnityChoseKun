@@ -9,104 +9,181 @@
     
     public class ComponentEditor
     {
-        private static class Styles {                        
-            public static GUIContent componentPopupContent = EditorGUIUtility.TrTextContent("Select Component","検索するComponentを選択して下さい");                    
-            public static GUIContent objectsPopupContent = EditorGUIUtility.TrTextContent("Select Object","GameObjectを選択してください。");
-            public static GUIContent[] displayOptions = {
-                new GUIContent("Camera", (Texture2D)EditorGUIUtility.Load("d_Camera Icon")),
-                new GUIContent("Light", (Texture2D)EditorGUIUtility.Load("d_AreaLight Icon")),                
-            };            
+
+        public sealed class Settings{
+            private static class Styles {
+
+                public static GUIContent gameObject = new GUIContent("", (Texture2D)EditorGUIUtility.Load("d_GameObject Icon"));
+                
+            }
+
+            [SerializeField] bool isDraw;
+            [SerializeField] bool isActive;
+            [SerializeField] string name;
+            [SerializeField] bool isStatic;
+            [SerializeField] string tag;
+            [SerializeField] LayerMask layerMask;
+
+            public Settings(){}
+
+            public void Set(GameObjectKun gameObjectKun){
+                if(gameObjectKun == null){
+                    isDraw = false;
+                } else {
+                    isDraw = true;
+                    isActive = gameObjectKun.activeSelf;
+                    name = gameObjectKun.name;
+                    isStatic = gameObjectKun.isStatic;
+                    tag = gameObjectKun.tag;
+                    layerMask = gameObjectKun.layer;
+                }
+            }
+
+            public void Writeback(GameObjectKun gameObjectKun){
+                gameObjectKun.activeSelf = isActive;
+                gameObjectKun.name = name;
+                gameObjectKun.isStatic = isStatic;
+                gameObjectKun.tag = tag;
+                gameObjectKun.layer = layerMask;
+            }
+
+            public void DrawGameObject(){
+                if(isDraw == false){
+                    return;
+                }
+
+                GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));            
+                EditorGUILayout.BeginHorizontal();                     
+                Styles.gameObject.text = name;
+                isActive = EditorGUILayout.ToggleLeft(Styles.gameObject,isActive);                
+                GUILayout.FlexibleSpace();
+                isStatic = EditorGUILayout.ToggleLeft("Static",isStatic);
+                EditorGUILayout.EndHorizontal();
+                GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));            
+
+                EditorGUI.indentLevel += 1;
+                tag = EditorGUILayout.TagField("Tag",tag);
+                layerMask = LayerMaskField("Layer",layerMask);
+                EditorGUI.indentLevel --;
+            }
+
+            public LayerMask LayerMaskField(string label,LayerMask layerMask)
+            {
+                List<string> layers = new List<string>();
+                List<int> layerNumbers = new List<int>();
+
+                for (var i = 0; i < 32; ++i)
+                {
+                    string layerName = LayerMask.LayerToName(i);
+                    if (!string.IsNullOrEmpty(layerName))
+                    {
+                        layers.Add(layerName);
+                        layerNumbers.Add(i);
+                    }
+                }
+
+                int maskWithoutEmpty = 0;
+                for (var i = 0; i < layerNumbers.Count; ++i)
+                {
+                    if (0 < ((1 << layerNumbers[i]) & layerMask.value))
+                        maskWithoutEmpty |= 1 << i;
+                }
+
+                maskWithoutEmpty = EditorGUILayout.MaskField(label, maskWithoutEmpty, layers.ToArray());
+                int mask = 0;
+                for (var i = 0; i < layerNumbers.Count; ++i)
+                {
+                    if (0 < (maskWithoutEmpty & (1 << i)))
+                        mask |= 1 << layerNumbers[i];
+                }
+                layerMask.value = mask;
+
+                return layerMask;
+            }
         }
 
-        private readonly ComponentView[] componentViews = {
-            new CameraView(),  // Camera
-            new LightView(), // Light
-        };
-        TransformView m_componentViewTransform;
-        TransformView componentViewTransform {
-            get {if(m_componentViewTransform == null){m_componentViewTransform = new TransformView();}return m_componentViewTransform;}
+
+        [SerializeField] Settings m_settings;
+        Settings settings {
+            get{if(m_settings == null){m_settings = new Settings();}return m_settings;}
+            set{m_settings = value;}
         }
-        ComponentView currentComponentView {
-            get {return componentViews[selectComponentdIndex];}
-        }
-        int selectComponentdIndex = 0;
-        int selectObjectIndex = 0;
-        // Key: instanceID
-        Dictionary<int,GameObjectKun> m_gameObjectKuns;
+        [SerializeField] private  List<ComponentView> m_componentViews;            
+        List<ComponentView> componentViews{
+            get {
+                if(m_componentViews == null)
+                {
+                    m_componentViews = new List<ComponentView>();
+                }
+                return m_componentViews;
+            }
+            set {m_componentViews = value;}
+        }                
+        [SerializeField] Dictionary<int,GameObjectKun> m_gameObjectKuns;
         Dictionary<int,GameObjectKun> gameObjectKuns {
             get {if(m_gameObjectKuns == null){m_gameObjectKuns = new Dictionary<int, GameObjectKun>();}return m_gameObjectKuns;}
         }                
-        int [] m_instanceIDs;
-        int [] instanceIDs{
-            get {if(m_instanceIDs == null){m_instanceIDs = new int[1];}return m_instanceIDs;}
-            set {m_instanceIDs = value;}
-        }
-        string [] m_objectNames;
-        string [] objectNames {
-            get {if(m_objectNames == null){m_objectNames = new string[1];m_objectNames[0] = "";}return m_objectNames;}
-            set {m_objectNames = value;}
+
+        [SerializeField] int m_selectGameObujectKunID;
+
+
+        public ComponentEditor() {
+            if(PlayerHierarchyWindow.window != null){
+                PlayerHierarchyWindow.window.selectionChangedCB = SelectionChangedCB;
+            }
         }
 
-        public void OnGUI() {
 
-            if(gameObjectKuns.Count == 0){
-                EditorGUILayout.HelpBox("Pullを実行して下さい", MessageType.Info);                
-            } else {
-                EditorGUILayout.BeginHorizontal();
-                {                                   
-                    EditorGUI.BeginChangeCheck ();
-                    selectComponentdIndex = EditorGUILayout.Popup(Styles.componentPopupContent,selectComponentdIndex,Styles.displayOptions);
-                    if(EditorGUI.EndChangeCheck() == true){                             
-                        ReloadPopupObject();
-                        ReloadComponentView();
-                    }
-                }
-                EditorGUILayout.EndHorizontal();            
-                
-                if(selectObjectIndex != -1)
+        void BuildComponentView(GameObjectKun gameObjectKun)
+        {
+            componentViews.Clear();
+            if(gameObjectKun!=null) {
+                m_selectGameObujectKunID = gameObjectKun.instanceID;
+
+                var transformView = new TransformView();
+                transformView.SetJson(gameObjectKun.transformJson);
+                m_componentViews.Add(transformView);
+                for(var i = 0; i < gameObjectKun.componentDataJsons.Length; i++)
                 {
-                    EditorGUI.BeginChangeCheck();    
-                    selectObjectIndex = EditorGUILayout.Popup(Styles.objectsPopupContent,selectObjectIndex,objectNames);
-                    if(EditorGUI.EndChangeCheck() == true){                                                    
-                        ReloadComponentView();
-                    }
+                    var type = ComponentView.GetComponentViewSyetemType(gameObjectKun.types[i]);
+                    var componentView = System.Activator.CreateInstance(type) as ComponentView;
+                    componentView.SetJson(gameObjectKun.componentDataJsons[i]);
+                    componentViews.Add(componentView);
                 }
-
-                if(selectObjectIndex == -1){            
-                    
-                }else{
-                    // Transform
-                    componentViewTransform.OnGUI();
-                    
-                    // 選択中のComponent
-                    currentComponentView.OnGUI();                        
-                }
-                EditorGUILayout.Space();
+            }else{
+                m_selectGameObujectKunID = -1;
             }
 
-            EditorGUILayout.BeginHorizontal();
+        }
+
+        
+
+        public void OnGUI() {        
+            settings.DrawGameObject();
+            foreach(var componentView in componentViews)
             {
-                if(GUILayout.Button("Pull")){   
-                    UnityChoseKunEditor.SendMessage(UnityChoseKun.MessageID.GameObjectPull);                    
-                }
-                if(GUILayout.Button("Push")){
-                    if(selectComponentdIndex < 0 || selectComponentdIndex >= instanceIDs.Length){
-                        Debug.LogWarning("Invalid Idx");
-                    }else{
-                        var id = instanceIDs[selectObjectIndex];
-                        var gameObjectKun = gameObjectKuns[id]; 
-                        gameObjectKun.transformJson = componentViewTransform.GetJson();
-                        for(var i = 0; i < gameObjectKun.types.Length; i++){
-                            if(gameObjectKun.types[i] == (ComponentKun.ComponentType)selectComponentdIndex){
-                                gameObjectKun.componentDataJsons[i] = currentComponentView.GetJson();
-                                break;
-                            }
-                        }
-                        UnityChoseKunEditor.SendMessage<GameObjectKun>(UnityChoseKun.MessageID.GameObjectPush,gameObjectKun);                                     
+                componentView.OnGUI();
+            }
+            EditorGUILayout.BeginHorizontal();
+            
+            GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(4));
+            
+            if(GUILayout.Button("Pull")){   
+                UnityChoseKunEditor.SendMessage(UnityChoseKun.MessageID.GameObjectPull);
+            }
+            if(GUILayout.Button("Push")){
+                if(m_gameObjectKuns.ContainsKey(m_selectGameObujectKunID)){
+                    var gameObjectKun = m_gameObjectKuns[m_selectGameObujectKunID];
+                    settings.Writeback(gameObjectKun);
+                    gameObjectKun.transformJson = m_componentViews[0].GetJson();
+                    for(var i = 0; i < gameObjectKun.componentDataJsons.Length; i++)
+                    {
+                        gameObjectKun.componentDataJsons[i]=m_componentViews[i+1].GetJson();
                     }
+                    UnityChoseKunEditor.SendMessage<GameObjectKun>(UnityChoseKun.MessageID.GameObjectPush,gameObjectKun);                                     
                 }
             }
-            EditorGUILayout.EndHorizontal();            
+            EditorGUILayout.EndHorizontal();                        
         }
 
         public void OnMessageEvent(string json)
@@ -114,57 +191,29 @@
             Debug.Log("OnMessageEvent");
             gameObjectKuns.Clear();
             var sceneKun = JsonUtility.FromJson<SceneKun>(json);
+            
             for(var i = 0; i < sceneKun.gameObjectKuns.Length; i++){
                 gameObjectKuns.Add(sceneKun.gameObjectKuns[i].instanceID,sceneKun.gameObjectKuns[i]);
             }            
             if(PlayerHierarchyWindow.window != null){
+                PlayerHierarchyWindow.window.selectionChangedCB = SelectionChangedCB;
                 PlayerHierarchyWindow.window.sceneKun = sceneKun;
+                PlayerHierarchyWindow.window.Reload();
             }
-
-
-            ReloadPopupObject();
-            ReloadComponentView();
         }
+        
 
-        void ReloadPopupObject()
-        {
-            var list = new List<GameObjectKun>();
-            ComponentKun.ComponentType type = (ComponentKun.ComponentType)selectComponentdIndex;          
-            foreach(var dict in gameObjectKuns){
-                if(dict.Value.IsContainComponent(type)){
-                    list.Add(dict.Value);
-                }
-            }                                        
-            instanceIDs = new int[list.Count];
-            objectNames = new string[list.Count];
-            for(var i = 0; i < list.Count; i++){
-                instanceIDs[i] = list[i].instanceID;
-                objectNames[i] = list[i].name;
-            }
-
-            if(list.Count == 0){
-                selectObjectIndex = -1;                        
+        void SelectionChangedCB(IList<int> selectedIds)
+        {            
+            var id = PlayerHierarchyWindow.window.lastClickedID;
+            if(gameObjectKuns.ContainsKey(id)){
+                var gameObjectKun = gameObjectKuns[id];
+                settings.Set(gameObjectKun);
+                BuildComponentView(gameObjectKun);   
             } else {
-                selectObjectIndex = 0;
-            }
+                BuildComponentView(null);
+            }            
+            InspectorViewEditorWindow.window.Repaint();
         }
-
-        void ReloadComponentView()
-        {
-            if(selectObjectIndex < 0 || selectObjectIndex >= instanceIDs.Length){
-                Debug.LogWarning("selectObjectIndex Invalid");
-                return;
-            }
-            var id = instanceIDs[selectObjectIndex];
-            var gameObjectKun = gameObjectKuns[id];                    
-            componentViewTransform.SetJson(gameObjectKun.transformJson);                
-            for(var i = 0; i < gameObjectKun.types.Length; i++){
-                if(gameObjectKun.types[i] == (ComponentKun.ComponentType)selectComponentdIndex){                            
-                    currentComponentView.SetJson(gameObjectKun.componentDataJsons[i]);
-                    break;
-                }
-            }                    
-        }
-
     }
 }

@@ -9,6 +9,8 @@
 
     public class HierarchyTreeView : TreeView
     {        
+        public delegate void SelectionChangedCB(IList<int> selectedIds);
+
 
         static  class Styles {
             public static Texture2D gameObjectIcon = (Texture2D)EditorGUIUtility.Load("d_GameObject Icon");
@@ -22,7 +24,12 @@
             get {if(m_sceneKun == null){m_sceneKun = new SceneKun();}return m_sceneKun;}
             set {m_sceneKun = value;}
         }
-
+        
+        [SerializeField] SelectionChangedCB m_selectionChangeCB;
+        public SelectionChangedCB selectionChangeCB {
+            get {return m_selectionChangeCB;}
+            set {m_selectionChangeCB = value;}
+        }
 
         public HierarchyTreeView(TreeViewState state) : base(state){}
                                 
@@ -74,6 +81,14 @@
                 }
             }
             return treeViewItem;
+        }
+
+        protected override void SelectionChanged (IList<int> selectedIds)
+        {
+            base.SelectionChanged(selectedIds);                    
+            if(m_selectionChangeCB != null){
+                m_selectionChangeCB(selectedIds);
+            }
         }
     }
 }
