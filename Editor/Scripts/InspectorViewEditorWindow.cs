@@ -34,12 +34,9 @@
         IConnectionState m_attachProfilerState;
         bool m_registered = false;
         static InspectorViewEditorWindow m_window;
-
         public static InspectorViewEditorWindow window
         {
-            get {               
-                return m_window;
-            }
+            get {return m_window;}
             private set {m_window = value;}
         }
 
@@ -54,7 +51,7 @@
             get {if(m_editorComponent == null){m_editorComponent = new ComponentEditor();}return m_editorComponent;}
         }
         [SerializeField] Dictionary<string,Action> onGUILayoutFuncDict;
-        Dictionary<UnityChoseKun.MessageID, OnMessageFunc> onMessageFuncDict;
+        [SerializeField] Dictionary<UnityChoseKun.MessageID, OnMessageFunc> onMessageFuncDict;
         [SerializeField] Vector2 scrollPos;
 
 
@@ -78,11 +75,11 @@
         //
         private void OnGUI()
         {                        
-            Initialize();
+           // Initialize();
             GUILayoutConnect();            
             EditorGUILayout.Space();
             
-            if (onGUILayoutFuncDict != null)
+            //if (onGUILayoutFuncDict != null)
             {
                 var texts = onGUILayoutFuncDict.Keys.ToArray();                
                 toolbarIdx = GUILayout.Toolbar(
@@ -167,11 +164,10 @@
 
         private void Initialize()
         {
-            if (m_registered == false)
+            //if (m_registered == false)
             {
                 UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Initialize();
-                UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Register(UnityChoseKun.kMsgSendPlayerToEditor, OnMessageEvent);
-              
+                UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Register(UnityChoseKun.kMsgSendPlayerToEditor, OnMessageEvent);              
                 if (onGUILayoutFuncDict == null)
                 {
                     onGUILayoutFuncDict = new Dictionary<string, Action>()
@@ -195,7 +191,7 @@
                 }
                 m_registered = true;
             }
-        }
+        } 
 
         private void OnMessageEvent(UnityEngine.Networking.PlayerConnection.MessageEventArgs args)
         {

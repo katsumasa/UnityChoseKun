@@ -9,23 +9,18 @@
     
     public class ComponentEditor
     {
-
         public sealed class Settings{
             private static class Styles {
-
-                public static GUIContent gameObject = new GUIContent("", (Texture2D)EditorGUIUtility.Load("d_GameObject Icon"));
-                
+                public static GUIContent gameObject = new GUIContent("", (Texture2D)EditorGUIUtility.Load("d_GameObject Icon"));                
             }
-
             [SerializeField] bool isDraw;
             [SerializeField] bool isActive;
             [SerializeField] string name;
             [SerializeField] bool isStatic;
             [SerializeField] string tag;
             [SerializeField] LayerMask layerMask;
-
+            
             public Settings(){}
-
             public void Set(GameObjectKun gameObjectKun){
                 if(gameObjectKun == null){
                     isDraw = false;
@@ -51,7 +46,6 @@
                 if(isDraw == false){
                     return;
                 }
-
                 GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));            
                 EditorGUILayout.BeginHorizontal();                     
                 Styles.gameObject.text = name;
@@ -110,21 +104,14 @@
         }
         [SerializeField] private  List<ComponentView> m_componentViews;            
         List<ComponentView> componentViews{
-            get {
-                if(m_componentViews == null)
-                {
-                    m_componentViews = new List<ComponentView>();
-                }
-                return m_componentViews;
-            }
+            get {if(m_componentViews == null){m_componentViews = new List<ComponentView>();}return m_componentViews;}
             set {m_componentViews = value;}
         }                
         [SerializeField] Dictionary<int,GameObjectKun> m_gameObjectKuns;
         Dictionary<int,GameObjectKun> gameObjectKuns {
             get {if(m_gameObjectKuns == null){m_gameObjectKuns = new Dictionary<int, GameObjectKun>();}return m_gameObjectKuns;}
         }                
-
-        [SerializeField] int m_selectGameObujectKunID;
+        [SerializeField] int m_selectGameObujectKunID = -1;
 
 
         public ComponentEditor() {
@@ -132,7 +119,6 @@
                 PlayerHierarchyWindow.window.selectionChangedCB = SelectionChangedCB;
             }
         }
-
 
         void BuildComponentView(GameObjectKun gameObjectKun)
         {
@@ -153,7 +139,6 @@
             }else{
                 m_selectGameObujectKunID = -1;
             }
-
         }
 
         
@@ -163,11 +148,9 @@
             foreach(var componentView in componentViews)
             {
                 componentView.OnGUI();
-            }
-            EditorGUILayout.BeginHorizontal();
-            
+            }                        
             GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(4));
-            
+            EditorGUILayout.BeginHorizontal();
             if(GUILayout.Button("Pull")){   
                 UnityChoseKunEditor.SendMessage(UnityChoseKun.MessageID.GameObjectPull);
             }
@@ -202,7 +185,6 @@
             }
         }
         
-
         void SelectionChangedCB(IList<int> selectedIds)
         {            
             var id = PlayerHierarchyWindow.window.lastClickedID;
@@ -211,6 +193,7 @@
                 settings.Set(gameObjectKun);
                 BuildComponentView(gameObjectKun);   
             } else {
+                settings.Set(null);
                 BuildComponentView(null);
             }            
             InspectorViewEditorWindow.window.Repaint();

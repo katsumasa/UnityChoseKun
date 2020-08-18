@@ -56,6 +56,21 @@
         protected override void RowGUI (RowGUIArgs args)
         {
             Texture2D icon;
+
+            var colorBackUp = GUI.color;
+            if(sceneKun.gameObjectKuns != null){            
+                var gameObjectKun = sceneKun.gameObjectKuns.Where((g)=>g.instanceID == args.item.id).FirstOrDefault();
+                if(gameObjectKun != null){
+                    if(gameObjectKun.activeSelf){
+                        GUI.color = Color.white;                
+                    } else {
+                        GUI.color = Color.gray;
+                    }
+                }
+            }
+            
+            
+
             if(args.item.id == 0){
                 icon = Styles.sceneAssetIcon;
             } else {
@@ -65,8 +80,9 @@
             toggleRect.x += GetContentIndent(args.item);
             toggleRect.width = 16f;
             GUI.DrawTexture(toggleRect,icon);
-            extraSpaceBeforeIconAndLabel = toggleRect.width + 2f;
-            base.RowGUI(args);
+            extraSpaceBeforeIconAndLabel = toggleRect.width + 2f;            
+            base.RowGUI(args);            
+            GUI.color = colorBackUp;
         }
 
 
@@ -79,7 +95,7 @@
                 foreach(var child in children){
                     treeViewItem.children.Add(MakeTreeViewRecursive(child,depth+1));
                 }
-            }
+            }            
             return treeViewItem;
         }
 

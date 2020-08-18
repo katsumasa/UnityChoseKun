@@ -113,17 +113,18 @@ namespace  Utj.UnityChoseKun
                 public static readonly int[] AreaLightShapeValues = { (int)AreaLightShape.Rectangle, (int)AreaLightShape.Disc };
             }
 
+            
+
+            int ofst1 = 0;
+            int ofst2 = 12;
+
             public bool DrawEnabled(bool foldout)
             {
                 EditorGUILayout.Space();
                 GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));            
                 EditorGUILayout.BeginHorizontal();
-                foldout = EditorGUILayout.Foldout(foldout,LightContent);
-                var r = EditorGUILayout.GetControlRect();
-                r.x -= 12;
-                r.xMin -= 12;
-                enabled = EditorGUI.ToggleLeft(r,"Light",enabled);
-                //enabled = EditorGUILayout.ToggleLeft("Light",enabled);
+                foldout = EditorGUILayout.Foldout(foldout,LightContent);                
+                enabled = EditorGUILayout.ToggleLeft("Light",enabled);                
                 GUILayout.FlexibleSpace();
                 EditorGUILayout.EndHorizontal();
                 GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));

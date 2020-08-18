@@ -132,19 +132,14 @@
 
 
             public bool DrawCamera(bool foldout)
-            {
-                EditorGUILayout.Space();
+            {                
                 GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(1));
                 EditorGUILayout.BeginHorizontal();
-                foldout =  EditorGUILayout.Foldout(foldout,Styles.cameraFoldout);
-                var r = EditorGUILayout.GetControlRect();
-                r.x -= 12;
-                r.xMin -= 12;
-                cameraKun.enabled = EditorGUI.ToggleLeft(r,"Camera",cameraKun.enabled);
+                foldout =  EditorGUILayout.Foldout(foldout,Styles.cameraFoldout);                
+                cameraKun.enabled = EditorGUILayout.ToggleLeft("Camera",cameraKun.enabled);
                 GUILayout.FlexibleSpace();
                 EditorGUILayout.EndHorizontal();
-                GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(1));
-                EditorGUILayout.Space();
+                GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(1));                
                 return foldout;
             }
         
