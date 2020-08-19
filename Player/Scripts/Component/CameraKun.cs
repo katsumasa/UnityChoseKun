@@ -6,7 +6,7 @@
 
 
     [System.Serializable]
-    public class CameraKun : ComponentKun{
+    public class CameraKun : BehaviourKun{
         private static readonly Vector2[] k_ApertureFormatValues =
         {
             new Vector2(4.8f, 3.5f) , // 8mm
@@ -21,7 +21,7 @@
             new Vector2(70.41f, 52.63f), // 70mm IMAX
         };
 
-        public bool enabled;    
+        
 
         public CameraClearFlags clearFlags;
         public Color backgroundColor;
@@ -53,10 +53,9 @@
 
         public CameraKun(): this(null){}
         
-        public CameraKun(Component component)
+        public CameraKun(Component component):base(component)
         {                                    
             var camera = component as Camera;
-
             if(camera != null){
                 enabled = camera.enabled;
                 clearFlags = camera.clearFlags;
@@ -83,41 +82,39 @@
                 allowDynamicResolution = camera.allowDynamicResolution;
                 targetEye = (int)camera.stereoTargetEye;                
             }
-
         }
 
-        public override void WriteBack(Component component)
+        public override void WriteBack(Component component) 
         {
-            Debug.Log("SetComponent");
+            base.WriteBack(component);            
             var camera = component as Camera;
-
-            camera.enabled = enabled;
-            camera.clearFlags = clearFlags;
-            camera.backgroundColor = backgroundColor;
-            camera.cullingMask = cullingMask;
-            camera.orthographic = orthographic;
-            camera.orthographicSize = orthographicSize;
-            camera.fieldOfView = fieldOfView;
-            camera.usePhysicalProperties = usePhysicalProperties;
-            if (usePhysicalProperties)
-            {
-                camera.focalLength = focalLength;
-                camera.sensorSize = k_ApertureFormatValues[sensorType];
-                camera.lensShift = lensShift;
-                camera.gateFit = gateFit;
-            }
-            camera.nearClipPlane = nearClipPlane;
-            camera.farClipPlane = farClipPlane;
-            camera.rect = rect;
-            camera.depth = depth;
-            camera.renderingPath = (RenderingPath)renderingPath;
-            camera.useOcclusionCulling = useOcclusionCulling;
-            camera.allowHDR = allowHDR;
-            camera.allowMSAA = allowMSAA;
-            camera.allowDynamicResolution = allowDynamicResolution;
-            camera.stereoTargetEye = (StereoTargetEyeMask)targetEye;            
-
-            Debug.Log(camera.fieldOfView);
+            if(camera == null){
+                camera.enabled = enabled;
+                camera.clearFlags = clearFlags;
+                camera.backgroundColor = backgroundColor;
+                camera.cullingMask = cullingMask;
+                camera.orthographic = orthographic;
+                camera.orthographicSize = orthographicSize;
+                camera.fieldOfView = fieldOfView;
+                camera.usePhysicalProperties = usePhysicalProperties;
+                if (usePhysicalProperties)
+                {
+                    camera.focalLength = focalLength;
+                    camera.sensorSize = k_ApertureFormatValues[sensorType];
+                    camera.lensShift = lensShift;
+                    camera.gateFit = gateFit;
+                }
+                camera.nearClipPlane = nearClipPlane;
+                camera.farClipPlane = farClipPlane;
+                camera.rect = rect;
+                camera.depth = depth;
+                camera.renderingPath = (RenderingPath)renderingPath;
+                camera.useOcclusionCulling = useOcclusionCulling;
+                camera.allowHDR = allowHDR;
+                camera.allowMSAA = allowMSAA;
+                camera.allowDynamicResolution = allowDynamicResolution;
+                camera.stereoTargetEye = (StereoTargetEyeMask)targetEye;            
+            }            
         }
 
     }

@@ -4,32 +4,78 @@
     using System.Collections.Generic;
     using UnityEngine;
 
-    // <summary> ComponentをEditor/Playerの両方でシリアライズ/デシリアライズを行う処理 </summary>
+    
     [System.Serializable]
-    public abstract class ComponentKun {
-        public enum ComponentType {
-            Camera = 0,
+    public class ComponentKun {                    
+        public enum ComponentKunType {            
+            Transform = 0,
+            Camera,
             Light,
+            Behaviour,
+            Component,
+
+            Invalid,
         };
-        // -----------------------
-        public ComponentType type;                
 
-        
-
-        public abstract void WriteBack(Component component);
-
-
-        static readonly System.Type [,] typeConverterTbls = {
+        public static readonly System.Type [,] typeConverterTbls = {
+            {typeof(Transform),typeof(TransformKun)},
             {typeof(Camera),typeof(CameraKun)},
             {typeof(Light),typeof(LightKun)},
+            {typeof(Behaviour),typeof(BehaviourKun)},
+
+
+            
+            {typeof(Component),typeof(ComponentKun)},
         };
 
-        public static System.Type GetSystemType(ComponentType componentType,bool isComponentKun)
+
+        public static ComponentKunType GetComponentKunType(Component component)
         {
-            return typeConverterTbls[(int)componentType,isComponentKun?1:0];
+            if(component is Transform){return ComponentKunType.Transform;}
+            if(component is Camera){return ComponentKunType.Camera;}
+            if(component is Light){return ComponentKunType.Light;}
+            if(component is Behaviour){return ComponentKunType.Behaviour;}
+            if(component is Component){return ComponentKunType.Component;}
+            return ComponentKunType.Invalid;
         }
 
-        
+        public static System.Type GetComponentSystemType(ComponentKunType behaviorKunType)
+        {            
+            return typeConverterTbls[(int)behaviorKunType,0];
+        }
 
+        public static System.Type GetComponentSystemType(Component component)
+        {            
+            return GetComponentSystemType(GetComponentKunType(component));            
+        }
+
+        public static System.Type GetComponetKunSyetemType(ComponentKunType behaviorKunType)
+        {
+            return typeConverterTbls[(int)behaviorKunType,1];
+        }
+
+        public static System.Type GetComponetKunSyetemType(Component component)
+        {            
+            return GetComponetKunSyetemType(GetComponentKunType(component));           
+        }
+
+
+        public string name;
+        public ComponentKunType componentKunType; 
+
+        public ComponentKun():this(null){}
+        public ComponentKun(Component component)
+        {
+            componentKunType = ComponentKunType.Component;
+            if(component!=null){
+                name = component.ToString();
+            }
+        }
+
+        public virtual void WriteBack(Component component)
+        {
+            //...
+        }
+        
     }
 }

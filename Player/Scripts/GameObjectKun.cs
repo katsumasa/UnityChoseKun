@@ -16,7 +16,7 @@
         public string name;
         
         public string transformJson;
-        public ComponentKun.ComponentType [] types;
+        public ComponentKun.ComponentKunType [] componentKunTypes;
         public string[] componentDataJsons;
 
         private TransformKun m_transformKun;
@@ -28,12 +28,7 @@
                 return m_transformKun;
             }
         }
-
-        private readonly System.Type [,] typeConverterTbls = {
-            {typeof(Camera),typeof(CameraKun)},
-            {typeof(Light),typeof(LightKun)},
-        };
-
+        
 
 
         public GameObjectKun():this(null){}
@@ -48,29 +43,23 @@
             instanceID = go.GetInstanceID();
             name = go.name;                                
             transformJson = JsonUtility.ToJson(new TransformKun(go.transform));                
-            var typeList = new List<ComponentKun.ComponentType>();
+            var typeList = new List<BehaviourKun.ComponentKunType>();
             var jsonList = new List<string>();
-            var idx = 0;
-                        
-
-            for(var i = 0; i < typeConverterTbls.GetLength(0); i++)
-            {
-                System.Type type = typeConverterTbls[i,0];
-                var components = go.GetComponents(type);
-                if(components != null){
-                    type = typeConverterTbls[i,1];
-                    for(var j = 0; j < components.Length; j++)    
-                    {                        
-                        typeList.Add((ComponentKun.ComponentType)i);
-                        var component = components[j];
-                        var o = System.Activator.CreateInstance(type,new object[]{component});
-                        jsonList.Add(JsonUtility.ToJson(o));
-                        idx++;    
-                    }
-                    types = typeList.ToArray();
-                    componentDataJsons = jsonList.ToArray();
+            
+            var components = go.GetComponents(typeof(Component));
+            foreach(var component in components){
+                var componentKunType = ComponentKun.GetComponentKunType(component);
+                if(componentKunType == ComponentKun.ComponentKunType.Transform){
+                    continue;
                 }
+                var systemType = ComponentKun.typeConverterTbls[(int)componentKunType,1];   
+                var componentKun = System.Activator.CreateInstance(systemType,new object[]{component});
+                var json = JsonUtility.ToJson(componentKun);
+                typeList.Add(componentKunType);
+                jsonList.Add(json);                                
             }
+            componentKunTypes = typeList.ToArray();
+            componentDataJsons = jsonList.ToArray();            
         }
 
 
@@ -84,38 +73,27 @@
             gameObject.tag = tag;
             gameObject.name = name;
 
-
             var transFormKun = JsonUtility.FromJson<TransformKun>(transformJson);
             if(transFormKun != null){
                 transFormKun.WriteBack(gameObject.transform);
             }
 
-            for(var i = 0; i < types.Length; i++){
-                var index = (int)types[i];
-                var type = typeConverterTbls[index,0];
-                Debug.Log("type : "+type);
-                var component = gameObject.GetComponent(type);
+            for(var i = 0; i < componentKunTypes.Length; i++){                        
+                var componentKunType = componentKunTypes[i];
+                var systemType = ComponentKun.GetComponentSystemType(componentKunType);
+                var component = gameObject.GetComponent(systemType);
                 if(component == null){
-                    Debug.Log("component == null");
+                    Debug.LogWarning("component == null");
                     continue;
                 }
-                var componentKun = JsonUtility.FromJson(componentDataJsons[i],typeConverterTbls[index,1]) as ComponentKun;
-                if(componentKun == null){
-                    Debug.Log("componentKun == null");
-                    continue;
-                }
+                var componentKun = JsonUtility.FromJson(componentDataJsons[i],
+                                                        ComponentKun.GetComponetKunSyetemType(componentKunType)) as ComponentKun;
                 componentKun.WriteBack(component);
-            }            
+            }                        
         }
 
 
-        public bool IsContainComponent(ComponentKun.ComponentType type)
-        {
-            if(types == null){
-                return false;
-            }
-            return types.Contains(type);
-        }
+        
     }
 
 

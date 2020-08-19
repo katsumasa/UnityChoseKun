@@ -6,9 +6,8 @@ namespace  Utj.UnityChoseKun
     
 
     [System.Serializable]
-    public class LightKun : ComponentKun
+    public class LightKun : BehaviourKun
     {
-        public bool enabled;
         public LightType lightType;
         public LightShape lightShape;
         public float range;
@@ -30,93 +29,84 @@ namespace  Utj.UnityChoseKun
         public bool halo;
         public string flare;
         public LightRenderMode renderMode ;
-        public int cullingMask ;
-        
-        
-        
+        public int cullingMask ;                        
         public int renderingLayerMask ;
         
+        public LightKun() : this(null){}        
 
-        public LightKun() : this(null)
-        {
-        }
-
-        public LightKun(Component component)
-        {
-            Debug.Log("LightKun");
-            type = ComponentType.Light;            
-
+        public LightKun(Component component) : base(component)
+        {                     
+            componentKunType = BehaviourKun.ComponentKunType.Light;
             var light = component as Light;
-            if(light == null){
-                return;
+            if(light){                
+                enabled = light.enabled;
+                lightType = light.type;
+                lightShape = light.shape;
+                range = light.range;
+                spotAngle = light.spotAngle;
+                innerSpotAngle = light.spotAngle;
+                cookieSize = light.cookieSize;
+                if(light.cookie != null){
+                    cookie = light.cookie.name;
+                }else{
+                    cookie = "";
+                }
+                if(light.flare != null){
+                    flare = light.flare.name;
+                }else{
+                    flare = "";
+                }
+                color = light.color;
+                intensity = light.intensity;
+                bounceIntensity = light.bounceIntensity;
+                colorTemperature = light.colorTemperature;
+                useColorTemperature = light.useColorTemperature;
+                shadowsType = light.shadows;
+                shadowsStrength = light.shadowStrength;
+                shadowsBias = light.shadowBias;
+                shadowsNormalBias = light.shadowNormalBias;
+                shadowsNormalBias = light.shadowNormalBias;
+                // halo
+                renderMode = light.renderMode;
+                cullingMask =light.cullingMask;
+                        
+                renderingLayerMask = light.renderingLayerMask;            
             }
-            enabled = light.enabled;
-            lightType = light.type;
-            lightShape = light.shape;
-            range = light.range;
-            spotAngle = light.spotAngle;
-            innerSpotAngle = light.spotAngle;
-            cookieSize = light.cookieSize;
-            if(light.cookie != null){
-                cookie = light.cookie.name;
-            }else{
-                cookie = "";
-            }
-            if(light.flare != null){
-                flare = light.flare.name;
-            }else{
-                flare = "";
-            }
-            color = light.color;
-            intensity = light.intensity;
-            bounceIntensity = light.bounceIntensity;
-            colorTemperature = light.colorTemperature;
-            useColorTemperature = light.useColorTemperature;
-            shadowsType = light.shadows;
-            shadowsStrength = light.shadowStrength;
-            shadowsBias = light.shadowBias;
-            shadowsNormalBias = light.shadowNormalBias;
-            shadowsNormalBias = light.shadowNormalBias;
-            // halo
-            renderMode = light.renderMode;
-            cullingMask =light.cullingMask;
-                    
-            renderingLayerMask = light.renderingLayerMask;            
         }
 
         public override void WriteBack(Component component)
         {
+            base.WriteBack(component);
             Debug.Log("WriteBack");            
 
             var light = component as Light;
-            if(light == null){
-                return;
+            if(light != null){                
+                light.enabled = enabled;
+                light.type = lightType;
+                light.shape = lightShape;
+                light.range = range;
+                light.spotAngle = spotAngle;
+                light.spotAngle = innerSpotAngle;
+                cookieSize = light.cookieSize;
+
+                // ToDo::cookie と flare            
+
+                light.color = color;
+                light.intensity = intensity;
+                light.bounceIntensity = bounceIntensity;
+                light.colorTemperature = colorTemperature;
+                light.useColorTemperature = useColorTemperature;
+                light.shadows = shadowsType;
+                light.shadowStrength = shadowsStrength;
+                light.shadowBias = shadowsBias;
+                light.shadowNormalBias = shadowsNormalBias;
+                
+                //ToDo::halo
+                light.renderMode = renderMode;
+                light.cullingMask = cullingMask;
+                            
+                light.renderingLayerMask = renderingLayerMask;
             }
-            light.enabled = enabled;
-            light.type = lightType;
-            light.shape = lightShape;
-            light.range = range;
-            light.spotAngle = spotAngle;
-            light.spotAngle = innerSpotAngle;
-            cookieSize = light.cookieSize;
-
-            // ToDo::cookie と flare            
-
-            light.color = color;
-            light.intensity = intensity;
-            light.bounceIntensity = bounceIntensity;
-            light.colorTemperature = colorTemperature;
-            light.useColorTemperature = useColorTemperature;
-            light.shadows = shadowsType;
-            light.shadowStrength = shadowsStrength;
-            light.shadowBias = shadowsBias;
-            light.shadowNormalBias = shadowsNormalBias;
-            
-            //ToDo::halo
-            light.renderMode = renderMode;
-            light.cullingMask = cullingMask;
-                        
-            light.renderingLayerMask = renderingLayerMask;
         }
     }
 }

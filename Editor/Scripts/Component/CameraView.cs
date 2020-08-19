@@ -45,7 +45,7 @@
                 get {
                     if(m_cameraKun == null){
                         m_cameraKun = new CameraKun(null);
-                        m_cameraKun.type = 0;
+                        m_cameraKun.componentKunType = 0;
                     }
                     return m_cameraKun;
                 }

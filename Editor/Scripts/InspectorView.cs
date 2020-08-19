@@ -7,7 +7,7 @@
     using UnityEditor;
 
     
-    public class ComponentEditor
+    public class InspectorView
     {
         public sealed class Settings{
             private static class Styles {
@@ -113,8 +113,9 @@
         }                
         [SerializeField] int m_selectGameObujectKunID = -1;
 
+        [SerializeField] SceneKun sceneKun;
 
-        public ComponentEditor() {
+        public InspectorView() {
             if(PlayerHierarchyWindow.window != null){
                 PlayerHierarchyWindow.window.selectionChangedCB = SelectionChangedCB;
             }
@@ -131,7 +132,7 @@
                 m_componentViews.Add(transformView);
                 for(var i = 0; i < gameObjectKun.componentDataJsons.Length; i++)
                 {
-                    var type = ComponentView.GetComponentViewSyetemType(gameObjectKun.types[i]);
+                    var type = ComponentView.GetComponentViewSyetemType(gameObjectKun.componentKunTypes[i]);
                     var componentView = System.Activator.CreateInstance(type) as ComponentView;
                     componentView.SetJson(gameObjectKun.componentDataJsons[i]);
                     componentViews.Add(componentView);
@@ -168,19 +169,22 @@
             }
             EditorGUILayout.EndHorizontal();                        
         }
-
+        
         public void OnMessageEvent(string json)
         {
             Debug.Log("OnMessageEvent");
             gameObjectKuns.Clear();
-            var sceneKun = JsonUtility.FromJson<SceneKun>(json);
+            sceneKun = JsonUtility.FromJson<SceneKun>(json);
             
             for(var i = 0; i < sceneKun.gameObjectKuns.Length; i++){
                 gameObjectKuns.Add(sceneKun.gameObjectKuns[i].instanceID,sceneKun.gameObjectKuns[i]);
-            }            
-            if(PlayerHierarchyWindow.window != null){
+            }  
+            if(PlayerHierarchyWindow.window == null){
+                PlayerHierarchyWindow.Create();
+            }
+            if(PlayerHierarchyWindow.window != null){                
                 PlayerHierarchyWindow.window.selectionChangedCB = SelectionChangedCB;
-                PlayerHierarchyWindow.window.sceneKun = sceneKun;
+                PlayerHierarchyWindow.window.sceneKun = sceneKun;                
                 PlayerHierarchyWindow.window.Reload();
             }
         }
@@ -196,7 +200,7 @@
                 settings.Set(null);
                 BuildComponentView(null);
             }            
-            InspectorViewEditorWindow.window.Repaint();
+            UnityChoseKunEditorWindow.window.Repaint();
         }
     }
 }

@@ -9,7 +9,7 @@ namespace  Utj.UnityChoseKun
 
     public class LightView : ComponentView
     {
-        public sealed class Settings
+        public new class Settings
         {
             [SerializeField] private LightKun m_lightKun;
             public LightKun lightKun {get {if(m_lightKun == null){m_lightKun = new LightKun();}return m_lightKun;} set {m_lightKun = value;}}
@@ -57,7 +57,7 @@ namespace  Utj.UnityChoseKun
                 Disc = 4
             }
 
-            public Settings():this(null){}
+            public Settings(){}
             public Settings(string json)
             {
                 lightKun = JsonUtility.FromJson<LightKun>(json);
@@ -112,12 +112,7 @@ namespace  Utj.UnityChoseKun
                 public static readonly GUIContent[] AreaLightShapeTitles = { EditorGUIUtility.TrTextContent("Rectangle"), EditorGUIUtility.TrTextContent("Disc") };
                 public static readonly int[] AreaLightShapeValues = { (int)AreaLightShape.Rectangle, (int)AreaLightShape.Disc };
             }
-
-            
-
-            int ofst1 = 0;
-            int ofst2 = 12;
-
+        
             public bool DrawEnabled(bool foldout)
             {
                 EditorGUILayout.Space();

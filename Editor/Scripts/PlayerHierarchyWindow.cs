@@ -19,13 +19,13 @@
 #endif
     using UnityEditor.IMGUI.Controls;
 
+    [System.Serializable]
     public class PlayerHierarchyWindow : EditorWindow
     {
         public static class Styles
         {                                
             public static readonly GUIContent TitleContent = new GUIContent("Player Hierarchy", (Texture2D)EditorGUIUtility.Load("d_UnityEditor.SceneHierarchyWindow"));
         }
-
         //
         // delegateの宣言
         //
@@ -39,12 +39,8 @@
             private set {m_window = value;}
         }
 
-
-
-
         [SerializeField] SearchField m_searchField;          
         [SerializeField] TreeViewState m_treeViewState;
-
         TreeViewState treeViewState {
             get{if(m_treeViewState == null){m_treeViewState = new TreeViewState();}return m_treeViewState;}
             set {m_treeViewState = value;}
@@ -52,17 +48,10 @@
 
         HierarchyTreeView m_hierarchyTreeView;        
         HierarchyTreeView hierarchyTreeView{
-            get {
-                if(m_hierarchyTreeView == null){
-                    m_hierarchyTreeView = new HierarchyTreeView(treeViewState);
-                }
-                return m_hierarchyTreeView;
-            }
-            set {
-                m_hierarchyTreeView = value;
-            }
+            get {if(m_hierarchyTreeView == null){m_hierarchyTreeView = new HierarchyTreeView(treeViewState);}return m_hierarchyTreeView;}
+            set {m_hierarchyTreeView = value;}
         }
-        HierarchyTreeView.SelectionChangedCB m_selectionChangedCB;
+        [SerializeField] HierarchyTreeView.SelectionChangedCB m_selectionChangedCB;
         public HierarchyTreeView.SelectionChangedCB selectionChangedCB{
             private get {return m_selectionChangedCB;}
             set {
@@ -71,16 +60,16 @@
             }
         }
 
-        SceneKun m_sceneKun;
+        
+        [SerializeField] SceneKun m_sceneKun;
 
         public SceneKun sceneKun {
             set {                
-                m_sceneKun = value;
+                //m_sceneKun = value;
                 hierarchyTreeView.sceneKun = value;
             }
-            get {
-                return m_sceneKun;
-            }
+            //get {return m_sceneKun;}
+            //get{return hierarchyTreeView.sceneKun;}
         }
 
         public int lastClickedID {
@@ -96,7 +85,7 @@
         // 関数の定義
 
         [MenuItem("Window/UnityChoseKun/Hierarchy")]
-        static void Create()
+        public static void Create()
         {
             if (window == null)
             {
@@ -106,14 +95,15 @@
             window.wantsMouseMove = true;
             window.autoRepaintOnSceneChange = true;
             window.Show();
-
+            window.OnEnable();
+                
+            
         }
 
         public void Reload()
         {
             if(hierarchyTreeView != null){
-                hierarchyTreeView.selectionChangeCB = selectionChangedCB;
-                hierarchyTreeView.sceneKun = sceneKun;
+                hierarchyTreeView.selectionChangeCB = selectionChangedCB;                
                 hierarchyTreeView.Reload();
             }
             Repaint();
@@ -124,13 +114,8 @@
             if(treeViewState == null){
                 treeViewState = new TreeViewState();
             }
-            hierarchyTreeView = new HierarchyTreeView(treeViewState);
-            hierarchyTreeView.selectionChangeCB = selectionChangedCB;
-            hierarchyTreeView.sceneKun = sceneKun;
-            hierarchyTreeView.Reload();
-
-            
-
+            hierarchyTreeView = new HierarchyTreeView(treeViewState);            
+            Reload();
             if(m_searchField == null){
                 m_searchField = new SearchField();
                 m_searchField.downOrUpArrowKeyPressed += hierarchyTreeView.SetFocusAndEnsureSelectedItem;
@@ -138,8 +123,7 @@
         }
 
         private void OnDisable()
-        {
-            
+        {            
         }        
 
         private void OnDestroy()
