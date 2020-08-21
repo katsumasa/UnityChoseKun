@@ -9,7 +9,7 @@ namespace  Utj.UnityChoseKun
 
     public class LightView : ComponentView
     {
-        public new class Settings
+        public class Settings
         {
             [SerializeField] private LightKun m_lightKun;
             public LightKun lightKun {get {if(m_lightKun == null){m_lightKun = new LightKun();}return m_lightKun;} set {m_lightKun = value;}}

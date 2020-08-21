@@ -44,8 +44,7 @@
             public CameraKun cameraKun {
                 get {
                     if(m_cameraKun == null){
-                        m_cameraKun = new CameraKun(null);
-                        m_cameraKun.componentKunType = 0;
+                        m_cameraKun = new CameraKun(null);                     
                     }
                     return m_cameraKun;
                 }

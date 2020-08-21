@@ -8,16 +8,53 @@
     
     [System.Serializable]
     public class GameObjectKun {
-        public bool activeSelf;
-        public bool isStatic;
-        public int layer;
-        public string tag;
-        public int instanceID;
-        public string name;
+        [SerializeField] bool m_activeSelf;
+        public bool activeSelf{
+            get{return m_activeSelf;}
+            set{m_activeSelf = value;}
+        }
+        [SerializeField] bool m_isStatic;
+        public bool isStatic {
+            get {return m_isStatic;}
+            set {m_isStatic = value;}
+        }
+
+        [SerializeField] int m_layer;
+        public int layer{
+            get {return m_layer;}
+            set {m_layer = value;}
+        }
+        [SerializeField] string m_tag;
+        public string tag{
+            get {return m_tag;}
+            set {m_tag = value;}
+        }
+        [SerializeField] int m_instanceID;
+        public int instanceID{
+            get {return m_instanceID;}
+            private set {m_instanceID = value;}
+        }
+        [SerializeField] string m_name;
+        public string name {
+            get {return m_name;}
+            set {m_name = value;}
+        }
         
-        public string transformJson;
-        public ComponentKun.ComponentKunType [] componentKunTypes;
-        public string[] componentDataJsons;
+        [SerializeField] string m_transformJson;
+        public string transformJson{
+            get{return m_transformJson;}
+            set{m_transformJson = value;}
+        }
+        [SerializeField] ComponentKun.ComponentKunType [] m_componentKunTypes;
+        public ComponentKun.ComponentKunType [] componentKunTypes{
+            get{return m_componentKunTypes;}
+            set{m_componentKunTypes = value;}
+        }
+        [SerializeField] string[] m_componentDataJsons;
+        public string[] componentDataJsons {
+            get{return m_componentDataJsons;}
+            set{m_componentDataJsons = value;}
+        }
 
         private TransformKun m_transformKun;
         public TransformKun transformKun {
@@ -49,6 +86,7 @@
             var components = go.GetComponents(typeof(Component));
             foreach(var component in components){
                 var componentKunType = ComponentKun.GetComponentKunType(component);
+                Debug.Log("ComponentKunType" + componentKunType);
                 if(componentKunType == ComponentKun.ComponentKunType.Transform){
                     continue;
                 }

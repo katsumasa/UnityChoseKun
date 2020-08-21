@@ -15,6 +15,7 @@
             //{ComponentKun.ComponentKunType.Transform,   typeof(TransformView)},
             {ComponentKun.ComponentKunType.Camera,      typeof(CameraView)},
             {ComponentKun.ComponentKunType.Light,       typeof(LightView)},
+            {ComponentKun.ComponentKunType.Renderer,    typeof(RendererView)},
             {ComponentKun.ComponentKunType.Behaviour,   typeof(BehaviourView)},
             {ComponentKun.ComponentKunType.Component,   typeof(ComponentView)},
         };

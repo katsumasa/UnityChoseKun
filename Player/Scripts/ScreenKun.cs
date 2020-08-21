@@ -6,29 +6,105 @@
 
     [System.Serializable]
     public class ScreenKun
-    {        
-        public bool autorotateToLandscapeLeft;
-        public bool autorotateToLandscapeRight;
-        public bool autorotateToPortrait;
-        public bool autorotateToPortraitUpsideDown;
-        public float brightness;
-        public int currentResolutionWidth;
-        public int currentResolutionHeight;
-        public int currentResolutionRefreshRate;
-        public Rect[] cutouts;
-        public float dpi;
-        public bool fullScreen;
-        public FullScreenMode fullScreenMode;
-        public int height;
-        public ScreenOrientation orientation;
-        public Resolution[] resolutions;
-        public Rect safeArea;
-        public int sleepTimeout;
-        public int width;
-        public int preferredRefreshRate;
+    {   
+        [SerializeField]bool m_autorotateToLandscapeLeft; 
+        public bool autorotateToLandscapeLeft{
+            get{return m_autorotateToLandscapeLeft;}
+            set{m_autorotateToLandscapeLeft = value;}
+        }
+        [SerializeField] bool m_autorotateToLandscapeRight;
+        public bool autorotateToLandscapeRight{
+            get{return m_autorotateToLandscapeRight;}
+            set{m_autorotateToLandscapeRight = value;}
+        }
+        [SerializeField] bool m_autorotateToPortrait;
+        public bool autorotateToPortrait{
+            get{return m_autorotateToPortrait;}
+            set {m_autorotateToPortrait = value;}
+        }
+        [SerializeField] bool m_autorotateToPortraitUpsideDown;
+        public bool autorotateToPortraitUpsideDown{
+            get{return m_autorotateToPortraitUpsideDown;}
+            set{m_autorotateToPortraitUpsideDown = value;}
+        }
+        [SerializeField] float m_brightness;
+        public float brightness{
+            get{return m_brightness;}
+            set{m_brightness = value;}
+        }
+        [SerializeField] int m_currentResolutionWidth;
+        public int currentResolutionWidth{
+            get{return m_currentResolutionWidth;}
+            set{m_currentResolutionWidth = value;}
+        }
+        [SerializeField] int m_currentResolutionHeight;
+        public int currentResolutionHeight{
+            get{return m_currentResolutionHeight;}
+            set{m_currentResolutionHeight = value;}
+        }
+        [SerializeField] int m_currentResolutionRefreshRate;
+        public int currentResolutionRefreshRate{
+            get{return m_currentResolutionRefreshRate;}
+            set{m_currentResolutionRefreshRate = value;}
+        }
+        [SerializeField] Rect[] m_cutouts;
+        public Rect[] cutouts{
+            get{return m_cutouts;}
+            set{m_cutouts = value;}
+        }
+        [SerializeField] float m_dpi;
+        public float dpi{
+            get{return m_dpi;}
+            set{m_dpi = value;}
+        }
+        [SerializeField] bool m_fullScreen;
+        public bool fullScreen{
+            get{return m_fullScreen;}
+            set{m_fullScreen = value;}
+        }
+        [SerializeField] FullScreenMode m_fullScreenMode;
+        public FullScreenMode fullScreenMode{
+            get{return m_fullScreenMode;}
+            set{m_fullScreenMode = value;}
+        }
 
-        
+        [SerializeField] int m_height;
+        public int height{
+            get{return m_height;}
+            set{m_height = value;}
+        }
+        [SerializeField] ScreenOrientation m_orientation;
+        public ScreenOrientation orientation{
+            get{return m_orientation;}
+            set{m_orientation = value;}
+        }
+        [SerializeField] Resolution[] m_resolutions;
+        public Resolution[] resolutions{
+            get{return m_resolutions;}
+            set{m_resolutions = value;}
+        }
+        [SerializeField] Rect m_safeArea;
+        public Rect safeArea{
+            get{return m_safeArea;}
+            set{m_safeArea = value;}
+        }
+        [SerializeField] int m_sleepTimeout;
+        public int sleepTimeout{
+            get{return m_sleepTimeout;}
+            set{m_sleepTimeout = value;}
+        }
+        [SerializeField] int m_width;
+        public int width{
+            get{return m_width;}
+            set{m_width = value;}
+        }
+        [SerializeField] int m_preferredRefreshRate;
+        public int preferredRefreshRate{
+            get{return m_preferredRefreshRate;}
+            set{m_preferredRefreshRate = value;}
+        }
 
+    
         public ScreenKun()
         {
             autorotateToLandscapeLeft = Screen.autorotateToLandscapeLeft;

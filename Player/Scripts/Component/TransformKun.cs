@@ -6,15 +6,40 @@
     
 
    [System.Serializable]
-    public class TransformKun {
-        public Vector3 localPosition;
-        public Vector3 localScale;
-        public Vector3 localRotation;
-        public int instanceID;
-        public int parentInstanceID;
-        private int childCount;
+    public class TransformKun : ComponentKun{
+        
+        [SerializeField] protected Vector3 m_localPosition;
+        public Vector3 localPosition {
+            get{return m_localPosition;}
+            set{m_localPosition = value;}
+        }
+        [SerializeField] protected Vector3 m_localScale;
+        public Vector3 localScale{
+            get{return m_localScale;}
+            set{m_localScale = value;}
+        }
+
+        [SerializeField] protected Vector3 m_localRotation;
+        public Vector3 localRotation{
+            get{return m_localRotation;}
+            set{m_localScale = value;}
+        }
+
+        
+        [SerializeField] protected  int m_parentInstanceID;
+        public int parentInstanceID{
+            get {return m_parentInstanceID;}
+            protected set {m_parentInstanceID = value;}
+        }
+        [SerializeField] int m_childCount;
+        private int childCount {
+            get{return m_childCount;}
+            set{m_childCount = value;}
+        }
+
         public TransformKun():this(null){}
-        public TransformKun(Transform transform){
+        public TransformKun(Component component):base(component){
+            var transform = component as Transform;
             if(transform != null){
                 localPosition = transform.localPosition;
                 localScale = transform.localScale;

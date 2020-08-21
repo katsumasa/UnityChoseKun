@@ -43,9 +43,29 @@
 
         [SerializeField] int toolbarIdx = 0;
         [SerializeField] ScreenView m_screenView;
-        ScreenView screenView{get {if(m_screenView == null ){m_screenView = new ScreenView();}return m_screenView;}}        
+        ScreenView screenView{
+            get {
+                if(m_screenView == null ){
+                    m_screenView = new ScreenView();
+                }
+                return m_screenView;
+            }
+            set {
+                m_screenView = value;
+            }
+        }        
         [SerializeField] TimeView m_timeView;
-        TimeView timeView{get {if(m_timeView == null){m_timeView = new TimeView();}return m_timeView;}}        
+        TimeView timeView{
+            get {
+                if(m_timeView == null){
+                    m_timeView = new TimeView();
+                }
+                return m_timeView;
+            }
+            set {
+                m_timeView = value;
+            }
+        }        
         [SerializeField] InspectorView m_inspectorView ;
         InspectorView inspectorView {
             get {if(m_inspectorView == null){m_inspectorView = new InspectorView();}return m_inspectorView;}
@@ -128,6 +148,9 @@
             if (m_attachProfilerState == null){            
                 m_attachProfilerState = ConnectionUtility.GetAttachToPlayerState(this);            
             }
+            screenView = new ScreenView();
+            timeView = new TimeView();                        
+
             Initialize();
         }
 

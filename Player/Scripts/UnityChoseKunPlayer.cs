@@ -96,7 +96,7 @@ namespace Utj.UnityChoseKun
                 Debug.LogWarning("mesage == null");
                 return;
             }
-            Debug.Log("message.id" + message.id);
+            Debug.Log("message.id " + message.id);
             var func = onMessageFuncDict[message.id];
             func(message.json);            
         }
