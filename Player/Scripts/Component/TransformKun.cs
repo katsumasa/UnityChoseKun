@@ -22,7 +22,7 @@
         [SerializeField] protected Vector3 m_localRotation;
         public Vector3 localRotation{
             get{return m_localRotation;}
-            set{m_localScale = value;}
+            set{m_localRotation = value;}
         }
 
         
@@ -39,6 +39,8 @@
 
         public TransformKun():this(null){}
         public TransformKun(Component component):base(component){
+            componentKunType = ComponentKunType.Transform;
+
             var transform = component as Transform;
             if(transform != null){
                 localPosition = transform.localPosition;
@@ -48,12 +50,18 @@
                 if(transform.parent != null){
                     parentInstanceID = transform.parent.GetInstanceID();
                 }
+            //    Debug.Log(name + ": local scale: " + localScale);
             }
         }
 
-        public  void WriteBack(Transform transform)
+        public  override void WriteBack(Component component)
         {
-            if(transform){
+            base.WriteBack(component);
+
+            var transform = component as Transform;
+            if(transform!=null){
+                Debug.Log("Transform WriteBack" + localPosition + localRotation + localScale);
+                
                 transform.localPosition = localPosition;
                 transform.localScale = localScale;
                 transform.localRotation =  Quaternion.Euler(localRotation);

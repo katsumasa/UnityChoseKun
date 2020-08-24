@@ -5,181 +5,72 @@ using UnityEditor;
 
 namespace Utj.UnityChoseKun{
     [System.Serializable]
-    public class SkinnedMeshRendererView : ComponentView
+    public class SkinnedMeshRendererView : RendererView
     {
-        [System.Serializable]
-        public class Settings {
-            private static class Styles {
-                public static readonly GUIContent Name = new GUIContent((Texture2D)EditorGUIUtility.Load("d_SkinnedMeshRenderer Icon"));                
-            }
-            [SerializeField] SkinnedMeshRendererKun m_skinnedMeshRendererKun;
-            public SkinnedMeshRendererKun skinnedMeshRendererKun{
-                get{return m_skinnedMeshRendererKun;}
-                set{m_skinnedMeshRendererKun = value;}
-            }
-            [SerializeField] bool m_skinnedMeshRendererFoldout = false;
-            public bool skinnedMeshRendererFoldout{
-                get{return m_skinnedMeshRendererFoldout;}
-                set{m_skinnedMeshRendererFoldout = value;}
-            }
-            public bool enabled {
-                get{return skinnedMeshRendererKun.enabled;}
-                set{skinnedMeshRendererKun.enabled = value;}
-            }
+        private static class Styles {
+            public static readonly GUIContent Icon = new GUIContent((Texture2D)EditorGUIUtility.Load("d_SkinnedMeshRenderer Icon"));
+            public static readonly GUIContent RendererName = new GUIContent("Skinned Mesh Renderer"); 
+        }
 
-            public Bounds bounds {
-                get{return skinnedMeshRendererKun.localBounds;}
-                set{skinnedMeshRendererKun.localBounds = value;}
-            }
+        [SerializeField] SkinnedMeshRendererKun m_skinnedMeshRendererKun;
+        SkinnedMeshRendererKun rendererKun {
+            get{return m_skinnedMeshRendererKun;}
+            set{m_skinnedMeshRendererKun = value;}
+        }
 
-            public SkinQuality quality {
-                get{return skinnedMeshRendererKun.quality;}
-                set{skinnedMeshRendererKun.quality = value;}
-            }
-            public bool updateWhenOffscreen {
-                get{return skinnedMeshRendererKun.updateWhenOffscreen;}
-                set{skinnedMeshRendererKun.updateWhenOffscreen = value;}
-            }            
-            public string mesh {
-                get{return skinnedMeshRendererKun.sharedMesh;}
-            }
-
-            [SerializeField] bool m_materialsFoldout = true;
-            bool materialsFoldout {
-                get {return m_materialsFoldout;}
-                set {m_materialsFoldout = value;}
-            }
+        [SerializeField] bool m_probsFoldout = true;
+        bool probsFoldout{
+            get{return m_probsFoldout;}
+            set{m_probsFoldout = value;}
+        }
+        [SerializeField] bool m_additionalSettingsFoldout = true;
+        bool additionalSettingsFoldout{
+            get{return m_additionalSettingsFoldout;}
+            set{m_additionalSettingsFoldout = value;}
+        }
+    
 
 
-            [SerializeField] bool m_lightingFoldout = true;
-            bool lightingFoldout{
-                get{return m_lightingFoldout;}
-                set{m_lightingFoldout = value;}
-            }
+        protected override bool DrawTitle(RendererKun rendererKun)
+        {
+            GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));            
+            EditorGUILayout.BeginHorizontal();
 
-            UnityEngine.Rendering.ShadowCastingMode castShadows {
-                get{return skinnedMeshRendererKun.shadowCastingMode;}
-                set{skinnedMeshRendererKun.shadowCastingMode = value;}
-            }
-
-            bool receiveShadows{
-                get{return skinnedMeshRendererKun.receiveShadows;}
-                set {skinnedMeshRendererKun.receiveShadows = value;}
-            }
-
-            [SerializeField] bool m_probsFoldout = true;
-            bool probsFoldout{
-                get{return m_probsFoldout;}
-                set{m_probsFoldout = value;}
-            }
-
-            UnityEngine.Rendering.LightProbeUsage lightProbeUsage{
-                get{return skinnedMeshRendererKun.lightProbeUsage;}
-                set{skinnedMeshRendererKun.lightProbeUsage = value;}
-            }
-
-            TransformKun anchorOverride {
-                get{return skinnedMeshRendererKun.probeAnchor;}
-            }
-             UnityEngine.Rendering.ReflectionProbeUsage reflectionProbeUsage {
-                 get{return skinnedMeshRendererKun.reflectionProbeUsage;}
-                 set{skinnedMeshRendererKun.reflectionProbeUsage = value;}
-             }
-
-            [SerializeField] bool m_additionalSettingsFoldout = false;
-            bool additionalSettingsFoldout{
-                get{return m_additionalSettingsFoldout;}
-                set{m_additionalSettingsFoldout = value;}
-            }
-            bool motionVectors {
-                get {return skinnedMeshRendererKun.skinnedMotionVectors;}
-                set {skinnedMeshRendererKun.skinnedMotionVectors = value;}
-            }
-
-            bool dynamicOcclusion {
-                get{return skinnedMeshRendererKun.allowOcclusionWhenDynamic;}
-                set{skinnedMeshRendererKun.allowOcclusionWhenDynamic = value;}
-            }
+            titleFoldout = EditorGUILayout.Foldout(titleFoldout,Styles.Icon);                
+            rendererKun.enabled = EditorGUILayout.ToggleLeft(Styles.RendererName,rendererKun.enabled);                
+            GUILayout.FlexibleSpace();
+            EditorGUILayout.EndHorizontal();
+            GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));         
+            
+            return titleFoldout;
+        }
 
 
-
-
-            public bool DrawTitle()
-            {                
-                GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));            
-                EditorGUILayout.BeginHorizontal();
-                skinnedMeshRendererFoldout = EditorGUILayout.Foldout(skinnedMeshRendererFoldout,Styles.Name);                
-                enabled = EditorGUILayout.ToggleLeft("Skinned Mesh Renderer",enabled);                
-                GUILayout.FlexibleSpace();
-                EditorGUILayout.EndHorizontal();
-                GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));         
-                return skinnedMeshRendererFoldout;           
-            }
-
-            public void DrawBounds()
+            public void DrawBounds(RendererKun rendererKun)
             {
+                var skinnedMeshRendererKun = rendererKun as SkinnedMeshRendererKun;
                 EditorGUILayout.LabelField("Bounds");
                 EditorGUILayout.BeginVertical();
-                EditorGUILayout.Vector3Field("Center",bounds.center);
-                EditorGUILayout.Vector3Field("Center",bounds.extents);
+                EditorGUILayout.Vector3Field("Center",skinnedMeshRendererKun.bounds.center);
+                EditorGUILayout.Vector3Field("Center",skinnedMeshRendererKun.bounds.extents);
                 EditorGUILayout.EndVertical();
 
-                quality = (SkinQuality)EditorGUILayout.EnumPopup("Quality",quality);
-                updateWhenOffscreen  = EditorGUILayout.Toggle("Update When Offscreen",updateWhenOffscreen);
-                EditorGUILayout.TextField("Mesh",mesh);
-            }
-            public void DrawMaterials()
-            {
-                materialsFoldout = EditorGUILayout.Foldout(materialsFoldout,"Materials");
-                if(materialsFoldout){
-                    using (new EditorGUI.IndentLevelScope()){
-                        if(skinnedMeshRendererKun.materials != null){
-                            EditorGUILayout.BeginHorizontal();
-                            EditorGUILayout.LabelField("Size");
-                            EditorGUILayout.TextField(skinnedMeshRendererKun.materials.Length.ToString());
-                            EditorGUILayout.EndHorizontal();
-                            for(var i = 0; i < skinnedMeshRendererKun.materials.Length; i++){
-                                EditorGUILayout.BeginHorizontal();
-                                EditorGUILayout.LabelField("Element "+i);
-                                EditorGUILayout.TextField(skinnedMeshRendererKun.materials[i].name);
-                                EditorGUILayout.EndHorizontal();
-                            }
-                        }else{
-                            EditorGUILayout.BeginHorizontal();
-                            EditorGUILayout.LabelField("Size");
-                            EditorGUILayout.TextField("0");
-                            EditorGUILayout.EndHorizontal();
-                            EditorGUILayout.BeginHorizontal();
-                            EditorGUILayout.LabelField("Element 0");
-                            EditorGUILayout.TextField("None(Material)");
-                            EditorGUILayout.EndHorizontal();
-                        }
-                    }
-                }
+                skinnedMeshRendererKun.quality = (SkinQuality)EditorGUILayout.EnumPopup("Quality",skinnedMeshRendererKun.quality);
+                skinnedMeshRendererKun.updateWhenOffscreen  = EditorGUILayout.Toggle("Update When Offscreen",skinnedMeshRendererKun.updateWhenOffscreen);
+                EditorGUILayout.TextField("Mesh",skinnedMeshRendererKun.sharedMesh);
             }
 
-
-            public void DrawLighting()
+            public void DrawProbs(RendererKun rendererKun)
             {
-                lightingFoldout = EditorGUILayout.Foldout(lightingFoldout,"Lighting");
-                if(lightingFoldout){
-                    using (new EditorGUI.IndentLevelScope()){   
-                        castShadows = (UnityEngine.Rendering.ShadowCastingMode)EditorGUILayout.EnumPopup("Cast Shadows",castShadows);
-                        receiveShadows =  EditorGUILayout.Toggle("Receive Shadows",receiveShadows);
-                    }
-                }
-            }
+                var skinnedMeshRendererKun = rendererKun as SkinnedMeshRendererKun;
 
-
-            public void DrawProbs()
-            {
                 probsFoldout = EditorGUILayout.Foldout(probsFoldout,"Probs");
                 if(probsFoldout){
                     using (new EditorGUI.IndentLevelScope()){   
-                        lightProbeUsage = (UnityEngine.Rendering.LightProbeUsage)EditorGUILayout.EnumPopup("Light Probes",lightProbeUsage);
-                        reflectionProbeUsage = (UnityEngine.Rendering.ReflectionProbeUsage)EditorGUILayout.EnumPopup("Reflection Probs",reflectionProbeUsage);
-                        if(anchorOverride != null){
-                            EditorGUILayout.TextField("Anchor Override",anchorOverride.name);
+                        rendererKun.lightProbeUsage = (UnityEngine.Rendering.LightProbeUsage)EditorGUILayout.EnumPopup("Light Probes",rendererKun.lightProbeUsage);
+                        rendererKun.reflectionProbeUsage = (UnityEngine.Rendering.ReflectionProbeUsage)EditorGUILayout.EnumPopup("Reflection Probs",rendererKun.reflectionProbeUsage);
+                        if(rendererKun.probeAnchor != null){
+                            EditorGUILayout.TextField("Anchor Override",rendererKun.probeAnchor.name);
                         } else {
                             EditorGUILayout.TextField("Anchor Override","None(Transform)");
                         }                        
@@ -187,47 +78,50 @@ namespace Utj.UnityChoseKun{
                 }
             }
 
-            public void DrawAdditionalSettings()
+            public void DrawAdditionalSettings(RendererKun rendererKun)
             {
+                var skinnedMeshRendererKun = rendererKun as SkinnedMeshRendererKun;
+
                 additionalSettingsFoldout = EditorGUILayout.Foldout(additionalSettingsFoldout,"Additional Settings");
-                motionVectors = EditorGUILayout.Toggle("Skinned Motion Vectors",motionVectors);
-                dynamicOcclusion = EditorGUILayout.Toggle("Dynamic Occluson",dynamicOcclusion);
+                skinnedMeshRendererKun.skinnedMotionVectors = EditorGUILayout.Toggle("Skinned Motion Vectors",skinnedMeshRendererKun.skinnedMotionVectors);
+                skinnedMeshRendererKun.allowOcclusionWhenDynamic = EditorGUILayout.Toggle("Dynamic Occluson",skinnedMeshRendererKun.allowOcclusionWhenDynamic);
             }
 
-            public Settings(){}
-            public Settings(string json)
-            {
-                skinnedMeshRendererKun = JsonUtility.FromJson<SkinnedMeshRendererKun>(json);
+        public override void SetJson(string json)
+        {
+            rendererKun =  JsonUtility.FromJson<SkinnedMeshRendererKun>(json);
+            if(rendererKun.material != null){
+                materialView = new MaterialView();
+                materialView.materialKun =  rendererKun.material;
             }
-        }
-
-        [SerializeField] Settings m_settings;
-        public Settings settings {
-            get{if(m_settings == null){m_settings = new Settings();}return m_settings;}
-            set{m_settings = value;}
-        }
-
-         public override void SetJson(string json)
-        {
-            settings = new Settings(json);
-        }
-
-        // <summary> JSONを設定する</summary>
-        public override string GetJson()
-        {
-            return JsonUtility.ToJson(settings.skinnedMeshRendererKun);
-        }
-        // <summary> OnGUIから呼び出す処理 </summary>
-        public override void OnGUI()
-        {
-            if(settings != null && settings.DrawTitle()){
-                using (new EditorGUI.IndentLevelScope()){
-                    settings.DrawMaterials();
-                    settings.DrawLighting();
-                    settings.DrawProbs();
-                    settings.DrawAdditionalSettings();
+            
+            if(rendererKun.materials != null){
+                materialViews = new MaterialView[rendererKun.materials.Length];
+                for(var i = 0; i < materialViews.Length; i++){
+                    materialViews[i] = new MaterialView();
+                    materialViews[i].materialKun = rendererKun.materials[i];
                 }
             }
         }
+
+        public override string GetJson()
+        {
+            return JsonUtility.ToJson(rendererKun);
+        }
+
+        public override void OnGUI()
+        {
+            if(rendererKun != null){
+                if(DrawTitle(rendererKun)){
+                    using (new EditorGUI.IndentLevelScope()){
+                        DrawMaterials(rendererKun);
+                        DrawBounds(rendererKun);
+                        DrawLighting(rendererKun);
+                        DrawProbs(rendererKun);
+                        DrawAdditionalSettings(rendererKun);
+                    }
+                }
+            }
+        }        
     }
 }

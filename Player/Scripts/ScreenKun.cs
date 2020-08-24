@@ -107,6 +107,7 @@
     
         public ScreenKun()
         {
+            #if false
             autorotateToLandscapeLeft = Screen.autorotateToLandscapeLeft;
             autorotateToLandscapeRight = Screen.autorotateToLandscapeRight;
             autorotateToPortrait = Screen.autorotateToPortrait;
@@ -136,6 +137,7 @@
             safeArea = Screen.safeArea;
             sleepTimeout = Screen.sleepTimeout;
             width = Screen.width;
+            #endif
         }
 
         public void WriteBack()

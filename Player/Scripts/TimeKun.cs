@@ -90,6 +90,7 @@
 
         public TimeKun()
         {
+            #if false
             deltaTime = Time.deltaTime;
             fixedUnscaledDeltaTime = Time.fixedUnscaledDeltaTime;
             fixedUnscaledTime = Time.fixedUnscaledTime;
@@ -106,6 +107,7 @@
             inFixedTimeStep = Time.inFixedTimeStep;
             maximumDeltaTime = Time.maximumDeltaTime;
             timeScale = Time.timeScale;
+            #endif
         }
 
 

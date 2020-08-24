@@ -15,24 +15,34 @@
             Camera,
             Light,            
             Behaviour,
-       //     SkinnedMeshMeshRenderer,
-    //            MeshRenderer,
+            SkinnedMeshMeshRenderer,
+            MeshRenderer,
             Renderer,
             Component,            
         };
 
-        public static readonly System.Type [,] typeConverterTbls = {
-            {typeof(Transform),typeof(TransformKun)},
-            {typeof(Camera),typeof(CameraKun)},
-            {typeof(Light),typeof(LightKun)},
-            {typeof(Behaviour),typeof(BehaviourKun)},
-            
-            {typeof(Renderer),typeof(RendererKun)},
+        
+        class ComponentPair {
+            public System.Type componentType;
+            public System.Type componenKunType;
+            public ComponentPair(System.Type componentType,System.Type componenKunType){
+                this.componentType = componentType;
+                this.componenKunType = componenKunType;
+            }
+        }
 
-            
-            {typeof(Component),typeof(ComponentKun)},
+        static readonly Dictionary<ComponentKunType,ComponentPair> componentPairDict = new Dictionary<ComponentKunType, ComponentPair>() 
+        {
+            {ComponentKunType.Transform,new ComponentPair(typeof(Transform),typeof(TransformKun))},
+            {ComponentKunType.Camera,new ComponentPair(typeof(Camera),typeof(CameraKun))},
+            {ComponentKunType.Light,new ComponentPair(typeof(Light),typeof(LightKun))},
+            {ComponentKunType.SkinnedMeshMeshRenderer,new ComponentPair(typeof(SkinnedMeshRenderer),typeof(SkinnedMeshRendererKun))},            
+            {ComponentKunType.MeshRenderer,new ComponentPair(typeof(MeshRenderer),typeof(MeshRendererKun))},
+            {ComponentKunType.Renderer,new ComponentPair(typeof(Renderer),typeof(RendererKun))},
+            {ComponentKunType.Behaviour,new ComponentPair(typeof(Behaviour),typeof(BehaviourKun))},
+            {ComponentKunType.Component,new ComponentPair(typeof(Component),typeof(ComponentKun))},
         };
-
+        
         // <summary> ComponentからComponentKunTypeを取得する </summary>
         public static ComponentKunType GetComponentKunType(Component component)
         {
@@ -41,6 +51,8 @@
             if(component is Camera){return ComponentKunType.Camera;}
             if(component is Light){return ComponentKunType.Light;}
             if(component is Behaviour){return ComponentKunType.Behaviour;}
+            if(component is MeshRenderer){return ComponentKunType.MeshRenderer;}
+            if(component is SkinnedMeshRenderer){return ComponentKunType.SkinnedMeshMeshRenderer;}
             if(component is Renderer){return ComponentKunType.Renderer;}
 
             if(component is Component){return ComponentKunType.Component;}
@@ -48,9 +60,9 @@
         }
 
         // <summary> ComponentKunTypeからSystem.Typeを取得する </summary>
-        public static System.Type GetComponentSystemType(ComponentKunType behaviorKunType)
+        public static System.Type GetComponentSystemType(ComponentKunType componentKunType)
         {            
-            return typeConverterTbls[(int)behaviorKunType,0];
+            return componentPairDict[componentKunType].componentType;
         }
 
         // <summary> ComponentからSystemTypeを取得する </summary>
@@ -59,9 +71,9 @@
             return GetComponentSystemType(GetComponentKunType(component));            
         }
 
-        public static System.Type GetComponetKunSyetemType(ComponentKunType behaviorKunType)
+        public static System.Type GetComponetKunSyetemType(ComponentKunType componentKunType)
         {
-            return typeConverterTbls[(int)behaviorKunType,1];
+            return componentPairDict[componentKunType].componenKunType;
         }
 
         public static System.Type GetComponetKunSyetemType(Component component)

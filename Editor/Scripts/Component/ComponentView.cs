@@ -12,16 +12,18 @@
     {        
 
         static Dictionary<ComponentKun.ComponentKunType,System.Type> componentViewTbls = new Dictionary<BehaviourKun.ComponentKunType, System.Type>{
-            //{ComponentKun.ComponentKunType.Transform,   typeof(TransformView)},
-            {ComponentKun.ComponentKunType.Camera,      typeof(CameraView)},
-            {ComponentKun.ComponentKunType.Light,       typeof(LightView)},
-            {ComponentKun.ComponentKunType.Renderer,    typeof(RendererView)},
-            {ComponentKun.ComponentKunType.Behaviour,   typeof(BehaviourView)},
-            {ComponentKun.ComponentKunType.Component,   typeof(ComponentView)},
+            {ComponentKun.ComponentKunType.Transform,               typeof(TransformView)},
+            {ComponentKun.ComponentKunType.Camera,                  typeof(CameraView)},
+            {ComponentKun.ComponentKunType.Light,                   typeof(LightView)},
+            {ComponentKun.ComponentKunType.Renderer,                typeof(RendererView)},
+            {ComponentKun.ComponentKunType.MeshRenderer,            typeof(MeshRendererView)},
+            {ComponentKun.ComponentKunType.SkinnedMeshMeshRenderer, typeof(SkinnedMeshRendererView)},
+            {ComponentKun.ComponentKunType.Behaviour,               typeof(BehaviourView)},
+            {ComponentKun.ComponentKunType.Component,               typeof(ComponentView)},
         };
         
         public static System.Type GetComponentViewSyetemType(BehaviourKun.ComponentKunType componentType)
-        {
+        {        
             return componentViewTbls[componentType];
         }
 

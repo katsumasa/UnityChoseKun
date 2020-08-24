@@ -39,12 +39,7 @@
             get {return m_name;}
             set {m_name = value;}
         }
-        
-        [SerializeField] string m_transformJson;
-        public string transformJson{
-            get{return m_transformJson;}
-            set{m_transformJson = value;}
-        }
+
         [SerializeField] ComponentKun.ComponentKunType [] m_componentKunTypes;
         public ComponentKun.ComponentKunType [] componentKunTypes{
             get{return m_componentKunTypes;}
@@ -58,9 +53,9 @@
 
         private TransformKun m_transformKun;
         public TransformKun transformKun {
-            get {
+            get {                                
                 if(m_transformKun == null){
-                    m_transformKun = JsonUtility.FromJson<TransformKun>(transformJson);
+                    m_transformKun = JsonUtility.FromJson<TransformKun>(componentDataJsons[0]);
                 }
                 return m_transformKun;
             }
@@ -79,18 +74,15 @@
             tag = go.tag;
             instanceID = go.GetInstanceID();
             name = go.name;                                
-            transformJson = JsonUtility.ToJson(new TransformKun(go.transform));                
+            
             var typeList = new List<BehaviourKun.ComponentKunType>();
             var jsonList = new List<string>();
             
             var components = go.GetComponents(typeof(Component));
             foreach(var component in components){
                 var componentKunType = ComponentKun.GetComponentKunType(component);
-                Debug.Log("ComponentKunType" + componentKunType);
-                if(componentKunType == ComponentKun.ComponentKunType.Transform){
-                    continue;
-                }
-                var systemType = ComponentKun.typeConverterTbls[(int)componentKunType,1];   
+                //Debug.Log("ComponentKunType: " + componentKunType);
+                var systemType = ComponentKun.GetComponetKunSyetemType(componentKunType);
                 var componentKun = System.Activator.CreateInstance(systemType,new object[]{component});
                 var json = JsonUtility.ToJson(componentKun);
                 typeList.Add(componentKunType);
@@ -110,15 +102,12 @@
             gameObject.layer = layer;
             gameObject.tag = tag;
             gameObject.name = name;
-
-            var transFormKun = JsonUtility.FromJson<TransformKun>(transformJson);
-            if(transFormKun != null){
-                transFormKun.WriteBack(gameObject.transform);
-            }
-
+            //Debug.Log("componentKunTypes.Length: "+componentKunTypes.Length);            
             for(var i = 0; i < componentKunTypes.Length; i++){                        
                 var componentKunType = componentKunTypes[i];
+                
                 var systemType = ComponentKun.GetComponentSystemType(componentKunType);
+                //Debug.Log("componentKunType: "+componentKunType+" systemType: "+systemType);                
                 var component = gameObject.GetComponent(systemType);
                 if(component == null){
                     Debug.LogWarning("component == null");

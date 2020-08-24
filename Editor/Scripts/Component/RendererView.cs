@@ -9,18 +9,18 @@ namespace Utj.UnityChoseKun{
     { 
         private static class Styles {
             public static readonly GUIContent Icon = new GUIContent((Texture2D)EditorGUIUtility.Load("d_MeshRenderer Icon"));
-            public static readonly GUIContent RendererName = new GUIContent("Renderer");
-
+            public static  GUIContent RendererName = new GUIContent("Renderer");
         }
 
+        
         [SerializeField] bool m_titleFoldout = false;
-        bool titleFoldout{
+        protected bool titleFoldout{
             get{return m_titleFoldout;}
             set{m_titleFoldout = value;}
         }
 
         [SerializeField] bool m_materialsFoldout;
-        bool materialsFoldout {
+         bool materialsFoldout {
             get {return m_materialsFoldout;}
             set {m_materialsFoldout = value;}
         }
@@ -31,14 +31,14 @@ namespace Utj.UnityChoseKun{
         }        
 
         [SerializeField]MaterialView m_materialView;
-        MaterialView materialView
+        protected MaterialView materialView
         {
             get{return m_materialView;}
             set{m_materialView = value;}
         }
 
         [SerializeField]MaterialView[] m_materialViews;
-        MaterialView[] materialViews
+        protected MaterialView[] materialViews
         {
             get{return m_materialViews;}
             set{m_materialViews = value;}
@@ -66,11 +66,7 @@ namespace Utj.UnityChoseKun{
         }
             
         protected virtual void DrawMaterials(RendererKun rendererKun)
-        {
-            if(rendererKun.material != null){
-               // materialView.OnGUI();
-            }
-
+        {            
             materialsFoldout = EditorGUILayout.Foldout(materialsFoldout,"Materials");
             if(materialsFoldout){
                 using (new EditorGUI.IndentLevelScope()){
