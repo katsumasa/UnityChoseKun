@@ -18,7 +18,7 @@
             [SerializeField] string name;
             [SerializeField] bool isStatic;
             [SerializeField] string tag;
-            [SerializeField] LayerMask layerMask;
+            [SerializeField] int layer;
             
             public Settings(){}
             public void Set(GameObjectKun gameObjectKun){
@@ -30,7 +30,7 @@
                     name = gameObjectKun.name;
                     isStatic = gameObjectKun.isStatic;
                     tag = gameObjectKun.tag;
-                    layerMask = gameObjectKun.layer;
+                    layer = gameObjectKun.layer;
                 }
             }
 
@@ -39,7 +39,7 @@
                 gameObjectKun.name = name;
                 gameObjectKun.isStatic = isStatic;
                 gameObjectKun.tag = tag;
-                gameObjectKun.layer = layerMask;
+                gameObjectKun.layer = layer;
             }
 
             public void DrawGameObject(){
@@ -57,43 +57,11 @@
 
                 EditorGUI.indentLevel += 1;
                 tag = EditorGUILayout.TagField("Tag",tag);
-                layerMask = LayerMaskField("Layer",layerMask);
+                layer = EditorGUILayout.LayerField("Layer",layer);
                 EditorGUI.indentLevel --;
             }
 
-            public LayerMask LayerMaskField(string label,LayerMask layerMask)
-            {
-                List<string> layers = new List<string>();
-                List<int> layerNumbers = new List<int>();
-
-                for (var i = 0; i < 32; ++i)
-                {
-                    string layerName = LayerMask.LayerToName(i);
-                    if (!string.IsNullOrEmpty(layerName))
-                    {
-                        layers.Add(layerName);
-                        layerNumbers.Add(i);
-                    }
-                }
-
-                int maskWithoutEmpty = 0;
-                for (var i = 0; i < layerNumbers.Count; ++i)
-                {
-                    if (0 < ((1 << layerNumbers[i]) & layerMask.value))
-                        maskWithoutEmpty |= 1 << i;
-                }
-
-                maskWithoutEmpty = EditorGUILayout.MaskField(label, maskWithoutEmpty, layers.ToArray());
-                int mask = 0;
-                for (var i = 0; i < layerNumbers.Count; ++i)
-                {
-                    if (0 < (maskWithoutEmpty & (1 << i)))
-                        mask |= 1 << layerNumbers[i];
-                }
-                layerMask.value = mask;
-
-                return layerMask;
-            }
+            
         }
 
 
@@ -126,11 +94,6 @@
             componentViews.Clear();
             if(gameObjectKun!=null) {
                 m_selectGameObujectKunID = gameObjectKun.instanceID;
-#if false
-                var transformView = new TransformView();
-                transformView.SetJson(gameObjectKun.transformJson);
-                m_componentViews.Add(transformView);
-#endif
                 for(var i = 0; i < gameObjectKun.componentDataJsons.Length; i++)
                 {
                     var type = ComponentView.GetComponentViewSyetemType(gameObjectKun.componentKunTypes[i]);
@@ -159,11 +122,9 @@
             if(GUILayout.Button("Push")){
                 if(m_gameObjectKuns.ContainsKey(m_selectGameObujectKunID)){
                     var gameObjectKun = m_gameObjectKuns[m_selectGameObujectKunID];
-                    settings.Writeback(gameObjectKun);
-                    //gameObjectKun.transformJson = m_componentViews[0].GetJson();
+                    settings.Writeback(gameObjectKun);                    
                     for(var i = 0; i < gameObjectKun.componentDataJsons.Length; i++)
-                    {
-                        //gameObjectKun.componentDataJsons[i]=m_componentViews[i+1].GetJson();
+                    {                        
                         gameObjectKun.componentDataJsons[i]=m_componentViews[i].GetJson();
                     }
                     UnityChoseKunEditor.SendMessage<GameObjectKun>(UnityChoseKun.MessageID.GameObjectPush,gameObjectKun);                                     

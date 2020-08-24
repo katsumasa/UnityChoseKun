@@ -6,9 +6,9 @@ using UnityEditor;
 namespace Utj.UnityChoseKun{
     public class BehaviourView : ComponentView
     {
-        public sealed class Settings{
+        private sealed class Settings{
             private static class Styles {
-                public static readonly Texture CSIcon = (Texture2D)EditorGUIUtility.Load("d_cs Script Icon");
+                public static readonly Texture CSIcon = (Texture2D)EditorGUIUtility.Load("d_TextAsset Icon");
             }
 
             [SerializeField] BehaviourKun m_behaviourKun;
@@ -35,7 +35,7 @@ namespace Utj.UnityChoseKun{
         }
 
         [SerializeField] Settings m_settings;
-        public Settings settings {
+        Settings settings {
             get{if(m_settings == null){m_settings = new Settings();}return m_settings;}
             set{m_settings = value;}
         }

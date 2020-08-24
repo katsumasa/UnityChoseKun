@@ -18,6 +18,7 @@
             {ComponentKun.ComponentKunType.Renderer,                typeof(RendererView)},
             {ComponentKun.ComponentKunType.MeshRenderer,            typeof(MeshRendererView)},
             {ComponentKun.ComponentKunType.SkinnedMeshMeshRenderer, typeof(SkinnedMeshRendererView)},
+            {ComponentKun.ComponentKunType.MonoBehaviour,           typeof(MonoBehaviourView)},
             {ComponentKun.ComponentKunType.Behaviour,               typeof(BehaviourView)},
             {ComponentKun.ComponentKunType.Component,               typeof(ComponentView)},
         };
