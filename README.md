@@ -62,6 +62,7 @@ MenuからWindow->UTJ->UnityChoseKun->PlayerViewで起動します。
 - 非常に負荷の高い処理です。
 - InspectorViewerのScreenのSetScreenからwidthとheightを調整したり、Skip Frameで実行間隔を調整してからPlayボタンを押すことをお勧めします。
 #### Hierarchy View
+![img](docs/HierarchyView.jpg)
 実機で実行されているアプリケーションのScene情報を分析し、Hierarchy Treeとして展開します。
 情報を取得分析する為には、Inspector View->Inspector->Pullを実行する必要があります。
 
@@ -75,7 +76,7 @@ MenuからWindow->UTJ->UnityChoseKun->Inspecterで起動します。
 ###### Inspector/Time/Component
 Inspecter Viewに表示するクラスを切り替えます
 ##### Inspector View(Inspector)
-![img]InspectorView.jpg
+![img](docs/InspectorView.jpg)
 Hierarchy Viewから選択されたGameObjectの情報を表示します。
 ###### Pull
 実機上で実行されているアプリケーションのScene情報を分析しHierarchy Viewへ展開します。
