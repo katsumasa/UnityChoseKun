@@ -10,15 +10,15 @@
     {
         public void OnMessageEventPull(string json)
         {
-            Debug.Log("OnMessageEventPull");
-            var screenKun = new ScreenKun();
+            //Debug.Log("ScreenPlayer:OnMessageEventPull");
+            var screenKun = new ScreenKun(true);
             SendMessage<ScreenKun>(UnityChoseKun.MessageID.ScreenPull,screenKun);
         }
 
 
         public void OnMessageEventPush(string json)
         {
-            Debug.Log("OnMessageEventPush");
+            //Debug.Log("ScreenPlayer:OnMessageEventPush");
             var screenKun = JsonUtility.FromJson<ScreenKun>(json);
             screenKun.WriteBack();
         }                

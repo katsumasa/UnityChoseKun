@@ -163,7 +163,9 @@
                 settings.Set(null);
                 BuildComponentView(null);
             }            
-            UnityChoseKunEditorWindow.window.Repaint();
+            if(UnityChoseKunEditorWindow.window != null){
+                UnityChoseKunEditorWindow.window.Repaint();
+            }
         }
     }
 }

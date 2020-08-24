@@ -104,40 +104,41 @@
             set{m_preferredRefreshRate = value;}
         }
 
-    
-        public ScreenKun()
-        {
-            #if false
-            autorotateToLandscapeLeft = Screen.autorotateToLandscapeLeft;
-            autorotateToLandscapeRight = Screen.autorotateToLandscapeRight;
-            autorotateToPortrait = Screen.autorotateToPortrait;
-            autorotateToPortraitUpsideDown = Screen.autorotateToPortraitUpsideDown;
-            brightness = Screen.brightness;
-            fullScreen = Screen.fullScreen;
-            fullScreenMode = Screen.fullScreenMode;
-            orientation = Screen.orientation;
-            sleepTimeout = Screen.sleepTimeout;
+        public ScreenKun():this(false){}
 
-            currentResolutionWidth = Screen.currentResolution.width;
-            currentResolutionHeight = Screen.currentResolution.height;
-            currentResolutionRefreshRate = Screen.currentResolution.refreshRate;
+        public ScreenKun(bool isSet)
+        {            
+            if(isSet){
+                autorotateToLandscapeLeft = Screen.autorotateToLandscapeLeft;
+                autorotateToLandscapeRight = Screen.autorotateToLandscapeRight;
+                autorotateToPortrait = Screen.autorotateToPortrait;
+                autorotateToPortraitUpsideDown = Screen.autorotateToPortraitUpsideDown;
+                brightness = Screen.brightness;
+                fullScreen = Screen.fullScreen;
+                fullScreenMode = Screen.fullScreenMode;
+                orientation = Screen.orientation;
+                sleepTimeout = Screen.sleepTimeout;
 
-            cutouts = new Rect[Screen.cutouts.Length];
-            for (var i = 0; i < Screen.cutouts.Length; i++)
-            {
-                cutouts[i] = Screen.cutouts[i];
+                currentResolutionWidth = Screen.currentResolution.width;
+                currentResolutionHeight = Screen.currentResolution.height;
+                currentResolutionRefreshRate = Screen.currentResolution.refreshRate;
+
+                cutouts = new Rect[Screen.cutouts.Length];
+                for (var i = 0; i < Screen.cutouts.Length; i++)
+                {
+                    cutouts[i] = Screen.cutouts[i];
+                }
+                height = Screen.height;
+                orientation = Screen.orientation;
+                resolutions = new Resolution[Screen.resolutions.Length];
+                for (var i = 0; i < Screen.resolutions.Length; i++)
+                {
+                    resolutions[i] = Screen.resolutions[i];
+                }
+                safeArea = Screen.safeArea;
+                sleepTimeout = Screen.sleepTimeout;
+                width = Screen.width;         
             }
-            height = Screen.height;
-            orientation = Screen.orientation;
-            resolutions = new Resolution[Screen.resolutions.Length];
-            for (var i = 0; i < Screen.resolutions.Length; i++)
-            {
-                resolutions[i] = Screen.resolutions[i];
-            }
-            safeArea = Screen.safeArea;
-            sleepTimeout = Screen.sleepTimeout;
-            width = Screen.width;
-            #endif
         }
 
         public void WriteBack()

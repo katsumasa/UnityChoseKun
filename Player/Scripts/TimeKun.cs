@@ -87,27 +87,28 @@
             set{m_timeScale = value;}
         }
 
+        public TimeKun():this(false){}
 
-        public TimeKun()
+        public TimeKun(bool isSet)
         {
-            #if false
-            deltaTime = Time.deltaTime;
-            fixedUnscaledDeltaTime = Time.fixedUnscaledDeltaTime;
-            fixedUnscaledTime = Time.fixedUnscaledTime;
-            frameCount = Time.frameCount;
-            realtimeSinceStartup = Time.realtimeSinceStartup;
-            smoothDeltaTime = Time.smoothDeltaTime;
-            time = Time.time;
-            timeSinceLevelLoad = Time.timeSinceLevelLoad;
-            unscaledDeltaTime = Time.unscaledDeltaTime;
-            unscaledTime = Time.unscaledTime;
+            if(isSet){            
+                deltaTime = Time.deltaTime;
+                fixedUnscaledDeltaTime = Time.fixedUnscaledDeltaTime;
+                fixedUnscaledTime = Time.fixedUnscaledTime;
+                frameCount = Time.frameCount;
+                realtimeSinceStartup = Time.realtimeSinceStartup;
+                smoothDeltaTime = Time.smoothDeltaTime;
+                time = Time.time;
+                timeSinceLevelLoad = Time.timeSinceLevelLoad;
+                unscaledDeltaTime = Time.unscaledDeltaTime;
+                unscaledTime = Time.unscaledTime;
 
-            captureFramerate = Time.captureFramerate;
-            fixedDeltaTime = Time.fixedDeltaTime;
-            inFixedTimeStep = Time.inFixedTimeStep;
-            maximumDeltaTime = Time.maximumDeltaTime;
-            timeScale = Time.timeScale;
-            #endif
+                captureFramerate = Time.captureFramerate;
+                fixedDeltaTime = Time.fixedDeltaTime;
+                inFixedTimeStep = Time.inFixedTimeStep;
+                maximumDeltaTime = Time.maximumDeltaTime;
+                timeScale = Time.timeScale;
+            }
         }
 
 
