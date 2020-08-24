@@ -10,7 +10,7 @@
     {
         public  void OnMessageEventPull(string json)
         {
-            var timeKun = new TimeKun();
+            var timeKun = new TimeKun(true);
             SendMessage<TimeKun>(UnityChoseKun.MessageID.TimePull,timeKun);
         }
 

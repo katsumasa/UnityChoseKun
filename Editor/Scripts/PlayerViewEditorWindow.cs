@@ -155,7 +155,10 @@
             playerViewTexture.LoadRawTextureData(raw);
             playerViewTexture.Apply();
             // EditorWidowを再描画
-            window.Repaint();
+            if(window!=null){
+                window.Repaint();
+            }
+            
         }
 
 
