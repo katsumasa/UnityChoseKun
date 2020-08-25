@@ -8,7 +8,7 @@
 ## このプロジェクトで出来ること
 UnityEditor上で下記の作業を行うことが可能です。
 - 実機で再生されている画面の表示(PlayerView)
-- 実機で再生されているSceneのHierarchyに表示(Hierarchy View)
+- 実機で再生されているSceneのHierarchyに表示(Player Hierarchy)
 - Hierarchy ViweからGameObjectを選択し、Componentの内容を編集して実機へ反映する(Inspector View)
 
 ## 動作環境
@@ -61,7 +61,7 @@ MenuからWindow->UTJ->UnityChoseKun->PlayerViewで起動します。
 ##### 注意事項
 - 非常に負荷の高い処理です。
 - InspectorViewerのScreenのSetScreenからwidthとheightを調整したり、Skip Frameで実行間隔を調整してからPlayボタンを押すことをお勧めします。
-#### Hierarchy View
+#### PlayerHierarchy
 ![img](docs/HierarchyView.jpg)
 実機で実行されているアプリケーションのScene情報を分析し、Hierarchy Treeとして展開します。
 情報を取得分析する為には、Inspector View->Inspector->Pullを実行する必要があります。
