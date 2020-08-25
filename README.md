@@ -1,4 +1,5 @@
 # UnityChoseKun
+[English Ver. README](chosekun_en.md)
 ## 概要
 実機上で実行しているUnityでビルドしたアプリケーションをUnityEditor上で調整する為のツールです。
 
