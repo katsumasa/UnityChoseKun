@@ -24,7 +24,7 @@
             {
                 var go = FindGameObjectInChildren(obj,gameObjectKun.instanceID);
                 if(go != null){                    
-                    gameObjectKun.StoreGameObject(go);
+                    gameObjectKun.WriteBack(go);
                     return;
                 }
             }

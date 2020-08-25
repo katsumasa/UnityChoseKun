@@ -112,20 +112,23 @@ namespace Utj.UnityChoseKun {
             }
         }
 
-        public override void WriteBack(UnityEngine.Object obj)
+        public override bool WriteBack(UnityEngine.Object obj)
         {
-            base.WriteBack(obj);
-            var texture = obj as Texture;
-            if(texture){
-                texture.anisoLevel = anisoLevel;
-                texture.dimension = dimension;
-                texture.filterMode = filterMode;                                                        
-                texture.mipMapBias = mipMapBias;                                                
-                texture.wrapMode = wrapMode;
-                texture.wrapModeU = wrapModeU;
-                texture.wrapModeV = wrapModeV;
-                texture.wrapModeW = wrapModeW;
+            if(base.WriteBack(obj)){
+                var texture = obj as Texture;
+                if(texture){
+                    texture.anisoLevel = anisoLevel;
+                    texture.dimension = dimension;
+                    texture.filterMode = filterMode;                                                        
+                    texture.mipMapBias = mipMapBias;                                                
+                    texture.wrapMode = wrapMode;
+                    texture.wrapModeU = wrapModeU;
+                    texture.wrapModeV = wrapModeV;
+                    texture.wrapModeW = wrapModeW;
+                }
+                return true;
             }
+            return false;
         }
     }
 }

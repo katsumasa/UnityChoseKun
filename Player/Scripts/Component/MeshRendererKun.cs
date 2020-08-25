@@ -8,7 +8,14 @@ namespace Utj.UnityChoseKun{
 
         public MeshRendererKun(Component component):base(component)
         {
-            //componentKunType = ComponentKunType.MeshRenderer;
+            componentKunType = ComponentKunType.MeshRenderer;
+        }
+
+        public override bool WriteBack(Component component){
+            if(base.WriteBack(component)){
+                return true;
+            }
+            return false;
         }
     }
 }

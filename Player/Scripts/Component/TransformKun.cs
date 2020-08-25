@@ -24,13 +24,13 @@
             get{return m_localRotation;}
             set{m_localRotation = value;}
         }
-
         
         [SerializeField] protected  int m_parentInstanceID;
         public int parentInstanceID{
             get {return m_parentInstanceID;}
             protected set {m_parentInstanceID = value;}
         }
+
         [SerializeField] int m_childCount;
         private int childCount {
             get{return m_childCount;}
@@ -40,7 +40,6 @@
         public TransformKun():this(null){}
         public TransformKun(Component component):base(component){
             componentKunType = ComponentKunType.Transform;
-
             var transform = component as Transform;
             if(transform != null){
                 localPosition = transform.localPosition;
@@ -54,18 +53,19 @@
             }
         }
 
-        public  override void WriteBack(Component component)
+        public  override bool WriteBack(Component component)
         {
-            base.WriteBack(component);
-
-            var transform = component as Transform;
-            if(transform!=null){
-                Debug.Log("Transform WriteBack" + localPosition + localRotation + localScale);
-                
-                transform.localPosition = localPosition;
-                transform.localScale = localScale;
-                transform.localRotation =  Quaternion.Euler(localRotation);
+            if(base.WriteBack(component)){
+                var transform = component as Transform;
+                if(transform!=null){
+                    //Debug.Log("Transform WriteBack" + localPosition + localRotation + localScale);                    
+                    transform.localPosition = localPosition;
+                    transform.localScale    = localScale;
+                    transform.localRotation = Quaternion.Euler(localRotation);
+                }
+                return true;
             }
+            return false;
         }
     } 
 

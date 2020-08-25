@@ -25,7 +25,11 @@ namespace Utj.UnityChoseKun{
         public void DrawTitle(){
             GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));                            
             var label = new GUIContent(behaviourKun.name,Icon);
+            EditorGUI.BeginChangeCheck();
             behaviourKun.enabled = EditorGUILayout.ToggleLeft(label,behaviourKun.enabled);                
+            if(EditorGUI.EndChangeCheck()){
+                behaviourKun.dirty = true;
+            }
             GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));
         }
 
@@ -40,7 +44,11 @@ namespace Utj.UnityChoseKun{
 
         public override void OnGUI()
         {
+            EditorGUI.BeginChangeCheck();
             DrawTitle();
+            if(EditorGUI.EndChangeCheck()){
+                behaviourKun.dirty = true;
+            }
         }                  
     }
 }

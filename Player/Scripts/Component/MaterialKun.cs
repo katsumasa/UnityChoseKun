@@ -73,7 +73,7 @@ namespace Utj.UnityChoseKun{
         public MaterialKun():base(){}
 
         public MaterialKun(UnityEngine.Object obj):base(obj)
-        {
+        {            
             var material = obj as Material;
             if(material){
                 color = material.color;
@@ -97,25 +97,28 @@ namespace Utj.UnityChoseKun{
             }
         }
         // TODO : Materialのwrite back
-        public override void WriteBack(Object obj)
+        public override bool WriteBack(Object obj)
         {
-            base.WriteBack(obj);
-            var material = obj as Material;
-            if(material){
-                material.color = color;
-                material.doubleSidedGI = doubleSidedGI;
-                material.enableInstancing = enableInstancing;
-                material.globalIlluminationFlags = globalIlluminationFlags;
-                shader.WriteBack(material.shader);
-                if(mainTexture != null){
-                    mainTexture.WriteBack(material.mainTexture);                
+            if(base.WriteBack(obj)){
+                var material = obj as Material;
+                if(material){
+                    material.color = color;
+                    material.doubleSidedGI = doubleSidedGI;
+                    material.enableInstancing = enableInstancing;
+                    material.globalIlluminationFlags = globalIlluminationFlags;                    
+                    shader.WriteBack(material.shader);
+                    if(mainTexture!=null){                        
+                        mainTexture.WriteBack(material.mainTexture);                
+                    }
+                    material.mainTextureOffset = mainTextureOffset;
+                    material.mainTextureScale = mainTextureOffset;                
+                    material.renderQueue = renderQueue;                
+                    shader.WriteBack(material.shader);
+                    material.shaderKeywords = shaderKeywords;
                 }
-                material.mainTextureOffset = mainTextureOffset;
-                material.mainTextureScale = mainTextureOffset;                
-                material.renderQueue = renderQueue;                
-                shader.WriteBack(material.shader);
-                material.shaderKeywords = shaderKeywords;
+                return true;
             }
+            return false;
         }
     }
 }

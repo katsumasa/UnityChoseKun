@@ -85,21 +85,35 @@
             return GetComponetKunSyetemType(GetComponentKunType(component));           
         }
         
+        //
+        // Memberの定義
+        //
+
+        // <summary> ComponentKunの種別　</summary>
         [SerializeField] protected ComponentKunType m_componentKunType; 
         public ComponentKunType componentKunType{
             get{return m_componentKunType;}
             protected set{m_componentKunType = value;}
         }
 
+        
+        // <summary> コンストラクタ </summary>
         public ComponentKun():this(null){}
         public ComponentKun(Component component):base(component)
         {
-            componentKunType = ComponentKunType.Component;
+            componentKunType = ComponentKunType.Component;            
         }
-
-        public virtual void WriteBack(Component component)
+        
+        // ComponentへComponentKunの内容を書き戻す
+        // 返値 :   true: 書き戻しが行われた
+        //          false : 書き戻しが発生しなかった        
+        public virtual bool WriteBack(Component component)
         {
-            //...
+            if(dirtyInHierarchy){
+                dirty = false;
+                return true;
+            }
+            return false;
         }
         
     }

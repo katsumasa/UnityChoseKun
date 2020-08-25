@@ -75,8 +75,13 @@ namespace Utj.UnityChoseKun{
         public  void OnGUI(){
             if(DrawTitle()){
                 using (new EditorGUI.IndentLevelScope()){
+                    
+                    EditorGUI.BeginChangeCheck();
                     DrawShader();
                     DrawBody();
+                    if(EditorGUI.EndChangeCheck()){
+                        materialKun.dirty = true;
+                    }
                 }
             }
         }            

@@ -50,7 +50,7 @@ namespace Utj.UnityChoseKun {
         public SkinnedMeshRendererKun():this(null){}
         public SkinnedMeshRendererKun(Component component):base(component)
         {
-            //componentKunType = ComponentKunType.SkinnedMeshMeshRenderer;
+            componentKunType = ComponentKunType.SkinnedMeshMeshRenderer;
             var skinnedMeshRenderer = component as SkinnedMeshRenderer;
             if(skinnedMeshRenderer){
                 if(skinnedMeshRenderer.bones!=null){
@@ -68,17 +68,20 @@ namespace Utj.UnityChoseKun {
             }
         }
 
-        public override void WriteBack(Component component)
+        public override bool WriteBack(Component component)
         {
-            base.WriteBack(component);
-            var skinnedMeshRenderer = component as SkinnedMeshRenderer;
-            if(skinnedMeshRenderer){
-                skinnedMeshRenderer.quality = quality;
-                skinnedMeshRenderer.skinnedMotionVectors = skinnedMotionVectors;
-                skinnedMeshRenderer.forceMatrixRecalculationPerRender = forceMatrixRecalculationPerRender;
-                skinnedMeshRenderer.localBounds = localBounds;
-                skinnedMeshRenderer.updateWhenOffscreen = updateWhenOffscreen;
+            if(base.WriteBack(component)){
+                var skinnedMeshRenderer = component as SkinnedMeshRenderer;
+                if(skinnedMeshRenderer){
+                    skinnedMeshRenderer.quality = quality;
+                    skinnedMeshRenderer.skinnedMotionVectors = skinnedMotionVectors;
+                    skinnedMeshRenderer.forceMatrixRecalculationPerRender = forceMatrixRecalculationPerRender;
+                    skinnedMeshRenderer.localBounds = localBounds;
+                    skinnedMeshRenderer.updateWhenOffscreen = updateWhenOffscreen;
+                }
+                return true;
             }
+            return false;
         }
     }
 }

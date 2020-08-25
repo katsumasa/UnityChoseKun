@@ -36,7 +36,13 @@ namespace Utj.UnityChoseKun {
             EditorGUILayout.BeginHorizontal();
 
             titleFoldout = EditorGUILayout.Foldout(titleFoldout,Styles.Icon);                
+            
+            EditorGUI.BeginChangeCheck();
             rendererKun.enabled = EditorGUILayout.ToggleLeft(Styles.RendererName,rendererKun.enabled);                
+            if(EditorGUI.EndChangeCheck()){
+                rendererKun.dirty = true;
+            }
+
             GUILayout.FlexibleSpace();
             EditorGUILayout.EndHorizontal();
             GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));         
@@ -99,10 +105,14 @@ namespace Utj.UnityChoseKun {
             if(rendererKun != null){
                 if(DrawTitle(rendererKun)){
                     using (new EditorGUI.IndentLevelScope()){
+                        EditorGUI.BeginChangeCheck();
                         DrawMaterials(rendererKun);
                         DrawLighting(rendererKun);
                         DrawProbs(rendererKun);
                         DrawAdditionalSettings(rendererKun);
+                        if(EditorGUI.EndChangeCheck()){
+                            rendererKun.dirty = true;
+                        }
                     }
                 }
             }

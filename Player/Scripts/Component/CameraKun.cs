@@ -4,7 +4,9 @@
     using System.Linq;
     using UnityEngine;
 
-
+    // <summary>
+    // CameraをPlayer/Editorの両方でシリアライズ/デシリアライズする為のClass
+    // </summary>
     [System.Serializable]
     public class CameraKun : BehaviourKun{
         private static readonly Vector2[] k_ApertureFormatValues =
@@ -21,9 +23,9 @@
             new Vector2(70.41f, 52.63f), // 70mm IMAX
         };
 
-        
-
+        // メンバー変数の定義        
         public CameraClearFlags clearFlags;
+
         public Color backgroundColor;
         public int cullingMask;
         // Projection
@@ -55,6 +57,7 @@
         
         public CameraKun(Component component):base(component)
         {                                    
+            componentKunType = ComponentKunType.Camera;
             var camera = component as Camera;
             if(camera != null){
                 enabled = camera.enabled;
@@ -84,37 +87,40 @@
             }
         }
 
-        public override void WriteBack(Component component) 
+        public override bool WriteBack(Component component) 
         {
-            base.WriteBack(component);            
-            var camera = component as Camera;
-            if(camera == null){
-                camera.enabled = enabled;
-                camera.clearFlags = clearFlags;
-                camera.backgroundColor = backgroundColor;
-                camera.cullingMask = cullingMask;
-                camera.orthographic = orthographic;
-                camera.orthographicSize = orthographicSize;
-                camera.fieldOfView = fieldOfView;
-                camera.usePhysicalProperties = usePhysicalProperties;
-                if (usePhysicalProperties)
-                {
-                    camera.focalLength = focalLength;
-                    camera.sensorSize = k_ApertureFormatValues[sensorType];
-                    camera.lensShift = lensShift;
-                    camera.gateFit = gateFit;
+            if(base.WriteBack(component)){
+                var camera = component as Camera;
+                if(camera == null){
+                    camera.enabled = enabled;
+                    camera.clearFlags = clearFlags;
+                    camera.backgroundColor = backgroundColor;
+                    camera.cullingMask = cullingMask;
+                    camera.orthographic = orthographic;
+                    camera.orthographicSize = orthographicSize;
+                    camera.fieldOfView = fieldOfView;
+                    camera.usePhysicalProperties = usePhysicalProperties;
+                    if (usePhysicalProperties)
+                    {
+                        camera.focalLength = focalLength;
+                        camera.sensorSize = k_ApertureFormatValues[sensorType];
+                        camera.lensShift = lensShift;
+                        camera.gateFit = gateFit;
+                    }
+                    camera.nearClipPlane = nearClipPlane;
+                    camera.farClipPlane = farClipPlane;
+                    camera.rect = rect;
+                    camera.depth = depth;
+                    camera.renderingPath = (RenderingPath)renderingPath;
+                    camera.useOcclusionCulling = useOcclusionCulling;
+                    camera.allowHDR = allowHDR;
+                    camera.allowMSAA = allowMSAA;
+                    camera.allowDynamicResolution = allowDynamicResolution;
+                    camera.stereoTargetEye = (StereoTargetEyeMask)targetEye;                
                 }
-                camera.nearClipPlane = nearClipPlane;
-                camera.farClipPlane = farClipPlane;
-                camera.rect = rect;
-                camera.depth = depth;
-                camera.renderingPath = (RenderingPath)renderingPath;
-                camera.useOcclusionCulling = useOcclusionCulling;
-                camera.allowHDR = allowHDR;
-                camera.allowMSAA = allowMSAA;
-                camera.allowDynamicResolution = allowDynamicResolution;
-                camera.stereoTargetEye = (StereoTargetEyeMask)targetEye;            
-            }            
+                return true;
+            }
+            return false;
         }
 
     }

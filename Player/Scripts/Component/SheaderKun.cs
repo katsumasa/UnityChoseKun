@@ -41,13 +41,16 @@ namespace Utj.UnityChoseKun{
             }
         }
 
-        public override void WriteBack(UnityEngine.Object obj)
+        public override bool WriteBack(UnityEngine.Object obj)
         {
-            base.WriteBack(obj);
-            var shader = obj as Shader;
-            if(shader){
-                shader.maximumLOD = maximumLOD;
-            }            
+            if(base.WriteBack(obj)){
+                var shader = obj as Shader;
+                if(shader){
+                    shader.maximumLOD = maximumLOD;
+                }
+                return true;
+            }
+            return false;
         }
     }
 }
