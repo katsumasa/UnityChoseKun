@@ -74,14 +74,16 @@ namespace Utj.UnityChoseKun{
         {            
             materialsFoldout = EditorGUILayout.Foldout(materialsFoldout,"Materials");
             if(materialsFoldout){
-                using (new EditorGUI.IndentLevelScope()){
-                    if(rendererKun.materials != null){                                            
-                        foreach(var materialView in materialViews)
+                using (new EditorGUI.IndentLevelScope()){                    
+                    if(rendererKun.materials != null){   
+                        EditorGUILayout.IntField("Size",rendererKun.materials.Length);                                                                 
+                        foreach(var materia in rendererKun.materials)
                         {
-                            materialView.OnGUI();
-                        }                
+                            EditorGUILayout.TextField("Material",materia.name);
+                        }
                     } else {
-                        EditorGUILayout.TextField("None(Material)");
+                        EditorGUILayout.IntField("Size",1);
+                        EditorGUILayout.TextField("Material","None(Material)");
                     }
                 }
             }
@@ -136,6 +138,14 @@ namespace Utj.UnityChoseKun{
                     }
                 }
             }
+            EditorGUI.BeginChangeCheck();
+            foreach(var materialView in materialViews)
+            {
+                materialView.OnGUI();
+            }
+            if(EditorGUI.EndChangeCheck()){
+                rendererKun.dirty = true;
+            }    
         }
 
 

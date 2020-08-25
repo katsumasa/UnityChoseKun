@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEditor;
 
@@ -7,21 +8,29 @@ namespace Utj.UnityChoseKun{
     [System.Serializable]
     public class MaterialView 
     {                
+        public static readonly Texture2D Icon = (Texture2D)EditorGUIUtility.Load("d_Material Icon");
+          
+
+
         [SerializeField] MaterialKun m_materialKun;
         public MaterialKun materialKun {
             get{if(m_materialKun == null){m_materialKun = new MaterialKun();}return m_materialKun;}
             set{m_materialKun = value;}
         }
+        
+        ShaderKun shader {            
+            get {return materialKun.shader;}
+            set {materialKun.shader= value;}            
+        }
 
-        string shader {
-            get{if(materialKun.shader!=null){return materialKun.shader.name;}return "None";}
-        }            
         int renderQueue {
             get{return materialKun.renderQueue;}            
         }
+
         bool enableInstancing {
             get{return materialKun.enableInstancing;}
         }
+
         string[] shaderKeyWords {
             get{return materialKun.shaderKeywords;}                    
         }
@@ -40,14 +49,36 @@ namespace Utj.UnityChoseKun{
 
 
         bool DrawTitle()
-        {
-            foldout = EditorGUILayout.Foldout(foldout,materialKun.name);
+        {            
+            EditorGUILayout.LabelField(new GUIContent(materialKun.name,Icon));
+            EditorGUILayout.BeginHorizontal();
+            foldout = EditorGUILayout.Foldout(foldout,"Shader");
+            if(ShaderView.shaderNames != null){
+                var idx = 0;
+                for(var i = 0; i < ShaderView.shaderNames.Length; i++){
+                    if(ShaderView.shaderNames[i] == shader.name){
+                        idx = i;
+                        break;
+                    }
+                }
+                EditorGUI.BeginChangeCheck();
+                idx = EditorGUILayout.Popup("",idx,ShaderView.shaderNames);
+                if(EditorGUI.EndChangeCheck()){
+                    shader = ShaderView.shaderKuns[idx];
+                    materialKun.dirty = true;                           
+                }
+            } else {
+                EditorGUILayout.TextField("Shader",shader.name);
+            }
+            EditorGUILayout.EndHorizontal();
+
+
             return m_foldout;
         }
 
 
         void DrawShader(){
-            EditorGUILayout.TextField("Shader",shader);
+            
             using (new EditorGUI.IndentLevelScope()){
                 shaderKeywordFoldout = EditorGUILayout.Foldout(shaderKeywordFoldout,"Shader Key Words");
                 if(shaderKeywordFoldout){
@@ -73,9 +104,9 @@ namespace Utj.UnityChoseKun{
 
 
         public  void OnGUI(){
+            GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));         
             if(DrawTitle()){
-                using (new EditorGUI.IndentLevelScope()){
-                    
+                using (new EditorGUI.IndentLevelScope()){                    
                     EditorGUI.BeginChangeCheck();
                     DrawShader();
                     DrawBody();
@@ -84,6 +115,7 @@ namespace Utj.UnityChoseKun{
                     }
                 }
             }
+            GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));         
         }            
     }
 }

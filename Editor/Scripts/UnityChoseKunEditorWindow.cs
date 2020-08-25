@@ -70,6 +70,12 @@
         InspectorView inspectorView {
             get {if(m_inspectorView == null){m_inspectorView = new InspectorView();}return m_inspectorView;}
         }
+
+        [SerializeField] ShaderView m_shaderView;
+        ShaderView shaderView {
+            get{if(m_shaderView == null){m_shaderView = new ShaderView();}return m_shaderView;}
+        }
+
         [SerializeField] Dictionary<string,Action> onGUILayoutFuncDict;
         [SerializeField] Dictionary<UnityChoseKun.MessageID, OnMessageFunc> onMessageFuncDict;
         [SerializeField] Vector2 scrollPos;
@@ -195,7 +201,8 @@
                     {
                         {"Inspector",   inspectorView .OnGUI},
                         {"Screen",      screenView.OnGUI },
-                        {"Time",       timeView.OnGUI},                        
+                        {"Time",        timeView.OnGUI}, 
+                        {"Shader",      shaderView.OnGUI},
                         
                         // 機能をここに追加していく                                              
                     };                    
@@ -208,6 +215,7 @@
                         {UnityChoseKun.MessageID.ScreenPull,screenView.OnMessageEvent},
                         {UnityChoseKun.MessageID.TimePull,timeView.OnMessageEvent },                        
                         {UnityChoseKun.MessageID.GameObjectPull, inspectorView.OnMessageEvent},
+                        {UnityChoseKun.MessageID.ShaderPull,shaderView.OnMessageEvent},
                         // 機能をここに追加していく                                              
                     };
                 }
