@@ -61,7 +61,11 @@
             }
         }
         
-
+        [SerializeField] bool m_dirty;
+        public bool dirty {
+            get{return m_dirty;}
+            set{m_dirty = value;}
+        }
 
         public GameObjectKun():this(null){}
         public GameObjectKun(GameObject go){
@@ -90,24 +94,24 @@
             }
             componentKunTypes = typeList.ToArray();
             componentDataJsons = jsonList.ToArray();            
+
+            dirty = false;
         }
 
 
-        public void StoreGameObject(GameObject gameObject)
+        public void WriteBack(GameObject gameObject)
         {
             Debug.Log("GameObjectKun::StoreGameObject");
-
-            gameObject.SetActive(activeSelf);
-            gameObject.isStatic = isStatic;
-            gameObject.layer = layer;
-            gameObject.tag = tag;
-            gameObject.name = name;
-            //Debug.Log("componentKunTypes.Length: "+componentKunTypes.Length);            
+            if(dirty){
+                gameObject.SetActive(activeSelf);
+                gameObject.isStatic = isStatic;
+                gameObject.layer = layer;
+                gameObject.tag = tag;
+                gameObject.name = name;
+            }
             for(var i = 0; i < componentKunTypes.Length; i++){                        
-                var componentKunType = componentKunTypes[i];
-                
+                var componentKunType = componentKunTypes[i];                    
                 var systemType = ComponentKun.GetComponentSystemType(componentKunType);
-                //Debug.Log("componentKunType: "+componentKunType+" systemType: "+systemType);                
                 var component = gameObject.GetComponent(systemType);
                 if(component == null){
                     Debug.LogWarning("component == null");
@@ -116,7 +120,9 @@
                 var componentKun = JsonUtility.FromJson(componentDataJsons[i],
                                                         ComponentKun.GetComponetKunSyetemType(componentKunType)) as ComponentKun;
                 componentKun.WriteBack(component);
-            }                        
+            }
+            
+            dirty = false;
         }
 
 

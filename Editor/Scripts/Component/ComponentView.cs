@@ -52,6 +52,7 @@
 
 
         }        
+        
         [SerializeField] Settings m_settings;
         Settings settings
         {
@@ -64,15 +65,21 @@
         {
             settings.componentKun = JsonUtility.FromJson<ComponentKun>(json);
         }
+        
         // <summary> JSONを設定する</summary>
         public virtual string GetJson()
         {
             return JsonUtility.ToJson(settings.componentKun);
         }
+        
         // <summary> OnGUIから呼び出す処理 </summary>
         public virtual void OnGUI()
         {
+            EditorGUI.BeginChangeCheck();
             settings.DrawName();
+            if(EditorGUI.EndChangeCheck()){
+                settings.componentKun.dirty = true;
+            }
         }
     }
 }

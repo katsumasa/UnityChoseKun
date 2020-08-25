@@ -53,6 +53,8 @@
             if(foldout){
                 using (new EditorGUI.IndentLevelScope())
                 {
+                    EditorGUI.BeginChangeCheck();
+
                     EditorGUILayout.BeginHorizontal();
                     EditorGUILayout.PrefixLabel(Styles.positionContent);
                     transformKun.localPosition = EditorGUILayout.Vector3Field("",transformKun.localPosition);
@@ -67,6 +69,10 @@
                     EditorGUILayout.PrefixLabel(Styles.scaleContent);
                     transformKun.localScale = EditorGUILayout.Vector3Field("",transformKun.localScale);
                     EditorGUILayout.EndHorizontal();                    
+
+                    if(EditorGUI.EndChangeCheck()){
+                        transformKun.dirty = true;
+                    }
                 }
             }
         }

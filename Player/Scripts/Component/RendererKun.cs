@@ -7,42 +7,51 @@ namespace Utj.UnityChoseKun {
     [System.Serializable]
     public class RendererKun : ComponentKun
     {
-        // <summary> 変数の定義 </summary>
+        //
+        // メンバーの変数の定義
+        //
         [SerializeField]bool m_allowOcclusionWhenDynamic ;
         public bool allowOcclusionWhenDynamic{
             get{return m_allowOcclusionWhenDynamic;}
             set{m_allowOcclusionWhenDynamic = value;}
         }
+
         [SerializeField] Bounds m_bounds ;
         public Bounds bounds {
             get{return m_bounds;}
             private set{m_bounds = value;}
         }
+
         [SerializeField]bool m_enabled;
         public bool enabled{
             get{return m_enabled;}
             set{m_enabled = value;}
         }
+
         [SerializeField] bool m_forceRenderingOff ;
         public bool forceRenderingOff {
             get{return m_forceRenderingOff;}
             set{m_forceRenderingOff = value;}
         }
+
         [SerializeField] bool m_isPartOfStaticBatch ;
         public bool isPartOfStaticBatch {
             get{return m_isPartOfStaticBatch;}
             private set{m_isPartOfStaticBatch = value;}
         }
+
         [SerializeField] bool m_isVisible ;
         public bool isVisible {
             get {return m_isVisible;}
             private set {m_isVisible = value;}
         }
+
         [SerializeField] int m_lightmapIndex ;
         public int lightmapIndex {
             get{return m_lightmapIndex;}
             set{m_lightmapIndex = value;}
         }
+
         [SerializeField] Vector4 m_lightmapScaleOffset ;
         public Vector4 lightmapScaleOffset {
             get{return m_lightmapScaleOffset;}
@@ -60,6 +69,7 @@ namespace Utj.UnityChoseKun {
             get{return m_lightProbeUsage;}
             set{m_lightProbeUsage = value;}
         }
+
         [SerializeField] Matrix4x4 m_localToWorldMatrix ;    
         public Matrix4x4 localToWorldMatrix {
             get{return m_localToWorldMatrix;}
@@ -83,6 +93,7 @@ namespace Utj.UnityChoseKun {
             get{return m_motionVectorGenerationMode;}
             set{m_motionVectorGenerationMode = value;}
         }
+
         [SerializeField] TransformKun m_probeAnchor ;
         public TransformKun probeAnchor {
             get{return m_probeAnchor;}
@@ -149,7 +160,6 @@ namespace Utj.UnityChoseKun {
             private set{m_sharedMaterials = value;}
         }
 
-
         [SerializeField] int m_sortingLayerID ;
         public int sortingLayerID {
             get{return m_sortingLayerID;}
@@ -174,8 +184,11 @@ namespace Utj.UnityChoseKun {
             private set {m_worldToLocalMatrix = value;}
         }
 
-        public RendererKun():this(null){}
+        //
+        // メンバー関数の定義
+        //
 
+        public RendererKun():this(null){}
 
         public RendererKun(Component component):base(component)
         {
@@ -226,28 +239,31 @@ namespace Utj.UnityChoseKun {
             }
         }
 
-        public override void WriteBack(Component component)
+        public override bool WriteBack(Component component)
         {
-            base.WriteBack(component);
-            var renderer = component as Renderer;
-            if(renderer){
-                renderer.allowOcclusionWhenDynamic =allowOcclusionWhenDynamic;                
-                renderer.enabled = enabled;
-                renderer.forceRenderingOff = forceRenderingOff;                                
-                renderer.lightmapIndex = lightmapIndex;
-                renderer.lightmapScaleOffset = lightmapScaleOffset ;                
-                renderer.lightProbeUsage = lightProbeUsage;
-                renderer.motionVectorGenerationMode = motionVectorGenerationMode;               
-                renderer.rayTracingMode = rayTracingMode;
-                renderer.realtimeLightmapIndex = realtimeLightmapIndex;
-                renderer.realtimeLightmapScaleOffset = realtimeLightmapScaleOffset;
-                renderer.rendererPriority = rendererPriority;
-                renderer.renderingLayerMask = renderingLayerMask;
-                renderer.shadowCastingMode = shadowCastingMode;
-                renderer.sortingLayerID = sortingLayerID;
-                renderer.sortingLayerName = sortingLayerName;
-                renderer.sortingOrder = sortingOrder;
+            if(base.WriteBack(component)){
+                var renderer = component as Renderer;
+                if(renderer){
+                    renderer.allowOcclusionWhenDynamic =allowOcclusionWhenDynamic;                
+                    renderer.enabled = enabled;
+                    renderer.forceRenderingOff = forceRenderingOff;                                
+                    renderer.lightmapIndex = lightmapIndex;
+                    renderer.lightmapScaleOffset = lightmapScaleOffset ;                
+                    renderer.lightProbeUsage = lightProbeUsage;
+                    renderer.motionVectorGenerationMode = motionVectorGenerationMode;               
+                    renderer.rayTracingMode = rayTracingMode;
+                    renderer.realtimeLightmapIndex = realtimeLightmapIndex;
+                    renderer.realtimeLightmapScaleOffset = realtimeLightmapScaleOffset;
+                    renderer.rendererPriority = rendererPriority;
+                    renderer.renderingLayerMask = renderingLayerMask;
+                    renderer.shadowCastingMode = shadowCastingMode;
+                    renderer.sortingLayerID = sortingLayerID;
+                    renderer.sortingLayerName = sortingLayerName;
+                    renderer.sortingOrder = sortingOrder;                    
+                }
+                return true;                
             }
+            return false;
         }
     }
 }

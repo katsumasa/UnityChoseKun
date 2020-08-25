@@ -134,8 +134,14 @@
             {                
                 GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(1));
                 EditorGUILayout.BeginHorizontal();
-                foldout =  EditorGUILayout.Foldout(foldout,Styles.cameraFoldout);                
+                foldout =  EditorGUILayout.Foldout(foldout,Styles.cameraFoldout);
+                
+                EditorGUI.BeginChangeCheck();
                 cameraKun.enabled = EditorGUILayout.ToggleLeft("Camera",cameraKun.enabled);
+                if(EditorGUI.EndChangeCheck()){
+                    cameraKun.dirty = true;
+                }
+
                 GUILayout.FlexibleSpace();
                 EditorGUILayout.EndHorizontal();
                 GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(1));                
@@ -297,10 +303,10 @@
         }
 
         public override void OnGUI()
-        {            
-        
+        {                    
             cameraFoldout = settings.DrawCamera(cameraFoldout);
             if(cameraFoldout){
+                EditorGUI.BeginChangeCheck();
                 using (new EditorGUI.IndentLevelScope())
                 {
                     settings.DrawClearFlags();
@@ -316,6 +322,9 @@
                     settings.DrawMSAA();
                     settings.DrawDynamicResolution();
                     settings.DrawTargetEye();
+                }
+                if(EditorGUI.EndChangeCheck()){
+                    settings.cameraKun.dirty = true;
                 }
             }
         }

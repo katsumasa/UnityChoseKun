@@ -50,10 +50,15 @@ namespace Utj.UnityChoseKun{
         {
             return JsonUtility.ToJson(settings.behaviourKun);
         }
+        
         // <summary> OnGUIから呼び出す処理 </summary>
         public override void OnGUI()
         {
+            EditorGUI.BeginChangeCheck();
             settings.DrawTitle();
+            if(EditorGUI.EndChangeCheck()){
+                settings.behaviourKun.dirty = true;
+            }
         }                  
     }
 }

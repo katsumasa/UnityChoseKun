@@ -109,11 +109,21 @@
         
 
         public void OnGUI() {        
+            EditorGUI.BeginChangeCheck();
             settings.DrawGameObject();
+            if(EditorGUI.EndChangeCheck()){
+                if(m_gameObjectKuns.ContainsKey(m_selectGameObujectKunID)){
+                    var gameObjectKun = m_gameObjectKuns[m_selectGameObujectKunID];
+                    gameObjectKun.dirty = true;
+                }
+            }
+            
             foreach(var componentView in componentViews)
             {
                 componentView.OnGUI();
-            }                        
+            }
+            
+
             GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(4));
             EditorGUILayout.BeginHorizontal();
             if(GUILayout.Button("Pull")){   

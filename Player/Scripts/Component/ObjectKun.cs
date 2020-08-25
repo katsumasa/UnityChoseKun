@@ -25,6 +25,17 @@ namespace Utj.UnityChoseKun{
             protected set {m_instanceID = value;}
         }
 
+        [SerializeField] bool m_dirty;
+        public bool dirty {
+            get {return m_dirty;}
+            set {m_dirty = value;}
+        }
+        
+        public virtual bool dirtyInHierarchy {
+            get {return dirty;}
+        }
+
+
         // <summary>
         // 関数の定義
         // </summary>
@@ -48,9 +59,13 @@ namespace Utj.UnityChoseKun{
             }
         }
         
-        public virtual void WriteBack(UnityEngine.Object obj)
+        public virtual bool WriteBack(UnityEngine.Object obj)
         {
-            //...
+            if(dirtyInHierarchy){
+                dirty = false;
+                return true;
+            }
+            return false;
         }
 
         public int GetInstanceID()

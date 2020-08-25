@@ -74,39 +74,41 @@ namespace  Utj.UnityChoseKun
             }
         }
 
-        public override void WriteBack(Component component)
+        public override bool WriteBack(Component component)
         {
-            base.WriteBack(component);
-            Debug.Log("WriteBack");            
+            //Debug.Log("WriteBack");
+            if(base.WriteBack(component)){                
+                var light = component as Light;
+                if(light != null){                
+                    light.enabled = enabled;
+                    light.type = lightType;
+                    light.shape = lightShape;
+                    light.range = range;
+                    light.spotAngle = spotAngle;
+                    light.spotAngle = innerSpotAngle;
+                    cookieSize = light.cookieSize;
 
-            var light = component as Light;
-            if(light != null){                
-                light.enabled = enabled;
-                light.type = lightType;
-                light.shape = lightShape;
-                light.range = range;
-                light.spotAngle = spotAngle;
-                light.spotAngle = innerSpotAngle;
-                cookieSize = light.cookieSize;
+                    // ToDo::cookie と flare            
 
-                // ToDo::cookie と flare            
-
-                light.color = color;
-                light.intensity = intensity;
-                light.bounceIntensity = bounceIntensity;
-                light.colorTemperature = colorTemperature;
-                light.useColorTemperature = useColorTemperature;
-                light.shadows = shadowsType;
-                light.shadowStrength = shadowsStrength;
-                light.shadowBias = shadowsBias;
-                light.shadowNormalBias = shadowsNormalBias;
-                
-                //ToDo::halo
-                light.renderMode = renderMode;
-                light.cullingMask = cullingMask;
-                            
-                light.renderingLayerMask = renderingLayerMask;
+                    light.color = color;
+                    light.intensity = intensity;
+                    light.bounceIntensity = bounceIntensity;
+                    light.colorTemperature = colorTemperature;
+                    light.useColorTemperature = useColorTemperature;
+                    light.shadows = shadowsType;
+                    light.shadowStrength = shadowsStrength;
+                    light.shadowBias = shadowsBias;
+                    light.shadowNormalBias = shadowsNormalBias;
+                    
+                    //ToDo::halo
+                    light.renderMode = renderMode;
+                    light.cullingMask = cullingMask;
+                                
+                    light.renderingLayerMask = renderingLayerMask;
+                }
+                return true;
             }
+            return false;
         }
     }
 }

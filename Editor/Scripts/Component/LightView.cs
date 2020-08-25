@@ -119,7 +119,13 @@ namespace  Utj.UnityChoseKun
                 GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));            
                 EditorGUILayout.BeginHorizontal();
                 foldout = EditorGUILayout.Foldout(foldout,LightContent);                
+                
+                EditorGUI.BeginChangeCheck();
                 enabled = EditorGUILayout.ToggleLeft("Light",enabled);                
+                if(EditorGUI.EndChangeCheck()){
+                    lightKun.dirty = true;
+                }
+
                 GUILayout.FlexibleSpace();
                 EditorGUILayout.EndHorizontal();
                 GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));
@@ -342,6 +348,7 @@ namespace  Utj.UnityChoseKun
             if(foldout){
                 using (new EditorGUI.IndentLevelScope())
                 {
+                    EditorGUI.BeginChangeCheck();                    
                     settings.DrawType();
                     if (LightmapEditorSettings.lightmapper == LightmapEditorSettings.Lightmapper.Enlighten && settings.lightKun.lightType == LightType.Disc)
                         EditorGUILayout.HelpBox(StylesEx.noDiscLightInEnlighten.text, MessageType.Warning);
@@ -352,9 +359,7 @@ namespace  Utj.UnityChoseKun
                         settings.DrawRange();
                         settings.DrawSpotAngle();
                     }                                                                
-                    
-                    
-                    
+                                                        
                     settings.DrawColor();            
 
                     EditorGUILayout.Space();
@@ -372,6 +377,9 @@ namespace  Utj.UnityChoseKun
                     settings.DrawRenderMode();
                     settings.DrawCullingMask();
                     settings.DrawRenderingLayerMask();
+                    if(EditorGUI.EndChangeCheck()){
+                        settings.lightKun.dirty = true;
+                    }
                 }
             }
         }
