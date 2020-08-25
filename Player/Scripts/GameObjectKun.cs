@@ -101,7 +101,7 @@
 
         public void WriteBack(GameObject gameObject)
         {
-            Debug.Log("GameObjectKun::StoreGameObject");
+            Debug.Log("GameObjectKun::StoreGameObject("+dirty+")");
             if(dirty){
                 gameObject.SetActive(activeSelf);
                 gameObject.isStatic = isStatic;

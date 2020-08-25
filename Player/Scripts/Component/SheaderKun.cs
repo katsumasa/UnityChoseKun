@@ -34,23 +34,13 @@ namespace Utj.UnityChoseKun{
             // TODO : プロパティの表示
             var shader = obj as Shader;
             if(shader){
+                name = shader.name;
                 isSupported = shader.isSupported;
                 maximumLOD = shader.maximumLOD;
                 passCount = shader.passCount;
                 renderQueue = shader.renderQueue;
             }
         }
-
-        public override bool WriteBack(UnityEngine.Object obj)
-        {
-            if(base.WriteBack(obj)){
-                var shader = obj as Shader;
-                if(shader){
-                    shader.maximumLOD = maximumLOD;
-                }
-                return true;
-            }
-            return false;
-        }
+        
     }
 }

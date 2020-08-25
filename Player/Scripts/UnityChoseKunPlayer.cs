@@ -27,6 +27,11 @@ namespace Utj.UnityChoseKun
         TimePlayer playerTime {
             get {if(m_playerTime == null){m_playerTime = new TimePlayer();}return m_playerTime;}
         }
+        ShaderPlayer m_shaderPlayer;
+        ShaderPlayer shaderPlayer {
+            get {
+                if(m_shaderPlayer == null){m_shaderPlayer = new ShaderPlayer();}return m_shaderPlayer;}
+        }
 
         ComponentPlayer m_componentPlayer;
         public ComponentPlayer componentPlayer {
@@ -39,12 +44,13 @@ namespace Utj.UnityChoseKun
         {                            
             onMessageFuncDict = new Dictionary<UnityChoseKun.MessageID, OnMessageFunc>()
             {
-                {UnityChoseKun.MessageID.ScreenPull,playerScreen.OnMessageEventPull},
-                {UnityChoseKun.MessageID.ScreenPush,playerScreen.OnMessageEventPush},
-                {UnityChoseKun.MessageID.TimePull, playerTime.OnMessageEventPull},
-                {UnityChoseKun.MessageID.TimePush, playerTime.OnMessageEventPush},
+                {UnityChoseKun.MessageID.ScreenPull,    playerScreen.OnMessageEventPull},
+                {UnityChoseKun.MessageID.ScreenPush,    playerScreen.OnMessageEventPush},
+                {UnityChoseKun.MessageID.TimePull,      playerTime.OnMessageEventPull},
+                {UnityChoseKun.MessageID.TimePush,      playerTime.OnMessageEventPush},
                 {UnityChoseKun.MessageID.GameObjectPull,componentPlayer.OnMessageEventPull},
-                {UnityChoseKun.MessageID.GameObjectPush,componentPlayer.OnMessageEventPush },                
+                {UnityChoseKun.MessageID.GameObjectPush,componentPlayer.OnMessageEventPush },
+                {UnityChoseKun.MessageID.ShaderPull,    shaderPlayer.OnMessageEventPull},                
             };
 
             

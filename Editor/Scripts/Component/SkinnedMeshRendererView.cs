@@ -88,8 +88,12 @@ namespace Utj.UnityChoseKun{
             var skinnedMeshRendererKun = rendererKun as SkinnedMeshRendererKun;
 
             additionalSettingsFoldout = EditorGUILayout.Foldout(additionalSettingsFoldout,"Additional Settings");
-            skinnedMeshRendererKun.skinnedMotionVectors = EditorGUILayout.Toggle("Skinned Motion Vectors",skinnedMeshRendererKun.skinnedMotionVectors);
-            skinnedMeshRendererKun.allowOcclusionWhenDynamic = EditorGUILayout.Toggle("Dynamic Occluson",skinnedMeshRendererKun.allowOcclusionWhenDynamic);
+            if(additionalSettingsFoldout){
+                 using (new EditorGUI.IndentLevelScope()){
+                    skinnedMeshRendererKun.skinnedMotionVectors = EditorGUILayout.Toggle("Skinned Motion Vectors",skinnedMeshRendererKun.skinnedMotionVectors);
+                    skinnedMeshRendererKun.allowOcclusionWhenDynamic = EditorGUILayout.Toggle("Dynamic Occluson",skinnedMeshRendererKun.allowOcclusionWhenDynamic);
+                 }
+            }
         }
 
         public override void SetJson(string json)
@@ -133,6 +137,15 @@ namespace Utj.UnityChoseKun{
                     }
                 }
             }
+            EditorGUI.BeginChangeCheck();
+            foreach(var materialView in materialViews)
+            {
+                materialView.OnGUI();
+            }
+            if(EditorGUI.EndChangeCheck()){
+                rendererKun.dirty = true;
+            }    
+            
         }        
     }
 }

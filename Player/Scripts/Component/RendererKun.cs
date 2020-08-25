@@ -240,10 +240,12 @@ namespace Utj.UnityChoseKun {
         }
 
         public override bool WriteBack(Component component)
-        {
-            if(base.WriteBack(component)){
-                var renderer = component as Renderer;
-                if(renderer){
+        {   
+            Debug.Log("Renderer.WriteBack("+dirty+")");
+            var result = base.WriteBack(component);            
+            var renderer = component as Renderer;
+            if(renderer){
+                if(result){
                     renderer.allowOcclusionWhenDynamic =allowOcclusionWhenDynamic;                
                     renderer.enabled = enabled;
                     renderer.forceRenderingOff = forceRenderingOff;                                
@@ -261,9 +263,14 @@ namespace Utj.UnityChoseKun {
                     renderer.sortingLayerName = sortingLayerName;
                     renderer.sortingOrder = sortingOrder;                    
                 }
-                return true;                
+                for(var i = 0; i < materials.Length; i++){
+                    var materialKun = materials[i];
+                    materialKun.WriteBack(renderer.materials[i]);
+                }
             }
-            return false;
+            
+            
+            return result;
         }
     }
 }

@@ -76,12 +76,14 @@ namespace Utj.UnityChoseKun{
         {            
             var material = obj as Material;
             if(material){
+                name = material.name;
                 color = material.color;
                 doubleSidedGI = material.doubleSidedGI;
                 enableInstancing = material.enableInstancing;
                 globalIlluminationFlags = material.globalIlluminationFlags;                                
                 passCount = material.passCount;
-                renderQueue = material.renderQueue;                                
+                renderQueue = material.renderQueue;
+                shaderKeywords = material.shaderKeywords;                                
                 if(material.shader != null){
                     shader = new ShaderKun(material.shader);
                     // TODO : Material.GetTextureを使って、"_MainTex" "_BumpMap" ,"_Cube" を取得
@@ -99,26 +101,34 @@ namespace Utj.UnityChoseKun{
         // TODO : Materialのwrite back
         public override bool WriteBack(Object obj)
         {
-            if(base.WriteBack(obj)){
-                var material = obj as Material;
-                if(material){
-                    material.color = color;
-                    material.doubleSidedGI = doubleSidedGI;
+            Debug.Log("Material.WriteBack("+dirty+")");
+            var result = base.WriteBack(obj);
+            var material = obj as Material;
+            if(material){
+                if(result){ 
                     material.enableInstancing = enableInstancing;
-                    material.globalIlluminationFlags = globalIlluminationFlags;                    
-                    shader.WriteBack(material.shader);
-                    if(mainTexture!=null){                        
-                        mainTexture.WriteBack(material.mainTexture);                
-                    }
-                    material.mainTextureOffset = mainTextureOffset;
-                    material.mainTextureScale = mainTextureOffset;                
-                    material.renderQueue = renderQueue;                
-                    shader.WriteBack(material.shader);
+                    material.renderQueue = renderQueue;
                     material.shaderKeywords = shaderKeywords;
+                    #if false
+                    material.color = color;
+                    material.doubleSidedGI = doubleSidedGI;                    
+                    material.globalIlluminationFlags = globalIlluminationFlags;                                    
+                    material.mainTextureOffset = mainTextureOffset;
+                    material.mainTextureScale = mainTextureOffset;                                    
+                    #endif
                 }
-                return true;
+                if(shader.name != material.shader.name){
+                    var tmp = Shader.Find(shader.name);
+                    if(tmp != null){                
+                        material.shader = tmp;
+                    }
+                }
+
+                if(mainTexture!=null){                        
+                    mainTexture.WriteBack(material.mainTexture);                
+                }
             }
-            return false;
+            return result;
         }
     }
 }
