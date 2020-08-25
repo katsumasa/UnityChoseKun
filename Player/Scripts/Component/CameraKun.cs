@@ -89,16 +89,17 @@
 
         public override bool WriteBack(Component component) 
         {
-            if(base.WriteBack(component)){
+            //Debug.Log("Camera WriteBack");
+            if(base.WriteBack(component)){                
                 var camera = component as Camera;
-                if(camera == null){
+                if(camera){
                     camera.enabled = enabled;
                     camera.clearFlags = clearFlags;
                     camera.backgroundColor = backgroundColor;
                     camera.cullingMask = cullingMask;
                     camera.orthographic = orthographic;
                     camera.orthographicSize = orthographicSize;
-                    camera.fieldOfView = fieldOfView;
+                    camera.fieldOfView = fieldOfView;                                    
                     camera.usePhysicalProperties = usePhysicalProperties;
                     if (usePhysicalProperties)
                     {
