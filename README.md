@@ -25,7 +25,7 @@ UnityEditor上で下記の作業を行うことが可能です。
 - Component
   - [Camera](https://docs.unity3d.com/ja/current/ScriptReference/Camera.html)
   - [Light](https://docs.unity3d.com/ja/current/ScriptReference/Light.html)
-  - [Renderer]https://docs.unity3d.com/ja/current/ScriptReference/Renderer.html)
+  - [Renderer](https://docs.unity3d.com/ja/current/ScriptReference/Renderer.html)
   - [MeshRenderer](https://docs.unity3d.com/ja/current/ScriptReference/Renderer.html)
   - [SkinnedMeshRenderer](https://docs.unity3d.com/ja/current/ScriptReference/SkinnedMeshRenderer.html)
   - [MonoBehavior](https://docs.unity3d.com/ja/current/ScriptReference/MonoBehaviour.html)
