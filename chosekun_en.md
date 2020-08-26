@@ -19,17 +19,17 @@ Tested on following device and Unity version
 
 ## Adjustable Components
 You can make adjustments on the following components
-- [Screen](https://docs.unity3d.com/current/ScriptReference/Screen.html)
-- [Time](https://docs.unity3d.com/current/ScriptReference/Time.html)
+- [Screen](https://docs.unity3d.com/ScriptReference/Screen.html)
+- [Time](https://docs.unity3d.com/ScriptReference/Time.html)
 - Component
-  - [Camera](https://docs.unity3d.com/current/ScriptReference/Camera.html)
-  - [Light](https://docs.unity3d.com/current/ScriptReference/Light.html)
-  - [Renderer](https://docs.unity3d.com/current/ScriptReference/Renderer.html)
-  - [MeshRenderer](https://docs.unity3d.com/current/ScriptReference/Renderer.html)
-  - [SkinnedMeshRenderer](https://docs.unity3d.com/current/ScriptReference/SkinnedMeshRenderer.html)
-  - [MonoBehavior](https://docs.unity3d.com/current/ScriptReference/MonoBehaviour.html)
-  - [Behavior](https://docs.unity3d.com/current/ScriptReference/Behaviour.html)
-  - [Material](https://docs.unity3d.com/current/ScriptReference/Material.html)
+  - [Camera](https://docs.unity3d.com/ScriptReference/Camera.html)
+  - [Light](https://docs.unity3d.com/ScriptReference/Light.html)
+  - [Renderer](https://docs.unity3d.com/ScriptReference/Renderer.html)
+  - [MeshRenderer](https://docs.unity3d.com/ScriptReference/Renderer.html)
+  - [SkinnedMeshRenderer](https://docs.unity3d.com/ScriptReference/SkinnedMeshRenderer.html)
+  - [MonoBehavior](https://docs.unity3d.com/ScriptReference/MonoBehaviour.html)
+  - [Behavior](https://docs.unity3d.com/ScriptReference/Behaviour.html)
+  - [Material](https://docs.unity3d.com/ScriptReference/Material.html)
 
 ## Notes
 - Cannot be used with Script Debugging.
