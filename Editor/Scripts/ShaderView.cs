@@ -4,7 +4,9 @@ using UnityEngine;
 using UnityEditor;
 
 namespace Utj.UnityChoseKun {
-    public class ShaderView
+        
+    
+    public class ShadersView
     {
         // Member変数の定義
         [SerializeField] static ShaderKun[] m_shaderKuns;
@@ -32,7 +34,7 @@ namespace Utj.UnityChoseKun {
                 cnt = shaderKuns.Length;
             }
 
-             EditorGUILayout.LabelField("Shader List("+cnt+")");
+            EditorGUILayout.LabelField("Shader List("+cnt+")");
             using (new EditorGUI.IndentLevelScope()){
                 if(shaderKuns != null){
                     EditorGUILayout.BeginScrollView(scrollPos);

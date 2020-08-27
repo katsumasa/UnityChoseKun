@@ -4,6 +4,8 @@ using UnityEngine;
 namespace Utj.UnityChoseKun{
     public class Test2 : MonoBehaviour
     {
+        [SerializeField]Material material;
+
         // Start is called before the first frame update
         void Start()
         {
@@ -14,6 +16,8 @@ namespace Utj.UnityChoseKun{
             var shaderPlayer = new ShaderPlayer();            
             shaderPlayer.GetAllShader();
             
+            var shaderKun = new ShaderKun(material.shader);
+            Debug.Log("");                        
         }
 
         // Update is called once per frame
