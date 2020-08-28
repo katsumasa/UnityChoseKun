@@ -52,7 +52,7 @@ namespace Utj.UnityChoseKun{
         {            
             EditorGUILayout.LabelField(new GUIContent(materialKun.name,MaterialIcon));
             if(ShadersView.shaderNames == null){
-                EditorGUILayout.HelpBox("If you want to select shaders,you need to Shader->Pull.",MessageType.Info);
+                EditorGUILayout.HelpBox("If you want to change shaders,you need to Shader->Pull.",MessageType.Info);
             }
             EditorGUILayout.BeginHorizontal();
             foldout = EditorGUILayout.Foldout(foldout,new GUIContent("Shader",ShaderIcon));
@@ -127,10 +127,33 @@ namespace Utj.UnityChoseKun{
                     case UnityEngine.Rendering.ShaderPropertyType.Texture:
                     {                        
                         var content = new GUIContent(displayName,TextureIcon);
-                        if((prop.textureValue == null)||string.IsNullOrEmpty(prop.textureValue.name)){
-                            EditorGUILayout.LabelField(content,new GUIContent("None"));
-                        }else{
-                            EditorGUILayout.LabelField(content,new GUIContent(prop.textureValue.name));
+                        if(TexturesView.textureNames == null){
+                            EditorGUILayout.HelpBox("If you want to change Texture,you need to Texture->Pull.",MessageType.Info);
+
+                            if((prop.textureValue == null)||string.IsNullOrEmpty(prop.textureValue.name)){
+                                EditorGUILayout.LabelField(content,new GUIContent("None"));
+                            } else {
+                                EditorGUILayout.LabelField(content,new GUIContent(prop.textureValue.name));
+                            }
+                        } else {
+                            int selectIdx = -1;
+                            for(var i = 0; i < TexturesView.textureNames.Length; i++){
+                                if(TexturesView.textureNames[i] == prop.textureValue.name){
+                                    selectIdx = i;
+                                    break;
+                                }
+                            }
+                            //if(selectIdx == -1){
+                            //    EditorGUILayout.LabelField(content,new GUIContent("None"));
+                            //} else 
+                            {
+                                EditorGUI.BeginChangeCheck();
+                                selectIdx = EditorGUILayout.Popup(content,selectIdx,TexturesView.textureNames);
+                                if(EditorGUI.EndChangeCheck()){
+                                    prop.textureValue = TexturesView.textureKuns[selectIdx];
+                                    prop.dirty = true;
+                                }       
+                            }                     
                         }  
                         if(prop.flags != UnityEngine.Rendering.ShaderPropertyFlags.NoScaleOffset){
                             using (new EditorGUI.IndentLevelScope()){
@@ -182,13 +205,11 @@ namespace Utj.UnityChoseKun{
             
         }
 
-
         void DrawBody()
         {
             EditorGUILayout.IntField("Render Queue",renderQueue);   
             EditorGUILayout.Toggle("Enable GUP Instancing",enableInstancing);
         }                            
-
 
         public  void OnGUI(){
             GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));         

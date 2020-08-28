@@ -282,7 +282,13 @@ namespace Utj.UnityChoseKun{
                             
                             case UnityEngine.Rendering.ShaderPropertyType.Texture:
                             {
-                                //material.SetTexture(prop.nameId,prop.textureValue);
+                                var id = prop.textureValue.GetInstanceID();
+                                Texture texture;
+                                TexturePlayer.textureDict.TryGetValue(id,out texture);
+                                if(texture != null){
+                                    //Debug.Log(texture.name);
+                                    material.SetTexture(prop.nameId,texture);  
+                                }
                             }
                             break;
                             
