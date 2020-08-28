@@ -1,16 +1,20 @@
 # UnityChoseKun
 [English Ver. README](chosekun_en.md)
+## はじめに
+Unityで開発したアプリを実機上で実行している時に、GameObjectの内容をほんの少しだけ変更したいだけなのに、UnityEditorで再ビルドを行う必要があり、長時間待たされ、貴重な開発時間を無駄にして悔しい思いをしている開発者の皆様、お待たせしました。
+UnityChoseKunはそのような無駄な時間を削減する為の開発支援ツールです。
+
 ## 概要
-実機上で実行しているUnityでビルドしたアプリケーションをUnityEditor上で調整する為のツールです。
+実機上で実行しているアプリ内のGameObjectをUnityEditorから調整する事が出来る、開発支援ツールです。
 
 ![img](docs/UnityChoseKunDemo02.gif)
 ![img](docs/UnityChoseKunDemo03.gif)
 
 ## このプロジェクトで出来ること
-UnityEditor上で下記の作業を行うことが可能です。
+本ツールは主に下記の３機能から構成されています。
 - 実機で再生されている画面の表示(PlayerView)
 - 実機で再生されているSceneのHierarchyに表示(PlayerHierarchy)
-- PlayerHierarchyで選択した、GameObjectに含まれるComponentの内容を編集し実機側へ反映する(PlayerInspector)
+- GameObjectに含まれるComponentの内容を編集し実機側へ反映する(PlayerInspector)
 
 ## 動作環境
 下記の内容で動作を確認済みです。
@@ -20,25 +24,26 @@ UnityEditor上で下記の作業を行うことが可能です。
 
 ## 調整可能なComponentについて
 現在下記の調整を行うことが出来ます
-- [Screen](https://docs.unity3d.com/ja/current/ScriptReference/Screen.html)
-- [Time](https://docs.unity3d.com/ja/current/ScriptReference/Time.html)
-- [Shader](https://docs.unity3d.com/ja/current/ScriptReference/Shader.html)
-- [Texture](https://docs.unity3d.com/ja/current/ScriptReference/Texture.html)
-- [Component](docs.unity3d.com/ja/current/ScriptReference/Component.html)
-  - [Camera](https://docs.unity3d.com/ja/current/ScriptReference/Camera.html)
-  - [Light](https://docs.unity3d.com/ja/current/ScriptReference/Light.html)
-  - [Renderer](https://docs.unity3d.com/ja/current/ScriptReference/Renderer.html)
-  - [MeshRenderer](https://docs.unity3d.com/ja/current/ScriptReference/Renderer.html)
-  - [SkinnedMeshRenderer](https://docs.unity3d.com/ja/current/ScriptReference/SkinnedMeshRenderer.html)
-  - [MonoBehavior](https://docs.unity3d.com/ja/current/ScriptReference/MonoBehaviour.html)
-  - [Behavior](https://docs.unity3d.com/ja/current/ScriptReference/Behaviour.html)
-  - [Material](https://docs.unity3d.com/ja/current/ScriptReference/Material.html)
+- [Screen](https://docs.unity3d.com/ja/ScriptReference/Screen.html)
+- [Time](https://docs.unity3d.com/ja/ScriptReference/Time.html)
+- [Shader](https://docs.unity3d.com/ja/ScriptReference/Shader.html)
+- [Texture](https://docs.unity3d.com/ja/ScriptReference/Texture.html)
+- [Component](docs.unity3d.com/ja/ScriptReference/Component.html)
+  - [Camera](https://docs.unity3d.com/ja/ScriptReference/Camera.html)
+  - [Light](https://docs.unity3d.com/ja/ScriptReference/Light.html)
+  - [Renderer](https://docs.unity3d.com/ja/ScriptReference/Renderer.html)
+  - [MeshRenderer](https://docs.unity3d.com/ja/ScriptReference/Renderer.html)
+  - [SkinnedMeshRenderer](https://docs.unity3d.com/ja/ScriptReference/SkinnedMeshRenderer.html)
+  - [MonoBehavior](https://docs.unity3d.com/ja/ScriptReference/MonoBehaviour.html)
+  - [Behavior](https://docs.unity3d.com/ja/ScriptReference/Behaviour.html)
+  - [Material](https://docs.unity3d.com/ja/ScriptReference/Material.html)
 
 ## 注意事項
-- Script Debuggingと併用できません。
-- Player Viewを有効にすると*端末が高温になります。*
-- Texture,Shaderは内容の確認のみで、変更を行うことは出来ません。
-- MaterialのShader/Textureを変更する為にはTexture/ShaderのPullを先に実行する必要があります。
+- 開発中のツールの為、作りこみが不十分です。万が一*不測の事態が起きても一切保証は出来ませんのでご注意下さい。*
+- Script Debuggingと併用できません。必ずScript DebuggingをOFFにした上でビルドを行ってください。
+- Player Viewを有効にすると*端末が高温になります。* また、画面解像度に応じてCPUリソースを消費します。PlayerViewの再生を行う前に、PlayerInspectorのScreenから画面解像度を変更することをお勧めします。Pixel4XLの場合、画面解像度を604x288に落とした場合、CPUリソースにほぼ消費しないで実行できるようでした。
+- Texture,Shaderに関しては内容の確認のみで、変更を行うことは出来ません。
+- Materialが参照しているShader/Textureを変更する為にはTexture/ShaderのPullを先に実行する必要があります。
 
 ## 使い方
 本リポジトリの内容を組込み先のUnityProjectのAssetフォルダ以下に丸々配置して下さい。
