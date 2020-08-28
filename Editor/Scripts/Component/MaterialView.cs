@@ -8,9 +8,9 @@ namespace Utj.UnityChoseKun{
     [System.Serializable]
     public class MaterialView 
     {                
-        public static readonly Texture2D Icon = (Texture2D)EditorGUIUtility.Load("d_Material Icon");
-          
-
+        public static readonly Texture2D MaterialIcon = (Texture2D)EditorGUIUtility.Load("d_Material Icon");
+        public static readonly Texture2D TextureIcon = (Texture2D)EditorGUIUtility.Load("d_Texture Icon");
+        public static readonly Texture2D ShaderIcon = (Texture2D)EditorGUIUtility.Load("d_Shader Icon");
 
         [SerializeField] MaterialKun m_materialKun;
         public MaterialKun materialKun {
@@ -50,51 +50,160 @@ namespace Utj.UnityChoseKun{
 
         bool DrawTitle()
         {            
-            EditorGUILayout.LabelField(new GUIContent(materialKun.name,Icon));
+            EditorGUILayout.LabelField(new GUIContent(materialKun.name,MaterialIcon));
+            if(ShadersView.shaderNames == null){
+                EditorGUILayout.HelpBox("If you want to change shaders,you need to Shader->Pull.",MessageType.Info);
+            }
             EditorGUILayout.BeginHorizontal();
-            foldout = EditorGUILayout.Foldout(foldout,"Shader");
-            if(ShaderView.shaderNames != null){
+            foldout = EditorGUILayout.Foldout(foldout,new GUIContent("Shader",ShaderIcon));
+            if(ShadersView.shaderNames != null){
                 var idx = 0;
-                for(var i = 0; i < ShaderView.shaderNames.Length; i++){
-                    if(ShaderView.shaderNames[i] == shader.name){
+                for(var i = 0; i < ShadersView.shaderNames.Length; i++){
+                    if(ShadersView.shaderNames[i] == shader.name){
                         idx = i;
                         break;
                     }
                 }
                 EditorGUI.BeginChangeCheck();
-                idx = EditorGUILayout.Popup("",idx,ShaderView.shaderNames);
+                idx = EditorGUILayout.Popup("",idx,ShadersView.shaderNames);
                 if(EditorGUI.EndChangeCheck()){
-                    shader = ShaderView.shaderKuns[idx];
+                    shader = ShadersView.shaderKuns[idx];
                     materialKun.dirty = true;                           
                 }
             } else {
-                EditorGUILayout.TextField("Shader",shader.name);
+
+                EditorGUILayout.TextField(shader.name);
             }
             EditorGUILayout.EndHorizontal();
-
-
             return m_foldout;
         }
 
 
-        void DrawShader(){
-            
-            using (new EditorGUI.IndentLevelScope()){
-                shaderKeywordFoldout = EditorGUILayout.Foldout(shaderKeywordFoldout,"Shader Key Words");
-                if(shaderKeywordFoldout){
-                    using (new EditorGUI.IndentLevelScope()){
-                        if(shaderKeyWords != null && shaderKeyWords.Length > 0){                                                    
-                            foreach(var keyword in shaderKeyWords){
-                                EditorGUILayout.TextField(keyword);
+        void DrawProperty(){
+            foreach(var prop in materialKun.propertys){
+                if(prop.flags ==  UnityEngine.Rendering.ShaderPropertyFlags.HideInInspector){
+                    continue;
+                }
+                var displayName = prop.displayName + "(" + prop.name + ")";
+                switch(prop.flags){
+                    case UnityEngine.Rendering.ShaderPropertyFlags.Normal:
+                    {
+                        displayName += "[Normal]";
+                    }
+                    break;
+                    
+                    case UnityEngine.Rendering.ShaderPropertyFlags.HDR:
+                    {
+                        displayName += "[HDR]";
+                    }
+                    break;
+
+                    case UnityEngine.Rendering.ShaderPropertyFlags.Gamma:
+                    {
+                        displayName += "[Gamma]";
+                    }
+                    break;
+
+                    case UnityEngine.Rendering.ShaderPropertyFlags.PerRendererData:
+                    {
+                        displayName += "[PerRenderData]";
+                    }
+                    break;
+                }
+                EditorGUI.BeginChangeCheck();
+                switch(prop.type){
+                    case UnityEngine.Rendering.ShaderPropertyType.Color:
+                    {
+                        prop.colorValue = EditorGUILayout.ColorField(displayName,prop.colorValue);
+                    }
+                    break;
+
+                    case UnityEngine.Rendering.ShaderPropertyType.Range:
+                    {
+                       prop.floatValue = EditorGUILayout.Slider(displayName,prop.floatValue,prop.rangeLimits.x,prop.rangeLimits.y);
+                    }
+                    break;
+
+                    case UnityEngine.Rendering.ShaderPropertyType.Texture:
+                    {                        
+                        var content = new GUIContent(displayName,TextureIcon);
+                        if(TexturesView.textureNames == null){
+                            EditorGUILayout.HelpBox("If you want to change Texture,you need to Texture->Pull.",MessageType.Info);
+
+                            if((prop.textureValue == null)||string.IsNullOrEmpty(prop.textureValue.name)){
+                                EditorGUILayout.LabelField(content,new GUIContent("None"));
+                            } else {
+                                EditorGUILayout.LabelField(content,new GUIContent(prop.textureValue.name));
                             }
                         } else {
-                            EditorGUILayout.TextField("None");
+                            int selectIdx = -1;
+                            for(var i = 0; i < TexturesView.textureNames.Length; i++){
+                                if(TexturesView.textureNames[i] == prop.textureValue.name){
+                                    selectIdx = i;
+                                    break;
+                                }
+                            }
+                            //if(selectIdx == -1){
+                            //    EditorGUILayout.LabelField(content,new GUIContent("None"));
+                            //} else 
+                            {
+                                EditorGUI.BeginChangeCheck();
+                                selectIdx = EditorGUILayout.Popup(content,selectIdx,TexturesView.textureNames);
+                                if(EditorGUI.EndChangeCheck()){
+                                    prop.textureValue = TexturesView.textureKuns[selectIdx];
+                                    prop.dirty = true;
+                                }       
+                            }                     
+                        }  
+                        if(prop.flags != UnityEngine.Rendering.ShaderPropertyFlags.NoScaleOffset){
+                            using (new EditorGUI.IndentLevelScope()){
+                                EditorGUILayout.BeginHorizontal();
+                                EditorGUILayout.LabelField("Tiling");
+                                prop.scale = EditorGUILayout.Vector2Field("",prop.scale);
+                                EditorGUILayout.EndHorizontal();
+                                EditorGUILayout.BeginHorizontal();
+                                EditorGUILayout.LabelField("Offset");
+                                prop.offset = EditorGUILayout.Vector2Field("",prop.offset);
+                                EditorGUILayout.EndHorizontal();
+                            }
                         }
+                    }   
+                    break;
+
+                    case UnityEngine.Rendering.ShaderPropertyType.Float:
+                    {
+                        prop.floatValue = EditorGUILayout.FloatField(displayName,prop.floatValue);
+                    }   
+                    break;
+
+                    case UnityEngine.Rendering.ShaderPropertyType.Vector:
+                    {
+                        prop.vectorValue = EditorGUILayout.Vector4Field(displayName,prop.vectorValue);
+                    }
+                    break;
+                }
+                if(EditorGUI.EndChangeCheck()){
+                    prop.dirty = true;
+                }
+            }            
+        }
+
+
+        void DrawShaderKeyWords(){                        
+            shaderKeywordFoldout = EditorGUILayout.Foldout(shaderKeywordFoldout,"Shader Key Words");
+            if(shaderKeywordFoldout){
+                using (new EditorGUI.IndentLevelScope()){
+                    if(shaderKeyWords != null && shaderKeyWords.Length > 0){                                                    
+                        foreach(var keyword in shaderKeyWords){
+                            EditorGUILayout.TextField(keyword);
+                        }
+                    } else {
+                        EditorGUILayout.TextField("None");
                     }
                 }
             }
+            
         }
-
 
         void DrawBody()
         {
@@ -102,13 +211,13 @@ namespace Utj.UnityChoseKun{
             EditorGUILayout.Toggle("Enable GUP Instancing",enableInstancing);
         }                            
 
-
         public  void OnGUI(){
             GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));         
             if(DrawTitle()){
                 using (new EditorGUI.IndentLevelScope()){                    
                     EditorGUI.BeginChangeCheck();
-                    DrawShader();
+                    DrawProperty();
+                    DrawShaderKeyWords();
                     DrawBody();
                     if(EditorGUI.EndChangeCheck()){
                         materialKun.dirty = true;

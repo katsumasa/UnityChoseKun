@@ -39,6 +39,11 @@ namespace Utj.UnityChoseKun
             private set {m_componentPlayer = value;}
         }
 
+        TexturePlayer m_texturePlayer;
+        public TexturePlayer texturePlayer {
+            get{if(m_texturePlayer == null){m_texturePlayer = new TexturePlayer();}return m_texturePlayer;}            
+        }
+
 
         private void Awake()
         {                            
@@ -50,12 +55,9 @@ namespace Utj.UnityChoseKun
                 {UnityChoseKun.MessageID.TimePush,      playerTime.OnMessageEventPush},
                 {UnityChoseKun.MessageID.GameObjectPull,componentPlayer.OnMessageEventPull},
                 {UnityChoseKun.MessageID.GameObjectPush,componentPlayer.OnMessageEventPush },
-                {UnityChoseKun.MessageID.ShaderPull,    shaderPlayer.OnMessageEventPull},                
-            };
-
-            
-            
-            
+                {UnityChoseKun.MessageID.ShaderPull,    shaderPlayer.OnMessageEventPull},   
+                {UnityChoseKun.MessageID.TexturePull,   texturePlayer.OnMessageEventPull},                
+            };                                    
         }
 
         // Start is called before the first frame update

@@ -71,9 +71,14 @@
             get {if(m_inspectorView == null){m_inspectorView = new InspectorView();}return m_inspectorView;}
         }
 
-        [SerializeField] ShaderView m_shaderView;
-        ShaderView shaderView {
-            get{if(m_shaderView == null){m_shaderView = new ShaderView();}return m_shaderView;}
+        [SerializeField] ShadersView m_shadersView;
+        ShadersView shaderView {
+            get{if(m_shadersView == null){m_shadersView = new ShadersView();}return m_shadersView;}
+        }
+
+        [SerializeField] TexturesView m_texturesView;
+        TexturesView texturesView{
+            get{if(m_texturesView == null){m_texturesView = new TexturesView();}return m_texturesView;}            
         }
 
         [SerializeField] Dictionary<string,Action> onGUILayoutFuncDict;
@@ -199,10 +204,12 @@
                 {
                     onGUILayoutFuncDict = new Dictionary<string, Action>()
                     {
-                        {"Inspector",   inspectorView .OnGUI},
+                        {"Inspector",   inspectorView.OnGUI},
+                        {"Texture",     texturesView.OnGUI},
+                        {"Shader",      shaderView.OnGUI},
                         {"Screen",      screenView.OnGUI },
                         {"Time",        timeView.OnGUI}, 
-                        {"Shader",      shaderView.OnGUI},
+                        
                         
                         // 機能をここに追加していく                                              
                     };                    
@@ -216,6 +223,7 @@
                         {UnityChoseKun.MessageID.TimePull,timeView.OnMessageEvent },                        
                         {UnityChoseKun.MessageID.GameObjectPull, inspectorView.OnMessageEvent},
                         {UnityChoseKun.MessageID.ShaderPull,shaderView.OnMessageEvent},
+                        {UnityChoseKun.MessageID.TexturePull,texturesView.OnMessageEvent},
                         // 機能をここに追加していく                                              
                     };
                 }

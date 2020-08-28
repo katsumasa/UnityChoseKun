@@ -4,7 +4,9 @@ using UnityEngine;
 using UnityEditor;
 
 namespace Utj.UnityChoseKun {
-    public class ShaderView
+        
+    
+    public class ShadersView
     {
         // Member変数の定義
         [SerializeField] static ShaderKun[] m_shaderKuns;
@@ -30,9 +32,11 @@ namespace Utj.UnityChoseKun {
             int cnt = 0;
             if(shaderKuns!=null){
                 cnt = shaderKuns.Length;
+                EditorGUILayout.LabelField("Shader List("+cnt+")");
+            }else {
+                EditorGUILayout.HelpBox("Please Pull Request.",MessageType.Info);
             }
 
-             EditorGUILayout.LabelField("Shader List("+cnt+")");
             using (new EditorGUI.IndentLevelScope()){
                 if(shaderKuns != null){
                     EditorGUILayout.BeginScrollView(scrollPos);
@@ -46,14 +50,12 @@ namespace Utj.UnityChoseKun {
             {                
                 UnityChoseKunEditor.SendMessage<ShaderKunPacket>(UnityChoseKun.MessageID.ShaderPull,null);
             }
-
         }
 
         public void OnMessageEvent(string json)
         {
             var shaderKunPacket = JsonUtility.FromJson<ShaderKunPacket>(json);
             shaderKuns = shaderKunPacket.shaderKuns;
-
             shaderNames = new string[shaderKuns.Length];
             for(var i = 0; i < shaderKuns.Length; i++)
             {

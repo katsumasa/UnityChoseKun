@@ -38,7 +38,7 @@ namespace Utj.UnityChoseKun {
         [SerializeField] bool m_isReadable ;
         public bool isReadable {
             get{return m_isReadable;}
-            private set{m_isReadable = value;}
+            set{m_isReadable = value;}
         }
 
         [SerializeField] float m_mipMapBias ;
@@ -122,8 +122,8 @@ namespace Utj.UnityChoseKun {
                     texture.filterMode = filterMode;                                                        
                     texture.mipMapBias = mipMapBias;                                                
                     texture.wrapMode = wrapMode;
-                    texture.wrapModeU = wrapModeU;
-                    texture.wrapModeV = wrapModeV;
+                    //texture.wrapModeU = wrapModeU;
+                    //texture.wrapModeV = wrapModeV;
                     texture.wrapModeW = wrapModeW;
                 }
                 return true;

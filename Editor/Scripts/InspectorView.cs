@@ -72,7 +72,12 @@
         }
         [SerializeField] private  List<ComponentView> m_componentViews;            
         List<ComponentView> componentViews{
-            get {if(m_componentViews == null){m_componentViews = new List<ComponentView>();}return m_componentViews;}
+            get {
+                if(m_componentViews == null){
+                    m_componentViews = new List<ComponentView>();
+                }
+                return m_componentViews;
+            }
             set {m_componentViews = value;}
         }                
         [SerializeField] Dictionary<int,GameObjectKun> m_gameObjectKuns;
@@ -91,7 +96,10 @@
 
         void BuildComponentView(GameObjectKun gameObjectKun)
         {
+            
+            
             componentViews.Clear();
+            
             if(gameObjectKun!=null) {
                 m_selectGameObujectKunID = gameObjectKun.instanceID;
                 for(var i = 0; i < gameObjectKun.componentDataJsons.Length; i++)
@@ -108,36 +116,41 @@
 
         
 
-        public void OnGUI() {        
-            EditorGUI.BeginChangeCheck();
-            settings.DrawGameObject();
-            if(EditorGUI.EndChangeCheck()){
-                if(m_gameObjectKuns.ContainsKey(m_selectGameObujectKunID)){
-                    var gameObjectKun = m_gameObjectKuns[m_selectGameObujectKunID];
-                    gameObjectKun.dirty = true;
-                }
+        public void OnGUI() { 
+            if(sceneKun == null) {
+                EditorGUILayout.HelpBox("Please Pull Request.",MessageType.Info);
+            }else{
+                EditorGUI.BeginChangeCheck();
+                settings.DrawGameObject();
+                if(EditorGUI.EndChangeCheck()){
+                    if(m_gameObjectKuns.ContainsKey(m_selectGameObujectKunID)){
+                        var gameObjectKun = m_gameObjectKuns[m_selectGameObujectKunID];
+                        gameObjectKun.dirty = true;
+                    }
+                }                
+                foreach(var componentView in componentViews)
+                {
+                    componentView.OnGUI();
+                }                
+                GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(4));
             }
-            
-            foreach(var componentView in componentViews)
-            {
-                componentView.OnGUI();
-            }
-            
 
-            GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(4));
-            EditorGUILayout.BeginHorizontal();
+
+            EditorGUILayout.BeginHorizontal();            
             if(GUILayout.Button("Pull")){   
                 UnityChoseKunEditor.SendMessage(UnityChoseKun.MessageID.GameObjectPull);
-            }
-            if(GUILayout.Button("Push")){
-                if(m_gameObjectKuns.ContainsKey(m_selectGameObujectKunID)){
-                    var gameObjectKun = m_gameObjectKuns[m_selectGameObujectKunID];
-                    settings.Writeback(gameObjectKun);                    
-                    for(var i = 0; i < gameObjectKun.componentDataJsons.Length; i++)
-                    {                        
-                        gameObjectKun.componentDataJsons[i]=m_componentViews[i].GetJson();
+            }            
+            if(sceneKun != null){            
+                if(GUILayout.Button("Push")){
+                    if(m_gameObjectKuns.ContainsKey(m_selectGameObujectKunID)){
+                        var gameObjectKun = m_gameObjectKuns[m_selectGameObujectKunID];
+                        settings.Writeback(gameObjectKun);                    
+                        for(var i = 0; i < gameObjectKun.componentDataJsons.Length; i++)
+                        {                        
+                            gameObjectKun.componentDataJsons[i]=m_componentViews[i].GetJson();
+                        }
+                        UnityChoseKunEditor.SendMessage<GameObjectKun>(UnityChoseKun.MessageID.GameObjectPush,gameObjectKun);                                     
                     }
-                    UnityChoseKunEditor.SendMessage<GameObjectKun>(UnityChoseKun.MessageID.GameObjectPush,gameObjectKun);                                     
                 }
             }
             EditorGUILayout.EndHorizontal();                        

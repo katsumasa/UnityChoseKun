@@ -5,6 +5,68 @@ namespace Utj.UnityChoseKun{
     [System.Serializable]
     public class ShaderKun : ObjectKun
     {
+        [System.Serializable]
+        public class Property {
+            [SerializeField] string[] m_attributes;
+            [SerializeField] string m_description;
+            [SerializeField] UnityEngine.Rendering.ShaderPropertyFlags m_flags;
+            [SerializeField] string m_name;
+            [SerializeField] int m_nameId;
+            [SerializeField] Vector2 m_rangeLimits;
+            [SerializeField]string m_textureDefaultName;
+            [SerializeField]UnityEngine.Rendering.TextureDimension m_textureDimension;
+            [SerializeField]UnityEngine.Rendering.ShaderPropertyType m_type;
+            [SerializeField] float m_defaultFloatValue;
+            [SerializeField] Vector4 m_defaultVectorValue;
+
+            public string[] attributes{
+                get{return m_attributes;}
+                set{m_attributes = value;}
+            }
+            public string description{
+                get{return m_description;}
+                set{m_description = value;}
+            }
+            public UnityEngine.Rendering.ShaderPropertyFlags flags{
+                get {return m_flags;}
+                set {m_flags = value;}
+            }
+            public  string name {
+                get{return m_name;}
+                set{m_name = value;}
+            }
+            public int nameId{
+                get{return m_nameId;}
+                set{m_nameId = value;}
+            }
+            public Vector2 rangeLimits{
+                get{return m_rangeLimits;}
+                set{m_rangeLimits = value;}
+            }
+            public string textureDefaultName{
+                get{return m_textureDefaultName;}
+                set{m_textureDefaultName = value;}
+            }
+            public UnityEngine.Rendering.TextureDimension textureDimension{
+                get{return m_textureDimension;}
+                set{m_textureDimension = value;}
+            }
+            public UnityEngine.Rendering.ShaderPropertyType type{
+                get{return m_type;}
+                set{m_type = value;}
+            }
+            public float defaultFloatValue {
+                get{return m_defaultFloatValue;}
+                set{m_defaultFloatValue = value;}
+            }
+            public Vector4 defaultVectorValue {
+                get{return m_defaultVectorValue;}
+                set{m_defaultVectorValue = value;}
+            }
+
+        }
+
+
         [SerializeField] bool m_isSupported ;
         public bool isSupported {
             get {return m_isSupported;}
@@ -28,6 +90,13 @@ namespace Utj.UnityChoseKun{
             private set {m_renderQueue = value;}
         }
 
+        [SerializeField] Property[] m_propertys;
+        Property[] propertys {
+            get{return m_propertys;}
+            set{m_propertys = value;}
+        }
+
+
         public ShaderKun():this(null){}
         public ShaderKun(UnityEngine.Object obj):base(obj)
         {
@@ -39,8 +108,114 @@ namespace Utj.UnityChoseKun{
                 maximumLOD = shader.maximumLOD;
                 passCount = shader.passCount;
                 renderQueue = shader.renderQueue;
+                var propertyCount = shader.GetPropertyCount();
+                if(propertyCount > 0){
+                    propertys = new Property[propertyCount];                    
+                    for(var i = 0; i < propertyCount; i++){
+                        propertys[i] = new Property();                        
+                        propertys[i].type = shader.GetPropertyType(i);
+                        propertys[i].attributes = shader.GetPropertyAttributes(i);
+                        propertys[i].description = shader.GetPropertyDescription(i);
+                        propertys[i].flags = shader.GetPropertyFlags(i);
+                        propertys[i].name = shader.GetPropertyName(i);
+                        propertys[i].nameId = shader.GetPropertyNameId(i);
+                        switch(propertys[i].type){
+                            case UnityEngine.Rendering.ShaderPropertyType.Range:
+                            {
+                                propertys[i].rangeLimits = shader.GetPropertyRangeLimits(i);
+                            }
+                            break;
+                            case UnityEngine.Rendering.ShaderPropertyType.Texture:
+                            {
+                                propertys[i].textureDefaultName = shader.GetPropertyTextureDefaultName(i);
+                                propertys[i].textureDimension = shader.GetPropertyTextureDimension(i);
+                            }
+                            break;
+
+                            case UnityEngine.Rendering.ShaderPropertyType.Float:
+                            {
+                                propertys[i].defaultFloatValue = shader.GetPropertyDefaultFloatValue(i);
+                            }
+                            break;
+
+                            case UnityEngine.Rendering.ShaderPropertyType.Vector:
+                            {
+                                propertys[i].defaultVectorValue = shader.GetPropertyDefaultVectorValue(i);
+                            }
+                            break;
+
+                            case UnityEngine.Rendering.ShaderPropertyType.Color:
+                            {
+                                //
+                            }
+                            break;
+                        }
+                    }
+                }
             }
         }
+
+
+        public int GetPropertyCount (){
+            if(propertys == null){
+                return 0;
+            }
+            return propertys.Length;
+        }
+
+        public string[] GetPropertyAttributes (int propertyIndex)
+        {
+            return propertys[propertyIndex].attributes;
+        }
         
+        public string GetPropertyDescription (int propertyIndex)
+        {
+            return propertys[propertyIndex].description;
+        }
+
+        public UnityEngine.Rendering.ShaderPropertyFlags GetPropertyFlags (int propertyIndex)
+        {
+            return propertys[propertyIndex].flags;
+        }   
+
+        public string GetPropertyName (int propertyIndex)
+        {
+            return propertys[propertyIndex].name;
+        }
+
+        public int GetPropertyNameId (int propertyIndex)
+        {
+            return propertys[propertyIndex].nameId;            
+        }
+
+        public Vector2 GetPropertyRangeLimits (int propertyIndex)
+        {
+            return propertys[propertyIndex].rangeLimits;
+        }
+
+        public string GetPropertyTextureDefaultName (int propertyIndex)
+        {
+            return propertys[propertyIndex].textureDefaultName;
+        }
+
+        public UnityEngine.Rendering.TextureDimension GetPropertyTextureDimension (int propertyIndex)
+        {
+            return propertys[propertyIndex].textureDimension;
+        }
+
+        public UnityEngine.Rendering.ShaderPropertyType GetPropertyType (int propertyIndex)
+        {
+            return propertys[propertyIndex].type;
+        }
+
+        public float GetPropertyDefaultFloatValue (int propertyIndex)
+        {
+            return propertys[propertyIndex].defaultFloatValue;
+        }
+
+        public Vector4 GetPropertyDefaultVectorValue (int propertyIndex)
+        {
+            return propertys[propertyIndex].defaultVectorValue;
+        }
     }
 }
