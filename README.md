@@ -50,7 +50,9 @@ UnityChoseKunはそのような無駄な時間を削減する為の開発支援�
 本リポジトリの内容を組込み先のUnityProjectのAssetフォルダ以下に丸々配置して下さい。
 ### アプリケーションビルド時
 - [UnityChoseKun.prefab](https://github.com/katsumasa/UnityChoseKun/blob/master/Player/Prefabs/UnityChoseKun.prefab)をSceneに配置してアプリをビルドして下さい。
-- ビルド時に[Development Build](https://docs.unity3d.com/ja/current/Manual/BuildSettingsStandalone.html)にチェックを入れてる必要があります。
+- [Development BuildとAutoconnect Profiler](https://docs.unity3d.com/ja/current/Manual/BuildSettingsStandalone.html)にチェックを入れてる必要があります。
+- [Scripting BackEnd](https://docs.unity3d.com/ja/2018.4/Manual/windowsstore-scriptingbackends.html)はIL2CPPを選択して下さい。
+
 ### アプリケーション実行時
 #### PlayerViewer
 実機で表示している内容をUnityEditor上で再生するViewerです。
