@@ -19,7 +19,7 @@ UnityChoseKunはそのような無駄な時間を削減する為の開発支援�
 ## 動作環境
 下記の内容で動作を確認済みです。
 - Unity2019.4.5f1
-- Pixel3XL,Pixel4XL
+- Pixel3XL,Pixel4XL,iPhone6
 - Scripting Backend *IL2CPP* (Monoの場合クラッシュします。)
 
 
