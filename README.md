@@ -20,6 +20,7 @@ UnityChoseKunはそのような無駄な時間を削減する為の開発支援�
 下記の内容で動作を確認済みです。
 - Unity2019.4.5f1
 - Pixel3XL,Pixel4XL
+- Scripting Backend *IL2CPP* (Monoの場合クラッシュします。)
 
 
 ## 調整可能なComponentについて
@@ -68,8 +69,8 @@ MenuからWindow->UTJ->UnityChoseKun->PlayerViewで起動します。
 ###### Stop
 画像の転送処理を停止します。
 ##### 注意事項
-- 非常に負荷の高い処理です。
-- InspectorViewerのScreenのSetScreenからwidthとheightを調整したり、Skip Frameで実行間隔を調整してからPlayボタンを押すことをお勧めします。
+- InspectorViewerは非常に負荷の高い処理です。InspectorViewerのScreenのSetScreenからwidthとheightを調整したり、Skip Frameで実行間隔を調整してからPlayボタンを押すことをお勧めします。
+- Scripting BackendにはIL2CPPを使用して下さい。
 #### PlayerHierarchy
 ![img](docs/HierarchyView.jpg)
 <br>
