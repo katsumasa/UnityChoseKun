@@ -86,7 +86,7 @@
         [SerializeField] Vector2 scrollPos;
 
 
-        [MenuItem("Window/UnityChoseKun/Inspector")]
+        [MenuItem("Window/UnityChoseKun/Player Inspector")]
         static void Create()
         {
             if(window == null){
