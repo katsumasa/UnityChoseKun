@@ -84,7 +84,7 @@
 
         // 関数の定義
 
-        [MenuItem("Window/UnityChoseKun/Hierarchy")]
+        [MenuItem("Window/UnityChoseKun/Player Hierarchy")]
         public static void Create()
         {
             if (window == null)

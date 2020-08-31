@@ -12,30 +12,40 @@
 
     // UnityPlayerViewerKunのEditorEditor側の処理
     // Katsumasa Kimura
+    
     public class PlayerViewKunEditorWindow : EditorWindow
     {
+        [System.Serializable]
+        public class Style
+        {
+           public static Texture2D GAME_VIEW_ICON = (Texture2D)EditorGUIUtility.Load("d_UnityEditor.GameView");
+        }
+
 
         /// <summary>
         /// 変数の定義 
         /// </summary>
+
         
         static PlayerViewKunEditorWindow window;        
         IConnectionState attachProfilerState;                
         PlayerView.EditorSendData editorSendData;
         Texture2D playerViewTexture;
+
         
 
         /// <summary>
         /// 関数の定義 
         /// </summary>
-        [MenuItem("Window/UnityChoseKun/PlayerView")]
+        [MenuItem("Window/UnityChoseKun/Player View")]
         static void Create()
         {
             if (window == null)
             {
                 window = (PlayerViewKunEditorWindow)EditorWindow.GetWindow(typeof(PlayerViewKunEditorWindow));
             }
-            window.titleContent = new GUIContent("Player");
+            
+            window.titleContent = new GUIContent(new GUIContent("Player View", Style.GAME_VIEW_ICON));
             window.wantsMouseMove = true;
             window.autoRepaintOnSceneChange = true;
             window.Show();
@@ -184,6 +194,7 @@
             PlayerConnectionGUILayout.AttachToPlayerDropdown(attachProfilerState, EditorStyles.toolbarDropDown);            
             EditorGUILayout.EndHorizontal();
 
+
             var playerCount = EditorConnection.instance.ConnectedPlayers.Count;
             System.Text.StringBuilder builder = new System.Text.StringBuilder();
             builder.AppendLine(string.Format("{0} players connected.", playerCount));
@@ -249,5 +260,20 @@
             }
             return bytes.Length;
         }
+
+
+        // d_BuildSettings.Merto
+        // d_BuildSettings.Lumin
+        // d_BuildSettings.Switch
+        // d_BuildSettings.PS4
+        // d_BuildSettings.WebGL
+        // d_BuildSettings.tvOS
+        // d_BuildSettings.iPhone
+        // d_BuildSettings.Stadia
+        // d_BuildSettings.Android
+        // d_BuildSettings.Standalone
+        // d_BuildSettings.XboxOne
+        // d_UnityEditor.GameView
+
     }
 }
