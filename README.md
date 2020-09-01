@@ -79,7 +79,7 @@ UnityChoseKunは再ビルドを行うこと無く、UnityEditorj上で開発機�
 
 実機で表示している内容をUnityEditor上で再生するViewerです。
 
-![img](docs/PlayerView.jpg)
+![img](docs/PlayerView.png)
 
 ##### 起動方法
 
@@ -100,6 +100,15 @@ MenuからWindow->UnityChoseKun->Player ViewでPlayerView Windowが表示され�
 画像の転送処理を行う間隔を指定します。
 間隔を開けることでCPU負荷が軽減されます。
 
+###### Recording Folde
+
+録画時にファイルを書き出す先のフォルダー
+
+###### Recording Count
+
+録画に何コマ迄録画するかを指定出来ます。
+このコマまで録画を行うと録画は自動的に停止します。
+
 ###### Play
 
 開発機の実行画面の再生を開始します。
@@ -107,6 +116,21 @@ MenuからWindow->UnityChoseKun->Player ViewでPlayerView Windowが表示され�
 ###### Stop
 
 実行画面の再生処理を停止します。
+
+###### Capture
+
+現在の画面をpng形式でファイルに書き出します。
+
+###### Rec/Stop
+
+録画(PNG形式で連番ファイルを指定したフォルダーに指定したFrame数まで書き出す)を行います。
+録画中は表記がStopとなり録画を停止します。
+
+###### Record Count
+
+録画中は現在録画中のフレームカウンターを表示し、録画終了後は指定したフレーム数の表示を指定することが出来ます。
+
+![img](docs/UnityChoseKunDemo04.gif)
 
 ##### 注意事項
 
