@@ -31,7 +31,10 @@
         IConnectionState attachProfilerState;                
         PlayerView.EditorSendData editorSendData;
         Texture2D playerViewTexture;
-
+        string recordPath;
+        bool isRecord;
+        int recordMaxFrame;
+        int recordCount;
         
 
         /// <summary>
@@ -218,6 +221,21 @@
             EditorGUILayout.EndHorizontal();
 
             
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Recording Folder",recordPath);                
+            if(GUILayout.Button("Set Folder")){
+                if(isRecord == false){
+                    recordPath = EditorUtility.SaveFolderPanel("Save textures to folder", "", "");
+                }
+            }
+            EditorGUILayout.EndHorizontal();
+            var tmp = EditorGUILayout.IntSlider("Record Max Frame",recordMaxFrame,1,9999);
+            if(isRecord == false){
+                recordMaxFrame = tmp;
+            }
+        
+            EditorGUILayout.Space();
+
 
             EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Play"))
@@ -231,9 +249,70 @@
                 editorSendData.command = PlayerView.Command.Stop;
                 SendMessage(editorSendData);
             }
+
+            if(GUILayout.Button("Capture"))
+            {
+                System.DateTime dt = System.DateTime.Now;
+                string result = dt.ToString("yyyyMMddHHmmss");
+                var path = EditorUtility.SaveFilePanel(
+                    "Save texture as PNG",
+                    "",
+                    result + ".png",
+                    "png");
+                if(path.Length != 0){                    
+                    var pngData = playerViewTexture.EncodeToPNG();
+                    if (pngData != null)
+                        System.IO.File.WriteAllBytes(path, pngData);
+                }
+            }
+
             EditorGUILayout.EndHorizontal();
 
 
+            
+                
+            if(playerViewTexture != null && recordPath.Length != 0 && recordCount < recordMaxFrame　&& isRecord){
+                var pngData = playerViewTexture.EncodeToPNG();
+                if (pngData != null){
+                    var path = recordPath + "/" + recordCount.ToString("D4") + ".png";
+                    System.IO.File.WriteAllBytes(path, pngData);
+                    recordCount++;
+                }
+                if(recordCount >= recordMaxFrame){
+                    isRecord = false;
+                }
+            }
+        
+            EditorGUILayout.BeginHorizontal();
+            EditorGUI.BeginChangeCheck();
+            var tmpFrame = EditorGUILayout.IntSlider("Record Count",recordCount,1,recordMaxFrame);
+            if(EditorGUI.EndChangeCheck()){
+                if(isRecord == false && playerViewTexture != null){
+                    
+                    var fpath = recordPath + "/" + tmpFrame.ToString("D4") + ".png";
+                    if(System.IO.File.Exists(fpath)){
+                        recordCount = tmpFrame;
+                        var bytes = System.IO.File.ReadAllBytes(fpath);
+                        playerViewTexture.LoadImage(bytes);
+                    }
+                }
+            }
+
+            if(isRecord == false){
+                if(GUILayout.Button("Rec")){
+                    isRecord = true;
+                    recordCount = 0;
+                }
+            } else {
+                if(GUILayout.Button("Stop")){
+                    isRecord = false;
+                }
+            }
+            
+            EditorGUILayout.EndHorizontal();
+            
+
+            // 描画
             if (playerViewTexture != null)
             {
                 var r1 = EditorGUILayout.GetControlRect();
@@ -245,6 +324,11 @@
                     ScaleMode.ScaleToFit
                     );
             }
+
+            
+            
+            
+
         }
 
 
