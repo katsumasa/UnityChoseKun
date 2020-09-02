@@ -58,7 +58,7 @@
         [SerializeField] float m_unscaledTime; // RO
         public float unscaledTime{
             get{return m_unscaledTime;}
-            private set{m_unscaledDeltaTime = value;}
+            private set{ m_unscaledTime = value;}
         }
         [SerializeField] bool m_inFixedTimeStep;//RO
         public bool inFixedTimeStep{
