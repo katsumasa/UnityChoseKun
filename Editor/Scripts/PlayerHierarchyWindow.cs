@@ -109,9 +109,10 @@
             Repaint();
         }
 
-        private void OnEnable() {            
-            
-            if(treeViewState == null){
+        private void OnEnable() {
+
+            window = (PlayerHierarchyWindow)EditorWindow.GetWindow(typeof(PlayerHierarchyWindow));
+            if (treeViewState == null){
                 treeViewState = new TreeViewState();
             }
             hierarchyTreeView = new HierarchyTreeView(treeViewState);            
