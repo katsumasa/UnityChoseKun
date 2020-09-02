@@ -31,7 +31,7 @@ UnityChoseKunは再ビルドを行うこと無く、UnityEditorj上で開発機�
 下記の内容で動作の確認済を行っています。
 
 - Unityのバージョン
-  - Unity2018.4.26f1 (但し、機能制限あり)
+  - Unity2018.4.26f1 (一部、機能制限あり)
   - Unity2019.4.5f1
 - プラットフォーム
   - Android
@@ -64,8 +64,8 @@ UnityChoseKunは再ビルドを行うこと無く、UnityEditorj上で開発機�
 - Texture,Shaderに関しては内容の確認のみで、変更を行うことは出来ません。
 - Materialが参照しているShader/Textureを変更する為にはTexture/ShaderのPullを先に実行する必要があります。
 - Unity2018では以下の機能に対応していません。
- - Textureの差し替え
- - PlayerViewのEnable Async GPU Readback
+  - Materialが参照しているTextureの差し替え
+  - PlayerViewのAsync GPU Readback機能
 
 ## 使い方
 
