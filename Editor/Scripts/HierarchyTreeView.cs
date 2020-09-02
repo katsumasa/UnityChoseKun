@@ -15,7 +15,11 @@
         static  class Styles {
             public static Texture2D gameObjectIcon = (Texture2D)EditorGUIUtility.Load("d_GameObject Icon");
             public static Texture2D prefabIcon = (Texture2D)EditorGUIUtility.Load("d_Prefab Icon");
+#if UNITY_2019_1_OR_NEWER
             public static Texture2D sceneAssetIcon = (Texture2D)EditorGUIUtility.Load("d_SceneAsset Icon");
+#else
+            public static Texture2D sceneAssetIcon = (Texture2D)EditorGUIUtility.Load("SceneAsset Icon");
+#endif
         }
 
         

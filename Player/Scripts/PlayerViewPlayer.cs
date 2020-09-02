@@ -74,8 +74,10 @@
 
         private void OnDestroy()
         {
-            // 処理が残っているAsyncGPUReadbackがs全て完了する迄待つ
+            #if UNITY_2019_1_OR_NEWER
+            // 処理が残っているAsyncGPUReadbackが全て完了する迄待つ
             AsyncGPUReadback.WaitAllRequests();
+            #endif
 
             if (renderTexture != null)
             {
@@ -149,6 +151,7 @@
                 }
                 switch (captureMode)
                 {
+                    #if UNITY_2019_1_OR_NEWER
                     case CaptureMode.AsyncGPUReadBack:
                         {                        
                             if (
@@ -176,6 +179,9 @@
                         }
                         break;
                     case CaptureMode.Normal:
+                    #else
+                    default:
+                    #endif
                         {
                             var texture2D = ScreenCapture.CaptureScreenshotAsTexture();
                             var len = texture2D.GetRawTextureData().Length + 20;

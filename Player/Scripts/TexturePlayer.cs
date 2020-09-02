@@ -80,6 +80,7 @@ namespace Utj.UnityChoseKun{
 
         public void GetAllTextureInScene()
         {            
+            #if UNITY_2019_1_OR_NEWER
             var scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
             var components = new List<Renderer>();
             foreach(var go in scene.GetRootGameObjects()){
@@ -89,7 +90,7 @@ namespace Utj.UnityChoseKun{
                 if(renderer.materials!=null){
                     for(var i = 0; i < renderer.materials.Length; i++){
                         var material = renderer.materials[i];
-                        var shader = material.shader;
+                        var shader = material.shader;                        
                         var cnt = shader.GetPropertyCount();
                         Debug.Log(shader.name + " cnt " + cnt);
                         for(var j = 0; j < cnt; j++){
@@ -106,11 +107,11 @@ namespace Utj.UnityChoseKun{
                                 continue;
                             }
                             textureDict.Add(texture.GetInstanceID(),texture);
-                        }
+                        }            
                     }
                 }
             }
-
+            #endif
         }
 
 

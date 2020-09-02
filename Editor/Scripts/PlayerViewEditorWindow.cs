@@ -216,7 +216,9 @@
         private void GUILayoutPlayView()
         {
             EditorGUILayout.BeginHorizontal();
+#if UNITY_2019_1_OR_NEWER
             editorSendData.isUseAsyncGPUReadback = EditorGUILayout.Toggle("Enable Async GPU Readback", editorSendData.isUseAsyncGPUReadback);
+#endif
             editorSendData.frameCount = EditorGUILayout.IntField("Skip frame ", editorSendData.frameCount);
             EditorGUILayout.EndHorizontal();
 
@@ -271,7 +273,7 @@
 
             
                 
-            if(playerViewTexture != null && recordPath.Length != 0 && recordCount < recordMaxFrame　&& isRecord){
+            if(playerViewTexture != null && recordPath != null && recordPath.Length != 0 && recordCount < recordMaxFrame　&& isRecord){
                 var pngData = playerViewTexture.EncodeToPNG();
                 if (pngData != null){
                     var path = recordPath + "/" + recordCount.ToString("D4") + ".png";
