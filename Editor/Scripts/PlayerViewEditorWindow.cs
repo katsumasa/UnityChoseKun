@@ -231,6 +231,10 @@
                 }
             }
             EditorGUILayout.EndHorizontal();
+            if (recordPath == null || recordPath.Length == 0)
+            {
+                EditorGUILayout.HelpBox("Please Set Reoding Folder.", MessageType.Info);
+            }
             var tmp = EditorGUILayout.IntSlider("Record Max Frame",recordMaxFrame,1,9999);
             if(isRecord == false){
                 recordMaxFrame = tmp;
@@ -302,8 +306,11 @@
 
             if(isRecord == false){
                 if(GUILayout.Button("Rec")){
-                    isRecord = true;
-                    recordCount = 0;
+                    if (playerViewTexture != null && recordPath != null && recordPath.Length != 0)
+                    {
+                        isRecord = true;
+                        recordCount = 0;
+                    }
                 }
             } else {
                 if(GUILayout.Button("Stop")){
