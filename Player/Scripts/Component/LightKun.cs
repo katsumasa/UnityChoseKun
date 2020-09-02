@@ -2,23 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 namespace  Utj.UnityChoseKun 
-{
-    
-
+{    
     [System.Serializable]
     public class LightKun : BehaviourKun
     {
-        public LightType lightType;
+        #if UNITY_2019_1_OR_NEWER
         public LightShape lightShape;
+        public float colorTemperature ;
+        public bool useColorTemperature ;
+        public int renderingLayerMask ;
+        #endif
+
+        public LightType lightType;
         public float range;
         public float spotAngle;
         public float innerSpotAngle;
         public float cookieSize;
         public Color color ;
         public float intensity;
-        public float bounceIntensity ;
-        public float colorTemperature ;
-        public bool useColorTemperature ;
+        public float bounceIntensity ;        
         public string cookie;
         public LightShadows shadowsType;
         public float shadowsStrength;
@@ -29,8 +31,7 @@ namespace  Utj.UnityChoseKun
         public bool halo;
         public string flare;
         public LightRenderMode renderMode ;
-        public int cullingMask ;                        
-        public int renderingLayerMask ;
+        public int cullingMask ;                                        
         
         public LightKun() : this(null){}        
 
@@ -38,10 +39,17 @@ namespace  Utj.UnityChoseKun
         {                     
             componentKunType = BehaviourKun.ComponentKunType.Light;
             var light = component as Light;
-            if(light){                
-                enabled = light.enabled;
-                lightType = light.type;
+            if(light){       
+
+                #if UNITY_2019_1_OR_NEWER
                 lightShape = light.shape;
+                useColorTemperature = light.useColorTemperature;
+                colorTemperature = light.colorTemperature;
+                renderingLayerMask = light.renderingLayerMask;
+                #endif
+
+                enabled = light.enabled;
+                lightType = light.type;                            
                 range = light.range;
                 spotAngle = light.spotAngle;
                 innerSpotAngle = light.spotAngle;
@@ -59,8 +67,8 @@ namespace  Utj.UnityChoseKun
                 color = light.color;
                 intensity = light.intensity;
                 bounceIntensity = light.bounceIntensity;
-                colorTemperature = light.colorTemperature;
-                useColorTemperature = light.useColorTemperature;
+                
+                
                 shadowsType = light.shadows;
                 shadowsStrength = light.shadowStrength;
                 shadowsBias = light.shadowBias;
@@ -68,9 +76,7 @@ namespace  Utj.UnityChoseKun
                 shadowsNormalBias = light.shadowNormalBias;
                 // halo
                 renderMode = light.renderMode;
-                cullingMask =light.cullingMask;
-                        
-                renderingLayerMask = light.renderingLayerMask;            
+                cullingMask =light.cullingMask;                                        
             }
         }
 
@@ -79,10 +85,17 @@ namespace  Utj.UnityChoseKun
             //Debug.Log("WriteBack");
             if(base.WriteBack(component)){                
                 var light = component as Light;
-                if(light != null){                
-                    light.enabled = enabled;
-                    light.type = lightType;
+                if(light != null){
+
+                    #if UNITY_2019_1_OR_NEWER
                     light.shape = lightShape;
+                    light.renderingLayerMask = renderingLayerMask;
+                    light.colorTemperature = colorTemperature;
+                    light.useColorTemperature = useColorTemperature;
+                    #endif
+
+                    light.enabled = enabled;
+                    light.type = lightType;                    
                     light.range = range;
                     light.spotAngle = spotAngle;
                     light.spotAngle = innerSpotAngle;
@@ -93,8 +106,7 @@ namespace  Utj.UnityChoseKun
                     light.color = color;
                     light.intensity = intensity;
                     light.bounceIntensity = bounceIntensity;
-                    light.colorTemperature = colorTemperature;
-                    light.useColorTemperature = useColorTemperature;
+                    
                     light.shadows = shadowsType;
                     light.shadowStrength = shadowsStrength;
                     light.shadowBias = shadowsBias;
@@ -104,7 +116,7 @@ namespace  Utj.UnityChoseKun
                     light.renderMode = renderMode;
                     light.cullingMask = cullingMask;
                                 
-                    light.renderingLayerMask = renderingLayerMask;
+ 
                 }
                 return true;
             }

@@ -12,10 +12,19 @@ namespace  Utj.UnityChoseKun
         public class Settings
         {
             [SerializeField] private LightKun m_lightKun;
+            
+            #if UNITY_2019_1_OR_NEWER
+            public LightShape lightShape { get{return lightKun.lightShape;}  private set{lightKun.lightShape = value;}}
+            public float colorTemperature { get{return lightKun.colorTemperature;} private set{lightKun.colorTemperature = value;} }
+            public bool useColorTemperature { get{return lightKun.useColorTemperature;} private set{lightKun.useColorTemperature = value;} }
+            public int renderingLayerMask { get{return lightKun.renderingLayerMask;} private set{lightKun.renderingLayerMask = value;} }
+            #endif
+
             public LightKun lightKun {get {if(m_lightKun == null){m_lightKun = new LightKun();}return m_lightKun;} set {m_lightKun = value;}}
             public bool enabled {get{return lightKun.enabled;} private set {lightKun.enabled = value;}}
-            public LightType lightType {get {return lightKun.lightType;} private set {lightKun.lightType = value;}}            
-            public LightShape lightShape { get{return lightKun.lightShape;}  private set{lightKun.lightShape = value;}}
+            public LightType lightType {get {return lightKun.lightType;} private set {lightKun.lightType = value;}}
+            
+
             public float range { get{return lightKun.range;}  private set {lightKun.range = value;}}
             public float spotAngle {get{return lightKun.spotAngle;}  private set{lightKun.spotAngle = value;}}
             public float innerSpotAngle { get{return lightKun.innerSpotAngle;} private set{lightKun.innerSpotAngle = value;} }
@@ -23,11 +32,10 @@ namespace  Utj.UnityChoseKun
             public Color color { get{return lightKun.color;} private set{lightKun.color = value;} }
             public float intensity { get{return lightKun.intensity;} private set{lightKun.intensity = value;} }
             public float bounceIntensity { get {return lightKun.bounceIntensity;} private set{lightKun.bounceIntensity = value;} }
-            public float colorTemperature { get{return lightKun.colorTemperature;} private set{lightKun.colorTemperature = value;} }
-            public bool useColorTemperature { get{return lightKun.useColorTemperature;} private set{lightKun.useColorTemperature = value;} }
+            
             public string cookiName {get{return lightKun.cookie;}private set {lightKun.cookie = value;}}
             public LightShadows shadowsType { get{return lightKun.shadowsType;} private set{lightKun.shadowsType = value;} }
-            public float shadowsStrength { get{return lightKun.shadowsStrength;} private set{lightKun.shadowsStrength = value;} }            
+            public float shadowsStrength { get{return lightKun.shadowsStrength;} private set{lightKun.shadowsStrength = value;} }
             public UnityEngine.Rendering.LightShadowResolution shadowsResolution { get{return lightKun.shadowsResolution;} private set{lightKun.shadowsResolution = value;} }
             public float shadowsBias { get{return lightKun.shadowsBias;} private set{lightKun.shadowsBias = value;} }
             public float shadowsNormalBias { get{return lightKun.shadowsNormalBias;} private set{lightKun.shadowsNormalBias = value;} }
@@ -38,7 +46,7 @@ namespace  Utj.UnityChoseKun
             public int cullingMask { get{return lightKun.cullingMask;} private set{lightKun.cullingMask = value;} }
             
 
-            public int renderingLayerMask { get{return lightKun.renderingLayerMask;} private set{lightKun.renderingLayerMask = value;} }            
+            
             
             
             public bool isAreaLightType { get { return lightType == LightType.Rectangle || lightType  == LightType.Disc; } }
@@ -174,6 +182,7 @@ namespace  Utj.UnityChoseKun
 
             public void DrawColor()
             {
+                #if UNITY_2019_1_OR_NEWER
                 if (UnityEngine.Rendering.GraphicsSettings.lightsUseLinearIntensity && UnityEngine.Rendering.GraphicsSettings.lightsUseColorTemperature)
                 {
                     useColorTemperature =  EditorGUILayout.Toggle(Styles.UseColorTemperature,useColorTemperature);
@@ -191,6 +200,9 @@ namespace  Utj.UnityChoseKun
                 }
                 else
                     color = EditorGUILayout.ColorField(Styles.Color,color);
+                #else
+                    color = EditorGUILayout.ColorField(Styles.Color,color);
+                #endif
             }
             
             
@@ -241,6 +253,7 @@ namespace  Utj.UnityChoseKun
             
             public void DrawRenderingLayerMask()
             {
+                #if UNITY_2019_1_OR_NEWER
                 var srpAsset = UnityEngine.Rendering.GraphicsSettings.currentRenderPipeline;
                 bool usingSRP = srpAsset != null;
                 if (!usingSRP)
@@ -250,6 +263,7 @@ namespace  Utj.UnityChoseKun
                     return;
                 }
                 renderingLayerMask = EditorGUILayout.MaskField(Styles.RenderingLayerMask,renderingLayerMask,layerNames); 
+                #endif
             }
 
 

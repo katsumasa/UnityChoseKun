@@ -7,23 +7,34 @@ namespace Utj.UnityChoseKun{
     {
         // MaterialPropertyをRuntime/Editor両方で使用する為のClass
         [System.Serializable]
-        public class Property {            
+        public class Property {
+            #if UNITY_2019_1_OR_NEWER
+            [SerializeField] UnityEngine.Rendering.ShaderPropertyFlags m_flags;
+            [SerializeField] UnityEngine.Rendering.ShaderPropertyType m_type;
+            #endif
             [SerializeField] bool  m_dirty;
             [SerializeField] Color m_colorValue;
-            [SerializeField] string m_displayName;
-            [SerializeField] UnityEngine.Rendering.ShaderPropertyFlags m_flags;
+            [SerializeField] string m_displayName;            
             [SerializeField] float m_floatValue;
             [SerializeField] string m_name;                        
             [SerializeField] int m_nameId;
             [SerializeField] Vector2 m_rangeLimits;            
             [SerializeField] UnityEngine.Rendering.TextureDimension m_textureDimension;
-            [SerializeField] TextureKun m_textureValue;
-            [SerializeField] UnityEngine.Rendering.ShaderPropertyType m_type;
+            [SerializeField] TextureKun m_textureValue;            
             [SerializeField] Vector4 m_vectorValue;
-
             [SerializeField] Vector2 m_scale; // Tiling
             [SerializeField] Vector2 m_offset; // Offset
-
+            
+            #if UNITY_2019_1_OR_NEWER
+            public UnityEngine.Rendering.ShaderPropertyFlags flags{
+                get{return m_flags;}
+                set{m_flags = value;}
+            }
+            public UnityEngine.Rendering.ShaderPropertyType type{
+                get{return m_type;}
+                set{m_type = value;}
+            }
+            #endif
             public bool dirty{
                 get{return m_dirty;}
                 set{m_dirty = value;}
@@ -35,11 +46,7 @@ namespace Utj.UnityChoseKun{
             public string displayName {
                 get {return m_displayName;}
                 set {m_displayName = value;}
-            }
-            public UnityEngine.Rendering.ShaderPropertyFlags flags{
-                get{return m_flags;}
-                set{m_flags = value;}
-            }
+            }            
             public float floatValue{
                 get{return m_floatValue;}
                 set{m_floatValue = value;}
@@ -64,10 +71,7 @@ namespace Utj.UnityChoseKun{
                 get{return m_textureValue;}
                 set{m_textureValue = value;}
             }
-            public UnityEngine.Rendering.ShaderPropertyType type{
-                get{return m_type;}
-                set{m_type = value;}
-            }
+            
             public Vector4 vectorValue{
                 get {return m_vectorValue;}
                 set {m_vectorValue = value;}
@@ -178,17 +182,16 @@ namespace Utj.UnityChoseKun{
                 shaderKeywords = material.shaderKeywords;                                
                 if(material.shader != null){
                     shader = new ShaderKun(material.shader);
-
+                    #if UNITY_2019_1_OR_NEWER
                     if(shader.GetPropertyCount() > 0){
                         propertys = new Property[shader.GetPropertyCount()];
                         for(var i = 0; i < shader.GetPropertyCount(); i++){
-                            propertys[i] = new Property();
-                            
+                            propertys[i] = new Property();                            
+                            propertys[i].flags = shader.GetPropertyFlags(i);                            
                             propertys[i].type = shader.GetPropertyType(i);
                             propertys[i].name = shader.GetPropertyName(i);
                             propertys[i].nameId = shader.GetPropertyNameId(i);
-                            propertys[i].displayName = shader.GetPropertyDescription(i);
-                            propertys[i].flags = shader.GetPropertyFlags(i);
+                            propertys[i].displayName = shader.GetPropertyDescription(i);                            
                             switch(propertys[i].type){
                                 case UnityEngine.Rendering.ShaderPropertyType.Range:
                                 {
@@ -230,10 +233,9 @@ namespace Utj.UnityChoseKun{
                                 }
                                 break;
                             }
-
                         }
                     }
-                    
+                    #endif                    
                 }
                 shaderKeywords = material.shaderKeywords;
             }
@@ -252,8 +254,8 @@ namespace Utj.UnityChoseKun{
                     material.shaderKeywords = shaderKeywords;
                     #if false
                     material.color = color;
-                    material.doubleSidedGI = doubleSidedGI;                    
-                    material.globalIlluminationFlags = globalIlluminationFlags;                                                        
+                    material.doubleSidedGI = doubleSidedGI;
+                    material.globalIlluminationFlags = globalIlluminationFlags;
                     #endif
                 }
                 if(shader.name != material.shader.name){
@@ -262,6 +264,7 @@ namespace Utj.UnityChoseKun{
                         material.shader = tmp;
                     }
                 }
+                #if UNITY_2019_1_OR_NEWER
                 if(propertys != null){
                     foreach(var prop in propertys){
                         if(prop.dirty == false){
@@ -303,10 +306,10 @@ namespace Utj.UnityChoseKun{
                                 material.SetVector(prop.nameId,prop.vectorValue);
                             }
                             break;
-                        }                    
+                        }
                     }
                 }
-
+                #endif
                 
             }
             return result;

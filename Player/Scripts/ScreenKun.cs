@@ -109,11 +109,21 @@
         public ScreenKun(bool isSet)
         {            
             if(isSet){
+                #if UNITY_2019_1_OR_NEWER
+                brightness = Screen.brightness;
+                cutouts = new Rect[Screen.cutouts.Length];
+                for (var i = 0; i < Screen.cutouts.Length; i++)
+                {
+                    cutouts[i] = Screen.cutouts[i];
+                }
+                #endif
+
                 autorotateToLandscapeLeft = Screen.autorotateToLandscapeLeft;
                 autorotateToLandscapeRight = Screen.autorotateToLandscapeRight;
                 autorotateToPortrait = Screen.autorotateToPortrait;
                 autorotateToPortraitUpsideDown = Screen.autorotateToPortraitUpsideDown;
-                brightness = Screen.brightness;
+                
+                
                 fullScreen = Screen.fullScreen;
                 fullScreenMode = Screen.fullScreenMode;
                 orientation = Screen.orientation;
@@ -123,11 +133,7 @@
                 currentResolutionHeight = Screen.currentResolution.height;
                 currentResolutionRefreshRate = Screen.currentResolution.refreshRate;
 
-                cutouts = new Rect[Screen.cutouts.Length];
-                for (var i = 0; i < Screen.cutouts.Length; i++)
-                {
-                    cutouts[i] = Screen.cutouts[i];
-                }
+                
                 height = Screen.height;
                 orientation = Screen.orientation;
                 resolutions = new Resolution[Screen.resolutions.Length];
@@ -143,11 +149,14 @@
 
         public void WriteBack()
         {
+            #if UNITY_2019_1_OR_NEWER
+            Screen.brightness = brightness;
+            #endif
+            
             Screen.autorotateToLandscapeLeft = autorotateToLandscapeLeft;
             Screen.autorotateToLandscapeRight = autorotateToLandscapeRight;
             Screen.autorotateToPortrait = autorotateToPortrait;
-            Screen.autorotateToPortraitUpsideDown = autorotateToPortraitUpsideDown;
-            Screen.brightness = brightness;
+            Screen.autorotateToPortraitUpsideDown = autorotateToPortraitUpsideDown;            
             Screen.fullScreen = fullScreen;
             Screen.fullScreenMode = fullScreenMode;
             Screen.orientation = orientation;

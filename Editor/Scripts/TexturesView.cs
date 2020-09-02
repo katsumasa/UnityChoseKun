@@ -36,7 +36,9 @@ namespace Utj.UnityChoseKun {
                 EditorGUILayout.LabelField("Mip");
                 using (new EditorGUI.IndentLevelScope()){
                     EditorGUILayout.FloatField("Mip Bias",textureKun.mipMapBias);
+                    #if UNITY_2019_1_OR_NEWER
                     EditorGUILayout.IntField("Mip Level",textureKun.mipmapCount);
+                    #endif
                 }
             }            
             textureKun.wrapMode = (TextureWrapMode)EditorGUILayout.EnumPopup("WrapMode Mode",textureKun.wrapMode);
@@ -46,7 +48,9 @@ namespace Utj.UnityChoseKun {
             GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));      
             EditorGUILayout.IntField("Width",textureKun.width);
             EditorGUILayout.IntField("Height",textureKun.height);
-            textureKun.graphicsFormat = (UnityEngine.Experimental.Rendering.GraphicsFormat)EditorGUILayout.EnumPopup("Format",textureKun.graphicsFormat);            
+            #if UNITY_2019_1_OR_NEWER
+            textureKun.graphicsFormat = (UnityEngine.Experimental.Rendering.GraphicsFormat)EditorGUILayout.EnumPopup("Format",textureKun.graphicsFormat);
+            #endif
             EditorGUILayout.IntField("Update Count",(int)textureKun.updateCount);
              GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));
             if(EditorGUI.EndChangeCheck()){

@@ -80,6 +80,7 @@ namespace Utj.UnityChoseKun{
 
 
         void DrawProperty(){
+            #if UNITY_2019_1_OR_NEWER
             foreach(var prop in materialKun.propertys){
                 if(prop.flags ==  UnityEngine.Rendering.ShaderPropertyFlags.HideInInspector){
                     continue;
@@ -185,7 +186,8 @@ namespace Utj.UnityChoseKun{
                 if(EditorGUI.EndChangeCheck()){
                     prop.dirty = true;
                 }
-            }            
+            }          
+            #endif  
         }
 
 

@@ -10,6 +10,21 @@ namespace Utj.UnityChoseKun {
         //
         // メンバーの変数の定義
         //
+        #if UNITY_2019_1_OR_NEWER
+        [SerializeField] bool m_forceRenderingOff ;
+        public bool forceRenderingOff {
+            get{return m_forceRenderingOff;}
+            set{m_forceRenderingOff = value;}
+        }
+        
+        [SerializeField] UnityEngine.Experimental.Rendering.RayTracingMode m_rayTracingMode ;
+        public UnityEngine.Experimental.Rendering.RayTracingMode rayTracingMode {
+            get{return m_rayTracingMode;}
+            set{m_rayTracingMode = value;}
+        }
+        #endif
+
+
         [SerializeField]bool m_allowOcclusionWhenDynamic ;
         public bool allowOcclusionWhenDynamic{
             get{return m_allowOcclusionWhenDynamic;}
@@ -27,12 +42,7 @@ namespace Utj.UnityChoseKun {
             get{return m_enabled;}
             set{m_enabled = value;}
         }
-
-        [SerializeField] bool m_forceRenderingOff ;
-        public bool forceRenderingOff {
-            get{return m_forceRenderingOff;}
-            set{m_forceRenderingOff = value;}
-        }
+        
 
         [SerializeField] bool m_isPartOfStaticBatch ;
         public bool isPartOfStaticBatch {
@@ -100,11 +110,7 @@ namespace Utj.UnityChoseKun {
             private set{m_probeAnchor = value;}
         }
 
-        [SerializeField] UnityEngine.Experimental.Rendering.RayTracingMode m_rayTracingMode ;
-        public UnityEngine.Experimental.Rendering.RayTracingMode rayTracingMode {
-            get{return m_rayTracingMode;}
-            set{m_rayTracingMode = value;}
-        }
+
 
         [SerializeField] int m_realtimeLightmapIndex ;
         public int realtimeLightmapIndex {
@@ -195,10 +201,15 @@ namespace Utj.UnityChoseKun {
             componentKunType = ComponentKunType.Renderer;
             var renderer = component as Renderer;
             if(renderer){
+                #if UNITY_2019_1_OR_NEWER
+                forceRenderingOff = renderer.forceRenderingOff;
+                rayTracingMode = renderer.rayTracingMode;
+                #endif
+
                 allowOcclusionWhenDynamic = renderer.allowOcclusionWhenDynamic;
                 bounds = renderer.bounds;
                 enabled = renderer.enabled;
-                forceRenderingOff = renderer.forceRenderingOff;
+                
                 isPartOfStaticBatch = renderer.isPartOfStaticBatch;
                 isVisible =renderer.isVisible;
                 lightmapIndex = renderer.lightmapIndex;
@@ -219,7 +230,7 @@ namespace Utj.UnityChoseKun {
                 if(renderer.probeAnchor!=null){
                     probeAnchor = new TransformKun(renderer.probeAnchor);
                 }
-                rayTracingMode = renderer.rayTracingMode;
+                
                 realtimeLightmapIndex = renderer.realtimeLightmapIndex;
                 realtimeLightmapScaleOffset = renderer.realtimeLightmapScaleOffset;
                 rendererPriority = renderer.rendererPriority;
@@ -246,16 +257,20 @@ namespace Utj.UnityChoseKun {
             var renderer = component as Renderer;
             if(renderer){
                 if(result){
+                    #if UNITY_2019_1_OR_NEWER
+                    renderer.forceRenderingOff = forceRenderingOff;                                
+                    renderer.rayTracingMode = rayTracingMode;
+                    #endif
+
                     renderer.allowOcclusionWhenDynamic =allowOcclusionWhenDynamic;                
                     renderer.enabled = enabled;
-                    renderer.forceRenderingOff = forceRenderingOff;                                
-                    renderer.lightmapIndex = lightmapIndex;
-                    renderer.lightmapScaleOffset = lightmapScaleOffset ;                
+                    
+                    //renderer.lightmapIndex = lightmapIndex;
+                    //renderer.lightmapScaleOffset = lightmapScaleOffset ;                
                     renderer.lightProbeUsage = lightProbeUsage;
-                    renderer.motionVectorGenerationMode = motionVectorGenerationMode;               
-                    renderer.rayTracingMode = rayTracingMode;
-                    renderer.realtimeLightmapIndex = realtimeLightmapIndex;
-                    renderer.realtimeLightmapScaleOffset = realtimeLightmapScaleOffset;
+                    renderer.motionVectorGenerationMode = motionVectorGenerationMode;                                   
+                    //renderer.realtimeLightmapIndex = realtimeLightmapIndex;
+                    //renderer.realtimeLightmapScaleOffset = realtimeLightmapScaleOffset;
                     renderer.rendererPriority = rendererPriority;
                     renderer.renderingLayerMask = renderingLayerMask;
                     renderer.shadowCastingMode = shadowCastingMode;

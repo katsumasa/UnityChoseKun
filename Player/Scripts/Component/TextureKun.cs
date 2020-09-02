@@ -5,6 +5,20 @@ namespace Utj.UnityChoseKun {
     [System.Serializable]
     public class TextureKun : ObjectKun
     {
+        #if UNITY_2019_1_OR_NEWER
+        [SerializeField] UnityEngine.Experimental.Rendering.GraphicsFormat m_graphicsFormat ;
+        public UnityEngine.Experimental.Rendering.GraphicsFormat graphicsFormat{
+            get{return m_graphicsFormat;}
+            set{m_graphicsFormat = value;}
+        }
+
+        [SerializeField] int m_mipmapCount ;
+        public int mipmapCount {
+            get {return m_mipmapCount;}
+            protected set {m_mipmapCount = value;}
+        }
+        #endif
+
         [SerializeField] int m_anisoLevel ;
         public int anisoLevel{
             get{return m_anisoLevel;}
@@ -22,13 +36,7 @@ namespace Utj.UnityChoseKun {
             get{return m_filterMode;}
             set{m_filterMode = value;}
         }
-
-        [SerializeField] UnityEngine.Experimental.Rendering.GraphicsFormat m_graphicsFormat ;
-        public UnityEngine.Experimental.Rendering.GraphicsFormat graphicsFormat{
-            get{return m_graphicsFormat;}
-            set{m_graphicsFormat = value;}
-        }
-
+        
         [SerializeField] int m_height ;
         public int height{
             get{return m_height;}
@@ -47,11 +55,7 @@ namespace Utj.UnityChoseKun {
             set{m_mipMapBias = value;}
         }
 
-        [SerializeField] int m_mipmapCount ;
-        public int mipmapCount {
-            get {return m_mipmapCount;}
-            protected set {m_mipmapCount = value;}
-        }
+        
 
         [SerializeField] uint m_updateCount ;
         public uint updateCount {
@@ -94,15 +98,18 @@ namespace Utj.UnityChoseKun {
         {
             var texture = obj as Texture;
             if(texture){
+                #if UNITY_2019_1_OR_NEWER
+                graphicsFormat = texture.graphicsFormat;
+                mipmapCount = texture.mipmapCount;
+                #endif
+
                 anisoLevel = texture.anisoLevel;
                 dimension = texture.dimension;
-                filterMode = texture.filterMode;
-                graphicsFormat = texture.graphicsFormat;
+                filterMode = texture.filterMode;                
                 height = texture.height;
                 //imageContentsHash = texture.imageContentsHash;
                 isReadable = texture.isReadable;
-                mipMapBias = texture.mipMapBias;
-                mipmapCount = texture.mipmapCount;
+                mipMapBias = texture.mipMapBias;                
                 updateCount = texture.updateCount;
                 width = texture.width;
                 wrapMode = texture.wrapMode;
