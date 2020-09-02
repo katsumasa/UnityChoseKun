@@ -31,6 +31,7 @@ UnityChoseKunは再ビルドを行うこと無く、UnityEditorj上で開発機�
 下記の内容で動作の確認済を行っています。
 
 - Unityのバージョン
+  - Unity2018.4.26f1 (但し、機能制限あり)
   - Unity2019.4.5f1
 - プラットフォーム
   - Android
@@ -62,6 +63,9 @@ UnityChoseKunは再ビルドを行うこと無く、UnityEditorj上で開発機�
 - Player Viewを有効にすると*端末が高温になります。* また、画面解像度に応じてCPUリソースを消費します。PlayerViewの再生を行う前に、Player InspectorのScreenから画面解像度を変更することをお勧めします。Pixel4XLの場合、画面解像度を604x288迄落とした場合、CPUリソースにほぼ消費せずに実行できているようでした。
 - Texture,Shaderに関しては内容の確認のみで、変更を行うことは出来ません。
 - Materialが参照しているShader/Textureを変更する為にはTexture/ShaderのPullを先に実行する必要があります。
+- Unity2018では以下の機能に対応していません。
+ - Textureの差し替え
+ - PlayerViewのEnable Async GPU Readback
 
 ## 使い方
 
