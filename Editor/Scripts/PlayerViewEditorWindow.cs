@@ -81,6 +81,10 @@
         //
         private void OnEnable()
         {
+            if (window == null)
+            {
+                window = (PlayerViewKunEditorWindow)EditorWindow.GetWindow(typeof(PlayerViewKunEditorWindow));
+            }
             if (attachProfilerState == null)
             {
                 attachProfilerState = PlayerConnectionUtility.GetAttachToPlayerState(this);

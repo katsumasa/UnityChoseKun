@@ -156,6 +156,8 @@
         // SampleのようにOnEnable/OnDisableで処理すると通信が不安体になる
         private void OnEnable()
         {
+            window = (UnityChoseKunEditorWindow)EditorWindow.GetWindow(typeof(UnityChoseKunEditorWindow));
+
             if (m_attachProfilerState == null){            
                 m_attachProfilerState = ConnectionUtility.GetAttachToPlayerState(this);            
             }

@@ -105,8 +105,8 @@
 
         protected override void SelectionChanged (IList<int> selectedIds)
         {
-            base.SelectionChanged(selectedIds);                    
-            if(m_selectionChangeCB != null){
+            base.SelectionChanged(selectedIds);            
+            if (m_selectionChangeCB != null){
                 m_selectionChangeCB(selectedIds);
             }
         }
