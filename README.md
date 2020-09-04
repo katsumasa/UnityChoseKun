@@ -41,6 +41,7 @@ UnityChoseKunは再ビルドを行うこと無く、UnityEditorj上で開発機�
     - iPhone 6S
 
 ## 対応しているObjectについて
+
 - [Application](docs.unity3d.com/ja/ScriptReference/Application.html)
 - [Screen](https://docs.unity3d.com/ja/ScriptReference/Screen.html)
 - [Time](https://docs.unity3d.com/ja/ScriptReference/Time.html)
@@ -200,3 +201,14 @@ Time Classのstaticメンバーに関する内容を編集することが出来�
 
 - [Pull] : Time Classのstaticメンバーを取得します。
 - [Push] : 編集した内容を実機上に書き戻します。
+
+##### Application
+
+![img](docs/Inspector_Application.png)
+
+Application Classのstaticメンバーに関する内容を編集することが出来ます。
+また、Application.Quit()を実行することが可能です。
+
+- [Pull] : Application Classのstaticメンバーを取得します。
+- [Push] : 編集した内容を実機へ上書きします。
+- [Quit] : Application.Quite()を実行します。
