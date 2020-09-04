@@ -9,10 +9,10 @@ namespace Utj.UnityChoseKun
     public class ApplicationView
     {
         [SerializeField] ApplicationKun m_applicationKun;
-        ApplicationKun applicationKun
+        public ApplicationKun applicationKun
         {
             get { if (m_applicationKun == null) { m_applicationKun = new ApplicationKun(); } return m_applicationKun; }
-            set { m_applicationKun = value; }
+            private set { m_applicationKun = value; }
         }
         bool isDone = false;
         [SerializeField] Vector2 m_scrollPos;

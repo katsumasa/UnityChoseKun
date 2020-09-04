@@ -18,7 +18,19 @@
         [System.Serializable]
         public class Style
         {
-           public static Texture2D GAME_VIEW_ICON = (Texture2D)EditorGUIUtility.Load("d_UnityEditor.GameView");
+            public static Texture2D GAME_VIEW_ICON = (Texture2D)EditorGUIUtility.Load("d_UnityEditor.GameView");
+            public static Texture2D MERTO_ICON = (Texture2D)EditorGUIUtility.Load("d_BuildSettings.Merto");
+            public static Texture2D LUMIN_ICON = (Texture2D)EditorGUIUtility.Load("d_BuildSettings.Lumin");
+            public static Texture2D SWITCH_ICON = (Texture2D)EditorGUIUtility.Load("d_BuildSettings.Switch");
+            public static Texture2D PS4_ICON = (Texture2D)EditorGUIUtility.Load("d_BuildSettings.PS4");
+            public static Texture2D WEBGL_ICON = (Texture2D)EditorGUIUtility.Load("d_BuildSettings.WebGL");
+            public static Texture2D TVOS_ICON = (Texture2D)EditorGUIUtility.Load("d_BuildSettings.tvOS");
+            public static Texture2D IPHONE_ICON = (Texture2D)EditorGUIUtility.Load("d_BuildSettings.iPhone");
+            public static Texture2D ANDROID_ICON = (Texture2D)EditorGUIUtility.Load("d_BuildSettings.Android");
+            public static Texture2D STANDALONE_ICON = (Texture2D)EditorGUIUtility.Load("d_BuildSettings.Standalone");
+            public static Texture2D XBOXONE_ICON = (Texture2D)EditorGUIUtility.Load("d_BuildSettings.XboxOne");
+            public static Texture2D STADIA_ICON = (Texture2D)EditorGUIUtility.Load("d_BuildSettings.Stadia");
+
         }
 
 
@@ -31,10 +43,10 @@
         IConnectionState attachProfilerState;                
         PlayerView.EditorSendData editorSendData;
         Texture2D playerViewTexture;
-        string recordPath;
-        bool isRecord;
-        int recordMaxFrame;
-        int recordCount;
+        [SerializeField] string recordPath;
+        [SerializeField] bool isRecord;
+        [SerializeField] int recordMaxFrame;
+        [SerializeField] int recordCount;
         
 
         /// <summary>
@@ -102,7 +114,8 @@
 
         //
         private void OnGUI()
-        {          
+        {
+            ChangeTitleContent();
             GUILayoutConnect();
             EditorGUILayout.Separator();
             GUILayoutPlayView();
@@ -113,7 +126,94 @@
         //=========================================================================================
         // ユニーク関数の定義
         //=========================================================================================
-        
+
+        // ----------------------------------------------------------------------------------------
+        // <summary>接続先のデバイスアイコンに切り替える </summary>
+        // ----------------------------------------------------------------------------------------
+        private void ChangeTitleContent()
+        {
+            RuntimePlatform platform = RuntimePlatform.WindowsEditor;
+            Texture2D texture = null;
+            if (UnityChoseKunEditorWindow.window != null)
+            {
+                platform = UnityChoseKunEditorWindow.window.GetRuntimePlatform();
+            }
+            switch (platform)
+            {
+                case RuntimePlatform.IPhonePlayer:
+                    {
+                        texture = Style.IPHONE_ICON;
+                    }
+                    break;
+
+                case RuntimePlatform.Android:
+                    {
+                        texture = Style.ANDROID_ICON;
+                    }
+                    break;
+
+                case RuntimePlatform.Lumin:
+                    {
+                        texture = Style.LUMIN_ICON;
+                    }
+                    break;
+
+                case RuntimePlatform.Switch:
+                    {
+                        texture = Style.SWITCH_ICON;
+                    }
+                    break;
+
+                case RuntimePlatform.WSAPlayerARM:
+                case RuntimePlatform.WSAPlayerX64:
+                case RuntimePlatform.WSAPlayerX86:
+                    {
+                        texture = Style.MERTO_ICON;
+                    }
+                    break;
+
+                case RuntimePlatform.PS4:
+                    {
+                        texture = Style.PS4_ICON;
+                    }
+                    break;
+
+                case RuntimePlatform.WebGLPlayer:
+                    {
+                        texture = Style.WEBGL_ICON;
+                    }
+                    break;
+
+                case RuntimePlatform.tvOS:
+                    {
+                        texture = Style.TVOS_ICON;
+                    }
+                    break;
+
+                case RuntimePlatform.Stadia:
+                    {
+                        texture = Style.STADIA_ICON;
+                    }
+                    break;
+
+                case RuntimePlatform.XboxOne:
+                    {
+                        texture = Style.XBOXONE_ICON;
+                    }
+                    break;
+
+                default:
+                    {
+                        texture = Style.GAME_VIEW_ICON;
+                    }
+                    break;
+            }
+            if(texture == null)
+            {
+                texture = Style.GAME_VIEW_ICON;
+            }
+            window.titleContent = new GUIContent(new GUIContent("Player View", texture));
+        }
 
 
         // ----------------------------------------------------------------------------------------
@@ -359,18 +459,6 @@
         }
 
 
-        // d_BuildSettings.Merto
-        // d_BuildSettings.Lumin
-        // d_BuildSettings.Switch
-        // d_BuildSettings.PS4
-        // d_BuildSettings.WebGL
-        // d_BuildSettings.tvOS
-        // d_BuildSettings.iPhone
-        // d_BuildSettings.Stadia
-        // d_BuildSettings.Android
-        // d_BuildSettings.Standalone
-        // d_BuildSettings.XboxOne
-        // d_UnityEditor.GameView
-
+        
     }
 }

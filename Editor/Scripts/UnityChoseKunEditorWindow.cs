@@ -82,7 +82,7 @@
         }
 
         [SerializeField] ApplicationView m_applicationView;
-        ApplicationView applicationView
+        public ApplicationView applicationView
         {
             get {
                 if (m_applicationView == null) {
@@ -108,6 +108,17 @@
             window.autoRepaintOnSceneChange = true;
             window.Show();
         }
+
+
+        public RuntimePlatform GetRuntimePlatform()
+        {
+            if (applicationView.applicationKun != null)
+            {
+                return applicationView.applicationKun.platform;
+            }
+            return RuntimePlatform.WindowsEditor;
+        }
+
 
         private void Update()
         {            
