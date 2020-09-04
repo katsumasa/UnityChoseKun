@@ -44,6 +44,12 @@ namespace Utj.UnityChoseKun
             get{if(m_texturePlayer == null){m_texturePlayer = new TexturePlayer();}return m_texturePlayer;}            
         }
 
+        ApplicationPlayer m_applicationPlayer;
+        ApplicationPlayer applicationPlayer
+        {
+            get { return m_applicationPlayer; }
+            set { m_applicationPlayer = value; }
+        }
 
         private void Awake()
         {                            
@@ -56,7 +62,11 @@ namespace Utj.UnityChoseKun
                 {UnityChoseKun.MessageID.GameObjectPull,componentPlayer.OnMessageEventPull},
                 {UnityChoseKun.MessageID.GameObjectPush,componentPlayer.OnMessageEventPush },
                 {UnityChoseKun.MessageID.ShaderPull,    shaderPlayer.OnMessageEventPull},   
-                {UnityChoseKun.MessageID.TexturePull,   texturePlayer.OnMessageEventPull},                
+                {UnityChoseKun.MessageID.TexturePull,   texturePlayer.OnMessageEventPull},
+                {UnityChoseKun.MessageID.ApplicationPull, applicationPlayer.OnMessageEventPull},
+                {UnityChoseKun.MessageID.ApplicationPush, applicationPlayer.OnMessageEventPush},
+                {UnityChoseKun.MessageID.ApplicationQuit, applicationPlayer.OnMessageEventQuit},
+
             };                                    
         }
 

@@ -81,6 +81,17 @@
             get{if(m_texturesView == null){m_texturesView = new TexturesView();}return m_texturesView;}            
         }
 
+        [SerializeField] ApplicationView m_applicationView;
+        ApplicationView applicationView
+        {
+            get {
+                if (m_applicationView == null) {
+                    m_applicationView = new ApplicationView();
+                }
+                return m_applicationView;
+            }
+        }
+
         [SerializeField] Dictionary<string,Action> onGUILayoutFuncDict;
         [SerializeField] Dictionary<UnityChoseKun.MessageID, OnMessageFunc> onMessageFuncDict;
         [SerializeField] Vector2 scrollPos;
@@ -210,9 +221,8 @@
                         {"Texture",     texturesView.OnGUI},
                         {"Shader",      shaderView.OnGUI},
                         {"Screen",      screenView.OnGUI },
-                        {"Time",        timeView.OnGUI}, 
-                        
-                        
+                        {"Time",        timeView.OnGUI},
+                        {"Application", applicationView.OnGUI},                                                
                         // 機能をここに追加していく                                              
                     };                    
                 }
@@ -226,6 +236,8 @@
                         {UnityChoseKun.MessageID.GameObjectPull, inspectorView.OnMessageEvent},
                         {UnityChoseKun.MessageID.ShaderPull,shaderView.OnMessageEvent},
                         {UnityChoseKun.MessageID.TexturePull,texturesView.OnMessageEvent},
+                        {UnityChoseKun.MessageID.ApplicationPull,applicationView.OnMessageEvent },
+
                         // 機能をここに追加していく                                              
                     };
                 }
