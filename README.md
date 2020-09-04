@@ -161,6 +161,7 @@ Player Hierarchyで選択したGameObjectが持つComponentの内容を編集し
 ![img](docs/InspectorView.jpg)
 
 - [Connect To] : 接続先のデバイスを選択します。 Profilerと共有しています。
+- [Auto] : 項目を変更したら即座に変更内容を実機側に反映させます。※この項目が有効な場合[Push]は表示されません。
 - [Pull] : Scene内のHierarchy情報を収集します。
 - [Push] : 編集した内容を実機上に反映させます。
   
