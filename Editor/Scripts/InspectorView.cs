@@ -137,7 +137,10 @@
                 }
                 if (EditorGUI.EndChangeCheck())
                 {
-                    isChange = true;
+                    if (isNotRequirePush)
+                    {
+                        isChange = true;
+                    }
                 }
                 GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(4));
             }
