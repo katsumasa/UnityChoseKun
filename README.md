@@ -41,7 +41,7 @@ UnityChoseKunは再ビルドを行うこと無く、UnityEditorj上で開発機�
     - iPhone 6S
 
 ## 対応しているObjectについて
-
+- [Application](docs.unity3d.com/ja/ScriptReference/Application.html)
 - [Screen](https://docs.unity3d.com/ja/ScriptReference/Screen.html)
 - [Time](https://docs.unity3d.com/ja/ScriptReference/Time.html)
 - [Shader](https://docs.unity3d.com/ja/ScriptReference/Shader.html)
