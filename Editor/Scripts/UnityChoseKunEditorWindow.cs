@@ -91,6 +91,12 @@
                 return m_applicationView;
             }
         }
+        [SerializeField] AndroidView m_androidView;
+        public AndroidView androidView
+        {
+            get { if (m_androidView == null) { m_androidView = new AndroidView(); } return m_androidView; }            
+        }
+
 
         [SerializeField] Dictionary<string,Action> onGUILayoutFuncDict;
         [SerializeField] Dictionary<UnityChoseKun.MessageID, OnMessageFunc> onMessageFuncDict;
@@ -233,7 +239,8 @@
                         {"Shader",      shaderView.OnGUI},
                         {"Screen",      screenView.OnGUI },
                         {"Time",        timeView.OnGUI},
-                        {"Application", applicationView.OnGUI},                                                
+                        {"Application", applicationView.OnGUI},
+                        {"Android",     androidView.OnGUI},
                         // 機能をここに追加していく                                              
                     };                    
                 }
@@ -248,6 +255,7 @@
                         {UnityChoseKun.MessageID.ShaderPull,shaderView.OnMessageEvent},
                         {UnityChoseKun.MessageID.TexturePull,texturesView.OnMessageEvent},
                         {UnityChoseKun.MessageID.ApplicationPull,applicationView.OnMessageEvent },
+                        {UnityChoseKun.MessageID.AndroidPull,androidView.OnMessageEvent },
 
                         // 機能をここに追加していく                                              
                     };

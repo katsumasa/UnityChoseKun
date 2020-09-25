@@ -51,6 +51,13 @@ namespace Utj.UnityChoseKun
             set { m_applicationPlayer = value; }
         }
 
+        AndroidPlayer m_androidPlayer;
+        AndroidPlayer androidPlayer
+        {
+            get { if (m_androidPlayer == null) { m_androidPlayer = new AndroidPlayer(); } return m_androidPlayer; }
+        }
+
+
         private void Awake()
         {                            
             onMessageFuncDict = new Dictionary<UnityChoseKun.MessageID, OnMessageFunc>()
@@ -66,6 +73,8 @@ namespace Utj.UnityChoseKun
                 {UnityChoseKun.MessageID.ApplicationPull, applicationPlayer.OnMessageEventPull},
                 {UnityChoseKun.MessageID.ApplicationPush, applicationPlayer.OnMessageEventPush},
                 {UnityChoseKun.MessageID.ApplicationQuit, applicationPlayer.OnMessageEventQuit},
+                {UnityChoseKun.MessageID.AndroidPull,   androidPlayer.OnMessageEventPull},
+                {UnityChoseKun.MessageID.AndroidPush,   androidPlayer.OnMessageEventPush},
 
             };                                    
         }
