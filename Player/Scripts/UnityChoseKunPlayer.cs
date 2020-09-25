@@ -30,7 +30,8 @@ namespace Utj.UnityChoseKun
         ShaderPlayer m_shaderPlayer;
         ShaderPlayer shaderPlayer {
             get {
-                if(m_shaderPlayer == null){m_shaderPlayer = new ShaderPlayer();}return m_shaderPlayer;}
+                if(m_shaderPlayer == null){m_shaderPlayer = new ShaderPlayer();}return m_shaderPlayer;
+            }
         }
 
         ComponentPlayer m_componentPlayer;
@@ -47,7 +48,7 @@ namespace Utj.UnityChoseKun
         ApplicationPlayer m_applicationPlayer;
         ApplicationPlayer applicationPlayer
         {
-            get { return m_applicationPlayer; }
+            get { if (m_applicationPlayer == null) { m_applicationPlayer = new ApplicationPlayer(); } return m_applicationPlayer; }            
             set { m_applicationPlayer = value; }
         }
 
