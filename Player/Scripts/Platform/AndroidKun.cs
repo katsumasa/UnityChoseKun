@@ -42,7 +42,8 @@ namespace Utj.UnityChoseKun{
         // </summary>
         public AndroidKun(){
             isSustainedPerformanceMode = false;
-#if UNITY_ANDROID            
+
+#if UNITY_ANDROID
             permissions = new string[6];
             permissions[0] = UnityEngine.Android.Permission.Camera;
             permissions[1] = UnityEngine.Android.Permission.CoarseLocation;
@@ -51,13 +52,15 @@ namespace Utj.UnityChoseKun{
             permissions[4] = UnityEngine.Android.Permission.FineLocation;
             permissions[5] = UnityEngine.Android.Permission.Microphone;
             hasUserAuthorizedPermission = new bool[permissions.Length];
+#if !UNITY_EDITOR
             for(var i = 0; i < permissions.Length; i++){
                 hasUserAuthorizedPermission[i] = UnityEngine.Android.Permission.HasUserAuthorizedPermission(permissions[i]);
             }
+#endif
             requestUserPermissions = new bool[permissions.Length];
 #endif
         }
-        
+
         // <summary>
         // デストラクター
         // </summary>
