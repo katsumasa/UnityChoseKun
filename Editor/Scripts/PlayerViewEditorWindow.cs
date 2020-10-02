@@ -11,6 +11,8 @@
     using PlayerConnectionUtility = UnityEditor.Experimental.Networking.PlayerConnection.EditorGUIUtility;
     using PlayerConnectionGUILayout = UnityEditor.Experimental.Networking.PlayerConnection.EditorGUILayout;
     using System.Security.AccessControl;
+    using TMPro;
+    using System;
 
 
     // UnityPlayerViewerKunのEditorEditor側の処理
@@ -34,6 +36,11 @@
             public static Texture2D XBOXONE_ICON = (Texture2D)EditorGUIUtility.Load("d_BuildSettings.XboxOne");
             public static Texture2D STADIA_ICON = (Texture2D)EditorGUIUtility.Load("d_BuildSettings.Stadia");
 
+            public static readonly GUIContent PlayContents = new GUIContent((Texture2D)EditorGUIUtility.Load("d_PlayButton On@2x"),"Play / Stop");
+            public static readonly GUIContent RecOnContents = new GUIContent((Texture2D)EditorGUIUtility.Load("d_Record On@2x"),"Stop Record");
+            public static readonly GUIContent RecOffContents = new GUIContent((Texture2D)EditorGUIUtility.Load("d_Record Off@2x"),"Start Record");
+            public static readonly GUIContent FolderContents = new GUIContent((Texture2D)EditorGUIUtility.Load("d_OpenedFolder Icon"),"Set Save Location");
+            public static readonly GUIContent CaptureContents = new GUIContent((Texture2D)EditorGUIUtility.Load("d_SceneViewCamera@2x"),"Capture Screen");
         }
 
 
@@ -50,6 +57,7 @@
         [SerializeField] bool isRecord;
         [SerializeField] int recordMaxFrame;
         [SerializeField] int recordCount;
+        [SerializeField] bool isPlay;
         [SerializeField] PlayerViewPlayer.TextureHeader textureHeader;
 
         /// <summary>
@@ -299,9 +307,81 @@
         private void GUILayoutConnect()
         {
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Connect To");                        
-            PlayerConnectionGUILayout.AttachToPlayerDropdown(attachProfilerState, EditorStyles.toolbarDropDown);            
+            EditorGUILayout.LabelField("Connect To", GUILayout.ExpandWidth(false));
+            PlayerConnectionGUILayout.AttachToPlayerDropdown(attachProfilerState, EditorStyles.toolbarDropDown);
+            
+            // Play
+            {
+                var contentSize = EditorStyles.label.CalcSize(Style.PlayContents);
+                EditorGUI.BeginChangeCheck();
+                isPlay = GUILayout.Toggle(isPlay, Style.PlayContents, EditorStyles.toolbarButton, GUILayout.MaxWidth(contentSize.x + 10));
+                if (EditorGUI.EndChangeCheck())
+                {
+                    if (isPlay)
+                    {
+                        editorSendData.command = PlayerView.Command.Play;                        
+                    } 
+                    else
+                    {
+                        editorSendData.command = PlayerView.Command.Stop;
+                    }
+                    SendMessage(editorSendData);
+                }
+            }
+
+            
+            // Rec
+            {
+                EditorGUI.BeginDisabledGroup(recordPath == null || recordPath.Length == 0);
+                var contentSize = EditorStyles.label.CalcSize(Style.RecOnContents);
+                EditorGUI.BeginChangeCheck();
+                isRecord = GUILayout.Toggle(isRecord, isRecord ? Style.RecOnContents: Style.RecOffContents, EditorStyles.toolbarButton, GUILayout.MaxWidth(contentSize.x + 10));
+                if (EditorGUI.EndChangeCheck())
+                {
+                    if (isRecord)
+                    {
+                        recordCount = 0;
+                    }
+                }
+                EditorGUI.EndDisabledGroup();
+            }
+
+            // Capture
+            {                
+                var contentSize = EditorStyles.label.CalcSize(Style.RecOnContents);
+                if (GUILayout.Button(Style.CaptureContents, EditorStyles.toolbarButton, GUILayout.MaxWidth(contentSize.x + 10)))
+                {
+                    System.DateTime dt = System.DateTime.Now;
+                    string result = dt.ToString("yyyyMMddHHmmss");
+                    var path = EditorUtility.SaveFilePanel(
+                        "Save texture as PNG",
+                        "",
+                        result + ".png",
+                        "png");
+                    if (path.Length != 0)
+                    {
+                        var pngData = playerViewTexture.EncodeToPNG();
+                        if (pngData != null)
+                            System.IO.File.WriteAllBytes(path, pngData);
+                    }
+                }             
+            }
+
+            // Save Folder
+            {
+                if (GUILayout.Button(Style.FolderContents, EditorStyles.toolbarButton, GUILayout.ExpandWidth(false)))
+                {
+                    if (isRecord == false)
+                    {
+                        recordPath = EditorUtility.SaveFolderPanel("Save textures to folder", "", "");
+                    }
+                }
+            }
+
+            GUILayout.FlexibleSpace();
+
             EditorGUILayout.EndHorizontal();
+            
 
 
             var playerCount = EditorConnection.instance.ConnectedPlayers.Count;
@@ -321,69 +401,24 @@
         // ----------------------------------------------------------------------------------------
         private void GUILayoutPlayView()
         {
-            EditorGUILayout.BeginHorizontal();
-#if UNITY_2019_1_OR_NEWER
-            editorSendData.isUseAsyncGPUReadback = EditorGUILayout.Toggle("Enable Async GPU Readback", editorSendData.isUseAsyncGPUReadback);
-#endif
-            editorSendData.frameCount = EditorGUILayout.IntField("Skip frame ", editorSendData.frameCount);
-            EditorGUILayout.EndHorizontal();
-
-            
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Recording Folder",recordPath);                
-            if(GUILayout.Button("Set Folder")){
-                if(isRecord == false){
-                    recordPath = EditorUtility.SaveFolderPanel("Save textures to folder", "", "");
-                }
-            }
-            EditorGUILayout.EndHorizontal();
             if (recordPath == null || recordPath.Length == 0)
             {
-                EditorGUILayout.HelpBox("Please Set Reoding Folder.", MessageType.Info);
-            }
-            var tmp = EditorGUILayout.IntSlider("Record Max Frame",recordMaxFrame,1,9999);
-            if(isRecord == false){
-                recordMaxFrame = tmp;
-            }
-        
-            EditorGUILayout.Space();
-
-
-            EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("Play"))
-            {             
-                editorSendData.command = PlayerView.Command.Play;
-                SendMessage(editorSendData);
+                EditorGUILayout.HelpBox("Please Set Record Folder.", MessageType.Info);
             }
 
-            if (GUILayout.Button("Stop"))
-            {
-                editorSendData.command = PlayerView.Command.Stop;
-                SendMessage(editorSendData);
-            }
-
-            if(GUILayout.Button("Capture"))
-            {
-                System.DateTime dt = System.DateTime.Now;
-                string result = dt.ToString("yyyyMMddHHmmss");
-                var path = EditorUtility.SaveFilePanel(
-                    "Save texture as PNG",
-                    "",
-                    result + ".png",
-                    "png");
-                if(path.Length != 0){                    
-                    var pngData = playerViewTexture.EncodeToPNG();
-                    if (pngData != null)
-                        System.IO.File.WriteAllBytes(path, pngData);
-                }
-            }
-
-            EditorGUILayout.EndHorizontal();
-
-
+#if UNITY_2019_1_OR_NEWER
+            EditorGUI.BeginDisabledGroup(isPlay);
+            editorSendData.isUseAsyncGPUReadback = EditorGUILayout.ToggleLeft("Enable Async GPU Readback", editorSendData.isUseAsyncGPUReadback);
+            EditorGUI.EndDisabledGroup();
+#endif
+            EditorGUI.BeginDisabledGroup(isPlay);
+            editorSendData.frameCount = EditorGUILayout.IntField("Reflesh Interval", editorSendData.frameCount, GUILayout.ExpandWidth(false));
+            editorSendData.frameCount = Math.Max(0, editorSendData.frameCount);
+            EditorGUI.EndDisabledGroup();
+            EditorGUILayout.LabelField(new GUIContent("Record Folder","Record and Capture Folder"),new GUIContent(recordPath));                        
             
-                
-            if(playerViewTexture != null && recordPath != null && recordPath.Length != 0 && recordCount < recordMaxFrame　&& isRecord){
+            // ここでキャプチャ処理
+            if (playerViewTexture != null && recordPath != null && recordPath.Length != 0 && recordCount < recordMaxFrame　&& isRecord){
                 var pngData = playerViewTexture.EncodeToPNG();
                 if (pngData != null){
                     var path = recordPath + "/" + recordCount.ToString("D4") + ".png";
@@ -394,55 +429,54 @@
                     isRecord = false;
                 }
             }
-        
+
+            EditorGUI.BeginDisabledGroup(isRecord);
+            var tmp = EditorGUILayout.IntField("Record Count Max", recordMaxFrame, GUILayout.ExpandWidth(false));            
+            {
+                recordMaxFrame = Math.Max(0, tmp);
+                recordMaxFrame = Math.Min(99999, recordMaxFrame);
+            }
+            EditorGUI.EndDisabledGroup();
+
+            EditorGUI.BeginDisabledGroup(isRecord);
             EditorGUILayout.BeginHorizontal();
             EditorGUI.BeginChangeCheck();
-            var tmpFrame = EditorGUILayout.IntSlider("Record Count",recordCount,1,recordMaxFrame);
-            if(EditorGUI.EndChangeCheck()){
-                if(isRecord == false && playerViewTexture != null){
-                    
+            var tmpFrame = EditorGUILayout.IntSlider("Record Count", recordCount, 1, recordMaxFrame);
+            if (EditorGUI.EndChangeCheck())
+            {
+                if (isRecord == false && playerViewTexture != null)
+                {
                     var fpath = recordPath + "/" + tmpFrame.ToString("D4") + ".png";
-                    if(System.IO.File.Exists(fpath)){
+                    if (System.IO.File.Exists(fpath))
+                    {
                         recordCount = tmpFrame;
                         var bytes = System.IO.File.ReadAllBytes(fpath);
                         playerViewTexture.LoadImage(bytes);
                     }
                 }
             }
-
-            if(isRecord == false){
-                if(GUILayout.Button("Rec")){
-                    if (playerViewTexture != null && recordPath != null && recordPath.Length != 0)
-                    {
-                        isRecord = true;
-                        recordCount = 0;
-                    }
-                }
-            } else {
-                if(GUILayout.Button("Stop")){
-                    isRecord = false;
-                }
-            }
-            
             EditorGUILayout.EndHorizontal();
-            
+            EditorGUI.EndDisabledGroup();
 
             // 描画
             if (playerViewTexture != null)
             {
-                var r1 = EditorGUILayout.GetControlRect();
-                var r2 = new Rect(r1.x, r1.y, r1.width, position.height - (r1.y + r1.height));
+                var r1 = EditorGUILayout.GetControlRect();               
+                var r2 = new Rect(r1.x, r1.y, r1.width, position.height - (r1.y + r1.height) - 30.0f);
+                
                 EditorGUI.DrawPreviewTexture(
                     r2,
                     playerViewTexture,
                     null,
                     ScaleMode.ScaleToFit
                     );
+               // GUILayoutUtility.GetRect(r2.width, r2.height);
             }
 
+
             
-            
-            
+
+
 
         }
 
