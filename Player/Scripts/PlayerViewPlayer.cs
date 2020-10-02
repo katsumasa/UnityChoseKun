@@ -7,10 +7,36 @@
     using UnityEngine.Networking.PlayerConnection;
     using UnityEngine.Rendering;
     using Unity.Collections;
+    using System;
+    using System.Runtime.Serialization.Formatters.Binary;
+    using System.IO;
 
-    
     public class PlayerViewPlayer : MonoBehaviour
     {
+
+        [Serializable]
+        public class TextureHeader
+        {
+            [SerializeField] public Int32 width;
+            [SerializeField] public Int32 height;
+            [SerializeField] public TextureFormat textureFormat;
+            [SerializeField] public bool mipChain;
+            [SerializeField] public bool flip;
+
+            public TextureHeader()
+            {
+            }
+
+            public TextureHeader(Int32 width,Int32 height,TextureFormat textureFormat,bool mipChain,bool flip)
+            {
+                this.width = width;
+                this.height = height;
+                this.textureFormat = textureFormat;
+                this.mipChain = mipChain;
+                this.flip = flip;
+            }
+        }
+
 
         enum CaptureMode
         {
@@ -23,15 +49,14 @@
         int frameCount;
         int frameCountMax;
         RenderTexture renderTexture;
-        
-        
+        TextureHeader textureHeader;
+        BinaryFormatter binaryFormatter;
+        MemoryStream memoryStream;
 
         bool isPlay;
         bool isPause;
         bool isFinish;
         bool isAsyncGPUReadBackFinish;
-        
-       
         PlayerView.EditorSendData editorSendData;
 
 
@@ -48,6 +73,7 @@
             isFinish = false;
             isAsyncGPUReadBackFinish = false;            
             renderTexture = null;
+            textureHeader = null;
             StartCoroutine(VideoRecoder());
         }
 
@@ -97,8 +123,6 @@
                 case PlayerView.Command.Play:
                     {
                         frameCountMax = editorSendData.frameCount;
-                        frameCount = editorSendData.frameCount;
-                        
                         if (editorSendData.isUseAsyncGPUReadback && SystemInfo.supportsAsyncGPUReadback)
                         {
                             captureMode = CaptureMode.AsyncGPUReadBack;
@@ -108,8 +132,8 @@
                         }
                         frameCount = 0;
                         isPlay = true;                        
-
                         isAsyncGPUReadBackFinish = true;
+                        textureHeader = null;
                     }
                     break;
 
@@ -155,11 +179,12 @@
                     case CaptureMode.AsyncGPUReadBack:
                         {                        
                             if (
+                                (textureHeader == null) ||
                                 (renderTexture == null) ||
                                 (renderTexture.width != Screen.currentResolution.width) ||
                                 (renderTexture.height != Screen.currentResolution.height)
                                 )
-                            {
+                            {                                
                                 if(renderTexture != null)
                                 {
                                     renderTexture.Release();
@@ -169,7 +194,20 @@
                                     Screen.currentResolution.width,
                                     Screen.currentResolution.height,
                                     0
-                                    );                                
+                                    );
+                                var header = new TextureHeader(renderTexture.width, renderTexture.height, TextureFormat.RGBA32, false, true);
+                                var bf = new BinaryFormatter();
+                                var ms = new MemoryStream();
+                                try
+                                {
+                                    bf.Serialize(ms, header);
+                                    PlayerConnection.instance.Send(PlayerView.kMsgSendPlayerToEditorHeader, ms.ToArray());
+                                }
+                                finally
+                                {
+                                    ms.Close();
+                                }
+                                textureHeader = header;
                             }                            
                             frameCount = frameCountMax;
                             isAsyncGPUReadBackFinish = false;
@@ -184,18 +222,25 @@
                     #endif
                         {
                             var texture2D = ScreenCapture.CaptureScreenshotAsTexture();
-                            var len = texture2D.GetRawTextureData().Length + 20;
-                            var bytes = new byte[len];
-                            var idx = 0;
-                            idx += SetInt32ToBytes(texture2D.width, bytes, idx);
-                            idx += SetInt32ToBytes(texture2D.height, bytes, idx);
-                            idx += SetInt32ToBytes((int)TextureFormat.RGBA32, bytes, idx);
-                            idx += SetInt32ToBytes(0, bytes, idx);
-                            idx += SetInt32ToBytes(0, bytes, idx);
-                            System.Array.Copy(texture2D.GetRawTextureData(), 0, bytes, idx, texture2D.GetRawTextureData().Length);                                                     
+                            var header = new TextureHeader(texture2D.width, texture2D.height, TextureFormat.RGBA32,false,false);
+                            if(textureHeader == null || textureHeader != header)
+                            {
+                                var bf = new BinaryFormatter();
+                                var ms = new MemoryStream();
+                                try
+                                {
+                                    bf.Serialize(ms, header);                                    
+                                    PlayerConnection.instance.Send(PlayerView.kMsgSendPlayerToEditorHeader, ms.ToArray());
+                                }
+                                finally
+                                {
+                                    ms.Close();
+                                }
+                                textureHeader = header;
+                            }
                             PlayerConnection.instance.Send(
                                 PlayerView.kMsgSendPlayerToEditor,
-                                bytes
+                                texture2D.GetRawTextureData()
                             );
                             Destroy(texture2D);
                             frameCount = frameCountMax;
@@ -214,24 +259,14 @@
                 Debug.Log("AsyncGPUReadbackRequest has error.");
             }
             else
-            {
-                int len = request.GetData<byte>().Length + 20;
-                var bytes = new byte[len];
-                var idx = 0;                
-                idx +=SetInt32ToBytes(request.width, bytes, idx);
-                idx += SetInt32ToBytes(request.height, bytes, idx);
-                idx += SetInt32ToBytes((int)TextureFormat.RGBA32, bytes, idx);
-                idx += SetInt32ToBytes(0, bytes, idx);
-                idx += SetInt32ToBytes(1, bytes, idx);
-                NativeArray<byte>.Copy(request.GetData<byte>(), 0,bytes, idx, request.GetData<byte>().Length);
+            {        
                 PlayerConnection.instance.Send(
                     PlayerView.kMsgSendPlayerToEditor,
-                    bytes
-                    );
+                    request.GetData<byte>().ToArray()
+                );
             }
             isAsyncGPUReadBackFinish = true;
         }
-
 
 
 

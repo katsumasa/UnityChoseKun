@@ -2,17 +2,20 @@
 {
     using System.Collections;
     using System.Collections.Generic;
+    using System.Runtime.Serialization.Formatters.Binary;
+    using System.IO;
     using UnityEngine;
     using UnityEditor;
     using UnityEditor.Networking.PlayerConnection;
     using UnityEngine.Experimental.Networking.PlayerConnection;
     using PlayerConnectionUtility = UnityEditor.Experimental.Networking.PlayerConnection.EditorGUIUtility;
     using PlayerConnectionGUILayout = UnityEditor.Experimental.Networking.PlayerConnection.EditorGUILayout;
-    
+    using System.Security.AccessControl;
+
 
     // UnityPlayerViewerKunのEditorEditor側の処理
     // Katsumasa Kimura
-    
+
     public class PlayerViewKunEditorWindow : EditorWindow
     {
         [System.Serializable]
@@ -47,7 +50,7 @@
         [SerializeField] bool isRecord;
         [SerializeField] int recordMaxFrame;
         [SerializeField] int recordCount;
-        
+        [SerializeField] PlayerViewPlayer.TextureHeader textureHeader;
 
         /// <summary>
         /// 関数の定義 
@@ -75,14 +78,18 @@
         {            
             UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Initialize();
             UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Register(PlayerView.kMsgSendPlayerToEditor, OnMessageEvent);
+            UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Register(PlayerView.kMsgSendPlayerToEditorHeader, OnMessageEventHeader);
             playerViewTexture = new Texture2D(2960, 1140, TextureFormat.RGBA32, false);
             editorSendData.frameCount = 1;
+            recordMaxFrame = 200;
+             
         }
 
         //
         private void OnDestroy()
         {            
             UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Unregister(PlayerView.kMsgSendPlayerToEditor, OnMessageEvent);
+            UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Unregister(PlayerView.kMsgSendPlayerToEditorHeader, OnMessageEventHeader);
             UnityEditor.Networking.PlayerConnection.EditorConnection.instance.DisconnectAll();
             if (playerViewTexture == null)
                 DestroyImmediate(playerViewTexture);
@@ -216,66 +223,61 @@
         }
 
 
+        private void OnMessageEventHeader(UnityEngine.Networking.PlayerConnection.MessageEventArgs args)
+        {
+            var bf = new BinaryFormatter();
+            var ms = new MemoryStream(args.data);
+            textureHeader = (PlayerViewPlayer.TextureHeader)bf.Deserialize(ms);
+
+        }
+
+
         // ----------------------------------------------------------------------------------------
         // <summary> メッセージ受信時のCB </summary>
         // ----------------------------------------------------------------------------------------
         private void OnMessageEvent(UnityEngine.Networking.PlayerConnection.MessageEventArgs args)
         {
-            //Debug.Log("OnMessageEvent");           
-            var width           = System.BitConverter.ToInt32(args.data, 0);
-            var height          = System.BitConverter.ToInt32(args.data, 4);
-            var textureFormat   = (TextureFormat)System.BitConverter.ToInt32(args.data, 8);
-            var mipChain        = System.BitConverter.ToBoolean(args.data, 12);
-            var flip            = System.BitConverter.ToBoolean(args.data, 16);
-
-
-            // 設定の変更があった場合、Texture2Dを作り直す必要がある
             if ((playerViewTexture == null) ||
-                (playerViewTexture.width != width) ||
-                (playerViewTexture.height != height) ||
-                (playerViewTexture.format != textureFormat)
-                )
+                (playerViewTexture.width != textureHeader.width) ||
+                (playerViewTexture.height != textureHeader.height) ||
+                (playerViewTexture.format != textureHeader.textureFormat)
+            )
             {
-                if(playerViewTexture != null)
+                if (playerViewTexture != null)
                 {
                     DestroyImmediate(playerViewTexture);
                 }
-                playerViewTexture = new Texture2D(width, height, textureFormat, mipChain);
+                playerViewTexture = new Texture2D(
+                    textureHeader.width,
+                    textureHeader.height, 
+                    textureHeader.textureFormat,
+                    textureHeader.mipChain);
             }
 
-
-
-            // 画像を整形する            
-            var raw = new byte[args.data.Length - 20];
-            // TextureFormatに1Pixel辺りのバイト数は記載が無いのか・・・
-            int slide = width * 4;
+            byte[] raw;
+            int slide = textureHeader.width * 4;
             // 画像データが上下反転しているケースがある
-            if (flip)
+            if (textureHeader.flip)
             {
-                for (var y = 0; y < height; y++)
+                raw = new byte[args.data.Length];
+                for (var y = 0; y < textureHeader.height; y++)
                 {
-                    var i1 = (height - (y + 1)) * slide + 20;
+                    var i1 = (textureHeader.height - (y + 1)) * slide;
                     var i2 = y * slide;
                     System.Array.Copy(args.data, i1, raw, i2, slide);
                 }
             }
             else
             {
-                for (var y = 0; y < height; y++)
-                {
-                    var i1 = y * slide + 20;
-                    var i2 = y * slide;
-                    System.Array.Copy(args.data, i1, raw, i2, slide);
-
-                }
+                raw = args.data;
             }
             playerViewTexture.LoadRawTextureData(raw);
             playerViewTexture.Apply();
             // EditorWidowを再描画
-            if(window!=null){
+            if (window != null)
+            {
                 window.Repaint();
             }
-            
         }
 
 
