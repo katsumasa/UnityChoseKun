@@ -11,8 +11,9 @@
         public void OnMessageEventPull(string json)
         {                
             Debug.Log("ComponentPlayer:OnMessageEventPull");            
-            var scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();            
-            UnityChoseKunPlayer.SendMessage<SceneKun>(UnityChoseKun.MessageID.GameObjectPull,new SceneKun(scene));            
+            var scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
+            var sceneKun = new SceneKun(scene);
+            UnityChoseKunPlayer.SendMessage<SceneKun>(UnityChoseKun.MessageID.GameObjectPull,sceneKun);            
         }
 
 
