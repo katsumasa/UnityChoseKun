@@ -13,17 +13,17 @@ namespace Utj.UnityChoseKun{
             [SerializeField] UnityEngine.Rendering.ShaderPropertyType m_type;
             #endif
             [SerializeField] bool  m_dirty;
-            [SerializeField] Color m_colorValue;
+            [SerializeField] ColorKun m_colorValue;
             [SerializeField] string m_displayName;            
             [SerializeField] float m_floatValue;
             [SerializeField] string m_name;                        
             [SerializeField] int m_nameId;
-            [SerializeField] Vector2 m_rangeLimits;            
+            [SerializeField] Vector2Kun m_rangeLimits;            
             [SerializeField] UnityEngine.Rendering.TextureDimension m_textureDimension;
             [SerializeField] TextureKun m_textureValue;            
-            [SerializeField] Vector4 m_vectorValue;
-            [SerializeField] Vector2 m_scale; // Tiling
-            [SerializeField] Vector2 m_offset; // Offset
+            [SerializeField] Vector4Kun m_vectorValue;
+            [SerializeField] Vector2Kun m_scale; // Tiling
+            [SerializeField] Vector2Kun m_offset; // Offset
             
             #if UNITY_2019_1_OR_NEWER
             public UnityEngine.Rendering.ShaderPropertyFlags flags{
@@ -40,8 +40,8 @@ namespace Utj.UnityChoseKun{
                 set{m_dirty = value;}
             }
             public Color colorValue{
-                get{return m_colorValue;}
-                set{m_colorValue = value;}
+                get{return m_colorValue.GetColor();}
+                set{m_colorValue = new ColorKun(value);}
             }
             public string displayName {
                 get {return m_displayName;}
@@ -60,8 +60,8 @@ namespace Utj.UnityChoseKun{
                 set{m_nameId = value;}
             }
             public Vector2 rangeLimits{
-                get{return m_rangeLimits;}
-                set{m_rangeLimits = value;}
+                get{return m_rangeLimits.GetVector2();}
+                set{m_rangeLimits = new Vector2Kun(value);}
             }
             public UnityEngine.Rendering.TextureDimension textureDimension{
                 get{return m_textureDimension;}
@@ -73,16 +73,16 @@ namespace Utj.UnityChoseKun{
             }
             
             public Vector4 vectorValue{
-                get {return m_vectorValue;}
-                set {m_vectorValue = value;}
+                get {return m_vectorValue.GetVector4();}
+                set {m_vectorValue = new Vector4Kun(value);}
             }
             public Vector2 scale {
-                get{return m_scale;}
-                set{m_scale = value;}
+                get{return m_scale.GetVector2();}
+                set{m_scale = new Vector2Kun(value);}
             }            
             public Vector2 offset {
-                get{return m_offset;}
-                set{m_offset = value;}
+                get{return m_offset.GetVector2();}
+                set{m_offset = new Vector2Kun(value);}
             }            
 
 
@@ -93,10 +93,10 @@ namespace Utj.UnityChoseKun{
         }
 
 
-        [SerializeField] Color m_color;
+        [SerializeField] ColorKun m_color;
         public Color color {
-            get{return m_color;}
-            set{m_color = value;}
+            get{return m_color.GetColor();}
+            set{m_color = new ColorKun(value);}
         }
         [SerializeField] bool m_doubleSidedGI;
         public bool doubleSidedGI{

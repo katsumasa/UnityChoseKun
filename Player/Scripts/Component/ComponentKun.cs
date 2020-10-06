@@ -7,8 +7,14 @@
     
     [System.Serializable]
     public class ComponentKun : ObjectKun{                    
-        // <summary>定数の定義</summary>
-        // <summary> ComponentKunのタイプの定義 </summary>
+        // <summary>
+        // 定数の定義
+        // </summary>
+
+
+        // <summary>
+        // ComponentKunのタイプの定義
+        // </summary>
         public enum ComponentKunType {            
             Invalid = -1,
             Transform = 0,
@@ -27,12 +33,15 @@
         class ComponentPair {
             public System.Type componentType;
             public System.Type componenKunType;
+           
+            
             public ComponentPair(System.Type componentType,System.Type componenKunType){
                 this.componentType = componentType;
                 this.componenKunType = componenKunType;
             }
         }
 
+        
         static readonly Dictionary<ComponentKunType,ComponentPair> componentPairDict = new Dictionary<ComponentKunType, ComponentPair>() 
         {
             {ComponentKunType.Transform,new ComponentPair(typeof(Transform),typeof(TransformKun))},

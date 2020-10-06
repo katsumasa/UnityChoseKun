@@ -2,6 +2,8 @@
 {   
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Runtime.Serialization.Formatters.Binary;
     using UnityEngine;
     using UnityEditor;
 
@@ -60,18 +62,41 @@
             set{m_settings = value;}
         }
 
+#if false
         // <summary>JSONデータを設定する</summary>
         public virtual void SetJson(string json)
         {
             settings.componentKun = JsonUtility.FromJson<ComponentKun>(json);
-        }
+        }        
         
         // <summary> JSONを設定する</summary>
         public virtual string GetJson()
         {
             return JsonUtility.ToJson(settings.componentKun);
         }
-        
+
+#else
+        public virtual void SetBytes(byte[] bytes)
+        {
+            var bf = new BinaryFormatter();
+            var ms = new MemoryStream(bytes);
+
+            settings.componentKun = (ComponentKun)bf.Deserialize(ms);
+            ms.Close();
+        }
+
+        public virtual byte[] GetBytes()
+        {
+            var bf = new BinaryFormatter();
+            var ms = new MemoryStream();
+
+            bf.Serialize(ms,settings.componentKun);
+            var bytes = ms.ToArray();
+            ms.Close();
+            return bytes;
+        }
+#endif
+
         // <summary> OnGUIから呼び出す処理 </summary>
         public virtual void OnGUI()
         {

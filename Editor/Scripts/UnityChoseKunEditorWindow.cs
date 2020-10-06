@@ -29,7 +29,7 @@
         }
 
         delegate void Task();
-        delegate void OnMessageFunc(string json);
+        delegate void OnMessageFunc(byte[] bytes);
 
         IConnectionState m_attachProfilerState;
         bool m_registered = false;
@@ -267,13 +267,14 @@
         private void OnMessageEvent(UnityEngine.Networking.PlayerConnection.MessageEventArgs args)
         {
             //Debug.Log("OnMessageEvent");
-            var json = System.Text.Encoding.ASCII.GetString(args.data);
-            var message = JsonUtility.FromJson<UnityChoseKunMessageData>(json);
+            var message= UnityChoseKun.GetObject<UnityChoseKunMessageData>(args.data);
+
+            
             //Debug.Log("message.id:"　+　message.id);
             if (onMessageFuncDict != null && onMessageFuncDict.ContainsKey(message.id) == true)
             {
                 var func = onMessageFuncDict[message.id];
-                func(message.json);
+                func(message.bytes);
             }
         }
     }

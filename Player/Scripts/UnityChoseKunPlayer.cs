@@ -17,7 +17,7 @@ namespace Utj.UnityChoseKun
 
     public class UnityChoseKunPlayer : MonoBehaviour
     {              
-        delegate void OnMessageFunc(string json);
+        delegate void OnMessageFunc(byte[] data);
         Dictionary<UnityChoseKun.MessageID, OnMessageFunc> onMessageFuncDict;
         ScreenPlayer m_playerScreen;
         ScreenPlayer playerScreen {
@@ -118,25 +118,27 @@ namespace Utj.UnityChoseKun
         private void OnMessageEvent(MessageEventArgs args)
         {
             Debug.Log("UnityChoseKun::OnMessageEvent");
-            var json = System.Text.Encoding.ASCII.GetString(args.data);
-            var message = JsonUtility.FromJson<UnityChoseKunMessageData>(json);
+
+            var message = UnityChoseKun.GetObject<UnityChoseKunMessageData>(args.data);
             if(message == null){
                 Debug.LogWarning("mesage == null");
                 return;
             }
             Debug.Log("message.id " + message.id);
             var func = onMessageFuncDict[message.id];
-            func(message.json);            
+            func(message.bytes);            
         }
 
-        public static void SendMessage<T>(UnityChoseKun.MessageID id,object obj)
+        
+        public static void SendMessage<T>(UnityChoseKun.MessageID id, T obj)
         {
             var message = new UnityChoseKunMessageData();
             message.id = id;
-            message.json = JsonUtility.ToJson(obj);
-            var json = JsonUtility.ToJson(message);
-            var bytes = System.Text.Encoding.ASCII.GetBytes(json);
+            UnityChoseKun.ObjectToBytes<T>(obj, out message.bytes);
+
+            byte[] bytes;
+            UnityChoseKun.ObjectToBytes<UnityChoseKunMessageData>(message, out bytes);            
             PlayerConnection.instance.Send(UnityChoseKun.kMsgSendPlayerToEditor, bytes);
-        }        
+        }
     }
 }

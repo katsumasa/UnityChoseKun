@@ -8,7 +8,7 @@
     
     public class ComponentPlayer :  BasePlayer
     {                           
-        public void OnMessageEventPull(string json)
+        public void OnMessageEventPull(byte[] bytes)
         {                
             Debug.Log("ComponentPlayer:OnMessageEventPull");            
             var scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
@@ -17,10 +17,10 @@
         }
 
 
-        public void OnMessageEventPush(string json)
+        public void OnMessageEventPush(byte[] bytes)
         {
             Debug.Log("OnMessageEventPush"); 
-            var gameObjectKun = JsonUtility.FromJson<GameObjectKun>(json);
+            var gameObjectKun = UnityChoseKun.GetObject<GameObjectKun>(bytes);
             foreach (var obj in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
             {
                 var go = FindGameObjectInChildren(obj,gameObjectKun.instanceID);

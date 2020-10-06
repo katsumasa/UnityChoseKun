@@ -62,9 +62,9 @@
             EditorGUILayout.EndHorizontal();
         }
 
-        public void OnMessageEvent(string json)
+        public void OnMessageEvent(byte[] bytes)
         {
-            timeKun = JsonUtility.FromJson<TimeKun>(json);
+            timeKun = UnityChoseKun.GetObject<TimeKun>(bytes);
             isDone = true;
         }
 

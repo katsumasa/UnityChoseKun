@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEditor;
 
@@ -39,7 +41,7 @@ namespace Utj.UnityChoseKun{
             get{if(m_settings == null){m_settings = new Settings();}return m_settings;}
             set{m_settings = value;}
         }
-
+#if false
         public override void SetJson(string json)
         {
             settings = new Settings(json);
@@ -50,7 +52,27 @@ namespace Utj.UnityChoseKun{
         {
             return JsonUtility.ToJson(settings.behaviourKun);
         }
-        
+#else
+        public override void SetBytes(byte[] bytes)
+        {
+            var bf = new BinaryFormatter();
+            var ms = new MemoryStream(bytes);
+
+            settings.behaviourKun = (BehaviourKun)bf.Deserialize(ms);
+            ms.Close();
+        }
+
+        public override byte[] GetBytes()
+        {
+            var bf = new BinaryFormatter();
+            var ms = new MemoryStream();
+
+            bf.Serialize(ms, settings.behaviourKun);
+            var bytes = ms.ToArray();
+            ms.Close();
+            return bytes;
+        }
+#endif
         // <summary> OnGUIから呼び出す処理 </summary>
         public override void OnGUI()
         {

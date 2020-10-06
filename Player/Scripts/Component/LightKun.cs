@@ -7,31 +7,37 @@ namespace  Utj.UnityChoseKun
     public class LightKun : BehaviourKun
     {
         #if UNITY_2019_1_OR_NEWER
-        public LightShape lightShape;
-        public float colorTemperature ;
-        public bool useColorTemperature ;
-        public int renderingLayerMask ;
-        #endif
+        [SerializeField] public LightShape lightShape;
+        [SerializeField] public float colorTemperature ;
+        [SerializeField] public bool useColorTemperature ;
+        [SerializeField] public int renderingLayerMask ;
+#endif
 
-        public LightType lightType;
-        public float range;
-        public float spotAngle;
-        public float innerSpotAngle;
-        public float cookieSize;
-        public Color color ;
-        public float intensity;
-        public float bounceIntensity ;        
-        public string cookie;
-        public LightShadows shadowsType;
-        public float shadowsStrength;
-        public UnityEngine.Rendering.LightShadowResolution  shadowsResolution;
-        public float shadowsBias;
-        public float shadowsNormalBias ;
-        public float shadowsNearPlane ;
-        public bool halo;
-        public string flare;
-        public LightRenderMode renderMode ;
-        public int cullingMask ;                                        
+        [SerializeField] public LightType lightType;
+        [SerializeField] public float range;
+        [SerializeField] public float spotAngle;
+        [SerializeField] public float innerSpotAngle;
+        [SerializeField] public float cookieSize;
+        [SerializeField] public ColorKun m_color ;
+        public Color color
+        {
+            get { return m_color.GetColor(); }
+            set { m_color = new ColorKun(value); }
+        }
+
+        [SerializeField] public float intensity;
+        [SerializeField] public float bounceIntensity ;
+        [SerializeField] public string cookie;
+        [SerializeField] public LightShadows shadowsType;
+        [SerializeField] public float shadowsStrength;
+        [SerializeField] public UnityEngine.Rendering.LightShadowResolution  shadowsResolution;
+        [SerializeField] public float shadowsBias;
+        [SerializeField] public float shadowsNormalBias ;
+        [SerializeField] public float shadowsNearPlane ;
+        [SerializeField] public bool halo;
+        [SerializeField] public string flare;
+        [SerializeField] public LightRenderMode renderMode ;
+        [SerializeField] public int cullingMask ;                                        
         
         public LightKun() : this(null){}        
 
@@ -41,12 +47,12 @@ namespace  Utj.UnityChoseKun
             var light = component as Light;
             if(light){       
 
-                #if UNITY_2019_1_OR_NEWER
+#if UNITY_2019_1_OR_NEWER
                 lightShape = light.shape;
                 useColorTemperature = light.useColorTemperature;
                 colorTemperature = light.colorTemperature;
                 renderingLayerMask = light.renderingLayerMask;
-                #endif
+#endif
 
                 enabled = light.enabled;
                 lightType = light.type;                            
@@ -67,8 +73,7 @@ namespace  Utj.UnityChoseKun
                 color = light.color;
                 intensity = light.intensity;
                 bounceIntensity = light.bounceIntensity;
-                
-                
+                                
                 shadowsType = light.shadows;
                 shadowsStrength = light.shadowStrength;
                 shadowsBias = light.shadowBias;

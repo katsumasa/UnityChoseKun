@@ -8,7 +8,7 @@
 
     public class ScreenPlayer : BasePlayer
     {
-        public void OnMessageEventPull(string json)
+        public void OnMessageEventPull(byte[] bytes)
         {
             //Debug.Log("ScreenPlayer:OnMessageEventPull");
             var screenKun = new ScreenKun(true);
@@ -16,10 +16,10 @@
         }
 
 
-        public void OnMessageEventPush(string json)
+        public void OnMessageEventPush(byte[] bytes)
         {
             //Debug.Log("ScreenPlayer:OnMessageEventPush");
-            var screenKun = JsonUtility.FromJson<ScreenKun>(json);
+            var screenKun = UnityChoseKun.GetObject<ScreenKun>(bytes);
             screenKun.WriteBack();
         }                
     }

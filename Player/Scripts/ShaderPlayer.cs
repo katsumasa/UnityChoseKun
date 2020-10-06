@@ -2,8 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 namespace Utj.UnityChoseKun{
+
+    // <summary>
+    // ShaderKunの配列を送る為の構造体
+    // </summary>
+    [System.Serializable]
     public class ShaderKunPacket {
-        public ShaderKun[] shaderKuns;
+        [SerializeField] public ShaderKun[] shaderKuns;
     }
     
     public class ShaderPlayer : BasePlayer
@@ -23,7 +28,7 @@ namespace Utj.UnityChoseKun{
             shaderDict = null;
         }
 
-        public void OnMessageEventPull(string json){
+        public void OnMessageEventPull(byte[] bytes){
             GetAllShader();
             var shaderKuns = new ShaderKun[shaderDict.Count];
             var  i = 0;

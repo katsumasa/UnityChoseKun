@@ -118,9 +118,9 @@
         }
 
 
-        public void OnMessageEvent(string json)
+        public void OnMessageEvent(byte[] bytes)
         {
-            screenKun = JsonUtility.FromJson< ScreenKun>(json);            
+            screenKun = UnityChoseKun.GetObject<ScreenKun>(bytes);            
             isDone = true;
         }
     }

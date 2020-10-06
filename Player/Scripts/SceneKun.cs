@@ -8,9 +8,9 @@
     [System.Serializable]
     public class SceneKun
     {
-        public string name;
-        public int rootCount;
-        public GameObjectKun [] gameObjectKuns;     
+        [SerializeField] public string name;
+        [SerializeField] public int rootCount;
+        [SerializeField] public GameObjectKun [] gameObjectKuns;     
 
         // コンストラクタ
         public SceneKun()

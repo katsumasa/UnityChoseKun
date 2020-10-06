@@ -2,6 +2,8 @@
 
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Runtime.Serialization.Formatters.Binary;
     using UnityEngine;
     using UnityEditor;
 
@@ -31,6 +33,7 @@
         
         bool foldout = true;
 
+#if false
         public override void SetJson(string json)
         {
             transformKun = JsonUtility.FromJson<TransformKun>(json);
@@ -40,7 +43,28 @@
         {
             return JsonUtility.ToJson(transformKun);
         }
-        
+#else
+        public override void SetBytes(byte[] bytes)
+        {
+            var bf = new BinaryFormatter();
+            var ms = new MemoryStream(bytes);
+
+            transformKun = (TransformKun)bf.Deserialize(ms);
+            ms.Close();
+        }
+
+        public override byte[] GetBytes()
+        {
+            var bf = new BinaryFormatter();
+            var ms = new MemoryStream();
+
+            bf.Serialize(ms, transformKun);
+            var bytes = ms.ToArray();
+            ms.Close();
+            return bytes;
+        }
+
+#endif
 
         public override void OnGUI()
         {        
@@ -57,7 +81,7 @@
 
                     EditorGUILayout.BeginHorizontal();
                     EditorGUILayout.PrefixLabel(Styles.positionContent);
-                    transformKun.localPosition = EditorGUILayout.Vector3Field("",transformKun.localPosition);
+                    transformKun.localPosition = EditorGUILayout.Vector3Field("", transformKun.localPosition);
                     EditorGUILayout.EndHorizontal();
 
                     EditorGUILayout.BeginHorizontal();

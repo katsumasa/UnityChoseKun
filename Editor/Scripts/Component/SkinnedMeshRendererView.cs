@@ -1,7 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEditor;
+
 
 namespace Utj.UnityChoseKun{
     [System.Serializable]
@@ -96,6 +99,7 @@ namespace Utj.UnityChoseKun{
             }
         }
 
+#if false
         public override void SetJson(string json)
         {
             rendererKun =  JsonUtility.FromJson<SkinnedMeshRendererKun>(json);
@@ -117,7 +121,43 @@ namespace Utj.UnityChoseKun{
         {
             return JsonUtility.ToJson(rendererKun);
         }
+#else
+        public override void SetBytes(byte[] bytes)
+        {
+            var bf = new BinaryFormatter();
+            var ms = new MemoryStream(bytes);
 
+            rendererKun = (SkinnedMeshRendererKun)bf.Deserialize(ms);
+            ms.Close();
+
+            if (rendererKun.material != null)
+            {
+                materialView = new MaterialView();
+                materialView.materialKun = rendererKun.material;
+            }
+
+            if (rendererKun.materials != null)
+            {
+                materialViews = new MaterialView[rendererKun.materials.Length];
+                for (var i = 0; i < materialViews.Length; i++)
+                {
+                    materialViews[i] = new MaterialView();
+                    materialViews[i].materialKun = rendererKun.materials[i];
+                }
+            }
+        }
+
+        public override byte[] GetBytes()
+        {
+            var bf = new BinaryFormatter();
+            var ms = new MemoryStream();
+
+            bf.Serialize(ms, rendererKun);
+            var bytes = ms.ToArray();
+            ms.Close();
+            return bytes;
+        }
+#endif
         public override void OnGUI()
         {
             if(rendererKun != null){

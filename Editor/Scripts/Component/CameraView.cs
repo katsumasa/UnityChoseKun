@@ -1,6 +1,8 @@
 ﻿namespace Utj.UnityChoseKun{
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Runtime.Serialization.Formatters.Binary;
     using UnityEngine;
     using UnityEditor;
 
@@ -291,7 +293,7 @@
         private bool cameraFoldout {
             get; set;
         }
-
+#if false
         public override void SetJson(string json)
         {
             settings.cameraKun = JsonUtility.FromJson<CameraKun>(json);
@@ -301,7 +303,28 @@
         {
             return JsonUtility.ToJson(settings.cameraKun);
         }
+#else
+        public override void SetBytes(byte[] bytes)
+        {
+            var bf = new BinaryFormatter();
+            var ms = new MemoryStream(bytes);
 
+            settings.cameraKun= (CameraKun)bf.Deserialize(ms);
+            ms.Close();
+        }
+
+        public override byte[] GetBytes()
+        {
+            var bf = new BinaryFormatter();
+            var ms = new MemoryStream();
+
+            bf.Serialize(ms, settings.cameraKun);
+            var bytes = ms.ToArray();
+            ms.Close();
+            return bytes;
+        }
+
+#endif
         public override void OnGUI()
         {                    
             cameraFoldout = settings.DrawCamera(cameraFoldout);

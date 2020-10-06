@@ -79,12 +79,12 @@ namespace Utj.UnityChoseKun
             EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Pull"))
             {
-                UnityChoseKunEditor.SendMessage<ScreenKun>(UnityChoseKun.MessageID.ApplicationPull,null);
+                UnityChoseKunEditor.SendMessage<ApplicationKun>(UnityChoseKun.MessageID.ApplicationPull,null);
             }
             if (isDone && applicationKun.isDirty) {
                 if (GUILayout.Button("Push"))
                 {
-                    UnityChoseKunEditor.SendMessage<ScreenKun>(UnityChoseKun.MessageID.ApplicationPush, applicationKun);
+                    UnityChoseKunEditor.SendMessage<ApplicationKun>(UnityChoseKun.MessageID.ApplicationPush, applicationKun);
                 }
             }
             if (GUILayout.Button("Quit"))
@@ -95,9 +95,9 @@ namespace Utj.UnityChoseKun
             
         }
 
-        public void OnMessageEvent(string json)
+        public void OnMessageEvent(byte[] bytes)
         {
-            applicationKun = JsonUtility.FromJson<ApplicationKun>(json);
+            applicationKun = UnityChoseKun.GetObject<ApplicationKun>(bytes);
             isDone = true;
         }
     }

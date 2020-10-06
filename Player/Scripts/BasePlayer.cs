@@ -8,13 +8,14 @@
 
     public class BasePlayer
     {
-        public void SendMessage<T>(UnityChoseKun.MessageID id,object obj)
+        public void SendMessage<T>(UnityChoseKun.MessageID id,T obj)
         {
             var message = new UnityChoseKunMessageData();
             message.id = id;
-            message.json = JsonUtility.ToJson(obj);
-            var json = JsonUtility.ToJson(message);
-            var bytes = System.Text.Encoding.ASCII.GetBytes(json);
+            UnityChoseKun.ObjectToBytes<T>(obj, out message.bytes);
+
+            byte[] bytes;
+            UnityChoseKun.ObjectToBytes<UnityChoseKunMessageData>(message,out bytes);
             PlayerConnection.instance.Send(UnityChoseKun.kMsgSendPlayerToEditor, bytes);
         }
 

@@ -44,9 +44,9 @@ namespace Utj.UnityChoseKun{
         }
 
 
-        public void OnMessageEventPull(string json){
+        public void OnMessageEventPull(byte[] bytes){
             Debug.Log("TextureKunPlayer:TextureKunPlayer");
-            TextureKunPacket textureKunPacket = JsonUtility.FromJson<TextureKunPacket>(json);
+            var textureKunPacket = UnityChoseKun.GetObject<TextureKunPacket>(bytes);
             if(textureKunPacket.isScene){
                 GetAllTextureInScene();
             }

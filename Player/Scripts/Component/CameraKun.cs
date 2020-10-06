@@ -24,33 +24,51 @@
         };
 
         // メンバー変数の定義        
-        public CameraClearFlags clearFlags;
+        [SerializeField] public CameraClearFlags clearFlags;
+        [SerializeField] private ColorKun m_backgroundColor;
+        public Color backgroundColor
+        {
+            get { return m_backgroundColor.GetColor(); }
+            set { m_backgroundColor = new ColorKun(value); }
+        }
 
-        public Color backgroundColor;
-        public int cullingMask;
+        [SerializeField] public int cullingMask;
         // Projection
-        public bool  orthographic;
-        public float orthographicSize;
-        public float fieldOfView;
-        public bool usePhysicalProperties;
+        [SerializeField] public bool  orthographic;
+        [SerializeField] public float orthographicSize;
+        [SerializeField] public float fieldOfView;
+        [SerializeField] public bool usePhysicalProperties;
         // 物理カメラの設定
-        public float focalLength;
-        public int sensorType;
+        [SerializeField] public float focalLength;
+        [SerializeField] public int sensorType;
         //public Vector2 sensorSize;
-        public Vector2 lensShift;        
-        public Camera.GateFitMode gateFit;
+
+        [SerializeField] private Vector2Kun m_lensShift;        
+        public Vector2 lensShift
+        {
+            get { return m_lensShift.GetVector2(); }
+            set { m_lensShift = new Vector2Kun(value);}
+        }
+
+
+        [SerializeField] public Camera.GateFitMode gateFit;
         // Clipping Plane
-        public float nearClipPlane;
-        public float farClipPlane;
+        [SerializeField] public float nearClipPlane;
+        [SerializeField] public float farClipPlane;
         // Viewport Rect
-        public Rect rect;
-        public float depth;             
-        public int  renderingPath;
-        public bool useOcclusionCulling;        
-        public bool allowHDR;
-        public bool allowMSAA;
-        public bool allowDynamicResolution;
-        public int targetEye;
+        [SerializeField] RectKun m_rect;
+        public Rect rect {
+            get { return m_rect.GetRect(); }
+            set { m_rect = new RectKun(value);}
+        }
+
+        [SerializeField] public float depth;
+        [SerializeField] public int  renderingPath;
+        [SerializeField] public bool useOcclusionCulling;
+        [SerializeField] public bool allowHDR;
+        [SerializeField] public bool allowMSAA;
+        [SerializeField] public bool allowDynamicResolution;
+        [SerializeField] public int targetEye;
 
 
         public CameraKun(): this(null){}

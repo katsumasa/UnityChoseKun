@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEditor;
 
@@ -32,7 +34,7 @@ namespace Utj.UnityChoseKun{
             }
             GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));
         }
-
+#if false
         public override void SetJson(string json){
             behaviourKun = JsonUtility.FromJson<MonoBehaviourKun>(json);
         }
@@ -41,7 +43,27 @@ namespace Utj.UnityChoseKun{
         {
             return JsonUtility.ToJson(behaviourKun);
         }
+#else
+        public override void SetBytes(byte[] bytes)
+        {
+            var bf = new BinaryFormatter();
+            var ms = new MemoryStream(bytes);
 
+            behaviourKun = (MonoBehaviourKun)bf.Deserialize(ms);
+            ms.Close();
+        }
+
+        public override byte[] GetBytes()
+        {
+            var bf = new BinaryFormatter();
+            var ms = new MemoryStream();
+
+            bf.Serialize(ms, behaviourKun);
+            var bytes = ms.ToArray();
+            ms.Close();
+            return bytes;
+        }
+#endif
         public override void OnGUI()
         {
             EditorGUI.BeginChangeCheck();
