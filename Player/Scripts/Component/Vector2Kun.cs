@@ -8,7 +8,7 @@ namespace Utj.UnityChoseKun
     // SerializeObject for Vector2
     // </summary>
     [System.Serializable]
-    public struct Vector2Kun
+    public class Vector2Kun
     {
         [SerializeField]public float x;
         [SerializeField]public float y;

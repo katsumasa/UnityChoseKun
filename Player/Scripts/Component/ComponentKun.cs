@@ -20,10 +20,12 @@
             Transform = 0,
             Camera,
             Light,            
-            
             SkinnedMeshMeshRenderer,
             MeshRenderer,
             Renderer,
+
+            Rigidbody,
+
             MonoBehaviour,
             Behaviour,
             Component,            
@@ -50,22 +52,28 @@
             {ComponentKunType.SkinnedMeshMeshRenderer,new ComponentPair(typeof(SkinnedMeshRenderer),typeof(SkinnedMeshRendererKun))},            
             {ComponentKunType.MeshRenderer,new ComponentPair(typeof(MeshRenderer),typeof(MeshRendererKun))},
             {ComponentKunType.Renderer,new ComponentPair(typeof(Renderer),typeof(RendererKun))},
+            
+            {ComponentKunType.Rigidbody,new ComponentPair(typeof(Rigidbody),typeof(RigidbodyKun))},
+
             {ComponentKunType.MonoBehaviour,new ComponentPair(typeof(MonoBehaviour),typeof(MonoBehaviourKun))},
             {ComponentKunType.Behaviour,new ComponentPair(typeof(Behaviour),typeof(BehaviourKun))},
             {ComponentKunType.Component,new ComponentPair(typeof(Component),typeof(ComponentKun))},
         };
-        
+
         // <summary> ComponentからComponentKunTypeを取得する </summary>
         public static ComponentKunType GetComponentKunType(Component component)
         {
             // Note:基底クラスのチェックが後になるように記述する必要がある
-            if(component is Transform){return ComponentKunType.Transform;}
-            if(component is Camera){return ComponentKunType.Camera;}
-            if(component is Light){return ComponentKunType.Light;}
-            
-            if(component is MeshRenderer){return ComponentKunType.MeshRenderer;}
-            if(component is SkinnedMeshRenderer){return ComponentKunType.SkinnedMeshMeshRenderer;}
-            if(component is Renderer){return ComponentKunType.Renderer;}
+            if (component is Transform) { return ComponentKunType.Transform; }
+            if (component is Camera) { return ComponentKunType.Camera; }
+            if (component is Light) { return ComponentKunType.Light; }
+
+            if (component is MeshRenderer) { return ComponentKunType.MeshRenderer; }
+            if (component is SkinnedMeshRenderer) { return ComponentKunType.SkinnedMeshMeshRenderer; }
+            if (component is Renderer) { return ComponentKunType.Renderer; }
+
+            if (component is Rigidbody) { return ComponentKunType.Rigidbody;}
+
             if(component is MonoBehaviour){return ComponentKunType.MonoBehaviour;}
             if(component is Behaviour){return ComponentKunType.Behaviour;}
             if(component is Component){return ComponentKunType.Component;}

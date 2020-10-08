@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Utj.UnityChoseKun
 {
     [System.Serializable]
-    public struct Matrix4x4Kun
+    public class Matrix4x4Kun
     {
         [SerializeField] Vector4Kun[] columns;
 

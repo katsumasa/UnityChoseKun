@@ -298,7 +298,7 @@
 
         public override void SetComponentKun(ComponentKun componentKun)
         {
-            //settings.cameraKun = (CameraKun)componentKun;
+            settings.cameraKun = (CameraKun)componentKun;
         }
 
 

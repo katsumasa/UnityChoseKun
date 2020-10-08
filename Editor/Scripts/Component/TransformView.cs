@@ -29,6 +29,7 @@
                 }
             set {m_transformKun = value;}
         }
+
         
         
         bool foldout = true;
@@ -72,9 +73,11 @@
                     EditorGUILayout.BeginHorizontal();
                     EditorGUILayout.PrefixLabel(Styles.scaleContent);
                     transformKun.localScale = EditorGUILayout.Vector3Field("",transformKun.localScale);
-                    EditorGUILayout.EndHorizontal();                    
+                    EditorGUILayout.EndHorizontal();
 
-                    if(EditorGUI.EndChangeCheck()){
+                   
+
+                    if (EditorGUI.EndChangeCheck()){
                         transformKun.dirty = true;
                     }
                 }

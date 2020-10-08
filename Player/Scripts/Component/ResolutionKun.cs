@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Utj.UnityChoseKun {
     [System.Serializable]
-    public struct ResolutionKun {
+    public class ResolutionKun {
         [SerializeField] public int width;
         [SerializeField] public int height;
         [SerializeField] public int refreshRate;

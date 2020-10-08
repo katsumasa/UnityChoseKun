@@ -25,7 +25,7 @@ namespace Utj.UnityChoseKun
 
         public Quaternion GetQuaternion()
         {
-            return new Quaternion(x, y, x, w);
+            return new Quaternion(x, y, z, w);
         }
     }
 }

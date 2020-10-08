@@ -5,7 +5,8 @@ using System.Runtime.InteropServices;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
-
+using TMPro;
+using System;
 
 namespace Utj.UnityChoseKun
 {
@@ -56,20 +57,35 @@ namespace Utj.UnityChoseKun
 
         public static void BytesToObject<T>(byte[] src, out T dst)
         {
-            var bf = new BinaryFormatter();
-            var ms = new MemoryStream(src);
-            try
+            if (src != null)
             {
-                dst = (T)bf.Deserialize(ms);
+                var bf = new BinaryFormatter();
+                var ms = new MemoryStream(src);
+                try
+                {
+                    dst = (T)bf.Deserialize(ms);
+                }
+                finally
+                {
+                    ms.Close();
+                }
             }
-            finally
+            else
             {
-                ms.Close();
+                dst = default(T);
             }
         }
 
         public static T GetObject<T>(byte[] src)
         {
+         
+            
+            if(src == null)
+            {
+                return default(T);
+            }
+
+
             var bf = new BinaryFormatter();
             var ms = new MemoryStream(src);
             try
@@ -80,6 +96,8 @@ namespace Utj.UnityChoseKun
             {
                 ms.Close();
             }
+            
+            
         }
     }
 

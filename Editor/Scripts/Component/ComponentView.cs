@@ -17,9 +17,12 @@
             {ComponentKun.ComponentKunType.Transform,               typeof(TransformView)},
             {ComponentKun.ComponentKunType.Camera,                  typeof(CameraView)},
             {ComponentKun.ComponentKunType.Light,                   typeof(LightView)},
-            {ComponentKun.ComponentKunType.Renderer,                typeof(RendererView)},
-            {ComponentKun.ComponentKunType.MeshRenderer,            typeof(MeshRendererView)},
             {ComponentKun.ComponentKunType.SkinnedMeshMeshRenderer, typeof(SkinnedMeshRendererView)},
+            {ComponentKun.ComponentKunType.MeshRenderer,            typeof(MeshRendererView)},
+            {ComponentKun.ComponentKunType.Renderer,                typeof(RendererView)},
+
+            {ComponentKun.ComponentKunType.Rigidbody,               typeof(RigidbodyView)},
+
             {ComponentKun.ComponentKunType.MonoBehaviour,           typeof(MonoBehaviourView)},
             {ComponentKun.ComponentKunType.Behaviour,               typeof(BehaviourView)},
             {ComponentKun.ComponentKunType.Component,               typeof(ComponentView)},

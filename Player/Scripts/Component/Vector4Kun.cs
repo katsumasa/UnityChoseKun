@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Utj.UnityChoseKun
 {
     [System.Serializable]
-    public struct Vector4Kun
+    public class Vector4Kun
     {
         [SerializeField] public float x;
         [SerializeField] public float y;
@@ -20,7 +20,7 @@ namespace Utj.UnityChoseKun
             this.w = w;
         }
 
-        public Vector4Kun(Vector4 v4) : this(v4.x, v4.y, v4.z, v4.z) { }
+        public Vector4Kun(Vector4 v4) : this(v4.x, v4.y, v4.z, v4.w) { }
 
         
         public Vector4 GetVector4()

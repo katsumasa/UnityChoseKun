@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Utj.UnityChoseKun
 {
     [System.Serializable]
-    public struct ColorKun
+    public class ColorKun
     {
         [SerializeField] public float a;
         [SerializeField] public float b;

@@ -19,8 +19,18 @@
 
         public void OnMessageEventPush(byte[] bytes)
         {
-            Debug.Log("OnMessageEventPush"); 
+            Debug.Log("ComponentPlayer:OnMessageEventPush"); 
+            if(bytes == null)
+            {
+                Debug.Log("bytes == null");
+            }
+
+            Debug.Log("Start:UnityChoseKun.GetObject");
+
             var gameObjectKun = UnityChoseKun.GetObject<GameObjectKun>(bytes);
+
+            Debug.Log("End:UnityChoseKun.GetObject");
+
             foreach (var obj in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
             {
                 var go = FindGameObjectInChildren(obj,gameObjectKun.instanceID);
