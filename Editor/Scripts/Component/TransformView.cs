@@ -33,38 +33,18 @@
         
         bool foldout = true;
 
-#if false
-        public override void SetJson(string json)
+
+        public override void SetComponentKun(ComponentKun componentKun)
         {
-            transformKun = JsonUtility.FromJson<TransformKun>(json);
+            transformKun = componentKun as TransformKun;
         }
 
-        public override string GetJson()
-        {
-            return JsonUtility.ToJson(transformKun);
-        }
-#else
-        public override void SetBytes(byte[] bytes)
-        {
-            var bf = new BinaryFormatter();
-            var ms = new MemoryStream(bytes);
 
-            transformKun = (TransformKun)bf.Deserialize(ms);
-            ms.Close();
+        public override ComponentKun GetComponentKun()
+        {
+            return transformKun;
         }
 
-        public override byte[] GetBytes()
-        {
-            var bf = new BinaryFormatter();
-            var ms = new MemoryStream();
-
-            bf.Serialize(ms, transformKun);
-            var bytes = ms.ToArray();
-            ms.Close();
-            return bytes;
-        }
-
-#endif
 
         public override void OnGUI()
         {        

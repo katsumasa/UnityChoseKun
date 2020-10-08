@@ -37,7 +37,8 @@
         }
 
 
-        public sealed class Settings
+        [System.Serializable]
+        private sealed class Settings
         {
             enum ProjectionType { Orthographic, Perspective }
 
@@ -280,7 +281,7 @@
         }    
 
         private Settings m_Settings;
-        protected Settings settings
+        Settings settings
         {
             get
             {
@@ -293,38 +294,19 @@
         private bool cameraFoldout {
             get; set;
         }
-#if false
-        public override void SetJson(string json)
+
+        public override void SetComponentKun(ComponentKun componentKun)
         {
-            settings.cameraKun = JsonUtility.FromJson<CameraKun>(json);
+            settings.cameraKun = (CameraKun)componentKun;
         }
 
-        public override string GetJson()
+
+        public override ComponentKun GetComponentKun()
         {
-            return JsonUtility.ToJson(settings.cameraKun);
+            return settings.cameraKun;
         }
-#else
-        public override void SetBytes(byte[] bytes)
-        {
-            var bf = new BinaryFormatter();
-            var ms = new MemoryStream(bytes);
+        
 
-            settings.cameraKun= (CameraKun)bf.Deserialize(ms);
-            ms.Close();
-        }
-
-        public override byte[] GetBytes()
-        {
-            var bf = new BinaryFormatter();
-            var ms = new MemoryStream();
-
-            bf.Serialize(ms, settings.cameraKun);
-            var bytes = ms.ToArray();
-            ms.Close();
-            return bytes;
-        }
-
-#endif
         public override void OnGUI()
         {                    
             cameraFoldout = settings.DrawCamera(cameraFoldout);

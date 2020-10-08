@@ -83,36 +83,10 @@ namespace Utj.UnityChoseKun {
             }
         }
 
-#if false
-        public override void SetJson(string json)
-        {
-            rendererKun =  JsonUtility.FromJson<MeshRendererKun>(json);
-            if(rendererKun.material != null){
-                materialView = new MaterialView();
-                materialView.materialKun =  rendererKun.material;
-            }
-            
-            if(rendererKun.materials != null){
-                materialViews = new MaterialView[rendererKun.materials.Length];
-                for(var i = 0; i < materialViews.Length; i++){
-                    materialViews[i] = new MaterialView();
-                    materialViews[i].materialKun = rendererKun.materials[i];
-                }
-            }
-        }
 
-        public override string GetJson()
-        {            
-            return JsonUtility.ToJson(rendererKun);
-        }
-#else
-        public override void SetBytes(byte[] bytes)
+        public override void SetComponentKun(ComponentKun componentKun)
         {
-            var bf = new BinaryFormatter();
-            var ms = new MemoryStream(bytes);
-
-            rendererKun = (MeshRendererKun)bf.Deserialize(ms);
-            ms.Close();
+            rendererKun = componentKun as MeshRendererKun;
             if (rendererKun.material != null)
             {
                 materialView = new MaterialView();
@@ -130,17 +104,13 @@ namespace Utj.UnityChoseKun {
             }
         }
 
-        public override byte[] GetBytes()
-        {
-            var bf = new BinaryFormatter();
-            var ms = new MemoryStream();
 
-            bf.Serialize(ms, rendererKun);
-            var bytes = ms.ToArray();
-            ms.Close();
-            return bytes;
+        public override ComponentKun GetComponentKun()
+        {
+            return rendererKun;
         }
-#endif
+
+
         public override void OnGUI()
         {
             if(rendererKun != null){

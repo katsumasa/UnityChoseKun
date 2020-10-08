@@ -34,36 +34,19 @@ namespace Utj.UnityChoseKun{
             }
             GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));
         }
-#if false
-        public override void SetJson(string json){
-            behaviourKun = JsonUtility.FromJson<MonoBehaviourKun>(json);
-        }
 
-        public override string GetJson()
+
+        public override void SetComponentKun(ComponentKun componentKun)
         {
-            return JsonUtility.ToJson(behaviourKun);
+            behaviourKun = componentKun as MonoBehaviourKun;
         }
-#else
-        public override void SetBytes(byte[] bytes)
+
+        public override ComponentKun GetComponentKun()
         {
-            var bf = new BinaryFormatter();
-            var ms = new MemoryStream(bytes);
-
-            behaviourKun = (MonoBehaviourKun)bf.Deserialize(ms);
-            ms.Close();
+            return behaviourKun;
         }
 
-        public override byte[] GetBytes()
-        {
-            var bf = new BinaryFormatter();
-            var ms = new MemoryStream();
 
-            bf.Serialize(ms, behaviourKun);
-            var bytes = ms.ToArray();
-            ms.Close();
-            return bytes;
-        }
-#endif
         public override void OnGUI()
         {
             EditorGUI.BeginChangeCheck();

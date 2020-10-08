@@ -344,38 +344,18 @@ namespace  Utj.UnityChoseKun
 
 
 
-#if false
-        public override void SetJson(string json)
+
+        public override ComponentKun GetComponentKun()
         {
-            settings = new Settings(json);
+            return settings.lightKun;
         }
 
-        // <summary> JSONを設定する</summary>
-        public override string GetJson()
-        {
-            return JsonUtility.ToJson(settings.lightKun);
-        }
-#else
-        public override void SetBytes(byte[] bytes)
-        {
-            var bf = new BinaryFormatter();
-            var ms = new MemoryStream(bytes);
 
-            settings.lightKun = (LightKun)bf.Deserialize(ms);
-            ms.Close();
+        public override void SetComponentKun(ComponentKun componentKun)
+        {
+            settings.lightKun = (LightKun)componentKun;
         }
 
-        public override byte[] GetBytes()
-        {
-            var bf = new BinaryFormatter();
-            var ms = new MemoryStream();
-
-            bf.Serialize(ms, settings.lightKun);
-            var bytes = ms.ToArray();
-            ms.Close();
-            return bytes;
-        }
-#endif
 
         // <summary> OnGUIから呼び出す処理 </summary>
         public override void OnGUI()

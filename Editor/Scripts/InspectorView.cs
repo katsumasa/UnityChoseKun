@@ -101,13 +101,12 @@
             componentViews.Clear();            
             if(gameObjectKun!=null) {
                 m_selectGameObujectKunID = gameObjectKun.instanceID;
-                //for(var i = 0; i < gameObjectKun.componentDataJsons.Length; i++)
-                for(var i = 0; i < gameObjectKun.componentDataBytes.Length; i++)
+s                
+                for(var i = 0; i < gameObjectKun.componentKuns.Length; i++)
                 {
                     var type = ComponentView.GetComponentViewSyetemType(gameObjectKun.componentKunTypes[i]);
                     var componentView = System.Activator.CreateInstance(type) as ComponentView;
-                    //componentView.SetJson(gameObjectKun.componentDataJsons[i]);
-                    componentView.SetBytes(gameObjectKun.componentDataBytes[i]);
+                    componentView.SetComponentKun(gameObjectKun.componentKuns[i]);                    
                     componentViews.Add(componentView);
                 }
             }else{
@@ -169,9 +168,9 @@
                     {
                         var gameObjectKun = m_gameObjectKuns[m_selectGameObujectKunID];
                         settings.Writeback(gameObjectKun);
-                        for (var i = 0; i < gameObjectKun.componentDataBytes.Length; i++)
+                        for (var i = 0; i < gameObjectKun.componentKuns.Length; i++)
                         {
-                            gameObjectKun.componentDataBytes[i] = m_componentViews[i].GetBytes();
+                            gameObjectKun.componentKuns[i] = m_componentViews[i].GetComponentKun();
                         }
                         UnityChoseKunEditor.SendMessage<GameObjectKun>(UnityChoseKun.MessageID.GameObjectPush, gameObjectKun);
                     }

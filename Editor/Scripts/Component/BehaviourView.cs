@@ -41,38 +41,20 @@ namespace Utj.UnityChoseKun{
             get{if(m_settings == null){m_settings = new Settings();}return m_settings;}
             set{m_settings = value;}
         }
-#if false
-        public override void SetJson(string json)
+
+
+        public override void SetComponentKun(ComponentKun componentKun)
         {
-            settings = new Settings(json);
+            settings.behaviourKun = componentKun as BehaviourKun;
         }
 
-        // <summary> JSONを設定する</summary>
-        public override string GetJson()
-        {
-            return JsonUtility.ToJson(settings.behaviourKun);
-        }
-#else
-        public override void SetBytes(byte[] bytes)
-        {
-            var bf = new BinaryFormatter();
-            var ms = new MemoryStream(bytes);
 
-            settings.behaviourKun = (BehaviourKun)bf.Deserialize(ms);
-            ms.Close();
-        }
-
-        public override byte[] GetBytes()
+        public override ComponentKun GetComponentKun()
         {
-            var bf = new BinaryFormatter();
-            var ms = new MemoryStream();
-
-            bf.Serialize(ms, settings.behaviourKun);
-            var bytes = ms.ToArray();
-            ms.Close();
-            return bytes;
+            return settings.behaviourKun;
         }
-#endif
+                
+
         // <summary> OnGUIから呼び出す処理 </summary>
         public override void OnGUI()
         {
