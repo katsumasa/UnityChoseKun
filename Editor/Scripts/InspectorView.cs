@@ -100,8 +100,7 @@
         {                        
             componentViews.Clear();            
             if(gameObjectKun!=null) {
-                m_selectGameObujectKunID = gameObjectKun.instanceID;
-s                
+                m_selectGameObujectKunID = gameObjectKun.instanceID;                
                 for(var i = 0; i < gameObjectKun.componentKuns.Length; i++)
                 {
                     var type = ComponentView.GetComponentViewSyetemType(gameObjectKun.componentKunTypes[i]);

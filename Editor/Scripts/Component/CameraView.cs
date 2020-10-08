@@ -45,7 +45,7 @@
             
             CameraKun m_cameraKun;            
             public CameraKun cameraKun {
-                get {
+                get {                    
                     if(m_cameraKun == null){
                         m_cameraKun = new CameraKun(null);                     
                     }
@@ -295,9 +295,10 @@
             get; set;
         }
 
+
         public override void SetComponentKun(ComponentKun componentKun)
         {
-            settings.cameraKun = (CameraKun)componentKun;
+            //settings.cameraKun = (CameraKun)componentKun;
         }
 
 
@@ -305,7 +306,7 @@
         {
             return settings.cameraKun;
         }
-        
+
 
         public override void OnGUI()
         {                    
