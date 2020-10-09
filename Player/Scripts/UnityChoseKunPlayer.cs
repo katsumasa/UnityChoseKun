@@ -60,7 +60,7 @@ namespace Utj.UnityChoseKun
 
 
         private void Awake()
-        {                            
+        {
             onMessageFuncDict = new Dictionary<UnityChoseKun.MessageID, OnMessageFunc>()
             {
                 {UnityChoseKun.MessageID.ScreenPull,    playerScreen.OnMessageEventPull},
@@ -69,7 +69,7 @@ namespace Utj.UnityChoseKun
                 {UnityChoseKun.MessageID.TimePush,      playerTime.OnMessageEventPush},
                 {UnityChoseKun.MessageID.GameObjectPull,componentPlayer.OnMessageEventPull},
                 {UnityChoseKun.MessageID.GameObjectPush,componentPlayer.OnMessageEventPush },
-                {UnityChoseKun.MessageID.ShaderPull,    shaderPlayer.OnMessageEventPull},   
+                {UnityChoseKun.MessageID.ShaderPull,    shaderPlayer.OnMessageEventPull},
                 {UnityChoseKun.MessageID.TexturePull,   texturePlayer.OnMessageEventPull},
                 {UnityChoseKun.MessageID.ApplicationPull, applicationPlayer.OnMessageEventPull},
                 {UnityChoseKun.MessageID.ApplicationPush, applicationPlayer.OnMessageEventPush},
@@ -77,7 +77,15 @@ namespace Utj.UnityChoseKun
                 {UnityChoseKun.MessageID.AndroidPull,   androidPlayer.OnMessageEventPull},
                 {UnityChoseKun.MessageID.AndroidPush,   androidPlayer.OnMessageEventPush},
 
-            };                                    
+            };
+
+            // https://answers.unity.com/questions/725419/filestream-binaryformatter-from-c-to-ios-doesnt-wo.html
+#if UNITY_IPHONE || UNITY_IOS
+            {
+                System.Environment.SetEnvironmentVariable("MONO_REFLECTION_SERIALIZER", "yes");
+            }
+#endif
+
         }
 
         // Start is called before the first frame update
@@ -91,7 +99,7 @@ namespace Utj.UnityChoseKun
         }
 
         //
-        private void OnDestroy()
+        void OnDestroy()
         {
             if(onMessageFuncDict != null)
             {
@@ -101,21 +109,21 @@ namespace Utj.UnityChoseKun
         }
 
         //
-        private void OnEnable()
+        void OnEnable()
         {
             Debug.Log("OnEnable");
             PlayerConnection.instance.Register(UnityChoseKun.kMsgSendEditorToPlayer, OnMessageEvent);
         }
 
         //
-        private void OnDisable()
+        void OnDisable()
         {
             Debug.Log("OnDisable");
             PlayerConnection.instance.Unregister(UnityChoseKun.kMsgSendEditorToPlayer, OnMessageEvent);
         }
 
         //
-        private void OnMessageEvent(MessageEventArgs args)
+        void OnMessageEvent(MessageEventArgs args)
         {
             Debug.Log("UnityChoseKun::OnMessageEvent");
             if (args.data == null)
