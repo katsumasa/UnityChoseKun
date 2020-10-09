@@ -78,8 +78,10 @@ namespace Utj.UnityChoseKun
                 {UnityChoseKun.MessageID.AndroidPush,   androidPlayer.OnMessageEventPush},
 
             };
-
+            //
+            // https://answers.unity.com/questions/30930/why-did-my-binaryserialzer-stop-working.html
             // https://answers.unity.com/questions/725419/filestream-binaryformatter-from-c-to-ios-doesnt-wo.html
+            //
 #if UNITY_IPHONE || UNITY_IOS
             {
                 System.Environment.SetEnvironmentVariable("MONO_REFLECTION_SERIALIZER", "yes");

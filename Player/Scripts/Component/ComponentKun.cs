@@ -26,6 +26,10 @@
 
             Rigidbody,
 
+            CapsuleCollider,
+            MeshCollider,
+            Collider,
+
             MonoBehaviour,
             Behaviour,
             Component,            
@@ -55,6 +59,11 @@
             
             {ComponentKunType.Rigidbody,new ComponentPair(typeof(Rigidbody),typeof(RigidbodyKun))},
 
+            {ComponentKunType.CapsuleCollider,new ComponentPair(typeof(CapsuleCollider),typeof(CapsuleColliderKun))},
+            {ComponentKunType.MeshCollider,new ComponentPair(typeof(MeshCollider),typeof(MeshColliderKun))},
+            {ComponentKunType.Collider,new ComponentPair(typeof(Collider),typeof(ColliderKun))},
+
+
             {ComponentKunType.MonoBehaviour,new ComponentPair(typeof(MonoBehaviour),typeof(MonoBehaviourKun))},
             {ComponentKunType.Behaviour,new ComponentPair(typeof(Behaviour),typeof(BehaviourKun))},
             {ComponentKunType.Component,new ComponentPair(typeof(Component),typeof(ComponentKun))},
@@ -74,7 +83,11 @@
 
             if (component is Rigidbody) { return ComponentKunType.Rigidbody;}
 
-            if(component is MonoBehaviour){return ComponentKunType.MonoBehaviour;}
+            if( component is CapsuleCollider) { return ComponentKunType.CapsuleCollider; }
+            if (component is MeshCollider) { return ComponentKunType.MeshCollider; }
+            if (component is Collider) { return ComponentKunType.Collider; }
+
+            if (component is MonoBehaviour){return ComponentKunType.MonoBehaviour;}
             if(component is Behaviour){return ComponentKunType.Behaviour;}
             if(component is Component){return ComponentKunType.Component;}
             return ComponentKunType.Invalid;

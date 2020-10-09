@@ -23,6 +23,10 @@
 
             {ComponentKun.ComponentKunType.Rigidbody,               typeof(RigidbodyView)},
 
+            {ComponentKun.ComponentKunType.MeshCollider,            typeof(MeshColliderView) },
+            {ComponentKun.ComponentKunType.CapsuleCollider,         typeof(CapsuleColliderView) },
+            {ComponentKun.ComponentKunType.Collider,                typeof(ColliderView) },
+
             {ComponentKun.ComponentKunType.MonoBehaviour,           typeof(MonoBehaviourView)},
             {ComponentKun.ComponentKunType.Behaviour,               typeof(BehaviourView)},
             {ComponentKun.ComponentKunType.Component,               typeof(ComponentView)},
