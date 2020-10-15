@@ -8,15 +8,15 @@
 
     public class TimePlayer : BasePlayer
     {
-        public  void OnMessageEventPull(string json)
+        public  void OnMessageEventPull(byte[] bytes)
         {
             var timeKun = new TimeKun(true);
             SendMessage<TimeKun>(UnityChoseKun.MessageID.TimePull,timeKun);
         }
 
-        public void OnMessageEventPush(string json)
+        public void OnMessageEventPush(byte[] bytes)
         {
-            var timeKun = JsonUtility.FromJson<TimeKun>(json);
+            var timeKun = UnityChoseKun.GetObject<TimeKun>(bytes);
             timeKun.WriteBack();
         }        
     }

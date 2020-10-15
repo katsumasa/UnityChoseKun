@@ -100,12 +100,12 @@
         {                        
             componentViews.Clear();            
             if(gameObjectKun!=null) {
-                m_selectGameObujectKunID = gameObjectKun.instanceID;
-                for(var i = 0; i < gameObjectKun.componentDataJsons.Length; i++)
+                m_selectGameObujectKunID = gameObjectKun.instanceID;                
+                for(var i = 0; i < gameObjectKun.componentKuns.Length; i++)
                 {
                     var type = ComponentView.GetComponentViewSyetemType(gameObjectKun.componentKunTypes[i]);
                     var componentView = System.Activator.CreateInstance(type) as ComponentView;
-                    componentView.SetJson(gameObjectKun.componentDataJsons[i]);
+                    componentView.SetComponentKun(gameObjectKun.componentKuns[i]);                    
                     componentViews.Add(componentView);
                 }
             }else{
@@ -167,9 +167,9 @@
                     {
                         var gameObjectKun = m_gameObjectKuns[m_selectGameObujectKunID];
                         settings.Writeback(gameObjectKun);
-                        for (var i = 0; i < gameObjectKun.componentDataJsons.Length; i++)
+                        for (var i = 0; i < gameObjectKun.componentKuns.Length; i++)
                         {
-                            gameObjectKun.componentDataJsons[i] = m_componentViews[i].GetJson();
+                            gameObjectKun.componentKuns[i] = m_componentViews[i].GetComponentKun();
                         }
                         UnityChoseKunEditor.SendMessage<GameObjectKun>(UnityChoseKun.MessageID.GameObjectPush, gameObjectKun);
                     }
@@ -177,11 +177,11 @@
             }
         }
         
-        public void OnMessageEvent(string json)
+        public void OnMessageEvent(byte[] bytes)
         {
             Debug.Log("OnMessageEvent");
             gameObjectKuns.Clear();
-            sceneKun = JsonUtility.FromJson<SceneKun>(json);
+            sceneKun = UnityChoseKun.GetObject<SceneKun>(bytes);
             
             for(var i = 0; i < sceneKun.gameObjectKuns.Length; i++){
                 gameObjectKuns.Add(sceneKun.gameObjectKuns[i].instanceID,sceneKun.gameObjectKuns[i]);

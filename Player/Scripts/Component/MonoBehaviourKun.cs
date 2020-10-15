@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 namespace Utj.UnityChoseKun{
+    [System.Serializable]
     public class MonoBehaviourKun : BehaviourKun
     {
         public MonoBehaviourKun():this(null){}

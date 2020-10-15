@@ -67,10 +67,10 @@ namespace Utj.UnityChoseKun
             EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Pull"))
             {
-                UnityChoseKunEditor.SendMessage<ScreenKun>(UnityChoseKun.MessageID.AndroidPull, androidKun);
+                UnityChoseKunEditor.SendMessage<AndroidKun>(UnityChoseKun.MessageID.AndroidPull, androidKun);
             }
             if (GUILayout.Button("Push")) {
-                UnityChoseKunEditor.SendMessage<ScreenKun>(UnityChoseKun.MessageID.AndroidPush, androidKun);
+                UnityChoseKunEditor.SendMessage<AndroidKun>(UnityChoseKun.MessageID.AndroidPush, androidKun);
                 
             }
 
@@ -78,9 +78,9 @@ namespace Utj.UnityChoseKun
 
         }
 
-        public void OnMessageEvent(string json)
+        public void OnMessageEvent(byte[] bytes)
         {
-            androidKun = JsonUtility.FromJson<AndroidKun>(json);
+            androidKun = UnityChoseKun.GetObject<AndroidKun>(bytes);
             isDone = true;
         }
 

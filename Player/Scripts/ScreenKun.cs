@@ -47,10 +47,25 @@
             get{return m_currentResolutionRefreshRate;}
             set{m_currentResolutionRefreshRate = value;}
         }
-        [SerializeField] Rect[] m_cutouts;
+        [SerializeField] RectKun[] m_cutouts;
         public Rect[] cutouts{
-            get{return m_cutouts;}
-            set{m_cutouts = value;}
+            get
+            {
+                var rects = new Rect[m_cutouts.Length];
+                for(var i = 0; i < rects.Length; i++)
+                {
+                    rects[i] = m_cutouts[i].GetRect();
+                }
+                return rects;
+            }
+        
+            set{
+                m_cutouts = new RectKun[value.Length];
+                for (var i = 0; i < m_cutouts.Length; i++)
+                {
+                    m_cutouts[i] = new RectKun(value[i]);
+                }
+            }
         }
         [SerializeField] float m_dpi;
         public float dpi{
@@ -78,16 +93,31 @@
             get{return m_orientation;}
             set{m_orientation = value;}
         }
-        [SerializeField] Resolution[] m_resolutions;
+        [SerializeField] ResolutionKun[] m_resolutions;
         public Resolution[] resolutions{
-            get{return m_resolutions;}
-            set{m_resolutions = value;}
+            get{
+                var resolutions = new Resolution[m_resolutions.Length];
+                for(var i = 0; i < resolutions.Length; i++)
+                {
+                    resolutions[i] = m_resolutions[i].GetResolution();
+                }
+                return resolutions;
+            }
+            set{
+                m_resolutions = new ResolutionKun[value.Length];
+                for(var i = 0; i < m_resolutions.Length; i++)
+                {
+                    m_resolutions[i] = new ResolutionKun(value[i]);
+                }
+            }
         }
-        [SerializeField] Rect m_safeArea;
+
+        [SerializeField] RectKun m_safeArea;
         public Rect safeArea{
-            get{return m_safeArea;}
-            set{m_safeArea = value;}
+            get{return m_safeArea.GetRect();}
+            set{m_safeArea = new RectKun(value);}
         }
+
         [SerializeField] int m_sleepTimeout;
         public int sleepTimeout{
             get{return m_sleepTimeout;}

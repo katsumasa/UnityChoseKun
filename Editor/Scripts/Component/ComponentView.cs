@@ -2,6 +2,8 @@
 {   
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Runtime.Serialization.Formatters.Binary;
     using UnityEngine;
     using UnityEditor;
 
@@ -15,9 +17,16 @@
             {ComponentKun.ComponentKunType.Transform,               typeof(TransformView)},
             {ComponentKun.ComponentKunType.Camera,                  typeof(CameraView)},
             {ComponentKun.ComponentKunType.Light,                   typeof(LightView)},
-            {ComponentKun.ComponentKunType.Renderer,                typeof(RendererView)},
-            {ComponentKun.ComponentKunType.MeshRenderer,            typeof(MeshRendererView)},
             {ComponentKun.ComponentKunType.SkinnedMeshMeshRenderer, typeof(SkinnedMeshRendererView)},
+            {ComponentKun.ComponentKunType.MeshRenderer,            typeof(MeshRendererView)},
+            {ComponentKun.ComponentKunType.Renderer,                typeof(RendererView)},
+
+            {ComponentKun.ComponentKunType.Rigidbody,               typeof(RigidbodyView)},
+
+            {ComponentKun.ComponentKunType.MeshCollider,            typeof(MeshColliderView) },
+            {ComponentKun.ComponentKunType.CapsuleCollider,         typeof(CapsuleColliderView) },
+            {ComponentKun.ComponentKunType.Collider,                typeof(ColliderView) },
+
             {ComponentKun.ComponentKunType.MonoBehaviour,           typeof(MonoBehaviourView)},
             {ComponentKun.ComponentKunType.Behaviour,               typeof(BehaviourView)},
             {ComponentKun.ComponentKunType.Component,               typeof(ComponentView)},
@@ -60,18 +69,18 @@
             set{m_settings = value;}
         }
 
-        // <summary>JSONデータを設定する</summary>
-        public virtual void SetJson(string json)
+        public virtual void SetComponentKun(ComponentKun componentKun)
         {
-            settings.componentKun = JsonUtility.FromJson<ComponentKun>(json);
+            settings.componentKun = componentKun;
         }
-        
-        // <summary> JSONを設定する</summary>
-        public virtual string GetJson()
+
+
+        public virtual ComponentKun GetComponentKun()
         {
-            return JsonUtility.ToJson(settings.componentKun);
+            return settings.componentKun;
         }
-        
+
+
         // <summary> OnGUIから呼び出す処理 </summary>
         public virtual void OnGUI()
         {

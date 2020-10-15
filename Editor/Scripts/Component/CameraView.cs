@@ -1,6 +1,8 @@
 ﻿namespace Utj.UnityChoseKun{
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Runtime.Serialization.Formatters.Binary;
     using UnityEngine;
     using UnityEditor;
 
@@ -35,14 +37,15 @@
         }
 
 
-        public sealed class Settings
+        [System.Serializable]
+        private sealed class Settings
         {
             enum ProjectionType { Orthographic, Perspective }
 
             
             CameraKun m_cameraKun;            
             public CameraKun cameraKun {
-                get {
+                get {                    
                     if(m_cameraKun == null){
                         m_cameraKun = new CameraKun(null);                     
                     }
@@ -278,7 +281,7 @@
         }    
 
         private Settings m_Settings;
-        protected Settings settings
+        Settings settings
         {
             get
             {
@@ -292,15 +295,18 @@
             get; set;
         }
 
-        public override void SetJson(string json)
+
+        public override void SetComponentKun(ComponentKun componentKun)
         {
-            settings.cameraKun = JsonUtility.FromJson<CameraKun>(json);
+            settings.cameraKun = (CameraKun)componentKun;
         }
 
-        public override string GetJson()
+
+        public override ComponentKun GetComponentKun()
         {
-            return JsonUtility.ToJson(settings.cameraKun);
+            return settings.cameraKun;
         }
+
 
         public override void OnGUI()
         {                    

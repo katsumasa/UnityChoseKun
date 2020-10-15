@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEditor;
 
@@ -33,14 +35,17 @@ namespace Utj.UnityChoseKun{
             GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));
         }
 
-        public override void SetJson(string json){
-            behaviourKun = JsonUtility.FromJson<MonoBehaviourKun>(json);
+
+        public override void SetComponentKun(ComponentKun componentKun)
+        {
+            behaviourKun = componentKun as MonoBehaviourKun;
         }
 
-        public override string GetJson()
+        public override ComponentKun GetComponentKun()
         {
-            return JsonUtility.ToJson(behaviourKun);
+            return behaviourKun;
         }
+
 
         public override void OnGUI()
         {

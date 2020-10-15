@@ -31,10 +31,10 @@ namespace Utj.UnityChoseKun {
             set{m_allowOcclusionWhenDynamic = value;}
         }
 
-        [SerializeField] Bounds m_bounds ;
+        [SerializeField] BoundsKun m_bounds ;
         public Bounds bounds {
-            get{return m_bounds;}
-            private set{m_bounds = value;}
+            get{return m_bounds.GetBounds();}
+            private set{m_bounds = new BoundsKun(value);}
         }
 
         [SerializeField]bool m_enabled;
@@ -62,10 +62,10 @@ namespace Utj.UnityChoseKun {
             set{m_lightmapIndex = value;}
         }
 
-        [SerializeField] Vector4 m_lightmapScaleOffset ;
+        [SerializeField] Vector4Kun m_lightmapScaleOffset ;
         public Vector4 lightmapScaleOffset {
-            get{return m_lightmapScaleOffset;}
-            set{m_lightmapScaleOffset = value;}
+            get{return m_lightmapScaleOffset.GetVector4();}
+            set{m_lightmapScaleOffset = new Vector4Kun(value);}
         }
         
         [SerializeField] string m_lightProbeProxyVolumeOverride ;
@@ -80,10 +80,10 @@ namespace Utj.UnityChoseKun {
             set{m_lightProbeUsage = value;}
         }
 
-        [SerializeField] Matrix4x4 m_localToWorldMatrix ;    
+        [SerializeField] Matrix4x4Kun m_localToWorldMatrix ;    
         public Matrix4x4 localToWorldMatrix {
-            get{return m_localToWorldMatrix;}
-            private set{m_localToWorldMatrix = value;}
+            get{return m_localToWorldMatrix.GetMatrix4X4();}
+            private set{m_localToWorldMatrix = new Matrix4x4Kun(value);}
         }
         
         [SerializeField]  MaterialKun m_material ;
@@ -114,14 +114,14 @@ namespace Utj.UnityChoseKun {
 
         [SerializeField] int m_realtimeLightmapIndex ;
         public int realtimeLightmapIndex {
-            get{return realtimeLightmapIndex;}
-            set{realtimeLightmapIndex = value;}
+            get{return m_realtimeLightmapIndex;}
+            set{m_realtimeLightmapIndex = value;}
         }
 
-        [SerializeField] Vector4 m_realtimeLightmapScaleOffset ;
+        [SerializeField] Vector4Kun m_realtimeLightmapScaleOffset ;
         public Vector4 realtimeLightmapScaleOffset {
-            get{return m_realtimeLightmapScaleOffset;}
-            set{m_realtimeLightmapScaleOffset = value;}
+            get{return m_realtimeLightmapScaleOffset.GetVector4() ;}
+            set{m_realtimeLightmapScaleOffset = new Vector4Kun(value);}
         }
 
         [SerializeField]  bool m_receiveShadows ;
@@ -184,10 +184,10 @@ namespace Utj.UnityChoseKun {
             set {m_sortingOrder = value;}
         }
 
-        [SerializeField] Matrix4x4 m_worldToLocalMatrix ;
+        [SerializeField] Matrix4x4Kun m_worldToLocalMatrix ;
         public Matrix4x4 worldToLocalMatrix {
-            get {return m_worldToLocalMatrix;}
-            private set {m_worldToLocalMatrix = value;}
+            get {return m_worldToLocalMatrix.GetMatrix4X4();}
+            private set {m_worldToLocalMatrix = new Matrix4x4Kun(value);}
         }
 
         //

@@ -17,7 +17,7 @@ namespace Utj.UnityChoseKun
 
     public class UnityChoseKunPlayer : MonoBehaviour
     {              
-        delegate void OnMessageFunc(string json);
+        delegate void OnMessageFunc(byte[] data);
         Dictionary<UnityChoseKun.MessageID, OnMessageFunc> onMessageFuncDict;
         ScreenPlayer m_playerScreen;
         ScreenPlayer playerScreen {
@@ -60,7 +60,7 @@ namespace Utj.UnityChoseKun
 
 
         private void Awake()
-        {                            
+        {
             onMessageFuncDict = new Dictionary<UnityChoseKun.MessageID, OnMessageFunc>()
             {
                 {UnityChoseKun.MessageID.ScreenPull,    playerScreen.OnMessageEventPull},
@@ -69,7 +69,7 @@ namespace Utj.UnityChoseKun
                 {UnityChoseKun.MessageID.TimePush,      playerTime.OnMessageEventPush},
                 {UnityChoseKun.MessageID.GameObjectPull,componentPlayer.OnMessageEventPull},
                 {UnityChoseKun.MessageID.GameObjectPush,componentPlayer.OnMessageEventPush },
-                {UnityChoseKun.MessageID.ShaderPull,    shaderPlayer.OnMessageEventPull},   
+                {UnityChoseKun.MessageID.ShaderPull,    shaderPlayer.OnMessageEventPull},
                 {UnityChoseKun.MessageID.TexturePull,   texturePlayer.OnMessageEventPull},
                 {UnityChoseKun.MessageID.ApplicationPull, applicationPlayer.OnMessageEventPull},
                 {UnityChoseKun.MessageID.ApplicationPush, applicationPlayer.OnMessageEventPush},
@@ -77,7 +77,17 @@ namespace Utj.UnityChoseKun
                 {UnityChoseKun.MessageID.AndroidPull,   androidPlayer.OnMessageEventPull},
                 {UnityChoseKun.MessageID.AndroidPush,   androidPlayer.OnMessageEventPush},
 
-            };                                    
+            };
+            //
+            // https://answers.unity.com/questions/30930/why-did-my-binaryserialzer-stop-working.html
+            // https://answers.unity.com/questions/725419/filestream-binaryformatter-from-c-to-ios-doesnt-wo.html
+            //
+#if UNITY_IPHONE || UNITY_IOS
+            {
+                System.Environment.SetEnvironmentVariable("MONO_REFLECTION_SERIALIZER", "yes");
+            }
+#endif
+
         }
 
         // Start is called before the first frame update
@@ -91,7 +101,7 @@ namespace Utj.UnityChoseKun
         }
 
         //
-        private void OnDestroy()
+        void OnDestroy()
         {
             if(onMessageFuncDict != null)
             {
@@ -101,42 +111,51 @@ namespace Utj.UnityChoseKun
         }
 
         //
-        private void OnEnable()
+        void OnEnable()
         {
             Debug.Log("OnEnable");
             PlayerConnection.instance.Register(UnityChoseKun.kMsgSendEditorToPlayer, OnMessageEvent);
         }
 
         //
-        private void OnDisable()
+        void OnDisable()
         {
             Debug.Log("OnDisable");
             PlayerConnection.instance.Unregister(UnityChoseKun.kMsgSendEditorToPlayer, OnMessageEvent);
         }
 
         //
-        private void OnMessageEvent(MessageEventArgs args)
+        void OnMessageEvent(MessageEventArgs args)
         {
             Debug.Log("UnityChoseKun::OnMessageEvent");
-            var json = System.Text.Encoding.ASCII.GetString(args.data);
-            var message = JsonUtility.FromJson<UnityChoseKunMessageData>(json);
-            if(message == null){
-                Debug.LogWarning("mesage == null");
-                return;
+            if (args.data == null)
+            {
+                Debug.LogError("args.data == null");
             }
-            Debug.Log("message.id " + message.id);
-            var func = onMessageFuncDict[message.id];
-            func(message.json);            
+            else
+            {
+                var message = UnityChoseKun.GetObject<UnityChoseKunMessageData>(args.data);
+                if (message == null)
+                {
+                    Debug.LogWarning("mesage == null");
+                    return;
+                }
+                Debug.Log("message.id " + message.id);                
+                var func = onMessageFuncDict[message.id];
+                func(message.bytes);
+            }
         }
 
-        public static void SendMessage<T>(UnityChoseKun.MessageID id,object obj)
+        
+        public static void SendMessage<T>(UnityChoseKun.MessageID id, T obj)
         {
             var message = new UnityChoseKunMessageData();
             message.id = id;
-            message.json = JsonUtility.ToJson(obj);
-            var json = JsonUtility.ToJson(message);
-            var bytes = System.Text.Encoding.ASCII.GetBytes(json);
+            UnityChoseKun.ObjectToBytes<T>(obj, out message.bytes);
+
+            byte[] bytes;
+            UnityChoseKun.ObjectToBytes<UnityChoseKunMessageData>(message, out bytes);            
             PlayerConnection.instance.Send(UnityChoseKun.kMsgSendPlayerToEditor, bytes);
-        }        
+        }
     }
 }

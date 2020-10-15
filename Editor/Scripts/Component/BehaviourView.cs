@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEditor;
 
@@ -40,17 +42,19 @@ namespace Utj.UnityChoseKun{
             set{m_settings = value;}
         }
 
-        public override void SetJson(string json)
+
+        public override void SetComponentKun(ComponentKun componentKun)
         {
-            settings = new Settings(json);
+            settings.behaviourKun = componentKun as BehaviourKun;
         }
 
-        // <summary> JSONを設定する</summary>
-        public override string GetJson()
+
+        public override ComponentKun GetComponentKun()
         {
-            return JsonUtility.ToJson(settings.behaviourKun);
+            return settings.behaviourKun;
         }
-        
+                
+
         // <summary> OnGUIから呼び出す処理 </summary>
         public override void OnGUI()
         {

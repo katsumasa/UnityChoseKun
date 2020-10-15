@@ -44,9 +44,9 @@ namespace Utj.UnityChoseKun{
         }
 
 
-        public void OnMessageEventPull(string json){
+        public void OnMessageEventPull(byte[] bytes){
             Debug.Log("TextureKunPlayer:TextureKunPlayer");
-            TextureKunPacket textureKunPacket = JsonUtility.FromJson<TextureKunPacket>(json);
+            var textureKunPacket = UnityChoseKun.GetObject<TextureKunPacket>(bytes);
             if(textureKunPacket.isScene){
                 GetAllTextureInScene();
             }
@@ -82,46 +82,84 @@ namespace Utj.UnityChoseKun{
         {            
             #if UNITY_2019_1_OR_NEWER
             var scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
-            var components = new List<Renderer>();
-            foreach(var go in scene.GetRootGameObjects()){
-                GetSComponentsInChildren<Renderer>(go,components);
-            }
-            foreach(var renderer in components){
-                if(renderer.materials!=null){
-                    for(var i = 0; i < renderer.materials.Length; i++){
-                        var material = renderer.materials[i];
-                        var shader = material.shader;                        
-                        var cnt = shader.GetPropertyCount();
-                        Debug.Log(shader.name + " cnt " + cnt);
-                        for(var j = 0; j < cnt; j++){
-                            var type = shader.GetPropertyType(j);
-                            Debug.Log(type);
-                            if(type != UnityEngine.Rendering.ShaderPropertyType.Texture){
-                                continue;
-                            }
-                            var nameId = shader.GetPropertyNameId(j);
-                            var texture = material.GetTexture(nameId);
-                            Debug.Log("nameId:"+nameId);
+            if (scene != null)
+            {
+                var components = new List<Renderer>();
+                foreach (var go in scene.GetRootGameObjects())
+                {
+                    GetSComponentsInChildren<Renderer>(go, components);
+                }
+                foreach (var renderer in components)
+                {
+                    if (renderer.materials != null)
+                    {
+                        for (var i = 0; i < renderer.materials.Length; i++)
+                        {
+                            var material = renderer.materials[i];
+                            if (material != null)
+                            {
+                                var shader = material.shader;
+                                if (shader != null)
+                                {
+                                    var cnt = shader.GetPropertyCount();
+                                    Debug.Log(shader.name + " cnt " + cnt);
+                                    for (var j = 0; j < cnt; j++)
+                                    {
+                                        var type = shader.GetPropertyType(j);
+                                        Debug.Log(type);
+                                        if (type != UnityEngine.Rendering.ShaderPropertyType.Texture)
+                                        {
+                                            continue;
+                                        }
+                                        var nameId = shader.GetPropertyNameId(j);
+                                        var texture = material.GetTexture(nameId);
+                                        Debug.Log("nameId:" + nameId);
 
-                            if(textureDict.ContainsKey(texture.GetInstanceID())){
-                                continue;
+                                        if (texture != null)
+                                        {
+                                            if (textureDict.ContainsKey(texture.GetInstanceID()))
+                                            {
+                                                continue;
+                                            }
+                                            textureDict.Add(texture.GetInstanceID(), texture);
+                                        } else
+                                        {
+                                            Debug.Log("texture == null");
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    Debug.LogWarning("shader == null");
+                                }
+                            } else
+                            {
+                                Debug.LogWarning("material == null");
                             }
-                            textureDict.Add(texture.GetInstanceID(),texture);
-                        }            
+                        }
                     }
                 }
+            } else
+            {
+                Debug.LogWarning("scene == null");
             }
             #endif
         }
 
 
         void GetSComponentsInChildren<T>(GameObject go,List<T> components)
-        {            
-            go.GetComponents<T>(components);
-            for(var i = 0; i < go.transform.childCount; i++)
+        {
+            if (go != null)
             {
-                var child = go.transform.GetChild(i).gameObject;
-                GetSComponentsInChildren<T>(child,components);
+                go.GetComponents<T>(components);
+                for (var i = 0; i < go.transform.childCount; i++)
+                {
+                    var child = go.transform.GetChild(i).gameObject;
+                    GetSComponentsInChildren<T>(child, components);
+                }
+            } else
+            {
+                Debug.LogWarning("go == null");
             }
         }
     }

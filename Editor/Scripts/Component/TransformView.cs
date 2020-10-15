@@ -2,6 +2,8 @@
 
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Runtime.Serialization.Formatters.Binary;
     using UnityEngine;
     using UnityEditor;
 
@@ -27,20 +29,23 @@
                 }
             set {m_transformKun = value;}
         }
+
         
         
         bool foldout = true;
 
-        public override void SetJson(string json)
+
+        public override void SetComponentKun(ComponentKun componentKun)
         {
-            transformKun = JsonUtility.FromJson<TransformKun>(json);
+            transformKun = componentKun as TransformKun;
         }
 
-        public override string GetJson()
+
+        public override ComponentKun GetComponentKun()
         {
-            return JsonUtility.ToJson(transformKun);
+            return transformKun;
         }
-        
+
 
         public override void OnGUI()
         {        
@@ -57,7 +62,7 @@
 
                     EditorGUILayout.BeginHorizontal();
                     EditorGUILayout.PrefixLabel(Styles.positionContent);
-                    transformKun.localPosition = EditorGUILayout.Vector3Field("",transformKun.localPosition);
+                    transformKun.localPosition = EditorGUILayout.Vector3Field("", transformKun.localPosition);
                     EditorGUILayout.EndHorizontal();
 
                     EditorGUILayout.BeginHorizontal();
@@ -68,9 +73,11 @@
                     EditorGUILayout.BeginHorizontal();
                     EditorGUILayout.PrefixLabel(Styles.scaleContent);
                     transformKun.localScale = EditorGUILayout.Vector3Field("",transformKun.localScale);
-                    EditorGUILayout.EndHorizontal();                    
+                    EditorGUILayout.EndHorizontal();
 
-                    if(EditorGUI.EndChangeCheck()){
+                   
+
+                    if (EditorGUI.EndChangeCheck()){
                         transformKun.dirty = true;
                     }
                 }

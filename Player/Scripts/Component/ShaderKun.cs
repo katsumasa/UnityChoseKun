@@ -18,12 +18,12 @@ namespace Utj.UnityChoseKun{
             [SerializeField] string m_description;            
             [SerializeField] string m_name;
             [SerializeField] int m_nameId;
-            [SerializeField] Vector2 m_rangeLimits;
-            [SerializeField]string m_textureDefaultName;
-            [SerializeField]UnityEngine.Rendering.TextureDimension m_textureDimension;
-            [SerializeField]UnityEngine.Rendering.ShaderPropertyType m_type;
+            [SerializeField] Vector2Kun m_rangeLimits;
+            [SerializeField] string m_textureDefaultName;
+            [SerializeField] UnityEngine.Rendering.TextureDimension m_textureDimension;
+            [SerializeField] UnityEngine.Rendering.ShaderPropertyType m_type;
             [SerializeField] float m_defaultFloatValue;
-            [SerializeField] Vector4 m_defaultVectorValue;
+            [SerializeField] Vector4Kun m_defaultVectorValue;
                         
             public UnityEngine.Rendering.ShaderPropertyFlags flags{
                 get {return m_flags;}
@@ -46,8 +46,8 @@ namespace Utj.UnityChoseKun{
                 set{m_nameId = value;}
             }
             public Vector2 rangeLimits{
-                get{return m_rangeLimits;}
-                set{m_rangeLimits = value;}
+                get{return m_rangeLimits.GetVector2();}
+                set{m_rangeLimits = new Vector2Kun(value);}
             }
             public string textureDefaultName{
                 get{return m_textureDefaultName;}
@@ -66,8 +66,8 @@ namespace Utj.UnityChoseKun{
                 set{m_defaultFloatValue = value;}
             }
             public Vector4 defaultVectorValue {
-                get{return m_defaultVectorValue;}
-                set{m_defaultVectorValue = value;}
+                get{return m_defaultVectorValue.GetVector4();}
+                set{m_defaultVectorValue = new Vector4Kun(value);}
             }
         }
 

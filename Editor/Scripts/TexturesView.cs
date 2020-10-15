@@ -129,8 +129,8 @@ namespace Utj.UnityChoseKun {
 
         }
         
-        public void OnMessageEvent(string json){
-            var textureKunPacket = JsonUtility.FromJson<TexturePlayer.TextureKunPacket>(json);
+        public void OnMessageEvent(byte[] bytes){
+            var textureKunPacket = UnityChoseKun.GetObject <TexturePlayer.TextureKunPacket>(bytes);
             textureKuns = textureKunPacket.textureKuns;
             textureViews = new TextureView[textureKuns.Length];
             textureNames = new string[textureKuns.Length];

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 namespace Utj.UnityChoseKun {
+    
+    [System.Serializable]
     public class SkinnedMeshRendererKun : RendererKun
     {
         [SerializeField] TransformKun[] m_bones;
@@ -16,10 +18,10 @@ namespace Utj.UnityChoseKun {
             set{m_forceMatrixRecalculationPerRender = value;}
         }
 
-        [SerializeField] Bounds m_localBounds ;
+        [SerializeField] BoundsKun m_localBounds ;
         public Bounds localBounds {
-            get{return m_localBounds;}
-            set{m_localBounds = value;}
+            get{return m_localBounds.GetBounds();}
+            set{m_localBounds = new BoundsKun(value);}
         }
 
         [SerializeField] SkinQuality m_quality;

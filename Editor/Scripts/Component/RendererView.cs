@@ -1,7 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEditor;
+
 
 namespace Utj.UnityChoseKun{
     [System.Serializable]
@@ -100,27 +103,33 @@ namespace Utj.UnityChoseKun{
             }
         }
 
-        public override void SetJson(string json)
+
+        public override void SetComponentKun(ComponentKun componentKun)
         {
-            rendererKun =  JsonUtility.FromJson<RendererKun>(json);
-            if(rendererKun.material != null){
+            rendererKun = componentKun as RendererKun;
+            if (rendererKun.material != null)
+            {
                 materialView = new MaterialView();
-                materialView.materialKun =  rendererKun.material;
+                materialView.materialKun = rendererKun.material;
             }
-            
-            if(rendererKun.materials != null){
+
+            if (rendererKun.materials != null)
+            {
                 materialViews = new MaterialView[rendererKun.materials.Length];
-                for(var i = 0; i < materialViews.Length; i++){
+                for (var i = 0; i < materialViews.Length; i++)
+                {
                     materialViews[i] = new MaterialView();
                     materialViews[i].materialKun = rendererKun.materials[i];
                 }
             }
         }
 
-        public override string GetJson()
+
+        public override ComponentKun GetComponentKun()
         {
-            return JsonUtility.ToJson(rendererKun);
+            return rendererKun;
         }
+
 
         public override void OnGUI()
         {

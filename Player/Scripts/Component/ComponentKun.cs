@@ -7,17 +7,29 @@
     
     [System.Serializable]
     public class ComponentKun : ObjectKun{                    
-        // <summary>定数の定義</summary>
-        // <summary> ComponentKunのタイプの定義 </summary>
+        // <summary>
+        // 定数の定義
+        // </summary>
+
+
+        // <summary>
+        // ComponentKunのタイプの定義
+        // </summary>
         public enum ComponentKunType {            
             Invalid = -1,
             Transform = 0,
             Camera,
             Light,            
-            
             SkinnedMeshMeshRenderer,
             MeshRenderer,
             Renderer,
+
+            Rigidbody,
+
+            CapsuleCollider,
+            MeshCollider,
+            Collider,
+
             MonoBehaviour,
             Behaviour,
             Component,            
@@ -27,12 +39,15 @@
         class ComponentPair {
             public System.Type componentType;
             public System.Type componenKunType;
+           
+            
             public ComponentPair(System.Type componentType,System.Type componenKunType){
                 this.componentType = componentType;
                 this.componenKunType = componenKunType;
             }
         }
 
+        
         static readonly Dictionary<ComponentKunType,ComponentPair> componentPairDict = new Dictionary<ComponentKunType, ComponentPair>() 
         {
             {ComponentKunType.Transform,new ComponentPair(typeof(Transform),typeof(TransformKun))},
@@ -41,23 +56,38 @@
             {ComponentKunType.SkinnedMeshMeshRenderer,new ComponentPair(typeof(SkinnedMeshRenderer),typeof(SkinnedMeshRendererKun))},            
             {ComponentKunType.MeshRenderer,new ComponentPair(typeof(MeshRenderer),typeof(MeshRendererKun))},
             {ComponentKunType.Renderer,new ComponentPair(typeof(Renderer),typeof(RendererKun))},
+            
+            {ComponentKunType.Rigidbody,new ComponentPair(typeof(Rigidbody),typeof(RigidbodyKun))},
+
+            {ComponentKunType.CapsuleCollider,new ComponentPair(typeof(CapsuleCollider),typeof(CapsuleColliderKun))},
+            {ComponentKunType.MeshCollider,new ComponentPair(typeof(MeshCollider),typeof(MeshColliderKun))},
+            {ComponentKunType.Collider,new ComponentPair(typeof(Collider),typeof(ColliderKun))},
+
+
             {ComponentKunType.MonoBehaviour,new ComponentPair(typeof(MonoBehaviour),typeof(MonoBehaviourKun))},
             {ComponentKunType.Behaviour,new ComponentPair(typeof(Behaviour),typeof(BehaviourKun))},
             {ComponentKunType.Component,new ComponentPair(typeof(Component),typeof(ComponentKun))},
         };
-        
+
         // <summary> ComponentからComponentKunTypeを取得する </summary>
         public static ComponentKunType GetComponentKunType(Component component)
         {
             // Note:基底クラスのチェックが後になるように記述する必要がある
-            if(component is Transform){return ComponentKunType.Transform;}
-            if(component is Camera){return ComponentKunType.Camera;}
-            if(component is Light){return ComponentKunType.Light;}
-            
-            if(component is MeshRenderer){return ComponentKunType.MeshRenderer;}
-            if(component is SkinnedMeshRenderer){return ComponentKunType.SkinnedMeshMeshRenderer;}
-            if(component is Renderer){return ComponentKunType.Renderer;}
-            if(component is MonoBehaviour){return ComponentKunType.MonoBehaviour;}
+            if (component is Transform) { return ComponentKunType.Transform; }
+            if (component is Camera) { return ComponentKunType.Camera; }
+            if (component is Light) { return ComponentKunType.Light; }
+
+            if (component is MeshRenderer) { return ComponentKunType.MeshRenderer; }
+            if (component is SkinnedMeshRenderer) { return ComponentKunType.SkinnedMeshMeshRenderer; }
+            if (component is Renderer) { return ComponentKunType.Renderer; }
+
+            if (component is Rigidbody) { return ComponentKunType.Rigidbody;}
+
+            if( component is CapsuleCollider) { return ComponentKunType.CapsuleCollider; }
+            if (component is MeshCollider) { return ComponentKunType.MeshCollider; }
+            if (component is Collider) { return ComponentKunType.Collider; }
+
+            if (component is MonoBehaviour){return ComponentKunType.MonoBehaviour;}
             if(component is Behaviour){return ComponentKunType.Behaviour;}
             if(component is Component){return ComponentKunType.Component;}
             return ComponentKunType.Invalid;

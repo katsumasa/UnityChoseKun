@@ -3,6 +3,8 @@ namespace  Utj.UnityChoseKun
 {
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Runtime.Serialization.Formatters.Binary;
     using UnityEngine;
     using UnityEditor;
     using UnityEditor.AnimatedValues;
@@ -339,21 +341,22 @@ namespace  Utj.UnityChoseKun
         }
 
         [SerializeField] bool foldout = true;
-        
 
 
 
 
-        public override void SetJson(string json)
+        public override ComponentKun GetComponentKun()
         {
-            settings = new Settings(json);
+            return settings.lightKun;
         }
 
-        // <summary> JSONを設定する</summary>
-        public override string GetJson()
+
+        public override void SetComponentKun(ComponentKun componentKun)
         {
-            return JsonUtility.ToJson(settings.lightKun);
+            settings.lightKun = (LightKun)componentKun;
         }
+
+
         // <summary> OnGUIから呼び出す処理 </summary>
         public override void OnGUI()
         {

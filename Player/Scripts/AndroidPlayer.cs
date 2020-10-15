@@ -5,17 +5,17 @@ using UnityEngine;
 namespace Utj.UnityChoseKun {
     public class AndroidPlayer : BasePlayer
     {
-        public void OnMessageEventPull(string json)
+        public void OnMessageEventPull(byte[] bytes)
         {            
-            SendMessage<ScreenKun>(UnityChoseKun.MessageID.AndroidPull, new AndroidKun());
+            SendMessage<AndroidKun>(UnityChoseKun.MessageID.AndroidPull, new AndroidKun());
         }
 
 
-        public void OnMessageEventPush(string json)
+        public void OnMessageEventPush(byte[] bytes)
         {         
-            var androidKun = JsonUtility.FromJson<AndroidKun>(json);
+            var androidKun = UnityChoseKun.GetObject<AndroidKun>(bytes);
             androidKun.WriteBack();
-            SendMessage<ScreenKun>(UnityChoseKun.MessageID.AndroidPush, androidKun);
+            SendMessage<AndroidKun>(UnityChoseKun.MessageID.AndroidPush, androidKun);
         }
     }
 }

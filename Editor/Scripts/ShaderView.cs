@@ -52,9 +52,9 @@ namespace Utj.UnityChoseKun {
             }
         }
 
-        public void OnMessageEvent(string json)
+        public void OnMessageEvent(byte[] bytes)
         {
-            var shaderKunPacket = JsonUtility.FromJson<ShaderKunPacket>(json);
+            var shaderKunPacket = UnityChoseKun.GetObject<ShaderKunPacket>(bytes);
             shaderKuns = shaderKunPacket.shaderKuns;
             shaderNames = new string[shaderKuns.Length];
             for(var i = 0; i < shaderKuns.Length; i++)

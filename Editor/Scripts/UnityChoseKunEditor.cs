@@ -6,25 +6,40 @@
 
     public class UnityChoseKunEditor
     {
-        public static void SendMessage<T>(UnityChoseKun.MessageID id,object obj)
+        public static void SendMessage<T>(UnityChoseKun.MessageID id,T obj)
         {
             var message = new UnityChoseKunMessageData();
             message.id = id;
             if (obj != null)
             {
-                message.json = JsonUtility.ToJson(obj);
+                UnityChoseKun.ObjectToBytes(obj,out message.bytes);
             }
-            var json = JsonUtility.ToJson(message);
-            var bytes = System.Text.Encoding.ASCII.GetBytes(json);
+            byte[] bytes;
+            UnityChoseKun.ObjectToBytes<UnityChoseKunMessageData>(message, out bytes);
+
+
+            {
+                UnityChoseKunMessageData check1;
+                UnityChoseKun.BytesToObject<UnityChoseKunMessageData>(bytes,out check1);
+
+                T check2;
+
+                UnityChoseKun.BytesToObject<T>(check1.bytes, out check2);
+                Debug.Log(check2);
+            }
+
+
+
+
             EditorConnection.instance.Send(UnityChoseKun.kMsgSendEditorToPlayer, bytes);
         }
 
         public static void SendMessage(UnityChoseKun.MessageID id)
         {
             var message = new UnityChoseKunMessageData();
-            message.id = id;            
-            var json = JsonUtility.ToJson(message);
-            var bytes = System.Text.Encoding.ASCII.GetBytes(json);
+            message.id = id;
+            byte[] bytes;
+            UnityChoseKun.ObjectToBytes<UnityChoseKunMessageData>(message, out bytes);
             EditorConnection.instance.Send(UnityChoseKun.kMsgSendEditorToPlayer, bytes);
         }
 
