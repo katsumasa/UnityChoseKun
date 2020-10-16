@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+
+
 using UnityEngine;
 namespace Utj.UnityChoseKun{
     /// <summary>
@@ -67,11 +69,7 @@ namespace Utj.UnityChoseKun{
         /// <returns>結果 true:書き戻しが発生 false:書き戻しの必要がなかった</returns>
         public virtual bool WriteBack(UnityEngine.Object obj)
         {
-            if(dirtyInHierarchy){
-                dirty = false;
-                return true;
-            }
-            return false;
+            return dirty ;
         }
 
         public int GetInstanceID()

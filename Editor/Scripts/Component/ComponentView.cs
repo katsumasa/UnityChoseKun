@@ -95,7 +95,6 @@
         /// </summary>
         public virtual void OnGUI()
         {
-
             EditorGUI.BeginChangeCheck();
             GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));            
             var content = new GUIContent(componentKun.name, mComponentIcon);

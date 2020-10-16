@@ -36,10 +36,15 @@ namespace Utj.UnityChoseKun{
         /// </summary>
         public override void OnGUI()
         {
+            EditorGUI.BeginChangeCheck();
             GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));
             var label = new GUIContent(behaviourKun.name, mComponentIcon);
             behaviourKun.enabled = EditorGUILayout.ToggleLeft(label, behaviourKun.enabled);
             GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));
+            if (EditorGUI.EndChangeCheck())
+            {
+                behaviourKun.dirty = true;
+            }
         }                  
     }
 }

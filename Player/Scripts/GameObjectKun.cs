@@ -103,6 +103,15 @@
         }
 
 
+        public void ResetDirty()
+        {
+            dirty = false;
+            for (var i = 0; i < componentKuns.Length; i++)
+            {
+                componentKuns[i].dirty = false;
+            }
+        }
+
         public void WriteBack(GameObject gameObject)
         {
             if(dirty){
@@ -118,11 +127,15 @@
                 var componentKunType = componentKunTypes[i];
                 var systemType = ComponentKun.GetComponentSystemType(componentKunType);                
                 var component = gameObject.GetComponent(systemType);
+                
+                Debug.Log(componentKunType);
+
                 if(component == null){                
                     Debug.LogWarning("component == null");
                     continue;
                 }                               
                 componentKuns[i].WriteBack(component);
+                componentKuns[i].dirty = false;
             }
             
             dirty = false;

@@ -89,15 +89,12 @@ namespace Utj.UnityChoseKun {
 
         public override bool WriteBack(Component component)
         {
-            Debug.Log("W1");
-
             if (base.WriteBack(component))
             {
-                Debug.Log("W2");
                 var animator = component as Animator;
                 if (animator)
                 {
-                    Debug.Log("W3");
+                    Debug.Log("animator.enabled" + animator.enabled);
                     animator.applyRootMotion = applyRootMotion;
                     animator.updateMode = updateMode;
                     animator.cullingMode = cullingMode;

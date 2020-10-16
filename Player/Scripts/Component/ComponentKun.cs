@@ -184,13 +184,7 @@
         /// <returns>結果  true : 書き戻しが行われた false : 書き戻しが発生しなかった</returns>        
         public virtual bool WriteBack(Component component)
         {
-            Debug.Log("WriteBack1");
-            if(dirtyInHierarchy){
-                Debug.Log("WriteBack2");
-                dirty = false;
-                return true;
-            }
-            return false;
+            return base.WriteBack(component);            
         }
         
     }
