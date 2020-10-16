@@ -6,8 +6,8 @@
     using System.IO;
     using System.Runtime.Serialization.Formatters.Binary;
     using UnityEngine;
+    using System;
 
-    
     [System.Serializable]
     public class GameObjectKun {
 
@@ -115,13 +115,13 @@
 
             // ComponentKun側がDirtyであるかいなかはComponentKun側に依存する
             for(var i = 0; i < componentKunTypes.Length; i++){                        
-                var componentKunType = componentKunTypes[i];                    
-                var systemType = ComponentKun.GetComponentSystemType(componentKunType);
+                var componentKunType = componentKunTypes[i];
+                var systemType = ComponentKun.GetComponentSystemType(componentKunType);                
                 var component = gameObject.GetComponent(systemType);
-                if(component == null){
+                if(component == null){                
                     Debug.LogWarning("component == null");
                     continue;
-                }                
+                }                               
                 componentKuns[i].WriteBack(component);
             }
             

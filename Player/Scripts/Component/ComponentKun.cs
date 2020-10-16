@@ -4,17 +4,20 @@
     using System.Collections.Generic;
     using UnityEngine;
 
-    
+    /// <summary>
+    ///  ComponentをSerialize/Deserializeする為のClass
+    ///  Program by Katsumasa.Kimura
+    /// </summary>
     [System.Serializable]
     public class ComponentKun : ObjectKun{                    
-        // <summary>
+        
         // 定数の定義
-        // </summary>
+        
 
 
-        // <summary>
-        // ComponentKunのタイプの定義
-        // </summary>
+        /// <summary>
+        /// ComponentKunのタイプの定義
+        /// </summary>
         public enum ComponentKunType {            
             Invalid = -1,
             Transform = 0,
@@ -29,6 +32,8 @@
             CapsuleCollider,
             MeshCollider,
             Collider,
+
+            Animator,
 
             MonoBehaviour,
             Behaviour,
@@ -63,16 +68,24 @@
             {ComponentKunType.MeshCollider,new ComponentPair(typeof(MeshCollider),typeof(MeshColliderKun))},
             {ComponentKunType.Collider,new ComponentPair(typeof(Collider),typeof(ColliderKun))},
 
+            {ComponentKunType.Animator,new ComponentPair(typeof(Animator),typeof(AnimatorKun)) },
 
             {ComponentKunType.MonoBehaviour,new ComponentPair(typeof(MonoBehaviour),typeof(MonoBehaviourKun))},
             {ComponentKunType.Behaviour,new ComponentPair(typeof(Behaviour),typeof(BehaviourKun))},
             {ComponentKunType.Component,new ComponentPair(typeof(Component),typeof(ComponentKun))},
         };
 
-        // <summary> ComponentからComponentKunTypeを取得する </summary>
+
+        /// <summary>
+        /// ComponentのComponentKunTypeを取得する
+        /// </summary>
+        /// <params name="component">チェックするComponent</params>
+        /// <returns>ComponentのComponentKunType</params>
         public static ComponentKunType GetComponentKunType(Component component)
         {
-            // Note:基底クラスのチェックが後になるように記述する必要がある
+            //
+            // [NOTE] 基底クラスのチェックが後になるように記述する必要がある
+            //
             if (component is Transform) { return ComponentKunType.Transform; }
             if (component is Camera) { return ComponentKunType.Camera; }
             if (component is Light) { return ComponentKunType.Light; }
@@ -87,39 +100,66 @@
             if (component is MeshCollider) { return ComponentKunType.MeshCollider; }
             if (component is Collider) { return ComponentKunType.Collider; }
 
+            if (component is Animator) { return ComponentKunType.Animator; }
+
             if (component is MonoBehaviour){return ComponentKunType.MonoBehaviour;}
             if(component is Behaviour){return ComponentKunType.Behaviour;}
             if(component is Component){return ComponentKunType.Component;}
             return ComponentKunType.Invalid;
         }
 
-        // <summary> ComponentKunTypeからSystem.Typeを取得する </summary>
+
+        /// <summary> 
+        /// ComponentのSystem.Typeを取得する 
+        /// </summary>
+        /// <params name="componentKunType">Componentと一致するComponentKunType</params>
+        /// <returns>ComponentのSystem.Type</returns>
         public static System.Type GetComponentSystemType(ComponentKunType componentKunType)
         {            
             return componentPairDict[componentKunType].componentType;
         }
 
-        // <summary> ComponentからSystemTypeを取得する </summary>
+
+        /// <summary> 
+        /// ComponentのSystemTypeを取得する
+        /// </summary>
+        /// <params name="component">チェックされるComponent</param>
+        /// <returns>ComponentのSystem.Type</returns>
         public static System.Type GetComponentSystemType(Component component)
         {            
             return GetComponentSystemType(GetComponentKunType(component));            
         }
 
+
+        /// <summary>
+        /// ComponentKunTypeからComponentKunのSystem.Typeを取得する
+        /// </summary>
+        /// <params name="componentKunType">チェックするComponentKunType</params>
+        /// <returns>ComponentKunのSystem.Type</returns>
         public static System.Type GetComponetKunSyetemType(ComponentKunType componentKunType)
         {
             return componentPairDict[componentKunType].componenKunType;
         }
 
+
+        /// <summary>
+        /// ComponentのSystem,Typeを取得する
+        /// </summary>
+        /// <params name="component">チェックするComponent</params>
+        /// <returns>ComponentのSystem.Type</returns>
         public static System.Type GetComponetKunSyetemType(Component component)
         {            
             return GetComponetKunSyetemType(GetComponentKunType(component));           
         }
         
+
         //
         // Memberの定義
         //
 
-        // <summary> ComponentKunの種別　</summary>
+        /// <summary>
+        /// ComponentKunの種別
+        /// </summary>
         [SerializeField] protected ComponentKunType m_componentKunType; 
         public ComponentKunType componentKunType{
             get{return m_componentKunType;}
@@ -127,19 +167,26 @@
         }
 
         
-        // <summary> コンストラクタ </summary>
+        /// <summary>
+        /// コンストラクタ 
+        /// </summary>
         public ComponentKun():this(null){}
         public ComponentKun(Component component):base(component)
         {
-            componentKunType = ComponentKunType.Component;            
+            componentKunType = ComponentKunType.Component;                        
         }
-        
-        // ComponentへComponentKunの内容を書き戻す
-        // 返値 :   true: 書き戻しが行われた
-        //          false : 書き戻しが発生しなかった        
+
+
+        /// <summary>
+        /// Componentへ内容を書き戻す
+        /// </summary>
+        /// <param name="component">書き戻されるComponent</param>
+        /// <returns>結果  true : 書き戻しが行われた false : 書き戻しが発生しなかった</returns>        
         public virtual bool WriteBack(Component component)
         {
+            Debug.Log("WriteBack1");
             if(dirtyInHierarchy){
+                Debug.Log("WriteBack2");
                 dirty = false;
                 return true;
             }

@@ -278,6 +278,9 @@ namespace Utj.UnityChoseKun {
                     renderer.sortingLayerName = sortingLayerName;
                     renderer.sortingOrder = sortingOrder;                    
                 }
+                //
+                // RendererはDirtyでは無いがMaterialが書き換わっているケースもある
+                //
                 for(var i = 0; i < materials.Length; i++){
                     var materialKun = materials[i];
                     materialKun.WriteBack(renderer.materials[i]);

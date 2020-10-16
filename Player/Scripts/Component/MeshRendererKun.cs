@@ -12,6 +12,12 @@ namespace Utj.UnityChoseKun{
             componentKunType = ComponentKunType.MeshRenderer;
         }
 
+
+        /// <summary>
+        /// Componentを書き戻す
+        /// </summary>
+        /// <param name="component">書き戻すComponent</param>
+        /// <returns>結果 true : 下記戻した false : 書き戻す必要がなかった</returns>
         public override bool WriteBack(Component component){
             if(base.WriteBack(component)){
                 return true;

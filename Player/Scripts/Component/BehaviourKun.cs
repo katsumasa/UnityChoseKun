@@ -20,8 +20,8 @@ namespace Utj.UnityChoseKun {
             componentKunType = ComponentKunType.Behaviour;
             var behaviour = component as Behaviour;
             if(behaviour!=null){
-                enabled = behaviour.enabled;                        
-                name = behaviour.ToString();
+                enabled = behaviour.enabled;
+                name = behaviour.GetType().Name;
             }
         }
         
