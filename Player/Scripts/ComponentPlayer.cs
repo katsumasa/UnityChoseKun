@@ -34,7 +34,8 @@
             foreach (var obj in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
             {
                 var go = FindGameObjectInChildren(obj,gameObjectKun.instanceID);
-                if(go != null){                    
+                if(go != null){
+                    Debug.Log("Find Object");
                     gameObjectKun.WriteBack(go);
                     return;
                 }

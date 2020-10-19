@@ -10,7 +10,9 @@ namespace Utj.UnityChoseKun{
     [System.Serializable]
     public class MonoBehaviourView : BehaviourView
     {
-     
+        
+
+
         static readonly Texture Icon = (Texture2D)EditorGUIUtility.Load("d_cs Script Icon");
         [SerializeField]bool m_foldout = false;     
         bool titleFoldout {
@@ -18,17 +20,12 @@ namespace Utj.UnityChoseKun{
             set {m_foldout = value;}
         }
 
-        [SerializeField] MonoBehaviourKun m_monoBehaviourKun; 
-        MonoBehaviourKun behaviourKun {
-            get{return m_monoBehaviourKun;}
-            set{m_monoBehaviourKun = value;}
-        }
 
         public void DrawTitle(){
             GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));                            
             var label = new GUIContent(behaviourKun.name,Icon);
             EditorGUI.BeginChangeCheck();
-            behaviourKun.enabled = EditorGUILayout.ToggleLeft(label,behaviourKun.enabled);                
+            behaviourKun.enabled = EditorGUILayout.ToggleLeft(label, behaviourKun.enabled);                
             if(EditorGUI.EndChangeCheck()){
                 behaviourKun.dirty = true;
             }

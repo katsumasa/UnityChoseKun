@@ -39,10 +39,8 @@ namespace Utj.UnityChoseKun
 
         public override bool WriteBack(Component component)
         {
-            if (dirty)
+            if (base.WriteBack(component))
             {
-                base.WriteBack(component);
-
                 Rigidbody rigidbody = component as Rigidbody;
                 rigidbody.mass = mass;
                 rigidbody.drag = drag;

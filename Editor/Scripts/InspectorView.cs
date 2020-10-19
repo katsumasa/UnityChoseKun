@@ -167,11 +167,14 @@
                     {
                         var gameObjectKun = m_gameObjectKuns[m_selectGameObujectKunID];
                         settings.Writeback(gameObjectKun);
+#if false
                         for (var i = 0; i < gameObjectKun.componentKuns.Length; i++)
                         {
                             gameObjectKun.componentKuns[i] = m_componentViews[i].GetComponentKun();
                         }
+#endif
                         UnityChoseKunEditor.SendMessage<GameObjectKun>(UnityChoseKun.MessageID.GameObjectPush, gameObjectKun);
+                        gameObjectKun.ResetDirty();                        
                     }
                 }
             }

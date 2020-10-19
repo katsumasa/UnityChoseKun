@@ -8,11 +8,15 @@
     using UnityEditor;
 
 
-    // <summary> Componentの表示を行う基底クラス </summary>
+    /// <summary>
+    /// Componentの表示を行う基底クラス 
+    /// Programed by Katsumasa.Kimura
+    /// </summary>
     [System.Serializable]
     public class ComponentView
     {        
-
+        // [NOTE] ComponentKun型のClassが追加されたらここに追加する
+        // ComponentKunType,ComponentViewのSystem.Type
         static Dictionary<ComponentKun.ComponentKunType,System.Type> componentViewTbls = new Dictionary<BehaviourKun.ComponentKunType, System.Type>{
             {ComponentKun.ComponentKunType.Transform,               typeof(TransformView)},
             {ComponentKun.ComponentKunType.Camera,                  typeof(CameraView)},
@@ -27,67 +31,77 @@
             {ComponentKun.ComponentKunType.CapsuleCollider,         typeof(CapsuleColliderView) },
             {ComponentKun.ComponentKunType.Collider,                typeof(ColliderView) },
 
+            {ComponentKun.ComponentKunType.Animator,                typeof(AnimatorView) },
+
+
             {ComponentKun.ComponentKunType.MonoBehaviour,           typeof(MonoBehaviourView)},
             {ComponentKun.ComponentKunType.Behaviour,               typeof(BehaviourView)},
             {ComponentKun.ComponentKunType.Component,               typeof(ComponentView)},
         };
         
+
         public static System.Type GetComponentViewSyetemType(BehaviourKun.ComponentKunType componentType)
         {        
             return componentViewTbls[componentType];
         }
 
-        [System.Serializable]
-        private class Settings
+
+
+
+        private static class Styles
         {
-            private static class Styles {
-                public static readonly Texture2D Icon = (Texture2D)EditorGUIUtility.Load("d_Prefab Icon");
-            }
-
-
-            [SerializeField]ComponentKun m_componentKun;
-            public ComponentKun componentKun{
-                get{if(m_componentKun == null){m_componentKun = new ComponentKun();}return m_componentKun;}
-                set{m_componentKun = value;}
-            }
-
-            public void DrawName()
-            {
-                GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));                            
-                var label = new GUIContent(componentKun.name,Styles.Icon);
-                EditorGUILayout.LabelField(label);
-                GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));
-            }
-
-
-        }        
-        
-        [SerializeField] Settings m_settings;
-        Settings settings
-        {
-            get{if(m_settings == null){m_settings = new Settings();}return m_settings;}
-            set{m_settings = value;}
+            public static readonly Texture2D ComponentIcon = (Texture2D)EditorGUIUtility.Load("d_Prefab Icon");
         }
 
+
+        [SerializeField] ComponentKun m_componentKun;
+        protected ComponentKun componentKun
+        {
+            get { if (m_componentKun == null) { m_componentKun = new ComponentKun(); } return m_componentKun; }
+            set { m_componentKun = value; }
+        }
+
+        protected Texture2D mComponentIcon;
+
+
+        /// <summary>
+        /// ComponentKunを設定する
+        /// </summary>
+        /// <param name="componentKun">設定されるComponentKun</param>
         public virtual void SetComponentKun(ComponentKun componentKun)
         {
-            settings.componentKun = componentKun;
+            this.componentKun = componentKun;
         }
 
 
+        /// <summary>
+        /// ComponentKunを取得する
+        /// </summary>
+        /// <returns>ComponentKun</returns>
         public virtual ComponentKun GetComponentKun()
         {
-            return settings.componentKun;
+            return componentKun;
         }
 
 
-        // <summary> OnGUIから呼び出す処理 </summary>
+        public ComponentView()
+        {
+            mComponentIcon = Styles.ComponentIcon;
+        }
+
+
+        /// <summary>
+        /// OnGUIから呼び出す処理
+        /// </summary>
         public virtual void OnGUI()
         {
             EditorGUI.BeginChangeCheck();
-            settings.DrawName();
-            if(EditorGUI.EndChangeCheck()){
-                settings.componentKun.dirty = true;
+            GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));            
+            var content = new GUIContent(componentKun.name, mComponentIcon);
+            EditorGUILayout.LabelField(content);
+            GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));            
+            if (EditorGUI.EndChangeCheck()){
+                componentKun.dirty = true;
             }
         }
     }

@@ -6,8 +6,8 @@
     using System.IO;
     using System.Runtime.Serialization.Formatters.Binary;
     using UnityEngine;
+    using System;
 
-    
     [System.Serializable]
     public class GameObjectKun {
 
@@ -103,6 +103,15 @@
         }
 
 
+        public void ResetDirty()
+        {
+            dirty = false;
+            for (var i = 0; i < componentKuns.Length; i++)
+            {
+                componentKuns[i].dirty = false;
+            }
+        }
+
         public void WriteBack(GameObject gameObject)
         {
             if(dirty){
@@ -115,14 +124,18 @@
 
             // ComponentKun側がDirtyであるかいなかはComponentKun側に依存する
             for(var i = 0; i < componentKunTypes.Length; i++){                        
-                var componentKunType = componentKunTypes[i];                    
-                var systemType = ComponentKun.GetComponentSystemType(componentKunType);
+                var componentKunType = componentKunTypes[i];
+                var systemType = ComponentKun.GetComponentSystemType(componentKunType);                
                 var component = gameObject.GetComponent(systemType);
-                if(component == null){
+                
+                Debug.Log(componentKunType);
+
+                if(component == null){                
                     Debug.LogWarning("component == null");
                     continue;
-                }                
+                }                               
                 componentKuns[i].WriteBack(component);
+                componentKuns[i].dirty = false;
             }
             
             dirty = false;

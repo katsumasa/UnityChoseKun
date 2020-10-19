@@ -39,10 +39,8 @@ namespace Utj.UnityChoseKun
 
         public override bool WriteBack(Component component)
         {
-            if (dirty)
-            {
-                base.WriteBack(component);
-
+            if (base.WriteBack(component))
+            {            
                 var collider = component as Collider;
                 collider.contactOffset = contactOffset;
                 collider.enabled = enabled;
@@ -86,9 +84,8 @@ namespace Utj.UnityChoseKun
 
         public override bool WriteBack(Component component)
         {
-            if (dirty)
+            if (base.WriteBack(component))
             {
-                base.WriteBack(component);
                 var capsuleCollider = component as CapsuleCollider;
                 if (capsuleCollider)
                 {
@@ -129,9 +126,8 @@ namespace Utj.UnityChoseKun
 
         public override bool WriteBack(Component component)
         {
-            if (dirty)
+            if (base.WriteBack(component))
             {
-                base.WriteBack(component);
                 var meshCollider = component as MeshCollider;
                 if (meshCollider)
                 {

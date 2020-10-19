@@ -10,6 +10,9 @@ using System;
 
 namespace Utj.UnityChoseKun
 {
+    /// <summary>
+    /// UnityChoseKunの共通パケット
+    /// </summary>
     [System.Serializable]    
     public class UnityChoseKunMessageData
     {
@@ -17,8 +20,15 @@ namespace Utj.UnityChoseKun
         [SerializeField] public byte[] bytes;
     }
 
+
+    /// <summary>
+    /// UnityChoseKun Class
+    /// </summary>
     public class UnityChoseKun
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public enum MessageID
         {
             ScreenPull,
@@ -35,10 +45,25 @@ namespace Utj.UnityChoseKun
             AndroidPull,
             AndroidPush,
         }
+
+
+        /// <summary>
+        /// From Editor to Playerで使用するPlayerConnec用のGUID
+        /// </summary>        
         public static readonly System.Guid kMsgSendEditorToPlayer = new System.Guid("a819fa0823134ed9bfc6cf17eac8a232");
+
+        /// <summary>
+        /// From Player to Editorで使用するPlayerConnect用のGUID
+        /// </summary>
         public static readonly System.Guid kMsgSendPlayerToEditor = new System.Guid("5b9b9d37e331433cbd31c6cf8093d8da");
 
 
+        /// <summary>
+        /// Objectデータをbyteの配列へ変換する
+        /// </summary>
+        /// <typeparam name="T">変換するObjectの型</typeparam>
+        /// <param name="src">変換するObject</param>
+        /// <param name="dst">byte型の配列</param>
         public static void ObjectToBytes<T>(T src, out byte[] dst)
         {
             var bf = new BinaryFormatter();
@@ -55,6 +80,12 @@ namespace Utj.UnityChoseKun
         }
 
 
+        /// <summary>
+        /// byte配列からObjectへ変換する
+        /// </summary>
+        /// <typeparam name="T">変換後のオブジェクトの型</typeparam>
+        /// <param name="src">byte配列</param>
+        /// <param name="dst">変換されたオブジェクト</param>
         public static void BytesToObject<T>(byte[] src, out T dst)
         {
             if (src != null)
@@ -76,16 +107,19 @@ namespace Utj.UnityChoseKun
             }
         }
 
+
+        /// <summary>
+        /// byte配列をオブジェクトに変換する
+        /// </summary>
+        /// <typeparam name="T">変換後のオブジェクトの型</typeparam>
+        /// <param name="src">byte配列</param>
+        /// <returns>変換されたオブジェクト</returns>
         public static T GetObject<T>(byte[] src)
-        {
-         
-            
+        {                     
             if(src == null)
             {
                 return default(T);
             }
-
-
             var bf = new BinaryFormatter();
             var ms = new MemoryStream(src);
             try
@@ -95,9 +129,7 @@ namespace Utj.UnityChoseKun
             finally
             {
                 ms.Close();
-            }
-            
-            
+            }                        
         }
     }
 

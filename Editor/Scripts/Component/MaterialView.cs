@@ -139,7 +139,7 @@ namespace Utj.UnityChoseKun{
                         } else {
                             int selectIdx = -1;
                             for(var i = 0; i < TexturesView.textureNames.Length; i++){
-                                if(TexturesView.textureNames[i] == prop.textureValue.name){
+                                if(prop.textureValue != null && TexturesView.textureNames[i] == prop.textureValue.name){
                                     selectIdx = i;
                                     break;
                                 }
