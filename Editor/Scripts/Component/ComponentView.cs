@@ -93,7 +93,7 @@
         /// <summary>
         /// OnGUIから呼び出す処理
         /// </summary>
-        public virtual void OnGUI()
+        public virtual bool OnGUI()
         {
             EditorGUI.BeginChangeCheck();
             GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));            
@@ -103,6 +103,8 @@
             if (EditorGUI.EndChangeCheck()){
                 componentKun.dirty = true;
             }
+
+            return true;
         }
     }
 }

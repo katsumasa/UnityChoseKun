@@ -44,13 +44,15 @@ namespace Utj.UnityChoseKun{
         }
 
 
-        public override void OnGUI()
+        public override bool OnGUI()
         {
             EditorGUI.BeginChangeCheck();
             DrawTitle();
             if(EditorGUI.EndChangeCheck()){
                 behaviourKun.dirty = true;
             }
+
+            return true;
         }                  
     }
 }

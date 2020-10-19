@@ -17,7 +17,11 @@ namespace Utj.UnityChoseKun{
         {
             public static readonly Texture2D ComponentIcon = (Texture2D)EditorGUIUtility.Load("d_TextAsset Icon");
         }
-                      
+
+
+        [SerializeField] bool mFoldout = true;
+
+
         protected BehaviourKun behaviourKun
         {
             get { return componentKun as BehaviourKun; }
@@ -34,17 +38,29 @@ namespace Utj.UnityChoseKun{
         /// <summary> 
         /// OnGUIから呼び出す処理
         /// </summary>
-        public override void OnGUI()
+        public override bool OnGUI()
         {
+
+            GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));
+            
+            EditorGUILayout.BeginHorizontal();
+            var iconContent = new GUIContent(mComponentIcon);
+            mFoldout = EditorGUILayout.Foldout(mFoldout, iconContent);                          // Foldout & Icon
+            
             EditorGUI.BeginChangeCheck();
-            GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));
-            var label = new GUIContent(behaviourKun.name, mComponentIcon);
-            behaviourKun.enabled = EditorGUILayout.ToggleLeft(label, behaviourKun.enabled);
-            GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));
+            var content = new GUIContent(behaviourKun.name);
+            behaviourKun.enabled = EditorGUILayout.ToggleLeft(content, behaviourKun.enabled);   // CheckBox & Label
             if (EditorGUI.EndChangeCheck())
             {
                 behaviourKun.dirty = true;
             }
+
+            GUILayout.FlexibleSpace();
+            EditorGUILayout.EndHorizontal();
+            
+            GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));
+
+            return mFoldout;            
         }                  
     }
 }

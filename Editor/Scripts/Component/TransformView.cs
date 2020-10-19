@@ -47,7 +47,7 @@
         }
 
 
-        public override void OnGUI()
+        public override bool OnGUI()
         {        
 
             EditorGUILayout.Space();
@@ -82,6 +82,8 @@
                     }
                 }
             }
+
+            return true;
         }
 
         

@@ -308,7 +308,7 @@
         }
 
 
-        public override void OnGUI()
+        public override bool OnGUI()
         {                    
             cameraFoldout = settings.DrawCamera(cameraFoldout);
             if(cameraFoldout){
@@ -333,6 +333,7 @@
                     settings.cameraKun.dirty = true;
                 }
             }
+            return true;
         }
 
     }

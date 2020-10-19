@@ -39,7 +39,7 @@ namespace Utj.UnityChoseKun
         }
 
 
-        public override void OnGUI()
+        public override bool OnGUI()
         {
             EditorGUI.BeginChangeCheck();
             GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));
@@ -73,6 +73,8 @@ namespace Utj.UnityChoseKun
             {
                 colliderKun.dirty = true;
             }
+
+            return true;
         }
 
     }

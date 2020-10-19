@@ -131,7 +131,7 @@ namespace Utj.UnityChoseKun{
         }
 
 
-        public override void OnGUI()
+        public override bool OnGUI()
         {
             if(rendererKun != null){
                 if(DrawTitle(rendererKun)){
@@ -154,7 +154,9 @@ namespace Utj.UnityChoseKun{
             }
             if(EditorGUI.EndChangeCheck()){
                 rendererKun.dirty = true;
-            }    
+            }
+
+            return true;
         }
 
 

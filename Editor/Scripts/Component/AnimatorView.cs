@@ -34,24 +34,27 @@ namespace Utj.UnityChoseKun {
 
 
 
-        public override void OnGUI()
+        public override bool OnGUI()
         {
-            base.OnGUI();
-
-            using (new EditorGUI.IndentLevelScope())
+            if (base.OnGUI())
             {
 
-                EditorGUI.BeginChangeCheck();
-                EditorGUILayout.LabelField(Style.Controller, new GUIContent(animatorKun.runtimeAnimatorController,Style.ControllerIcon));
-                EditorGUILayout.LabelField(Style.Avator, new GUIContent(animatorKun.avatar,Style.AvatorIcon));
-                animatorKun.applyRootMotion = EditorGUILayout.Toggle(Style.ApplyRootMotion, animatorKun.applyRootMotion);
-                EditorGUILayout.EnumPopup(Style.UpdateMode, animatorKun.updateMode);
-                animatorKun.cullingMode = (AnimatorCullingMode)EditorGUILayout.EnumPopup(Style.CullingMode, animatorKun.cullingMode);
-                if (EditorGUI.EndChangeCheck())
+                using (new EditorGUI.IndentLevelScope())
                 {
-                    animatorKun.dirty = true;
+
+                    EditorGUI.BeginChangeCheck();
+                    EditorGUILayout.LabelField(Style.Controller, new GUIContent(animatorKun.runtimeAnimatorController, Style.ControllerIcon));
+                    EditorGUILayout.LabelField(Style.Avator, new GUIContent(animatorKun.avatar, Style.AvatorIcon));
+                    animatorKun.applyRootMotion = EditorGUILayout.Toggle(Style.ApplyRootMotion, animatorKun.applyRootMotion);
+                    EditorGUILayout.EnumPopup(Style.UpdateMode, animatorKun.updateMode);
+                    animatorKun.cullingMode = (AnimatorCullingMode)EditorGUILayout.EnumPopup(Style.CullingMode, animatorKun.cullingMode);
+                    if (EditorGUI.EndChangeCheck())
+                    {
+                        animatorKun.dirty = true;
+                    }
                 }
             }
+            return true;
         }
     }
 }

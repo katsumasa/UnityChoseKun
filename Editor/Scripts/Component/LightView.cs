@@ -358,7 +358,7 @@ namespace  Utj.UnityChoseKun
 
 
         // <summary> OnGUIから呼び出す処理 </summary>
-        public override void OnGUI()
+        public override bool OnGUI()
         {
             
             foldout =  settings.DrawEnabled(foldout);
@@ -399,6 +399,7 @@ namespace  Utj.UnityChoseKun
                     }
                 }
             }
+            return true;
         }
 
         void ShadowsGUI()
