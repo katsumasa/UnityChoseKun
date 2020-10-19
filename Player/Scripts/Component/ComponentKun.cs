@@ -35,6 +35,8 @@
 
             Animator,
 
+            ParticleSystem,
+
             MonoBehaviour,
             Behaviour,
             Component,            
@@ -70,6 +72,8 @@
 
             {ComponentKunType.Animator,new ComponentPair(typeof(Animator),typeof(AnimatorKun)) },
 
+            {ComponentKunType.ParticleSystem,new ComponentPair(typeof(ParticleSystem),typeof(ParticleSystemKun)) },
+
             {ComponentKunType.MonoBehaviour,new ComponentPair(typeof(MonoBehaviour),typeof(MonoBehaviourKun))},
             {ComponentKunType.Behaviour,new ComponentPair(typeof(Behaviour),typeof(BehaviourKun))},
             {ComponentKunType.Component,new ComponentPair(typeof(Component),typeof(ComponentKun))},
@@ -101,6 +105,9 @@
             if (component is Collider) { return ComponentKunType.Collider; }
 
             if (component is Animator) { return ComponentKunType.Animator; }
+
+            if(component is ParticleSystem) { return ComponentKunType.ParticleSystem; }
+
 
             if (component is MonoBehaviour){return ComponentKunType.MonoBehaviour;}
             if(component is Behaviour){return ComponentKunType.Behaviour;}

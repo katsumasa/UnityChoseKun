@@ -32,6 +32,7 @@
             {ComponentKun.ComponentKunType.Collider,                typeof(ColliderView) },
 
             {ComponentKun.ComponentKunType.Animator,                typeof(AnimatorView) },
+            {ComponentKun.ComponentKunType.ParticleSystem,          typeof(ParticleSystemView) },
 
 
             {ComponentKun.ComponentKunType.MonoBehaviour,           typeof(MonoBehaviourView)},
