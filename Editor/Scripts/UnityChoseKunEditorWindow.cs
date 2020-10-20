@@ -20,7 +20,9 @@
 
    
 
-    // <summary>UnityChoseKunのEditorWindow部分</summary>
+    /// <summary>
+    /// UnityChoseKunのEditorWindow
+    /// </summary>
     public class UnityChoseKunEditorWindow : EditorWindow
     {
         private static class Styles
@@ -32,14 +34,8 @@
         delegate void OnMessageFunc(byte[] bytes);
 
         IConnectionState m_attachProfilerState;
-        bool m_registered = false;
-        static UnityChoseKunEditorWindow m_window;
-        public static UnityChoseKunEditorWindow window
-        {
-            get {return m_window;}
-            private set {m_window = value;}
-        }
-
+        
+        
 
         [SerializeField] int toolbarIdx = 0;
         [SerializeField] ScreenView m_screenView;
@@ -105,10 +101,8 @@
 
         [MenuItem("Window/UnityChoseKun/Player Inspector")]
         static void Create()
-        {
-            if(window == null){
-                window = (UnityChoseKunEditorWindow)EditorWindow.GetWindow(typeof(UnityChoseKunEditorWindow));
-            }
+        {            
+            var window = (UnityChoseKunEditorWindow)EditorWindow.GetWindow(typeof(UnityChoseKunEditorWindow));            
             window.titleContent = Styles.TitleContent;
             window.wantsMouseMove = true;
             window.autoRepaintOnSceneChange = true;
@@ -134,7 +128,6 @@
         //
         private void OnGUI()
         {                        
-           // Initialize();
             GUILayoutConnect();            
             EditorGUILayout.Space();
             
@@ -148,6 +141,7 @@
                 EditorGUILayout.Space();
 
                 var key = texts[toolbarIdx];
+                
                 Action onGUI;
                 onGUILayoutFuncDict.TryGetValue(key,out onGUI);
                 if (onGUI != null)
@@ -184,8 +178,6 @@
         // SampleのようにOnEnable/OnDisableで処理すると通信が不安体になる
         private void OnEnable()
         {
-            window = (UnityChoseKunEditorWindow)EditorWindow.GetWindow(typeof(UnityChoseKunEditorWindow));
-
             if (m_attachProfilerState == null){            
                 m_attachProfilerState = ConnectionUtility.GetAttachToPlayerState(this);            
             }
@@ -201,14 +193,12 @@
             m_attachProfilerState = null;            
         }        
 
+
+
         private void OnDestroy()
         {
-            if (m_registered == true)
-            {
-                UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Unregister(UnityChoseKun.kMsgSendPlayerToEditor, OnMessageEvent);
-                UnityEditor.Networking.PlayerConnection.EditorConnection.instance.DisconnectAll();
-                m_registered = false;
-            }
+            UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Unregister(UnityChoseKun.kMsgSendPlayerToEditor, OnMessageEvent);
+            UnityEditor.Networking.PlayerConnection.EditorConnection.instance.DisconnectAll();
 
             if(onMessageFuncDict != null)
             {
@@ -221,56 +211,56 @@
                 onGUILayoutFuncDict.Clear();
                 onGUILayoutFuncDict = null;
             }
-            window = null;
         }
 
         private void Initialize()
         {
-            //if (m_registered == false)
+            UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Initialize();
+            UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Register(UnityChoseKun.kMsgSendPlayerToEditor, OnMessageEvent);              
+            if (onGUILayoutFuncDict == null)
             {
-                UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Initialize();
-                UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Register(UnityChoseKun.kMsgSendPlayerToEditor, OnMessageEvent);              
-                if (onGUILayoutFuncDict == null)
+                onGUILayoutFuncDict = new Dictionary<string, Action>()
                 {
-                    onGUILayoutFuncDict = new Dictionary<string, Action>()
-                    {
-                        {"Inspector",   inspectorView.OnGUI},
-                        {"Texture",     texturesView.OnGUI},
-                        {"Shader",      shaderView.OnGUI},
-                        {"Screen",      screenView.OnGUI },
-                        {"Time",        timeView.OnGUI},
-                        {"Application", applicationView.OnGUI},
-                        {"Android",     androidView.OnGUI},
-                        // 機能をここに追加していく                                              
-                    };                    
-                }
-
-                if (onMessageFuncDict == null)
-                {
-                    onMessageFuncDict = new Dictionary<UnityChoseKun.MessageID, OnMessageFunc>()
-                    {
-                        {UnityChoseKun.MessageID.ScreenPull,screenView.OnMessageEvent},
-                        {UnityChoseKun.MessageID.TimePull,timeView.OnMessageEvent },                        
-                        {UnityChoseKun.MessageID.GameObjectPull, inspectorView.OnMessageEvent},
-                        {UnityChoseKun.MessageID.ShaderPull,shaderView.OnMessageEvent},
-                        {UnityChoseKun.MessageID.TexturePull,texturesView.OnMessageEvent},
-                        {UnityChoseKun.MessageID.ApplicationPull,applicationView.OnMessageEvent },
-                        {UnityChoseKun.MessageID.AndroidPull,androidView.OnMessageEvent },
-
-                        // 機能をここに追加していく                                              
-                    };
-                }
-                m_registered = true;
+                    {"Inspector",   inspectorView.OnGUI},
+                    {"Texture",     texturesView.OnGUI},
+                    {"Shader",      shaderView.OnGUI},
+                    {"Screen",      screenView.OnGUI },
+                    {"Time",        timeView.OnGUI},
+                    {"Application", applicationView.OnGUI},
+                    {"Android",     androidView.OnGUI},
+                    // 機能をここに追加していく                                              
+                };                    
             }
+
+            if (onMessageFuncDict == null)
+            {
+                onMessageFuncDict = new Dictionary<UnityChoseKun.MessageID, OnMessageFunc>()
+                {
+                    {UnityChoseKun.MessageID.ScreenPull,screenView.OnMessageEvent},
+                    {UnityChoseKun.MessageID.TimePull,timeView.OnMessageEvent },                        
+                    {UnityChoseKun.MessageID.GameObjectPull, inspectorView.OnMessageEvent},
+                    {UnityChoseKun.MessageID.ShaderPull,shaderView.OnMessageEvent},
+                    {UnityChoseKun.MessageID.TexturePull,texturesView.OnMessageEvent},
+                    {UnityChoseKun.MessageID.ApplicationPull,applicationView.OnMessageEvent },
+                    {UnityChoseKun.MessageID.AndroidPull,androidView.OnMessageEvent },
+
+                    // 機能をここに追加していく                                              
+                };
+            }         
         } 
 
+
+        /// <summary>
+        /// メッセージの受信CB
+        /// </summary>
+        /// <param name="args">メッセージデータ</param>
         private void OnMessageEvent(UnityEngine.Networking.PlayerConnection.MessageEventArgs args)
         {
             //Debug.Log("OnMessageEvent");
-            var message= UnityChoseKun.GetObject<UnityChoseKunMessageData>(args.data);
-
+            var message = UnityChoseKun.GetObject<UnityChoseKunMessageData>(args.data);
             
             //Debug.Log("message.id:"　+　message.id);
+
             if (onMessageFuncDict != null && onMessageFuncDict.ContainsKey(message.id) == true)
             {
                 var func = onMessageFuncDict[message.id];

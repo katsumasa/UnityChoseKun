@@ -55,10 +55,15 @@ namespace Utj.UnityChoseKun {
 
         }
 
-
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
         public AnimatorKun() : this(null) { }
 
-
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        /// <param name="component">Animatorオブジェクト</param>
         public AnimatorKun(Component component):base(component)
         {            
             componentKunType = ComponentKunType.Animator;
@@ -70,8 +75,7 @@ namespace Utj.UnityChoseKun {
                 } else
                 {
                     runtimeAnimatorController = "None";
-                }
-                
+                }                
                 
                 if (animator.avatar != null)
                 {
@@ -86,7 +90,11 @@ namespace Utj.UnityChoseKun {
             }
         }
 
-
+        /// <summary>
+        /// AnimatorKunの内容をAnimatorへ書き戻す
+        /// </summary>
+        /// <param name="component"></param>
+        /// <returns></returns>
         public override bool WriteBack(Component component)
         {
             if (base.WriteBack(component))

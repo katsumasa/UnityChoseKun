@@ -5,61 +5,57 @@ using UnityEditor;
 
 namespace Utj.UnityChoseKun
 {
-    public class MeshColliderView : ComponentView
+    /// <summary>
+    /// MeshCplliderを表示する為のClass
+    /// Programed by Katsumasa.Kimura
+    /// </summary>
+    public class MeshColliderView : ColliderView
     {
         private static class Styles
         {
-            public static GUIContent ColliderFoldoutContent = new GUIContent((Texture2D)EditorGUIUtility.Load("d_MeshCollider Icon"));
+            public static Texture2D ComponentIcon = (Texture2D)EditorGUIUtility.Load("d_MeshCollider Icon");
+
             public static GUIContent ColliderToggleContent = new GUIContent("Mesh Collider");
         }
 
-        MeshColliderKun colliderKun;
-        bool foldout = true;
-
-
-
-        public override void SetComponentKun(ComponentKun componentKun)
+        MeshColliderKun meshColliderKun
         {
-            colliderKun = componentKun as MeshColliderKun;
+            get { return colliderKun as MeshColliderKun; }
+            set { colliderKun = value; }
+        }
+        
+
+        public MeshColliderView()
+        {
+            componentIcon = Styles.ComponentIcon;
+            foldout = true;
         }
 
 
-        public override ComponentKun GetComponentKun()
-        {
-            return colliderKun;
-        }
 
 
         public override bool OnGUI()
-        {
-            EditorGUI.BeginChangeCheck();
-            GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));
-            EditorGUILayout.BeginHorizontal();
-            foldout = EditorGUILayout.Foldout(foldout, Styles.ColliderFoldoutContent);
-
-            colliderKun.enabled = EditorGUILayout.ToggleLeft(Styles.ColliderToggleContent, colliderKun.enabled);
-            GUILayout.FlexibleSpace();
-            EditorGUILayout.EndHorizontal();
-            GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));
-            if (foldout)
+        {            
+            if (DrawHeader())
             {
+                EditorGUI.BeginChangeCheck();
                 using (new EditorGUI.IndentLevelScope())
                 {
-                    colliderKun.convex = EditorGUILayout.Toggle("Convex", colliderKun.convex);
+                    meshColliderKun.convex = EditorGUILayout.Toggle("Convex", meshColliderKun.convex);
                     using (new EditorGUI.IndentLevelScope()) {
-                        EditorGUI.BeginDisabledGroup(!colliderKun.convex);
+                        EditorGUI.BeginDisabledGroup(!meshColliderKun.convex);
                         colliderKun.isTrigger = EditorGUILayout.Toggle("Is Trigger", colliderKun.isTrigger);
                         EditorGUI.EndDisabledGroup();
                     }
-                    colliderKun.cookingOptions = (MeshColliderCookingOptions)EditorGUILayout.EnumFlagsField("Cooking Options", colliderKun.cookingOptions);
-                    EditorGUILayout.LabelField("Material", colliderKun.material);
-                    EditorGUILayout.LabelField("Mesh",colliderKun.sharedMesh);                    
+                    meshColliderKun.cookingOptions = (MeshColliderCookingOptions)EditorGUILayout.EnumFlagsField("Cooking Options", meshColliderKun.cookingOptions);
+                    EditorGUILayout.LabelField("Material", meshColliderKun.material);
+                    EditorGUILayout.LabelField("Mesh", meshColliderKun.sharedMesh);                    
                 }
-            }
-            if (EditorGUI.EndChangeCheck())
-            {
-                colliderKun.dirty = true;
-            }
+                if (EditorGUI.EndChangeCheck())
+                {
+                    colliderKun.dirty = true;
+                }
+            }            
 
             return true;
         }

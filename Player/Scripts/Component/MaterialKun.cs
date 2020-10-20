@@ -4,8 +4,10 @@ using UnityEngine;
 namespace Utj.UnityChoseKun{
     [System.Serializable]
     public class MaterialKun : ObjectKun
-    {
-        // MaterialPropertyをRuntime/Editor両方で使用する為のClass
+    {        
+        /// <summary>
+        /// MaterialPropertyをRuntime/Editor両方で使用する為のClass
+        /// </summary>
         [System.Serializable]
         public class Property {
             #if UNITY_2019_1_OR_NEWER
@@ -84,7 +86,6 @@ namespace Utj.UnityChoseKun{
                 get{return m_offset.GetVector2();}
                 set{m_offset = new Vector2Kun(value);}
             }            
-
 
             public Property()
             {

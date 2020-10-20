@@ -18,22 +18,32 @@ namespace Utj.UnityChoseKun
         [SerializeField] public CollisionDetectionMode collisionDetectionMode;
         [SerializeField] public RigidbodyConstraints constraints;
 
-        public RigidbodyKun() : base() {
-            componentKunType = ComponentKunType.Rigidbody;
-        }
 
-
-        public RigidbodyKun(Rigidbody rigidbody):this()
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        public RigidbodyKun() : this(null) { }
+        
+        
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        /// <param name="component">Rigidbodyオブジェクト</param>
+        public RigidbodyKun(Component component):base(component)
         {
-            
-            mass = rigidbody.mass;
-            drag = rigidbody.drag;
-            angularDrag = rigidbody.angularDrag;
-            useGravity = rigidbody.useGravity;
-            isKinematic = rigidbody.isKinematic;
-            interpolation = rigidbody.interpolation;
-            collisionDetectionMode = rigidbody.collisionDetectionMode;
-            constraints = rigidbody.constraints;
+            componentKunType = ComponentKunType.Rigidbody;
+            var rigidbody = component as Rigidbody;
+            if (rigidbody)
+            {
+                mass = rigidbody.mass;
+                drag = rigidbody.drag;
+                angularDrag = rigidbody.angularDrag;
+                useGravity = rigidbody.useGravity;
+                isKinematic = rigidbody.isKinematic;
+                interpolation = rigidbody.interpolation;
+                collisionDetectionMode = rigidbody.collisionDetectionMode;
+                constraints = rigidbody.constraints;
+            }
         }
 
 

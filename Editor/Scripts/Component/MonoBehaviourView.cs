@@ -10,33 +10,19 @@ namespace Utj.UnityChoseKun{
     [System.Serializable]
     public class MonoBehaviourView : BehaviourView
     {
-        
 
 
-        static readonly Texture Icon = (Texture2D)EditorGUIUtility.Load("d_cs Script Icon");
-        [SerializeField]bool m_foldout = false;     
-        bool titleFoldout {
-            get{return m_foldout;}
-            set {m_foldout = value;}
-        }
-
-
-        public void DrawTitle(){
-            GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));                            
-            var label = new GUIContent(behaviourKun.name,Icon);
-            EditorGUI.BeginChangeCheck();
-            behaviourKun.enabled = EditorGUILayout.ToggleLeft(label, behaviourKun.enabled);                
-            if(EditorGUI.EndChangeCheck()){
-                behaviourKun.dirty = true;
-            }
-            GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));
-        }
-
-
-        public override void SetComponentKun(ComponentKun componentKun)
+        static class Styles
         {
-            behaviourKun = componentKun as MonoBehaviourKun;
+            public static readonly Texture2D Icon = (Texture2D)EditorGUIUtility.Load("d_cs Script Icon");
         }
+        
+        
+        public MonoBehaviourView():base()
+        {
+            componentIcon = Styles.Icon;
+        }
+
 
         public override ComponentKun GetComponentKun()
         {
@@ -44,15 +30,6 @@ namespace Utj.UnityChoseKun{
         }
 
 
-        public override bool OnGUI()
-        {
-            EditorGUI.BeginChangeCheck();
-            DrawTitle();
-            if(EditorGUI.EndChangeCheck()){
-                behaviourKun.dirty = true;
-            }
-
-            return true;
-        }                  
+        
     }
 }

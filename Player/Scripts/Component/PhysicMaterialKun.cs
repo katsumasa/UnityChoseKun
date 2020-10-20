@@ -13,11 +13,18 @@ namespace Utj.UnityChoseKun
         [SerializeField] public PhysicMaterialCombine frictionCombine;
         [SerializeField] public float staticFriction;
 
-        public PhysicMaterialKun() : base()
-        {            
-        }
 
-        public PhysicMaterialKun(PhysicMaterial physicMaterial):this()
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        public PhysicMaterialKun() : this(null) { }
+
+
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        /// <param name="physicMaterial">PhysicMaterialオブジェクト</param>
+        public PhysicMaterialKun(PhysicMaterial physicMaterial):base(physicMaterial)
         {
             bounceCombine = physicMaterial.bounceCombine;
             bounciness = physicMaterial.bounciness;
@@ -26,11 +33,16 @@ namespace Utj.UnityChoseKun
             staticFriction = physicMaterial.staticFriction;
         }
 
+
+        /// <summary>
+        /// 内容を書き戻す
+        /// </summary>
+        /// <param name="obj">PhysicMaterialオブジェクト</param>
+        /// <returns></returns>
         public override bool WriteBack(Object obj)
         {
-            if (dirty)
+            if (WriteBack(obj))
             {
-                WriteBack(obj);
                 var physicMaterial = obj as PhysicMaterial;
                 if (physicMaterial)
                 {
@@ -39,9 +51,8 @@ namespace Utj.UnityChoseKun
                     physicMaterial.dynamicFriction = dynamicFriction;
                     physicMaterial.frictionCombine = frictionCombine;
                     physicMaterial.staticFriction = staticFriction;
-                }
-
-                return true;
+                    return true;
+                }                
             }
             return false;
         }

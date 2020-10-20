@@ -4,9 +4,16 @@ using UnityEngine;
 
 namespace Utj.UnityChoseKun {
 
+    /// <summary>
+    /// Behaviourをシリアライズ・デシリアライズする為のClass
+    /// Programed by Katsumasa.Kimura
+    /// </summary>
     [System.Serializable]
     public class BehaviourKun : ComponentKun
     {
+        /// <summary>
+        /// 有効/無効
+        /// </summary>
         [SerializeField] bool m_enabled;
         public bool enabled{
             get {return m_enabled;}
@@ -14,12 +21,21 @@ namespace Utj.UnityChoseKun {
         }
         
         
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
         public BehaviourKun():this(null){}
+        
+        
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        /// <param name="component">Beviourオブジェクト</param>
         public BehaviourKun(Component component):base(component)
         {
             componentKunType = ComponentKunType.Behaviour;
             var behaviour = component as Behaviour;
-            if(behaviour!=null){
+            if(behaviour != null){
                 enabled = behaviour.enabled;
                 name = behaviour.GetType().Name;
             }

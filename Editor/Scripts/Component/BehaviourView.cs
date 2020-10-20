@@ -18,10 +18,7 @@ namespace Utj.UnityChoseKun{
             public static readonly Texture2D ComponentIcon = (Texture2D)EditorGUIUtility.Load("d_TextAsset Icon");
         }
 
-
-        [SerializeField] bool mFoldout = true;
-
-
+        
         protected BehaviourKun behaviourKun
         {
             get { return componentKun as BehaviourKun; }
@@ -33,6 +30,7 @@ namespace Utj.UnityChoseKun{
         public BehaviourView():base()
         {
             mComponentIcon = Styles.ComponentIcon;
+            foldout = true;
         }
 
         /// <summary> 
@@ -40,27 +38,25 @@ namespace Utj.UnityChoseKun{
         /// </summary>
         public override bool OnGUI()
         {
-
-            GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));
-            
+            GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));            
             EditorGUILayout.BeginHorizontal();
             var iconContent = new GUIContent(mComponentIcon);
-            mFoldout = EditorGUILayout.Foldout(mFoldout, iconContent);                          // Foldout & Icon
+            foldout = EditorGUILayout.Foldout(foldout, iconContent);                          // Foldout & Icon
             
             EditorGUI.BeginChangeCheck();
             var content = new GUIContent(behaviourKun.name);
-            behaviourKun.enabled = EditorGUILayout.ToggleLeft(content, behaviourKun.enabled);   // CheckBox & Label
+
+            var rect = EditorGUILayout.GetControlRect();
+            behaviourKun.enabled = EditorGUI.ToggleLeft(new Rect(rect.x-24,rect.y,rect.width,rect.height), content,behaviourKun.enabled);            
             if (EditorGUI.EndChangeCheck())
             {
                 behaviourKun.dirty = true;
             }
-
             GUILayout.FlexibleSpace();
-            EditorGUILayout.EndHorizontal();
-            
+            EditorGUILayout.EndHorizontal();            
             GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));
 
-            return mFoldout;            
+            return foldout;            
         }                  
     }
 }

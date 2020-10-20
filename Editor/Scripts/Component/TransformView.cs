@@ -1,61 +1,50 @@
-﻿namespace Utj.UnityChoseKun {
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using UnityEngine;
+using UnityEditor;
 
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Runtime.Serialization.Formatters.Binary;
-    using UnityEngine;
-    using UnityEditor;
 
+namespace Utj.UnityChoseKun
+{
+    /// <summary>
+    /// Transformを描画する為のClass
+    /// </summary>
     public class TransformView : ComponentView
     {
     
         private static class Styles
         {
-            public static GUIContent transformContent = new GUIContent("Transform", (Texture2D)EditorGUIUtility.Load("d_Transform Icon"));
+            public static Texture2D componentIcon = (Texture2D)EditorGUIUtility.Load("d_Transform Icon");
             public static GUIContent positionContent = EditorGUIUtility.TrTextContent("Position", "The local position of this GameObject relative to the parent.");
             public static GUIContent scaleContent = EditorGUIUtility.TrTextContent("Scale", "The local scaling of this GameObject relative to the parent.");
             public static GUIContent rotationContent = EditorGUIUtility.TrTextContent("Rotation", "The local rotation of this Game Object relative to the parent.");
 
         }
 
-        TransformKun m_transformKun;
+        
         public TransformKun transformKun{
             get {
-                    if(m_transformKun == null){
-                        m_transformKun = new TransformKun();
-                    }
-                    return m_transformKun;
+                return componentKun as TransformKun;
                 }
-            set {m_transformKun = value;}
+            set {componentKun = value;}
         }
 
-        
-        
-        bool foldout = true;
 
-
-        public override void SetComponentKun(ComponentKun componentKun)
+        public TransformView():base()
         {
-            transformKun = componentKun as TransformKun;
+            componentIcon = Styles.componentIcon;
         }
+        
 
-
-        public override ComponentKun GetComponentKun()
-        {
-            return transformKun;
-        }
-
-
+        /// <summary>
+        /// 描画処理
+        /// </summary>
+        /// <returns></returns>
         public override bool OnGUI()
-        {        
-
-            EditorGUILayout.Space();
-            GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));
-            foldout = EditorGUILayout.Foldout(foldout,Styles.transformContent);
-            GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));
-            EditorGUILayout.Space();
-            if(foldout){
+        {             
+            if(base.OnGUI()){
                 using (new EditorGUI.IndentLevelScope())
                 {
                     EditorGUI.BeginChangeCheck();
@@ -74,15 +63,12 @@
                     EditorGUILayout.PrefixLabel(Styles.scaleContent);
                     transformKun.localScale = EditorGUILayout.Vector3Field("",transformKun.localScale);
                     EditorGUILayout.EndHorizontal();
-
                    
-
                     if (EditorGUI.EndChangeCheck()){
                         transformKun.dirty = true;
                     }
                 }
             }
-
             return true;
         }
 

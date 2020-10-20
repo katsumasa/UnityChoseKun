@@ -50,6 +50,11 @@ namespace Utj.UnityChoseKun {
         
 
         public SkinnedMeshRendererKun():this(null){}
+
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        /// <param name="component"></param>
         public SkinnedMeshRendererKun(Component component):base(component)
         {
             componentKunType = ComponentKunType.SkinnedMeshMeshRenderer;

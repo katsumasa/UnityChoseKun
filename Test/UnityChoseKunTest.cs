@@ -36,6 +36,11 @@ namespace Utj.UnityChoseKun
 
             Debug.Log(gameObjectKun2);
 
+            var meshCollider = GetComponent<MeshCollider>();
+            if (meshCollider)
+            {
+                var meshColliderKun = new MeshColliderKun(meshCollider);
+            }
 
         }
 

@@ -5,26 +5,30 @@ using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEditor;
 
-namespace Utj.UnityChoseKun {
-    // MeshRenderer
+namespace Utj.UnityChoseKun {    
+    /// <summary>
+    /// MeshRendererを描画する為のClass
+    /// Prpgramed by Katsumasamura
+    /// </summary>
     [System.Serializable]
     public class MeshRendererView : RendererView
     {
         private static class Styles {
-            public static readonly GUIContent Icon = new GUIContent((Texture2D)EditorGUIUtility.Load("d_MeshRenderer Icon"));
-            public static readonly GUIContent RendererName = new GUIContent("Mesh Renderer");         
+            public static readonly Texture2D ComponentIcon = (Texture2D)EditorGUIUtility.Load("d_MeshRenderer Icon");
         }
 
-        [SerializeField]MeshRendererKun m_meshRendererKun;
-        MeshRendererKun rendererKun{
-            get{return m_meshRendererKun;}
-            set{m_meshRendererKun = value;}
+        
+        MeshRendererKun meshRendererKunn{
+            get{return rendererKun as MeshRendererKun;}
+            set{rendererKun = value;}
         }
+        
         [SerializeField] bool m_probsFoldout = true;
         bool probsFoldout{
             get{return m_probsFoldout;}
             set{m_probsFoldout = value;}
         }
+        
         [SerializeField] bool m_additionalSettingsFoldout = true;
         bool additionalSettingsFoldout{
             get{return m_additionalSettingsFoldout;}
@@ -32,24 +36,10 @@ namespace Utj.UnityChoseKun {
         }
     
 
-        protected override bool DrawTitle(RendererKun rendererKun)
+        public MeshRendererView() : base()
         {
-            GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));            
-            EditorGUILayout.BeginHorizontal();
-
-            titleFoldout = EditorGUILayout.Foldout(titleFoldout,Styles.Icon);                
-            
-            EditorGUI.BeginChangeCheck();
-            rendererKun.enabled = EditorGUILayout.ToggleLeft(Styles.RendererName,rendererKun.enabled);                
-            if(EditorGUI.EndChangeCheck()){
-                rendererKun.dirty = true;
-            }
-
-            GUILayout.FlexibleSpace();
-            EditorGUILayout.EndHorizontal();
-            GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));         
-            
-            return titleFoldout;
+            componentIcon = Styles.ComponentIcon;
+            foldout = true;
         }
 
 
@@ -84,48 +74,22 @@ namespace Utj.UnityChoseKun {
         }
 
 
-        public override void SetComponentKun(ComponentKun componentKun)
-        {
-            rendererKun = componentKun as MeshRendererKun;
-            if (rendererKun.material != null)
-            {
-                materialView = new MaterialView();
-                materialView.materialKun = rendererKun.material;
-            }
-
-            if (rendererKun.materials != null)
-            {
-                materialViews = new MaterialView[rendererKun.materials.Length];
-                for (var i = 0; i < materialViews.Length; i++)
-                {
-                    materialViews[i] = new MaterialView();
-                    materialViews[i].materialKun = rendererKun.materials[i];
-                }
-            }
-        }
-
-
-        public override ComponentKun GetComponentKun()
-        {
-            return rendererKun;
-        }
-
+        
 
         public override bool OnGUI()
         {
-            if(rendererKun != null){
-                if(DrawTitle(rendererKun)){
-                    using (new EditorGUI.IndentLevelScope()){
-                        EditorGUI.BeginChangeCheck();
-                        DrawMaterials(rendererKun);
-                        DrawLighting(rendererKun);
-                        DrawProbs(rendererKun);
-                        DrawAdditionalSettings(rendererKun);
-                        if(EditorGUI.EndChangeCheck()){
-                            rendererKun.dirty = true;
-                        }
+            if (DrawHeader()) {            
+                using (new EditorGUI.IndentLevelScope()){
+                    EditorGUI.BeginChangeCheck();
+                    DrawMaterials(rendererKun);
+                    DrawLighting(rendererKun);
+                    DrawProbs(rendererKun);
+                    DrawAdditionalSettings(rendererKun);
+                    if(EditorGUI.EndChangeCheck()){
+                        rendererKun.dirty = true;
                     }
                 }
+                
                 EditorGUI.BeginChangeCheck();
                 foreach(var materialView in materialViews)
                 {

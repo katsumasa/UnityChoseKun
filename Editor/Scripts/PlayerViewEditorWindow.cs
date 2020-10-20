@@ -149,9 +149,13 @@
         {
             RuntimePlatform platform = RuntimePlatform.WindowsEditor;
             Texture2D texture = null;
-            if (UnityChoseKunEditorWindow.window != null)
+
+            var chosekunEdotorWindow = (UnityChoseKunEditorWindow)EditorWindow.GetWindow(typeof(UnityChoseKunEditorWindow));
+
+
+            if (chosekunEdotorWindow != null)
             {
-                platform = UnityChoseKunEditorWindow.window.GetRuntimePlatform();
+                platform = chosekunEdotorWindow.GetRuntimePlatform();
             }
             switch (platform)
             {

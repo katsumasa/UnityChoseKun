@@ -54,11 +54,12 @@
                 GUILayout.FlexibleSpace();
                 isStatic = EditorGUILayout.ToggleLeft("Static",isStatic);
                 EditorGUILayout.EndHorizontal();
-                GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));            
-
+                                
                 EditorGUI.indentLevel += 1;
+                EditorGUILayout.BeginHorizontal();
                 tag = EditorGUILayout.TagField("Tag",tag);
                 layer = EditorGUILayout.LayerField("Layer",layer);
+                EditorGUILayout.EndHorizontal();
                 EditorGUI.indentLevel --;
             }            
         }
@@ -91,8 +92,9 @@
 
 
         public InspectorView() {
-            if(PlayerHierarchyWindow.window != null){
-                PlayerHierarchyWindow.window.selectionChangedCB = SelectionChangedCB;
+            var window = (PlayerHierarchyWindow)EditorWindow.GetWindow(typeof(PlayerHierarchyWindow));
+            if (window != null){
+                window.selectionChangedCB = SelectionChangedCB;
             }
         }
 
@@ -188,20 +190,19 @@
             
             for(var i = 0; i < sceneKun.gameObjectKuns.Length; i++){
                 gameObjectKuns.Add(sceneKun.gameObjectKuns[i].instanceID,sceneKun.gameObjectKuns[i]);
-            }  
-            if(PlayerHierarchyWindow.window == null){
-                PlayerHierarchyWindow.Create();
             }
-            if(PlayerHierarchyWindow.window != null){                
-                PlayerHierarchyWindow.window.selectionChangedCB = SelectionChangedCB;
-                PlayerHierarchyWindow.window.sceneKun = sceneKun;                
-                PlayerHierarchyWindow.window.Reload();
+            var window = (PlayerHierarchyWindow)EditorWindow.GetWindow(typeof(PlayerHierarchyWindow));
+            if(window != null){                
+                window.selectionChangedCB = SelectionChangedCB;
+                window.sceneKun = sceneKun;                
+                window.Reload();
             }
         }
         
         void SelectionChangedCB(IList<int> selectedIds)
-        {            
-            var id = PlayerHierarchyWindow.window.lastClickedID;
+        {
+            var window = (PlayerHierarchyWindow)EditorWindow.GetWindow(typeof(PlayerHierarchyWindow));
+            var id = window.lastClickedID;
             if(gameObjectKuns.ContainsKey(id)){
                 var gameObjectKun = gameObjectKuns[id];
                 settings.Set(gameObjectKun);
@@ -210,8 +211,10 @@
                 settings.Set(null);
                 BuildComponentView(null);
             }            
-            if(UnityChoseKunEditorWindow.window != null){
-                UnityChoseKunEditorWindow.window.Repaint();
+
+            var choseKunEditorWindow = (UnityChoseKunEditorWindow)EditorWindow.GetWindow(typeof(UnityChoseKunEditorWindow));
+            if (choseKunEditorWindow != null){
+                choseKunEditorWindow.Repaint();
             }
         }
     }

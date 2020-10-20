@@ -4,11 +4,14 @@ using UnityEditor;
 using UnityEngine;
 
 namespace Utj.UnityChoseKun {
+    /// <summary>
+    /// Animatorを表示する為のClass
+    /// Programed by Katsuma.Kimura
+    /// </summary>
     public class AnimatorView : BehaviourView
     {
-        static class Style
-        {
-            
+        static class Styles
+        {            
             public static readonly Texture2D ComponentIcon = (Texture2D)EditorGUIUtility.Load("d_Animator Icon");
             public static readonly Texture2D ControllerIcon = (Texture2D)EditorGUIUtility.Load("d_AnimatorController Icon");
             public static readonly Texture2D AvatorIcon = (Texture2D)EditorGUIUtility.Load("d_Avatar Icon");
@@ -27,27 +30,33 @@ namespace Utj.UnityChoseKun {
         }
 
 
-        public AnimatorView()
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        public AnimatorView():base()
         {
-            mComponentIcon = Style.ComponentIcon;
+            componentIcon = Styles.ComponentIcon;
+            foldout = true;
         }
 
 
-
+        /// <summary>
+        /// 描画処理
+        /// </summary>
+        /// <returns></returns>
         public override bool OnGUI()
         {
             if (base.OnGUI())
             {
-
                 using (new EditorGUI.IndentLevelScope())
                 {
 
                     EditorGUI.BeginChangeCheck();
-                    EditorGUILayout.LabelField(Style.Controller, new GUIContent(animatorKun.runtimeAnimatorController, Style.ControllerIcon));
-                    EditorGUILayout.LabelField(Style.Avator, new GUIContent(animatorKun.avatar, Style.AvatorIcon));
-                    animatorKun.applyRootMotion = EditorGUILayout.Toggle(Style.ApplyRootMotion, animatorKun.applyRootMotion);
-                    EditorGUILayout.EnumPopup(Style.UpdateMode, animatorKun.updateMode);
-                    animatorKun.cullingMode = (AnimatorCullingMode)EditorGUILayout.EnumPopup(Style.CullingMode, animatorKun.cullingMode);
+                    EditorGUILayout.LabelField(Styles.Controller, new GUIContent(animatorKun.runtimeAnimatorController, Styles.ControllerIcon));
+                    EditorGUILayout.LabelField(Styles.Avator, new GUIContent(animatorKun.avatar, Styles.AvatorIcon));
+                    animatorKun.applyRootMotion = EditorGUILayout.Toggle(Styles.ApplyRootMotion, animatorKun.applyRootMotion);
+                    EditorGUILayout.EnumPopup(Styles.UpdateMode, animatorKun.updateMode);
+                    animatorKun.cullingMode = (AnimatorCullingMode)EditorGUILayout.EnumPopup(Styles.CullingMode, animatorKun.cullingMode);
                     if (EditorGUI.EndChangeCheck())
                     {
                         animatorKun.dirty = true;

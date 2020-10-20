@@ -6,15 +6,17 @@ using UnityEditor;
 
 namespace Utj.UnityChoseKun
 {
-
-    public class CapsuleColliderView : ComponentView
+    /// <summary>
+    /// CapuselCplliderを描画する為のClass
+    /// </summary>
+    public class CapsuleColliderView : ColliderView
     {
         private static class Styles
         {
-            public static GUIContent ColliderFoldoutContent = new GUIContent((Texture2D)EditorGUIUtility.Load("d_CapsuleCollider Icon"));
-            public static GUIContent ColliderToggleContent = new GUIContent("CapsulColliderKun");
+            public static readonly Texture2D ComponentIcon = (Texture2D)EditorGUIUtility.Load("d_CapsuleCollider Icon");
+            
 
-            public static GUIContent[] AxixContents =
+            public static readonly GUIContent[] AxixContents =
             {
                 new GUIContent("X-Axis"),
                 new GUIContent("Y-Axis"),
@@ -22,35 +24,25 @@ namespace Utj.UnityChoseKun
             };
         }
 
-        CapsuleColliderKun colliderKun;
-        bool foldout = true;
 
+        CapsuleColliderKun capsuleColliderKun
+        {
+            get { return componentKun as CapsuleColliderKun; }
+            set { componentKun = value; }
+        }
+        
         
 
-        public override void SetComponentKun(ComponentKun componentKun)
+        public CapsuleColliderView():base()
         {
-            colliderKun = componentKun as CapsuleColliderKun;
-        }
 
-
-        public override ComponentKun GetComponentKun()
-        {
-            return colliderKun;
+            componentIcon = Styles.ComponentIcon;
         }
 
 
         public override bool OnGUI()
-        {
-            EditorGUI.BeginChangeCheck();
-            GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));
-            EditorGUILayout.BeginHorizontal();
-            foldout = EditorGUILayout.Foldout(foldout, Styles.ColliderFoldoutContent);
-
-            colliderKun.enabled = EditorGUILayout.ToggleLeft(Styles.ColliderToggleContent, colliderKun.enabled);
-            GUILayout.FlexibleSpace();
-            EditorGUILayout.EndHorizontal();
-            GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));
-            if (foldout)
+        {            
+            if(DrawHeader())
             {
                 using (new EditorGUI.IndentLevelScope())
                 {
@@ -62,10 +54,10 @@ namespace Utj.UnityChoseKun
                     colliderKun.boundsKun.center = EditorGUILayout.Vector3Field("", colliderKun.boundsKun.center);
                     EditorGUILayout.EndHorizontal();
 
-                    colliderKun.radius = EditorGUILayout.FloatField("Radius", colliderKun.radius);
-                    colliderKun.height = EditorGUILayout.FloatField("Height", colliderKun.height);
+                    capsuleColliderKun.radius = EditorGUILayout.FloatField("Radius", capsuleColliderKun.radius);
+                    capsuleColliderKun.height = EditorGUILayout.FloatField("Height", capsuleColliderKun.height);
 
-                    colliderKun.direction = EditorGUILayout.Popup(colliderKun.direction, Styles.AxixContents);
+                    capsuleColliderKun.direction = EditorGUILayout.Popup(capsuleColliderKun.direction, Styles.AxixContents);
 
                 }
             }

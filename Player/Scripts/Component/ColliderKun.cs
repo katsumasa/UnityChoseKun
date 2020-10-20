@@ -4,6 +4,10 @@ using UnityEngine;
 
 namespace Utj.UnityChoseKun
 {
+    /// <summary>
+    /// Colliderオブジェクトをシリアライズ/デシリアライズする為のクラス
+    /// Programed by Katsumasa.Kimura
+    /// </summary>
     [System.Serializable]
     public class ColliderKun : ComponentKun
     {        
@@ -21,10 +25,17 @@ namespace Utj.UnityChoseKun
         [SerializeField] public string material;
 
 
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
         public ColliderKun() : this(null) { }
 
 
-        public ColliderKun(Collider collider) : base()
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        /// <param name="collider">元となるColliderオブジェクト</param>
+        public ColliderKun(Collider collider) : base(collider)
         {
             componentKunType = ComponentKunType.Collider;
             if (collider != null)
@@ -37,6 +48,11 @@ namespace Utj.UnityChoseKun
             }
         }
 
+        /// <summary>
+        /// ColliderKunの内容を書き戻す
+        /// </summary>
+        /// <param name="component"></param>
+        /// <returns></returns>
         public override bool WriteBack(Component component)
         {
             if (base.WriteBack(component))
@@ -52,6 +68,10 @@ namespace Utj.UnityChoseKun
     }
 
 
+    /// <summary>
+    /// CapsuleColliderをシリアライズ・デシリアライズする為のClass
+    /// Programed by Katsumasa.Kimura
+    /// </summary>
     [System.Serializable]
     public class CapsuleColliderKun : ColliderKun
     {
@@ -66,22 +86,35 @@ namespace Utj.UnityChoseKun
         [SerializeField] public float radius;
 
 
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
         public CapsuleColliderKun() : this(null) { }                
 
 
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        /// <param name="collider">元となるCapuselCollider</param>
         public CapsuleColliderKun(Collider collider) : base(collider)
         {
-
             componentKunType = ComponentKunType.CapsuleCollider;
-            if (collider != null)
+            var capsuleCollider = collider as CapsuleCollider;
+            if (capsuleCollider != null)
             {
-                CapsuleCollider capsuleCollider = collider as CapsuleCollider;
+                
                 direction = capsuleCollider.direction;
                 height = capsuleCollider.height;
                 radius = capsuleCollider.radius;
             }
         }
 
+
+        /// <summary>
+        /// CapuselColliderKunの内容をCapuselColliderへ書き戻す
+        /// </summary>
+        /// <param name="component">CapuselColliderオブジェクト</param>
+        /// <returns></returns>
         public override bool WriteBack(Component component)
         {
             if (base.WriteBack(component))
@@ -93,14 +126,18 @@ namespace Utj.UnityChoseKun
                     capsuleCollider.direction = direction;
                     capsuleCollider.height = height;
                     capsuleCollider.radius = radius;
+                    return true;
                 }
-                return true;
             }
             return false;
         }
     }
 
 
+
+    /// <summary>
+    /// MeshColliderをシリアライズ・デシリアライズする為のClass
+    /// </summary>
     [System.Serializable]
     public class MeshColliderKun : ColliderKun
     {
@@ -108,22 +145,34 @@ namespace Utj.UnityChoseKun
         [SerializeField] public MeshColliderCookingOptions cookingOptions;
         [SerializeField] public string sharedMesh;
 
+
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
         public MeshColliderKun() : this(null) { }
         
-        
-
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        /// <param name="collider">MeshColliderオブジェクト</param>
         public MeshColliderKun(Collider collider) : base(collider)
         {
             componentKunType = ComponentKunType.MeshCollider;
-            if (collider)
+            MeshCollider meshCollider = collider as MeshCollider;
+            if (meshCollider)
             {
-                MeshCollider meshCollider = collider as MeshCollider;
                 convex = meshCollider.convex;
                 cookingOptions = meshCollider.cookingOptions;
                 sharedMesh = meshCollider.sharedMesh.name;
             }
         }
 
+
+        /// <summary>
+        /// MeshColliderKunの内容をMeshColliderへ書き戻す
+        /// </summary>
+        /// <param name="component"></param>
+        /// <returns></returns>
         public override bool WriteBack(Component component)
         {
             if (base.WriteBack(component))

@@ -55,7 +55,7 @@ namespace Utj.UnityChoseKun{
         /// <param name="obj">Object型のオブジェクト</param>
         public ObjectKun(UnityEngine.Object obj)
         {
-            if(obj!=null){
+            if(obj != null){
                 name = obj.GetType().Name;
                 instanceID = obj.GetInstanceID();    
             }

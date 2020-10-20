@@ -122,17 +122,17 @@ namespace Utj.UnityChoseKun
                 var particleSystem = component as ParticleSystem;
                 var main = particleSystem.main;
                 
-                main.duration       = this.main.duration;
-                main.loop           = this.main.loop;
-                main.maxParticles   = this.main.maxParticles;
-                main.playOnAwake    = this.main.playOnAwake;
-                main.prewarm        = this.main.prewarm;
+                main.duration                   = this.main.duration;
+                main.loop                       = this.main.loop;
+                main.maxParticles               = this.main.maxParticles;
+                main.playOnAwake                = this.main.playOnAwake;
+                main.prewarm                    = this.main.prewarm;
 
-                var emission = particleSystem.emission;
-                emission.enabled = this.emission;
+                var emission                    = particleSystem.emission;
+                emission.enabled                = this.emission;
 
-                var shape = particleSystem.shape;
-                shape.enabled = this.shape;
+                var shape                       = particleSystem.shape;
+                shape.enabled                   = this.shape;
 
                 var velocityOverLifetime        = particleSystem.velocityOverLifetime;
                 velocityOverLifetime.enabled    = this.limitVelocityOverLifetime;

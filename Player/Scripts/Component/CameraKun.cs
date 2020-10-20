@@ -71,8 +71,16 @@
         [SerializeField] public int targetEye;
 
 
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
         public CameraKun(): this(null){}
         
+
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        /// <param name="component">Cameraオブジェクト</param>
         public CameraKun(Component component):base(component)
         {                                    
             componentKunType = ComponentKunType.Camera;

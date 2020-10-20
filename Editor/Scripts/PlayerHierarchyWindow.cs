@@ -32,12 +32,7 @@
         delegate void Task();
         delegate void OnMessageFunc(string json);
         
-        // 変数の定義        
-        static PlayerHierarchyWindow m_window;
-        public static PlayerHierarchyWindow window{
-            get {return m_window;}            
-            private set {m_window = value;}
-        }
+        
 
         [SerializeField] SearchField m_searchField;          
         [SerializeField] TreeViewState m_treeViewState;
@@ -48,7 +43,13 @@
 
         HierarchyTreeView m_hierarchyTreeView;        
         HierarchyTreeView hierarchyTreeView{
-            get {if(m_hierarchyTreeView == null){m_hierarchyTreeView = new HierarchyTreeView(treeViewState);}return m_hierarchyTreeView;}
+            get {
+                if(m_hierarchyTreeView == null){
+                    m_hierarchyTreeView = new HierarchyTreeView(treeViewState);
+                }                
+                return m_hierarchyTreeView;
+            }
+
             set {m_hierarchyTreeView = value;}
         }
         [SerializeField] HierarchyTreeView.SelectionChangedCB m_selectionChangedCB;
@@ -86,19 +87,15 @@
 
         [MenuItem("Window/UnityChoseKun/Player Hierarchy")]
         public static void Create()
-        {
-            if (window == null)
-            {
-                window = (PlayerHierarchyWindow)EditorWindow.GetWindow(typeof(PlayerHierarchyWindow));
-            }            
+        {            
+            var window = (PlayerHierarchyWindow)EditorWindow.GetWindow(typeof(PlayerHierarchyWindow));                        
             window.titleContent = Styles.TitleContent;
             window.wantsMouseMove = true;
             window.autoRepaintOnSceneChange = true;
             window.Show();
-            window.OnEnable();
-                
-            
+            window.OnEnable();                            
         }
+
 
         public void Reload()
         {
@@ -109,13 +106,13 @@
             Repaint();
         }
 
-        private void OnEnable() {
 
-            window = (PlayerHierarchyWindow)EditorWindow.GetWindow(typeof(PlayerHierarchyWindow));
+        private void OnEnable() 
+        {
             if (treeViewState == null){
                 treeViewState = new TreeViewState();
             }
-            hierarchyTreeView = new HierarchyTreeView(treeViewState);            
+            
             Reload();
             if(m_searchField == null){
                 m_searchField = new SearchField();
