@@ -56,6 +56,11 @@ UnityChoseKunは再ビルドを行うこと無く、UnityEditorj上で開発機�
   - [MonoBehavior](https://docs.unity3d.com/ja/ScriptReference/MonoBehaviour.html)
   - [Behavior](https://docs.unity3d.com/ja/ScriptReference/Behaviour.html)
   - [Material](https://docs.unity3d.com/ja/ScriptReference/Material.html)
+  - [Animator](https://docs.unity3d.com/ja/ScriptReference/Animator.html)
+  - [Collider](https://docs.unity3d.com/ja/ScriptReference/Collider.html)
+  - [ParticleSystem](https://docs.unity3d.com/ja/ScriptReference/ParticleSystem.html)
+  
+  
 
 ## 注意事項・免責事項
 
