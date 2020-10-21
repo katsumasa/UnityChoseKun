@@ -44,6 +44,7 @@ namespace Utj.UnityChoseKun
             ApplicationQuit,
             AndroidPull,
             AndroidPush,
+            HierarchyPush,
         }
 
 

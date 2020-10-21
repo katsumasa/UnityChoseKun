@@ -1,12 +1,19 @@
-﻿namespace Utj.UnityChoseKun
-{    
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using UnityEngine;
-    using UnityEditor;
-    using UnityEditor.IMGUI.Controls;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+using UnityEditor;
+using UnityEditor.IMGUI.Controls;
 
+
+namespace Utj.UnityChoseKun
+{
+    /// <summary>
+    /// Hierarchyを表示する為のClass
+    /// Programed by Katsumasa.Kimura
+    /// https://docs.unity3d.com/ja/2019.4/Manual/TreeViewAPI.html
+    /// https://docs.unity3d.com/ja/2019.4/ScriptReference/IMGUI.Controls.TreeView.html
+    /// </summary>
     public class HierarchyTreeView : TreeView
     {        
         public delegate void SelectionChangedCB(IList<int> selectedIds);
@@ -23,19 +30,29 @@
         }
 
         
-        [SerializeField]  SceneKun m_sceneKun;
+        [SerializeField] SceneKun m_sceneKun;
+        [SerializeField] SelectionChangedCB m_selectionChangeCB;
+
+
         public SceneKun sceneKun {
             get {if(m_sceneKun == null){m_sceneKun = new SceneKun();}return m_sceneKun;}
             set {m_sceneKun = value;}
         }
         
-        [SerializeField] SelectionChangedCB m_selectionChangeCB;
+
         public SelectionChangedCB selectionChangeCB {
             get {return m_selectionChangeCB;}
             set {m_selectionChangeCB = value;}
         }
 
+
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        /// <param name="state"></param>
         public HierarchyTreeView(TreeViewState state) : base(state){}
+
+
                                 
         protected override TreeViewItem BuildRoot()
         {

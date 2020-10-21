@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 namespace Utj.UnityChoseKun {
-    
+    /// <summary>
+    /// SkinnedMeshRendererをSerialize/Deserializeする為のClass
+    /// </summary>
     [System.Serializable]
     public class SkinnedMeshRendererKun : RendererKun
     {
@@ -48,8 +50,12 @@ namespace Utj.UnityChoseKun {
             set{m_updateWhenOffscreen = value;}
         }
         
-
+        
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
         public SkinnedMeshRendererKun():this(null){}
+
 
         /// <summary>
         /// コンストラクタ
@@ -75,6 +81,12 @@ namespace Utj.UnityChoseKun {
             }
         }
 
+
+        /// <summary>
+        /// Objectに書き戻す
+        /// </summary>
+        /// <param name="component">SkinMeshRendererオブジェクト</param>
+        /// <returns></returns>
         public override bool WriteBack(Component component)
         {
             if(base.WriteBack(component)){

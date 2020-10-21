@@ -17,7 +17,7 @@
             byte[] bytes;
             UnityChoseKun.ObjectToBytes<UnityChoseKunMessageData>(message, out bytes);
 
-
+#if false
             {
                 UnityChoseKunMessageData check1;
                 UnityChoseKun.BytesToObject<UnityChoseKunMessageData>(bytes,out check1);
@@ -27,7 +27,7 @@
                 UnityChoseKun.BytesToObject<T>(check1.bytes, out check2);
                 Debug.Log(check2);
             }
-
+#endif
 
 
 
