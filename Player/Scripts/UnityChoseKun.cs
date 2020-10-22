@@ -1,4 +1,10 @@
-﻿using System.Collections;
+﻿#if DEBUG
+#define UNITY_CHOSEKUN_DEBUG
+#else
+#undef UNITY_CHOSEKUN_DEBUG
+#endif
+
+using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -20,14 +26,13 @@ namespace Utj.UnityChoseKun
         [SerializeField] public byte[] bytes;
     }
 
-
     /// <summary>
     /// UnityChoseKun Class
     /// </summary>
     public class UnityChoseKun
     {
         /// <summary>
-        /// 
+        /// MessageID
         /// </summary>
         public enum MessageID
         {
@@ -131,6 +136,39 @@ namespace Utj.UnityChoseKun
             {
                 ms.Close();
             }                        
+        }
+
+
+
+        public static void Log(object obj)
+        {
+#if UNITY_CHOSEKUN_DEBUG
+            Debug.Log(obj);
+#endif
+        }
+
+
+        public static void LogError(object obj)
+        {
+#if UNITY_CHOSEKUN_DEBUG
+            Debug.LogError(obj);
+#endif
+        }
+
+
+        public static void LogWarning(object obj)
+        {
+#if UNITY_CHOSEKUN_DEBUG
+            Debug.LogWarning(obj);
+#endif
+        }
+
+
+        public static void LogAssert(bool condition)
+        {
+#if UNITY_CHOSEKUN_DEBUG
+            Debug.Assert(condition);
+#endif
         }
     }
 

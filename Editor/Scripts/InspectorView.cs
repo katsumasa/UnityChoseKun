@@ -98,6 +98,7 @@
             }
         }
 
+
         void BuildComponentView(GameObjectKun gameObjectKun)
         {                        
             componentViews.Clear();            
@@ -116,50 +117,32 @@
         }
 
         
-
         public void OnGUI() {
             var isChange = false;
 
-            if(sceneKun == null) {
-                EditorGUILayout.HelpBox("Please Pull Request.",MessageType.Info);
-            }else{
-                isNotRequirePush = EditorGUILayout.Toggle(Settings.Styles.AutoPush,isNotRequirePush);
-                EditorGUI.BeginChangeCheck();
-                EditorGUI.BeginChangeCheck();
-                settings.DrawGameObject();
-                if(EditorGUI.EndChangeCheck()){
-                    if(m_gameObjectKuns.ContainsKey(m_selectGameObujectKunID)){
-                        var gameObjectKun = m_gameObjectKuns[m_selectGameObujectKunID];
-                        gameObjectKun.dirty = true;
-                    }
-                }                
-                foreach(var componentView in componentViews)
-                {
-                    componentView.OnGUI();
+                
+            EditorGUI.BeginChangeCheck();
+            settings.DrawGameObject();
+            if(EditorGUI.EndChangeCheck()){
+                if(m_gameObjectKuns.ContainsKey(m_selectGameObujectKunID)){
+                    var gameObjectKun = m_gameObjectKuns[m_selectGameObujectKunID];
+                    gameObjectKun.dirty = true;
                 }
-                if (EditorGUI.EndChangeCheck())
-                {
-                    if (isNotRequirePush)
-                    {
-                        isChange = true;
-                    }
-                }
-                GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(4));
             }
 
-
-            EditorGUILayout.BeginHorizontal();            
-            if(GUILayout.Button("Pull")){   
-                UnityChoseKunEditor.SendMessage(UnityChoseKun.MessageID.GameObjectPull);
-            }
-            if (isNotRequirePush == false)
+            EditorGUI.BeginChangeCheck();
+            foreach (var componentView in componentViews)
             {
-                if (GUILayout.Button("Push"))
-                {
-                    isChange = true;
-                }
+                componentView.OnGUI();
             }
-            EditorGUILayout.EndHorizontal();
+            if (EditorGUI.EndChangeCheck())
+            {
+                isChange = true;
+            }
+            GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(4));
+
+
+
 
             if (sceneKun != null)
             {

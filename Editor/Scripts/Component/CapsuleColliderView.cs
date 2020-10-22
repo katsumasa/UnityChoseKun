@@ -44,6 +44,7 @@ namespace Utj.UnityChoseKun
         {            
             if(DrawHeader())
             {
+                EditorGUI.BeginChangeCheck();
                 using (new EditorGUI.IndentLevelScope())
                 {
                     colliderKun.isTrigger = EditorGUILayout.Toggle("Is Trigger", colliderKun.isTrigger);
@@ -60,11 +61,12 @@ namespace Utj.UnityChoseKun
                     capsuleColliderKun.direction = EditorGUILayout.Popup(capsuleColliderKun.direction, Styles.AxixContents);
 
                 }
+                if (EditorGUI.EndChangeCheck())
+                {
+                    colliderKun.dirty = true;
+                }
             }
-            if (EditorGUI.EndChangeCheck())
-            {
-                colliderKun.dirty = true;
-            }
+            
 
             return true;
         }

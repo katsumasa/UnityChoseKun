@@ -81,7 +81,14 @@ namespace Utj.UnityChoseKun
                 return m_hierarchyPlayer;
             }
         }
+
+        /// <summary>
+        /// Singletoneチェック用
+        /// </summary>
+        //static bool m_isCreated;
+
         
+
 
 
         /// <summary>
@@ -89,8 +96,20 @@ namespace Utj.UnityChoseKun
         /// </summary>
         private void Awake()
         {
-            // MessageIDと対応するCBを登録する必要がある
-            onMessageFuncDict = new Dictionary<UnityChoseKun.MessageID, OnMessageFunc>()
+            // DontDestroyOnLoad()扱いにはなるが、ダメっぽい。
+
+            //if (m_isCreated)
+            //{
+            //    GameObject.DestroyImmediate(this.gameObject);
+            //}
+            //else
+            {
+                //    m_isCreated = true;
+                //    DontDestroyOnLoad(this.gameObject);
+
+
+                // MessageIDと対応するCBを登録する必要がある
+                onMessageFuncDict = new Dictionary<UnityChoseKun.MessageID, OnMessageFunc>()
             {
                 {UnityChoseKun.MessageID.ScreenPull,        playerScreen.OnMessageEventPull},
                 {UnityChoseKun.MessageID.ScreenPush,        playerScreen.OnMessageEventPush},
@@ -109,33 +128,38 @@ namespace Utj.UnityChoseKun
 
             };
 
-            
 
-            //
-            // https://answers.unity.com/questions/30930/why-did-my-binaryserialzer-stop-working.html
-            // https://answers.unity.com/questions/725419/filestream-binaryformatter-from-c-to-ios-doesnt-wo.html
-            //
+
+                //
+                // https://answers.unity.com/questions/30930/why-did-my-binaryserialzer-stop-working.html
+                // https://answers.unity.com/questions/725419/filestream-binaryformatter-from-c-to-ios-doesnt-wo.html
+                //
 #if UNITY_IPHONE || UNITY_IOS
-            {
-                System.Environment.SetEnvironmentVariable("MONO_REFLECTION_SERIALIZER", "yes");
-            }
+                {
+                    System.Environment.SetEnvironmentVariable("MONO_REFLECTION_SERIALIZER", "yes");
+                }
 #endif
-
+            }
         }
+
 
         // Start is called before the first frame update
         void Start()
         {            
         }
 
+
         // Update is called once per frame
         void Update()
         {
         }
 
+
         //
         void OnDestroy()
         {
+            UnityChoseKun.Log("OnDestroy");
+
             if(onMessageFuncDict != null)
             {
                 onMessageFuncDict.Clear();
@@ -143,37 +167,40 @@ namespace Utj.UnityChoseKun
             }
         }
 
+
         //
         void OnEnable()
         {
-            Debug.Log("OnEnable");
+            UnityChoseKun.Log("OnEnable");
             PlayerConnection.instance.Register(UnityChoseKun.kMsgSendEditorToPlayer, OnMessageEvent);
         }
+
 
         //
         void OnDisable()
         {
-            Debug.Log("OnDisable");
+            UnityChoseKun.Log("OnDisable");
             PlayerConnection.instance.Unregister(UnityChoseKun.kMsgSendEditorToPlayer, OnMessageEvent);
         }
+
 
         //
         void OnMessageEvent(MessageEventArgs args)
         {
-            Debug.Log("UnityChoseKun::OnMessageEvent");
+            UnityChoseKun.Log("UnityChoseKun::OnMessageEvent");
             if (args.data == null)
             {
-                Debug.LogError("args.data == null");
+                UnityChoseKun.LogError("args.data == null");
             }
             else
             {
                 var message = UnityChoseKun.GetObject<UnityChoseKunMessageData>(args.data);
                 if (message == null)
                 {
-                    Debug.LogWarning("mesage == null");
+                    UnityChoseKun.LogWarning("mesage == null");
                     return;
                 }
-                Debug.Log("message.id " + message.id);                
+                UnityChoseKun.Log("message.id " + message.id);                
                 var func = onMessageFuncDict[message.id];
                 func(message.bytes);
             }

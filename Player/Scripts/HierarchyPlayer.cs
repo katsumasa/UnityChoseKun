@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Utj.UnityChoseKun
 {
+    /// <summary>
+    /// HierarchyPlayerで使用するMessageデータ
+    /// </summary>
     [System.Serializable]
     public class HierarchyMessage
     {
@@ -12,21 +15,25 @@ namespace Utj.UnityChoseKun
             Duplicate,
             Delete,
             CreateEmpty,
+            CreatePrimitive,
         }
 
         [SerializeField] public MessageID messageID;
         [SerializeField] public int baseID;
-        [SerializeField] public int parentID;
-        [SerializeField] public int classID;
+        [SerializeField] public PrimitiveType primitiveType;
+        
     }
 
 
-
+    /// <summary>
+    /// HierarchyPlayer Class
+    /// </summary>
     public class HierarchyPlayer : BasePlayer
     {
         public void OnMessageEventPush(byte[] bytes)
         {
             HierarchyMessage message;
+
 
             UnityChoseKun.BytesToObject<HierarchyMessage>(bytes,out message);
             switch (message.messageID)
@@ -44,12 +51,60 @@ namespace Utj.UnityChoseKun
                         }
                     }
                     break;
+
+                case HierarchyMessage.MessageID.Delete:
+                    {
+                        var go = FindGameObjectInScene(message.baseID);
+                        if (go != null)
+                        {
+                            GameObject.DestroyImmediate(go);
+                        }
+                    }
+                    break;
+
+                case HierarchyMessage.MessageID.CreateEmpty:
+                    {
+                        var parent = FindGameObjectInScene(message.baseID);
+                        var go = new GameObject();
+                        if (parent != null)
+                        {
+                            go.transform.parent = parent.transform;
+                        }
+                        else
+                        {
+                            go.transform.parent = null;
+                        }
+                        
+                        go.transform.localPosition  = Vector3.zero;
+                        go.transform.localRotation  = Quaternion.identity;
+                        go.transform.localScale     = Vector3.one;
+                        
+                    }
+                    break;
+
+                case HierarchyMessage.MessageID.CreatePrimitive:
+                    {
+                        var parent = FindGameObjectInScene(message.baseID);
+                        var go = GameObject.CreatePrimitive(message.primitiveType);
+                        if (parent != null)
+                        {
+                            go.transform.parent = parent.transform;
+                        }
+                        else
+                        {
+                            go.transform.parent = null;
+                        }
+
+                        go.transform.localPosition = Vector3.zero;
+                        go.transform.localRotation = Quaternion.identity;
+                        go.transform.localScale = Vector3.one;
+                    }
+                    break;
             }
 
             var scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
             var sceneKun = new SceneKun(scene);
             UnityChoseKunPlayer.SendMessage<SceneKun>(UnityChoseKun.MessageID.GameObjectPull, sceneKun);
-
         }
 
 
