@@ -265,17 +265,22 @@ namespace Utj.UnityChoseKun
 
 
 
+        private void CreateObjectCommon(HierarchyMessage.MessageID messageID,int instanceID)
+        {
+            var message = new HierarchyMessage();
+            message.messageID = messageID;
+            message.baseID = instanceID ;
+            UnityChoseKunEditor.SendMessage<HierarchyMessage>(UnityChoseKun.MessageID.HierarchyPush, message);
+        }
+
+
         /// <summary>
         /// Duplicate
         /// </summary>
         /// <param name="obj"></param>
         private void DuplicateCB(object obj)
         {
-            var message = new HierarchyMessage();
-            message.messageID = HierarchyMessage.MessageID.Duplicate;
-            message.baseID = (int)obj;
-
-            UnityChoseKunEditor.SendMessage<HierarchyMessage>(UnityChoseKun.MessageID.HierarchyPush, message);
+            CreateObjectCommon(HierarchyMessage.MessageID.Duplicate,(int)obj);
         }
 
 
@@ -285,10 +290,8 @@ namespace Utj.UnityChoseKun
         /// <param name="obj"></param>
         private void DeleteCB(object obj)
         {
-            var message = new HierarchyMessage();
-            message.messageID = HierarchyMessage.MessageID.Delete;
-            message.baseID = (int)obj;
-            UnityChoseKunEditor.SendMessage<HierarchyMessage>(UnityChoseKun.MessageID.HierarchyPush, message);
+
+            CreateObjectCommon(HierarchyMessage.MessageID.Delete, (int)obj);
         }
 
 
@@ -298,55 +301,53 @@ namespace Utj.UnityChoseKun
         /// <param name="obj"></param>
         private void CreateEmptyCB(object obj)
         {
+            CreateObjectCommon(HierarchyMessage.MessageID.CreateEmpty, (int)obj);
+        }
+
+
+        /// <summary>
+        /// Create Primitiveの共通関数
+        /// </summary>
+        /// <param name="messageID"></param>
+        /// <param name="instanceID"></param>
+        /// <param name="primitiveType"></param>
+        private void CreatePrimitiveCommon(HierarchyMessage.MessageID messageID,int instanceID,PrimitiveType primitiveType)
+        {
             var message = new HierarchyMessage();
-            message.messageID = HierarchyMessage.MessageID.CreateEmpty;                                    
-            message.baseID = (int)obj;
+            message.messageID = HierarchyMessage.MessageID.CreatePrimitive;
+            message.baseID = instanceID;
+            message.primitiveType = primitiveType;
             UnityChoseKunEditor.SendMessage<HierarchyMessage>(UnityChoseKun.MessageID.HierarchyPush, message);
         }
+
 
         private void CreateCubeCB(object obj)
         {
-            var message = new HierarchyMessage();
-            message.messageID = HierarchyMessage.MessageID.CreatePrimitive;
-            message.baseID = (int)obj;
-            message.primitiveType = PrimitiveType.Cube;
-            UnityChoseKunEditor.SendMessage<HierarchyMessage>(UnityChoseKun.MessageID.HierarchyPush, message);
+            CreatePrimitiveCommon(HierarchyMessage.MessageID.CreatePrimitive, (int)obj,PrimitiveType.Cube);
         }
+
 
         private void CreatePlaneCB(object obj)
         {
-            var message = new HierarchyMessage();
-            message.messageID = HierarchyMessage.MessageID.CreatePrimitive;
-            message.baseID = (int)obj;
-            message.primitiveType = PrimitiveType.Plane;
-            UnityChoseKunEditor.SendMessage<HierarchyMessage>(UnityChoseKun.MessageID.HierarchyPush, message);
+            CreatePrimitiveCommon(HierarchyMessage.MessageID.CreatePrimitive, (int)obj, PrimitiveType.Plane);            
         }
+
 
         private void CreateSphereCB(object obj)
         {
-            var message = new HierarchyMessage();
-            message.messageID = HierarchyMessage.MessageID.CreatePrimitive;
-            message.baseID = (int)obj;
-            message.primitiveType = PrimitiveType.Sphere;
-            UnityChoseKunEditor.SendMessage<HierarchyMessage>(UnityChoseKun.MessageID.HierarchyPush, message);
+            CreatePrimitiveCommon(HierarchyMessage.MessageID.CreatePrimitive, (int)obj, PrimitiveType.Sphere);
         }
+
 
         private void CreateCapsuleCB(object obj)
         {
-            var message = new HierarchyMessage();
-            message.messageID = HierarchyMessage.MessageID.CreatePrimitive;
-            message.baseID = (int)obj;
-            message.primitiveType = PrimitiveType.Capsule;
-            UnityChoseKunEditor.SendMessage<HierarchyMessage>(UnityChoseKun.MessageID.HierarchyPush, message);
+            CreatePrimitiveCommon(HierarchyMessage.MessageID.CreatePrimitive, (int)obj, PrimitiveType.Capsule);
         }
+
 
         private void CreateCylinderCB(object obj)
         {
-            var message = new HierarchyMessage();
-            message.messageID = HierarchyMessage.MessageID.CreatePrimitive;
-            message.baseID = (int)obj;
-            message.primitiveType = PrimitiveType.Cylinder;
-            UnityChoseKunEditor.SendMessage<HierarchyMessage>(UnityChoseKun.MessageID.HierarchyPush, message);
+            CreatePrimitiveCommon(HierarchyMessage.MessageID.CreatePrimitive, (int)obj, PrimitiveType.Cylinder);
         }
 
         
