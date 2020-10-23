@@ -161,8 +161,18 @@
                         UnityChoseKunEditor.SendMessage<GameObjectKun>(UnityChoseKun.MessageID.GameObjectPush, gameObjectKun);
                         gameObjectKun.ResetDirty();                        
                     }
-                }
+                }          
             }
+
+            using (new EditorGUI.DisabledScope(true))
+            {
+                EditorGUILayout.BeginHorizontal();
+                GUILayout.FlexibleSpace();
+                GUILayout.Button(new GUIContent("Add Component"));
+                GUILayout.FlexibleSpace();
+                EditorGUILayout.EndHorizontal();
+            }
+
         }
         
         public void OnMessageEvent(byte[] bytes)
