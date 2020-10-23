@@ -29,15 +29,12 @@ namespace Utj.UnityChoseKun
     {
         public static class Styles
         {                                
-            public static readonly GUIContent TitleContent = new GUIContent("Player Hierarchy", (Texture2D)EditorGUIUtility.Load("d_UnityEditor.SceneHierarchyWindow@2x"));
-            
-            public static readonly GUIContent NetworkMessages = new GUIContent((Texture2D)EditorGUIUtility.Load("d_Profiler.NetworkMessages@2x"),"Hierarchyの情報を取得");
-
-
-            public static readonly GUIContent Rename        = new GUIContent("Rename");
-            public static readonly GUIContent Duplicate     = new GUIContent("Duplicate");
-            public static readonly GUIContent Delete        = new GUIContent("Delete");
-            public static readonly GUIContent CreateEmpty   = new GUIContent("CreateEmpty");
+            public static readonly GUIContent TitleContent      = new GUIContent("Player Hierarchy", (Texture2D)EditorGUIUtility.LoadRequired("d_UnityEditor.SceneHierarchyWindow"));            
+            public static readonly GUIContent NetworkMessages   = new GUIContent((Texture2D)EditorGUIUtility.LoadRequired("d_Profiler.NetworkMessages@2x"),"Hierarchyの情報を取得");
+            public static readonly GUIContent Rename            = new GUIContent("Rename");
+            public static readonly GUIContent Duplicate         = new GUIContent("Duplicate");
+            public static readonly GUIContent Delete            = new GUIContent("Delete");
+            public static readonly GUIContent CreateEmpty       = new GUIContent("CreateEmpty");
 
         }
         //
@@ -207,26 +204,21 @@ namespace Utj.UnityChoseKun
             }
 
 
-            using (new EditorGUILayout.HorizontalScope(EditorStyles.toolbar)) {                
-                
-
+            using (new EditorGUILayout.HorizontalScope(EditorStyles.toolbar)) {                                
                 var contents = new GUIContent(Styles.NetworkMessages);
                 var v2 = EditorStyles.label.CalcSize(contents);
-                if (GUILayout.Button(contents, EditorStyles.toolbarButton,GUILayout.Width(v2.x+16)))
+                if (GUILayout.Button(contents, EditorStyles.toolbarButton,GUILayout.Width(v2.x+8)))
                 {
                     UnityChoseKunEditor.SendMessage(UnityChoseKun.MessageID.GameObjectPull);
                 }
-
+                EditorGUILayout.Space();
                 contents = new GUIContent("Connect To");
                 v2 = EditorStyles.label.CalcSize(contents);
                 EditorGUILayout.LabelField("Connect To",GUILayout.Width(v2.x));
                 if (m_attachProfilerState != null)
                 {
                     ConnectionGUILayout.AttachToPlayerDropdown(m_attachProfilerState, EditorStyles.toolbarDropDown);
-                }
-
-
-                //GUILayout.FlexibleSpace();
+                }                
                 hierarchyTreeView.searchString = m_searchField.OnToolbarGUI(hierarchyTreeView.searchString);   
             }
             var playerCount = EditorConnection.instance.ConnectedPlayers.Count;
