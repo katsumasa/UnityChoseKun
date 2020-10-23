@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.UI;
+using UnityEngine.Profiling;
 #if UNITY_2018_1_OR_NEWER
 using UnityEngine.Networking.PlayerConnection;
 using ConnectionUtility = UnityEditor.Experimental.Networking.PlayerConnection.EditorGUIUtility;
@@ -129,7 +130,6 @@ namespace Utj.UnityChoseKun
 
         private void OnEnable() 
         {
-
             m_attachProfilerState = ConnectionUtility.GetAttachToPlayerState(this);
 
             if (treeViewState == null){
@@ -145,12 +145,8 @@ namespace Utj.UnityChoseKun
 
 
         private void OnDisable()
-        {
-            if (m_attachProfilerState != null)
-            {
-                m_attachProfilerState.Dispose();
-                m_attachProfilerState = null;
-            }
+        {            
+            m_attachProfilerState.Dispose();            
         }        
 
 
@@ -209,16 +205,31 @@ namespace Utj.UnityChoseKun
                 var v2 = EditorStyles.label.CalcSize(contents);
                 if (GUILayout.Button(contents, EditorStyles.toolbarButton,GUILayout.Width(v2.x+8)))
                 {
+                    // ChoseKunWindowを開く
+                    EditorWindow.GetWindow(typeof(UnityChoseKunEditorWindow));
                     UnityChoseKunEditor.SendMessage(UnityChoseKun.MessageID.GameObjectPull);
                 }
                 EditorGUILayout.Space();
                 contents = new GUIContent("Connect To");
                 v2 = EditorStyles.label.CalcSize(contents);
-                EditorGUILayout.LabelField("Connect To",GUILayout.Width(v2.x));
-                if (m_attachProfilerState != null)
+                EditorGUILayout.LabelField(contents, GUILayout.Width(v2.x));                               
+                ConnectionGUILayout.AttachToPlayerDropdown(m_attachProfilerState, EditorStyles.toolbarDropDown);
+                switch (m_attachProfilerState.connectedToTarget)
                 {
-                    ConnectionGUILayout.AttachToPlayerDropdown(m_attachProfilerState, EditorStyles.toolbarDropDown);
-                }                
+                    case ConnectionTarget.None:
+                        //This case can never happen within the Editor, since the Editor will always fall back onto a connection to itself.
+                        break;
+                    case ConnectionTarget.Player:
+                        Profiler.enabled = GUILayout.Toggle(Profiler.enabled, string.Format("Profile the attached Player ({0})", m_attachProfilerState.connectionName), EditorStyles.toolbarButton);
+                        break;
+                    case ConnectionTarget.Editor:
+                        // The name of the Editor or the PlayMode Player would be "Editor" so adding the connectionName here would not add anything.
+                        Profiler.enabled = GUILayout.Toggle(Profiler.enabled, "Profile the Player in the Editor", EditorStyles.toolbarButton);
+                        break;
+                    default:
+                        break;
+                }
+
                 hierarchyTreeView.searchString = m_searchField.OnToolbarGUI(hierarchyTreeView.searchString);   
             }
             var playerCount = EditorConnection.instance.ConnectedPlayers.Count;
@@ -243,12 +254,8 @@ namespace Utj.UnityChoseKun
         private void GUILayoutConnect()
         {
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Connect To");
-            if (m_attachProfilerState != null)
-            {
-                ConnectionGUILayout.AttachToPlayerDropdown(m_attachProfilerState, EditorStyles.toolbarDropDown);
-            }
-
+            EditorGUILayout.LabelField("Connect To");                        
+            ConnectionGUILayout.AttachToPlayerDropdown(m_attachProfilerState, EditorStyles.toolbarDropDown);            
             EditorGUILayout.EndHorizontal();
 
             var playerCount = EditorConnection.instance.ConnectedPlayers.Count;
@@ -263,10 +270,11 @@ namespace Utj.UnityChoseKun
         }
 
 
-
-
         private void CreateObjectCommon(HierarchyMessage.MessageID messageID,int instanceID)
         {
+            // ChoseKunWindowを開く
+            EditorWindow.GetWindow(typeof(UnityChoseKunEditorWindow));
+
             var message = new HierarchyMessage();
             message.messageID = messageID;
             message.baseID = instanceID ;
@@ -313,6 +321,10 @@ namespace Utj.UnityChoseKun
         /// <param name="primitiveType"></param>
         private void CreatePrimitiveCommon(HierarchyMessage.MessageID messageID,int instanceID,PrimitiveType primitiveType)
         {
+            // ChoseKunWindowを開く
+            EditorWindow.GetWindow(typeof(UnityChoseKunEditorWindow));
+
+
             var message = new HierarchyMessage();
             message.messageID = HierarchyMessage.MessageID.CreatePrimitive;
             message.baseID = instanceID;

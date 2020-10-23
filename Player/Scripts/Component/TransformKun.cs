@@ -38,7 +38,7 @@ namespace Utj.UnityChoseKun
 
         public int parentInstanceID{
             get {return m_parentInstanceID;}
-            protected set {m_parentInstanceID = value;}
+            set {m_parentInstanceID = value;}
         }
 
 
