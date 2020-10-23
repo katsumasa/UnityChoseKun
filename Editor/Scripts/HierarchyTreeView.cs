@@ -230,7 +230,12 @@ namespace Utj.UnityChoseKun
 
         void MoveTreeViewItem(TreeViewItem treeViewItem,TreeViewItem parent,int insertIndex)
         {
-            // 親から削除
+
+            // 親が同じな場合は
+            if (treeViewItem.parent == parent)
+            {
+                insertIndex--;
+            }
             if (treeViewItem.parent != null)
             {
                 treeViewItem.parent.children.Remove(treeViewItem);                
@@ -255,7 +260,14 @@ namespace Utj.UnityChoseKun
             if (parent != null)
             {
                 var parentKun = sceneKun.gameObjectKuns.Where((g) => g.instanceID == parent.id).FirstOrDefault();
-                gameObjectKun.transformKun.parentInstanceID = parentKun.transformKun.instanceID;
+                if (parentKun == null)
+                {
+                    gameObjectKun.transformKun.parentInstanceID = 0;
+                }
+                else
+                {
+                    gameObjectKun.transformKun.parentInstanceID = parentKun.transformKun.instanceID;
+                }
             } 
             else
             {
