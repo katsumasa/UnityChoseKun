@@ -199,7 +199,7 @@ namespace Utj.UnityChoseKun
                     menu.AddDisabledItem(new GUIContent("2D Object/Isometric Tilemap"));
                     menu.AddDisabledItem(new GUIContent("2D Object/Isometric Z As Y Tilemap"));
 
-                    menu.AddDisabledItem(new GUIContent("Effect/Particle System"));
+                    menu.AddItem(new GUIContent("Effect/Particle System"),false,CreateParticleSystem, lastClickedID);                    
                     menu.AddDisabledItem(new GUIContent("Effect/Particle System ForceField"));
                     menu.AddDisabledItem(new GUIContent("Effect/Trail"));
                     menu.AddDisabledItem(new GUIContent("Effect/Line"));
@@ -327,6 +327,22 @@ namespace Utj.UnityChoseKun
         private void CreateEmptyCB(object obj)
         {
             CreateObjectCommon(HierarchyMessage.MessageID.CreateEmpty, (int)obj);
+        }
+
+
+        private void CreateParticleSystem(object obj)
+        {
+            CreateClassCommon(typeof(ParticleSystem),(int)obj);
+        }
+
+
+        private void CreateClassCommon(System.Type type,int instanceID)
+        {
+            var message = new HierarchyMessage();
+            message.messageID = HierarchyMessage.MessageID.CreateClass;
+            message.baseID = instanceID;
+            message.type = type;
+            UnityChoseKunEditor.SendMessage<HierarchyMessage>(UnityChoseKun.MessageID.HierarchyPush, message);
         }
 
 

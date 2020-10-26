@@ -16,12 +16,14 @@ namespace Utj.UnityChoseKun
             Delete,
             CreateEmpty,
             CreatePrimitive,
+            CreateClass,
         }
 
         [SerializeField] public MessageID messageID;
         [SerializeField] public int baseID;
-        [SerializeField] public PrimitiveType primitiveType;
-        
+        [SerializeField] public PrimitiveType primitiveType;        
+        [SerializeField] public System.Type type;
+
     }
 
 
@@ -82,6 +84,25 @@ namespace Utj.UnityChoseKun
                     }
                     break;
 
+                case HierarchyMessage.MessageID.CreateClass:
+                    {                        
+                        var parent = FindGameObjectInScene(message.baseID);
+                        var go = new GameObject(message.type.Name,message.type);
+                        if (parent != null)
+                        {
+                            go.transform.parent = parent.transform;
+                        }
+                        else
+                        {
+                            go.transform.parent = null;
+                        }
+
+                        go.transform.localPosition = Vector3.zero;
+                        go.transform.localRotation = Quaternion.identity;
+                        go.transform.localScale = Vector3.one;
+                    }            
+                    break;
+
                 case HierarchyMessage.MessageID.CreatePrimitive:
                     {
                         var parent = FindGameObjectInScene(message.baseID);
@@ -106,6 +127,9 @@ namespace Utj.UnityChoseKun
             var sceneKun = new SceneKun(scene);
             UnityChoseKunPlayer.SendMessage<SceneKun>(UnityChoseKun.MessageID.GameObjectPull, sceneKun);
         }
+
+
+        
 
 
         /// <summary>
