@@ -92,6 +92,15 @@ namespace Utj.UnityChoseKun
             set {                
                 hierarchyTreeView.sceneKun = value;
             }
+
+            get
+            {
+                if(hierarchyTreeView.sceneKun == null)
+                {
+                    hierarchyTreeView.sceneKun = new SceneKun();
+                }
+                return hierarchyTreeView.sceneKun;
+            }
         }
 
         public int lastClickedID {

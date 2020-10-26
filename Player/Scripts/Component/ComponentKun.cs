@@ -39,7 +39,9 @@
 
             MonoBehaviour,
             Behaviour,
-            Component,            
+            Component,           
+            
+            Max,
         };
 
         

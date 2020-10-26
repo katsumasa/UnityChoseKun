@@ -44,6 +44,7 @@
         [SerializeField] ApplicationView    m_applicationView;
         [SerializeField] AndroidView        m_androidView;        
         [SerializeField] Vector2            scrollPos;
+        [SerializeField] ObjectCounterView  m_objectCounterView;
 
         IConnectionState                                    m_attachProfilerState;
         Dictionary<UnityChoseKun.MessageID, OnMessageFunc>  onMessageFuncDict;
@@ -128,7 +129,17 @@
             get { if (m_androidView == null) { m_androidView = new AndroidView(); } return m_androidView; }            
         }
 
-
+        public ObjectCounterView objectCounterView
+        {
+            get
+            {
+                if(m_objectCounterView == null)
+                {
+                    m_objectCounterView = new ObjectCounterView();
+                }
+                return m_objectCounterView;
+            }
+        }
         
 
         [MenuItem("Window/UnityChoseKun/Player Inspector")]
@@ -245,6 +256,7 @@
             onGUILayoutFuncDict = new Dictionary<string, Action>()
             {
                 {"Inspector",   inspectorView.OnGUI},
+                {"Component",   objectCounterView.OnGUI },
                 {"Texture",     texturesView.OnGUI},
                 {"Shader",      shaderView.OnGUI},
                 {"Screen",      screenView.OnGUI },

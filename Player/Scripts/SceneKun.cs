@@ -10,7 +10,25 @@
     {
         [SerializeField] public string name;
         [SerializeField] public int rootCount;
-        [SerializeField] public GameObjectKun [] gameObjectKuns;     
+        [SerializeField] public GameObjectKun [] mGameObjectKuns;     
+        
+        
+        public GameObjectKun[] gameObjectKuns
+        {
+            get {                 
+                if(mGameObjectKuns == null)
+                {
+                    mGameObjectKuns = new GameObjectKun[0];
+                }
+                return mGameObjectKuns;
+            }
+
+            set
+            {
+                mGameObjectKuns = value;
+            }
+        }
+
 
         // コンストラクタ
         public SceneKun()
