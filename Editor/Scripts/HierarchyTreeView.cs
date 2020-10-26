@@ -54,10 +54,12 @@ namespace Utj.UnityChoseKun
         public HierarchyTreeView(TreeViewState state) : base(state) { }
 
 
-
+        /// <summary>
+        /// TreeViewを再構築する為の処理
+        /// </summary>
+        /// <returns>RootとなるTreeViewItem</returns>
         protected override TreeViewItem BuildRoot()
         {                 
-
             var root = new TreeViewItem(id: -1, depth: -1, displayName: "Root");
             root.children = new List<TreeViewItem>();
             if (sceneKun != null && sceneKun.gameObjectKuns != null) {
@@ -81,7 +83,10 @@ namespace Utj.UnityChoseKun
         }
 
 
-
+        /// <summary>
+        /// TreeViewの１行を構築する
+        /// </summary>
+        /// <param name="args"></param>
         protected override void RowGUI (RowGUIArgs args)
         {
             Texture2D icon;
@@ -113,6 +118,12 @@ namespace Utj.UnityChoseKun
         }
 
 
+        /// <summary>
+        /// TreeViewを再帰的に構築する
+        /// </summary>
+        /// <param name="go">起点となるGameObjectKun</param>
+        /// <param name="depth">起点の深さ</param>
+        /// <returns>GameObjectKunのTreeViewIten</returns>
         TreeViewItem MakeTreeViewRecursive(GameObjectKun go,int depth)
         {
             var treeViewItem = new TreeViewItem(id:go.instanceID,depth:depth,displayName:go.name);            
@@ -128,6 +139,11 @@ namespace Utj.UnityChoseKun
             return treeViewItem;
         }
 
+
+        /// <summary>
+        /// 選択項目が変更された時のCB
+        /// </summary>
+        /// <param name="selectedIds">選択されているinstanceIDのList</param>
         protected override void SelectionChanged (IList<int> selectedIds)
         {
             base.SelectionChanged(selectedIds);            
@@ -135,6 +151,9 @@ namespace Utj.UnityChoseKun
                 m_selectionChangeCB(selectedIds);
             }
         }
+
+
+        // == Drag & Drop==
 
 
         const string k_GenericDragID = "GenericDragColumnDragging";
@@ -227,6 +246,33 @@ namespace Utj.UnityChoseKun
             return true;
         }
 
+        void MoveGameObjectKun(TreeViewItem treeViewItem, TreeViewItem parent)
+        {
+            var gameObjectKun = sceneKun.gameObjectKuns.Where((g) => g.instanceID == treeViewItem.id).FirstOrDefault();
+
+            if (parent != null)
+            {
+                var parentKun = sceneKun.gameObjectKuns.Where((g) => g.instanceID == parent.id).FirstOrDefault();
+                if (parentKun == null)
+                {
+                    gameObjectKun.transformKun.parentInstanceID = 0;
+                }
+                else
+                {
+                    gameObjectKun.transformKun.parentInstanceID = parentKun.transformKun.instanceID;
+                }
+            }
+            else
+            {
+                gameObjectKun.transformKun.parentInstanceID = 0;
+            }
+
+            gameObjectKun.transformKun.dirty = true;
+            gameObjectKun.dirty = true;
+            UnityChoseKunEditor.SendMessage<GameObjectKun>(UnityChoseKun.MessageID.GameObjectPush, gameObjectKun);
+            gameObjectKun.ResetDirty();
+        }
+
 
         void MoveTreeViewItem(TreeViewItem treeViewItem,TreeViewItem parent,int insertIndex)
         {
@@ -254,26 +300,11 @@ namespace Utj.UnityChoseKun
             treeViewItem.parent = parent;
             UpdateDepth(treeViewItem);
 
+            MoveGameObjectKun(treeViewItem,parent);
 
-            var gameObjectKun = sceneKun.gameObjectKuns.Where((g) => g.instanceID == treeViewItem.id).FirstOrDefault();
-            
-            if (parent != null)
-            {
-                var parentKun = sceneKun.gameObjectKuns.Where((g) => g.instanceID == parent.id).FirstOrDefault();
-                if (parentKun == null)
-                {
-                    gameObjectKun.transformKun.parentInstanceID = 0;
-                }
-                else
-                {
-                    gameObjectKun.transformKun.parentInstanceID = parentKun.transformKun.instanceID;
-                }
-            } 
-            else
-            {
-                gameObjectKun.transformKun.parentInstanceID = 0;
-            }
-            Reload();            
+            Reload();
+
+
         }
 
 

@@ -5,6 +5,7 @@
     using System.Linq;
     using UnityEngine;
     using UnityEditor;
+    using UnityEngine.Profiling;
 #if UNITY_2018_1_OR_NEWER
     using UnityEngine.Networking.PlayerConnection;
     using ConnectionUtility = UnityEditor.Experimental.Networking.PlayerConnection.EditorGUIUtility;
@@ -192,12 +193,31 @@
         private void GUILayoutConnect()
         {
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Connect To");
+
+            var contents = new GUIContent("Connect To");
+            var v2 = EditorStyles.label.CalcSize(contents);
+            EditorGUILayout.LabelField(contents, GUILayout.Width(v2.x));
             if (m_attachProfilerState != null)
             {
                 ConnectionGUILayout.AttachToPlayerDropdown(m_attachProfilerState, EditorStyles.toolbarDropDown);
+                switch (m_attachProfilerState.connectedToTarget)
+                {
+                    case ConnectionTarget.None:
+                        //This case can never happen within the Editor, since the Editor will always fall back onto a connection to itself.
+                        break;
+                    case ConnectionTarget.Player:
+                        Profiler.enabled = GUILayout.Toggle(Profiler.enabled, string.Format("Profile the attached Player ({0})", m_attachProfilerState.connectionName), EditorStyles.toolbarButton);
+                        break;
+                    case ConnectionTarget.Editor:
+                        // The name of the Editor or the PlayMode Player would be "Editor" so adding the connectionName here would not add anything.
+                        Profiler.enabled = GUILayout.Toggle(Profiler.enabled, "Profile the Player in the Editor", EditorStyles.toolbarButton);
+                        break;
+                    default:
+                        break;
+                }
             }
-            
+
+
             EditorGUILayout.EndHorizontal();
 
             var playerCount = EditorConnection.instance.ConnectedPlayers.Count;

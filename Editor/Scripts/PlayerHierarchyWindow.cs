@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿//#define ENABLE_PROFILER_STATES
+
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -20,6 +22,9 @@ using System.Runtime.InteropServices;
 using UnityEditor.IMGUI.Controls;
 
 
+
+
+
 namespace Utj.UnityChoseKun
 {        
     /// <summary>
@@ -36,8 +41,9 @@ namespace Utj.UnityChoseKun
             public static readonly GUIContent Duplicate         = new GUIContent("Duplicate");
             public static readonly GUIContent Delete            = new GUIContent("Delete");
             public static readonly GUIContent CreateEmpty       = new GUIContent("CreateEmpty");
-
         }
+
+
         //
         // delegateの宣言
         //
@@ -45,15 +51,15 @@ namespace Utj.UnityChoseKun
         delegate void OnMessageFunc(string json);
         
         
+        [SerializeField] SearchField                            m_searchField;          
+        [SerializeField] TreeViewState                          m_treeViewState;
+        [SerializeField] HierarchyTreeView                      m_hierarchyTreeView;
+        [SerializeField] HierarchyTreeView.SelectionChangedCB   m_selectionChangedCB;
+        [SerializeField] SceneKun                               m_sceneKun;
 
-        [SerializeField] SearchField m_searchField;          
-        [SerializeField] TreeViewState m_treeViewState;
-        [SerializeField] HierarchyTreeView m_hierarchyTreeView;
-        [SerializeField] HierarchyTreeView.SelectionChangedCB m_selectionChangedCB;
-        [SerializeField] SceneKun m_sceneKun;
-
-
+#if ENABLE_PROFILER_STATES
         IConnectionState m_attachProfilerState;
+#endif
 
         TreeViewState treeViewState {
             get{if(m_treeViewState == null){m_treeViewState = new TreeViewState();}return m_treeViewState;}
@@ -130,7 +136,9 @@ namespace Utj.UnityChoseKun
 
         private void OnEnable() 
         {
+#if ENABLE_PROFILER_STATES
             m_attachProfilerState = ConnectionUtility.GetAttachToPlayerState(this);
+#endif
 
             if (treeViewState == null){
                 treeViewState = new TreeViewState();
@@ -145,8 +153,10 @@ namespace Utj.UnityChoseKun
 
 
         private void OnDisable()
-        {            
-            m_attachProfilerState.Dispose();            
+        {
+#if ENABLE_PROFILER_STATES
+            m_attachProfilerState.Dispose();
+#endif
         }        
 
 
@@ -210,28 +220,35 @@ namespace Utj.UnityChoseKun
                     UnityChoseKunEditor.SendMessage(UnityChoseKun.MessageID.GameObjectPull);
                 }
                 EditorGUILayout.Space();
+
+#if ENABLE_PROFILER_STATES
                 contents = new GUIContent("Connect To");
                 v2 = EditorStyles.label.CalcSize(contents);
-                EditorGUILayout.LabelField(contents, GUILayout.Width(v2.x));                               
-                ConnectionGUILayout.AttachToPlayerDropdown(m_attachProfilerState, EditorStyles.toolbarDropDown);
-                switch (m_attachProfilerState.connectedToTarget)
-                {
-                    case ConnectionTarget.None:
-                        //This case can never happen within the Editor, since the Editor will always fall back onto a connection to itself.
-                        break;
-                    case ConnectionTarget.Player:
-                        Profiler.enabled = GUILayout.Toggle(Profiler.enabled, string.Format("Profile the attached Player ({0})", m_attachProfilerState.connectionName), EditorStyles.toolbarButton);
-                        break;
-                    case ConnectionTarget.Editor:
-                        // The name of the Editor or the PlayMode Player would be "Editor" so adding the connectionName here would not add anything.
-                        Profiler.enabled = GUILayout.Toggle(Profiler.enabled, "Profile the Player in the Editor", EditorStyles.toolbarButton);
-                        break;
-                    default:
-                        break;
+                EditorGUILayout.LabelField(contents, GUILayout.Width(v2.x));
+                if (m_attachProfilerState != null){
+                    ConnectionGUILayout.AttachToPlayerDropdown(m_attachProfilerState, EditorStyles.toolbarDropDown);
+                    switch (m_attachProfilerState.connectedToTarget)
+                    {
+                        case ConnectionTarget.None:
+                            //This case can never happen within the Editor, since the Editor will always fall back onto a connection to itself.
+                            break;
+                        case ConnectionTarget.Player:
+                            Profiler.enabled = GUILayout.Toggle(Profiler.enabled, string.Format("Profile the attached Player ({0})", m_attachProfilerState.connectionName), EditorStyles.toolbarButton);
+                            break;
+                        case ConnectionTarget.Editor:
+                            // The name of the Editor or the PlayMode Player would be "Editor" so adding the connectionName here would not add anything.
+                            Profiler.enabled = GUILayout.Toggle(Profiler.enabled, "Profile the Player in the Editor", EditorStyles.toolbarButton);
+                            break;
+                        default:
+                            break;
+                    }
                 }
+#endif
 
                 hierarchyTreeView.searchString = m_searchField.OnToolbarGUI(hierarchyTreeView.searchString);   
             }
+
+#if ENABLE_PROFILER_STATES
             var playerCount = EditorConnection.instance.ConnectedPlayers.Count;
             StringBuilder builder = new StringBuilder();
             builder.AppendLine(string.Format("{0} players connected.", playerCount));
@@ -241,13 +258,13 @@ namespace Utj.UnityChoseKun
                 builder.AppendLine(string.Format("[{0}] - {1} {2}", i++, p.name, p.playerId));
             }
             EditorGUILayout.HelpBox(builder.ToString(), MessageType.Info);
-
+#endif
 
             var rect = EditorGUILayout.GetControlRect(false,position.height - 16); 
             hierarchyTreeView.OnGUI(rect);            
         }
 
-
+#if ENABLE_PROFILER_STATES
         /// <summary>
         /// 接続先選択用GUI
         /// </summary>
@@ -268,7 +285,7 @@ namespace Utj.UnityChoseKun
             }
             EditorGUILayout.HelpBox(builder.ToString(), MessageType.Info);
         }
-
+#endif
 
         private void CreateObjectCommon(HierarchyMessage.MessageID messageID,int instanceID)
         {

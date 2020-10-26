@@ -7,6 +7,9 @@
     using UnityEditor;
 
     
+    /// <summary>
+    /// 
+    /// </summary>
     public class InspectorView
     {
         public sealed class Settings{

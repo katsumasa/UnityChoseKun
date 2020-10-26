@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 
@@ -84,6 +85,9 @@ namespace Utj.UnityChoseKun
                 var transform = component as Transform;
                 if(transform!=null){
                     //Debug.Log("Transform WriteBack" + localPosition + localRotation + localScale);                    
+
+
+                    transform.parent = GetTransform(parentInstanceID);
                     transform.localPosition = localPosition;
                     transform.localScale = localScale;
                     transform.localRotation = Quaternion.Euler(new Vector3(localRotation.x, localRotation.y, localRotation.z));
@@ -91,6 +95,15 @@ namespace Utj.UnityChoseKun
                 return true;
             }
             return false;
+        }
+
+
+        public Transform GetTransform(int instanceID)
+        {
+            var transform = Transform.FindObjectsOfType<Transform>().FirstOrDefault(q => q.GetInstanceID() == instanceID);
+
+
+            return transform;
         }
     } 
 

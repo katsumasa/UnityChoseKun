@@ -35,6 +35,7 @@ namespace Utj.UnityChoseKun
         public TransformView():base()
         {
             componentIcon = Styles.componentIcon;
+            foldout = true;
         }
         
 

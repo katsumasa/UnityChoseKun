@@ -7,6 +7,9 @@ namespace Utj.UnityChoseKun
     
     public class UnityChoseKunTest : MonoBehaviour
     {
+        [SerializeField] Transform m_TargetTransform;
+
+
         // Start is called before the first frame update
         void Start()
         {
@@ -41,6 +44,9 @@ namespace Utj.UnityChoseKun
             {
                 var meshColliderKun = new MeshColliderKun(meshCollider);
             }
+
+
+            transformKun.GetTransform(m_TargetTransform.GetInstanceID());
 
         }
 
