@@ -440,6 +440,7 @@ namespace Utj.UnityChoseKun
         public static void ObjectToBytes<T>(T src, out byte[] dst)
 #if SERIALIZATION_BINARFORMATTER
         {
+            UnityChoseKun.Log("Start Serialize");
             var bf = new BinaryFormatter();
             var ms = new MemoryStream();
             try
@@ -450,12 +451,15 @@ namespace Utj.UnityChoseKun
             finally
             {
                 ms.Close();
+                UnityChoseKun.Log("End Serialize");
             }
         }
 #else
         {
+            UnityChoseKun.Log("Start Serialize");
             var json = JsonUtility.ToJson(src);
             dst = System.Text.Encoding.ASCII.GetBytes(json);
+            UnityChoseKun.Log("End Serialize");
         }
 #endif
 
@@ -463,6 +467,7 @@ namespace Utj.UnityChoseKun
         public static void ObjectToBytes(object src, out byte[] dst)
 #if SERIALIZATION_BINARFORMATTER
         {
+            UnityChoseKun.Log("Start Serialize");
             var bf = new BinaryFormatter();
             var ms = new MemoryStream();
             try
@@ -473,12 +478,15 @@ namespace Utj.UnityChoseKun
             finally
             {
                 ms.Close();
+                UnityChoseKun.Log("End Serialize");
             }
         }
 #else
         {
+            UnityChoseKun.Log("Start Serialize");
             var json = JsonUtility.ToJson(src);
             dst = System.Text.Encoding.ASCII.GetBytes(json);
+            UnityChoseKun.Log("End Serialize");
         }
 #endif
 
@@ -494,7 +502,7 @@ namespace Utj.UnityChoseKun
         public static void BytesToObject<T>(byte[] src, out T dst)
 #if SERIALIZATION_BINARFORMATTER
         {
-
+            UnityChoseKun.Log("Start Serialize");
             if (src != null)
             {
                 var bf = new BinaryFormatter();
@@ -506,6 +514,7 @@ namespace Utj.UnityChoseKun
                 finally
                 {
                     ms.Close();
+                    UnityChoseKun.Log("End Serialize");
                 }
             }
             else
@@ -515,9 +524,10 @@ namespace Utj.UnityChoseKun
         }
 #else
         {
-
+            UnityChoseKun.Log("Start Deserialize");
             var json = System.Text.Encoding.ASCII.GetString(src);
             dst = JsonUtility.FromJson<T>(json);
+            UnityChoseKun.Log("End Deserialize");
         }
 #endif
 
@@ -531,26 +541,33 @@ namespace Utj.UnityChoseKun
         /// <returns>変換されたオブジェクト</returns>
         public static T GetObject<T>(byte[] src)
 #if SERIALIZATION_BINARFORMATTER
-        {                     
-            if(src == null)
+        {            
+            if (src == null)
             {
                 return default(T);
             }
+            UnityChoseKun.Log("Start Deserialize");
             var bf = new BinaryFormatter();
             var ms = new MemoryStream(src);
             try
             {
-                return (T)bf.Deserialize(ms);
+
+                var t = (T)bf.Deserialize(ms);
+                return t;
             }
             finally
             {
                 ms.Close();
+                UnityChoseKun.Log("End Deserialize");
             }                        
         }
 #else
         {
+            UnityChoseKun.Log("Start Deserialize");
             var json = System.Text.Encoding.ASCII.GetString(src);
-            return JsonUtility.FromJson<T>(json);
+            var t = JsonUtility.FromJson<T>(json);
+            UnityChoseKun.Log("End Deserialize");            
+            return t;
             
         }
 #endif
@@ -559,7 +576,7 @@ namespace Utj.UnityChoseKun
         public static object GetObject(byte[] src, System.Type type)
 #if SERIALIZATION_BINARFORMATTER
         {
-
+            UnityChoseKun.Log("Start Deserialize");
             var bf = new BinaryFormatter();
             var ms = new MemoryStream(src);
             try
@@ -569,20 +586,24 @@ namespace Utj.UnityChoseKun
             finally
             {
                 ms.Close();
+                UnityChoseKun.Log("End Deserialize");
             }
         }
 #else
         {
+            UnityChoseKun.Log("Start Deserialize");
             var json = System.Text.Encoding.ASCII.GetString(src);
-            return JsonUtility.FromJson(json,type);
-
+            var t = JsonUtility.FromJson(json,type);
+            UnityChoseKun.Log("End Deserialize");
+            return t;
         }
 #endif
 
         public static void Log(object obj)
         {
 #if UNITY_CHOSEKUN_DEBUG
-            Debug.Log(obj);
+            var time = Time.realtimeSinceStartup;
+            Debug.Log(time + "[sec] " + obj);
 #endif
         }
 
