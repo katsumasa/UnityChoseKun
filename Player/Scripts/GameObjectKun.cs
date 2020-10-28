@@ -9,7 +9,8 @@
     using System;
 
     [System.Serializable]
-    public class GameObjectKun {
+    public class GameObjectKun : ISerializationCallbackReceiver
+    {
 
         [SerializeField] bool m_activeSelf;
         public bool activeSelf{
@@ -47,16 +48,39 @@
             set {m_name = value;}
         }
 
+
+
+
         [SerializeField] ComponentKun.ComponentKunType [] m_componentKunTypes;
         public ComponentKun.ComponentKunType [] componentKunTypes{
             get{return m_componentKunTypes;}
             set{m_componentKunTypes = value;}
         }
 
-        [SerializeField] ComponentKun[] m_componentKuns;
+
+        [SerializeField] string[] m_componentKunStrings;
+
+        ComponentKun[] m_componentKuns;
+        
+        
         public ComponentKun[] componentKuns
         {
-            get { return m_componentKuns; }
+            get 
+            { 
+                // 初めてアクセスがあった時にデシリアライズを行う
+                if(m_componentKuns == null)
+                {
+                    m_componentKuns = new ComponentKun[m_componentKunStrings.Length];
+                    for (var i = 0; i < m_componentKunStrings.Length; i++)
+                    {
+                        var type = ComponentKun.GetComponetKunSyetemType(componentKunTypes[i]);
+                        var bytes = System.Text.Encoding.ASCII.GetBytes(m_componentKunStrings[i]);
+
+                        componentKuns[i] = (ComponentKun)UnityChoseKun.GetObject(bytes, type);
+                    }
+                }
+                return m_componentKuns; 
+            }
             set { m_componentKuns = value; }
         }
 
@@ -64,7 +88,7 @@
         private TransformKun m_transformKun;
         public TransformKun transformKun {
             get {
-                return m_componentKuns[0] as TransformKun;
+                return componentKuns[0] as TransformKun;
             }
         }
         
@@ -72,6 +96,31 @@
         public bool dirty {
             get{return m_dirty;}
             set{m_dirty = value;}
+        }
+
+
+        /// <summary>
+        /// ComponentKunをstringへ変換
+        /// </summary>
+        public void OnBeforeSerialize()
+        {
+            //UnityChoseKun.Log("OnBeforeSerialize");
+            m_componentKunStrings = new string[componentKunTypes.Length];
+            for(var i = 0; i < m_componentKunStrings.Length; i++)
+            {
+                byte[] bytes;                               
+                UnityChoseKun.ObjectToBytes(m_componentKuns[i],out bytes);
+                m_componentKunStrings[i] = System.Text.Encoding.ASCII.GetString(bytes);
+            }
+        }
+
+
+        /// <summary>
+        /// stringをComponentKunへ変換
+        /// </summary>
+        public void OnAfterDeserialize()
+        {            
+            // ここでは何もしない
         }
 
 

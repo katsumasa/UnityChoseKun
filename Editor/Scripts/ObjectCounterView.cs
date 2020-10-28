@@ -9,7 +9,7 @@
     [System.Serializable]
     public class ObjectCounterView
     {
-        [SerializeField] int[] mComponentCounts;
+        int[] mComponentCounts;
 
         int[] componentCounts
         {
@@ -31,10 +31,18 @@
 
         public void OnGUI()
         {
+            
             for(var i = 0; i < (int)ComponentKun.ComponentKunType.Max; i++)
             {
                 var t = (ComponentKun.ComponentKunType)i;
-                EditorGUILayout.IntField(new GUIContent(t.ToString()), componentCounts[i]);
+                int count = 0;
+                if(componentCounts != null)
+                {
+                    count = componentCounts[i];
+                }
+
+
+                EditorGUILayout.IntField(new GUIContent(t.ToString()), count);
             }
 
             if (GUILayout.Button("Analayze"))

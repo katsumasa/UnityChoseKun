@@ -4,18 +4,25 @@
 #undef UNITY_CHOSEKUN_DEBUG
 #endif
 
-using System.Collections;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using UnityEngine;
-using TMPro;
-using System;
+/// <summary>
+/// いずれかのSERIALIZATIONを選択する
+/// </summary>
+#define SERIALIZATION_BINARFORMATTER
+//#define SERIALIZATION_JSON
+
 
 namespace Utj.UnityChoseKun
 {
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Reflection;
+    using System.Runtime.InteropServices;
+    using System.IO;
+    using System.Runtime.Serialization.Formatters.Binary;
+    using UnityEngine;
+    using TMPro;
+    using System;
+
     /// <summary>
     /// UnityChoseKunの共通パケット
     /// </summary>
@@ -431,6 +438,7 @@ namespace Utj.UnityChoseKun
         /// <param name="src">変換するObject</param>
         /// <param name="dst">byte型の配列</param>
         public static void ObjectToBytes<T>(T src, out byte[] dst)
+#if SERIALIZATION_BINARFORMATTER
         {
             var bf = new BinaryFormatter();
             var ms = new MemoryStream();
@@ -444,6 +452,37 @@ namespace Utj.UnityChoseKun
                 ms.Close();
             }
         }
+#else
+        {
+            var json = JsonUtility.ToJson(src);
+            dst = System.Text.Encoding.ASCII.GetBytes(json);
+        }
+#endif
+
+
+        public static void ObjectToBytes(object src, out byte[] dst)
+#if SERIALIZATION_BINARFORMATTER
+        {
+            var bf = new BinaryFormatter();
+            var ms = new MemoryStream();
+            try
+            {
+                bf.Serialize(ms, src);
+                dst = ms.ToArray();
+            }
+            finally
+            {
+                ms.Close();
+            }
+        }
+#else
+        {
+            var json = JsonUtility.ToJson(src);
+            dst = System.Text.Encoding.ASCII.GetBytes(json);
+        }
+#endif
+
+
 
 
         /// <summary>
@@ -453,7 +492,9 @@ namespace Utj.UnityChoseKun
         /// <param name="src">byte配列</param>
         /// <param name="dst">変換されたオブジェクト</param>
         public static void BytesToObject<T>(byte[] src, out T dst)
+#if SERIALIZATION_BINARFORMATTER
         {
+
             if (src != null)
             {
                 var bf = new BinaryFormatter();
@@ -472,6 +513,14 @@ namespace Utj.UnityChoseKun
                 dst = default(T);
             }
         }
+#else
+        {
+
+            var json = System.Text.Encoding.ASCII.GetString(src);
+            dst = JsonUtility.FromJson<T>(json);
+        }
+#endif
+
 
 
         /// <summary>
@@ -481,6 +530,7 @@ namespace Utj.UnityChoseKun
         /// <param name="src">byte配列</param>
         /// <returns>変換されたオブジェクト</returns>
         public static T GetObject<T>(byte[] src)
+#if SERIALIZATION_BINARFORMATTER
         {                     
             if(src == null)
             {
@@ -497,8 +547,37 @@ namespace Utj.UnityChoseKun
                 ms.Close();
             }                        
         }
+#else
+        {
+            var json = System.Text.Encoding.ASCII.GetString(src);
+            return JsonUtility.FromJson<T>(json);
+            
+        }
+#endif
 
 
+        public static object GetObject(byte[] src, System.Type type)
+#if SERIALIZATION_BINARFORMATTER
+        {
+
+            var bf = new BinaryFormatter();
+            var ms = new MemoryStream(src);
+            try
+            {
+                return bf.Deserialize(ms);
+            }
+            finally
+            {
+                ms.Close();
+            }
+        }
+#else
+        {
+            var json = System.Text.Encoding.ASCII.GetString(src);
+            return JsonUtility.FromJson(json,type);
+
+        }
+#endif
 
         public static void Log(object obj)
         {
