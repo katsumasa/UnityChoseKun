@@ -502,7 +502,7 @@ namespace Utj.UnityChoseKun
         public static void BytesToObject<T>(byte[] src, out T dst)
 #if SERIALIZATION_BINARFORMATTER
         {
-            UnityChoseKun.Log("Start Serialize");
+            UnityChoseKun.Log("Start Deserialize");
             if (src != null)
             {
                 var bf = new BinaryFormatter();
@@ -514,7 +514,7 @@ namespace Utj.UnityChoseKun
                 finally
                 {
                     ms.Close();
-                    UnityChoseKun.Log("End Serialize");
+                    UnityChoseKun.Log("End Deserialize");
                 }
             }
             else
