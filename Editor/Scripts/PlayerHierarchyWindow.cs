@@ -36,7 +36,7 @@ namespace Utj.UnityChoseKun
         public static class Styles
         {                                
             public static readonly GUIContent TitleContent      = new GUIContent("Player Hierarchy", (Texture2D)EditorGUIUtility.FindTexture("d_UnityEditor.SceneHierarchyWindow"));            
-            public static readonly GUIContent NetworkMessages   = new GUIContent((Texture2D)EditorGUIUtility.LoadRequired("d_Profiler.NetworkMessages@2x"),"Hierarchyの情報を取得");
+            public static readonly GUIContent NetworkMessages   = new GUIContent("Reload",(Texture2D)EditorGUIUtility.LoadRequired("d_Profiler.NetworkMessages@2x"),"Hierarchyの情報を取得");
             public static readonly GUIContent Rename            = new GUIContent("Rename");
             public static readonly GUIContent Duplicate         = new GUIContent("Duplicate");
             public static readonly GUIContent Delete            = new GUIContent("Delete");
