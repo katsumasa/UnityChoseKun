@@ -1,6 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.IO;
 using UnityEngine;
+
 
 namespace Utj.UnityChoseKun
 {
@@ -8,7 +8,7 @@ namespace Utj.UnityChoseKun
     /// HierarchyPlayerで使用するMessageデータ
     /// </summary>
     [System.Serializable]
-    public class HierarchyMessage
+    public class HierarchyMessage : ISerializerKun
     {
         public enum MessageID
         {
@@ -22,8 +22,81 @@ namespace Utj.UnityChoseKun
         [SerializeField] public MessageID messageID;
         [SerializeField] public int baseID;
         [SerializeField] public PrimitiveType primitiveType;        
-        [SerializeField] public System.Type type;
+        [SerializeField] public string systemType;
 
+        public System.Type type;
+
+
+        /// <summary>
+        /// Serialize
+        /// </summary>
+        /// <param name="binaryWriter">BinaryWriter</param>
+        public virtual void Serialize(BinaryWriter binaryWriter)
+        {
+            binaryWriter.Write((int)messageID);
+            binaryWriter.Write(baseID);
+            binaryWriter.Write((int)primitiveType);
+
+            systemType = type.ToString();
+            binaryWriter.Write(systemType);
+        }
+
+
+        /// <summary>
+        /// Deserialize
+        /// </summary>
+        /// <param name="binaryReader">BinaryReader</param>
+        public virtual void Deserialize(BinaryReader binaryReader)
+        {
+            messageID = (MessageID)binaryReader.ReadInt32();
+            baseID = binaryReader.ReadInt32();
+            primitiveType = (PrimitiveType)binaryReader.ReadInt32();
+            systemType = binaryReader.ReadString();
+            type = System.Type.GetType(systemType);
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj)
+        {
+            var other = obj as HierarchyMessage;
+            if(other == null)
+            {
+                return false;
+            }
+            if (!messageID.Equals(other.messageID))
+            {
+                return false;
+            }
+            if (!baseID.Equals(other.baseID))
+            {
+                return false;
+            }
+            if (!primitiveType.Equals(other.primitiveType))
+            {
+                return false;
+            }
+
+            if (!type.Equals(other.type))
+            {
+                return false;
+            }
+            return true;
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 
 
@@ -32,12 +105,11 @@ namespace Utj.UnityChoseKun
     /// </summary>
     public class HierarchyPlayer : BasePlayer
     {
-        public void OnMessageEventPush(byte[] bytes)
+        public void OnMessageEventPush(BinaryReader binaryReader)
         {
-            HierarchyMessage message;
-
-
-            UnityChoseKun.BytesToObject<HierarchyMessage>(bytes,out message);
+            HierarchyMessage message = new HierarchyMessage();
+            message.Deserialize(binaryReader);
+            
             switch (message.messageID)
             {
                 case HierarchyMessage.MessageID.Duplicate:

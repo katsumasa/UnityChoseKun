@@ -1,46 +1,50 @@
-﻿namespace Utj.UnityChoseKun
+﻿using System.IO;
+using UnityEditor.Networking.PlayerConnection;
+
+
+namespace Utj.UnityChoseKun
 {    
-    using UnityEngine;    
-    using UnityEditor.Networking.PlayerConnection;
 
-
+        
     public class UnityChoseKunEditor
     {
-        public static void SendMessage<T>(UnityChoseKun.MessageID id,T obj)
+        public static void SendMessage<T>(UnityChoseKun.MessageID id,T obj) where T : ISerializerKun
         {
-            var message = new UnityChoseKunMessageData();
-            message.id = id;
-            if (obj != null)
+            var memory = new MemoryStream();
+            var writer = new BinaryWriter(memory);
+
+            try
             {
-                UnityChoseKun.ObjectToBytes(obj,out message.bytes);
+                writer.Write((int)id);
+                if (obj != null)
+                {
+                    obj.Serialize(writer);
+                }
+                var bytes = memory.ToArray();
+                EditorConnection.instance.Send(UnityChoseKun.kMsgSendEditorToPlayer, bytes);
             }
-            byte[] bytes;
-            UnityChoseKun.ObjectToBytes<UnityChoseKunMessageData>(message, out bytes);
-
-#if false
+            finally
             {
-                UnityChoseKunMessageData check1;
-                UnityChoseKun.BytesToObject<UnityChoseKunMessageData>(bytes,out check1);
-
-                T check2;
-
-                UnityChoseKun.BytesToObject<T>(check1.bytes, out check2);
-                Debug.Log(check2);
-            }
-#endif
-
-
-
-            EditorConnection.instance.Send(UnityChoseKun.kMsgSendEditorToPlayer, bytes);
+                writer.Close();
+                memory.Close();
+            }            
         }
 
         public static void SendMessage(UnityChoseKun.MessageID id)
         {
-            var message = new UnityChoseKunMessageData();
-            message.id = id;
-            byte[] bytes;
-            UnityChoseKun.ObjectToBytes<UnityChoseKunMessageData>(message, out bytes);
-            EditorConnection.instance.Send(UnityChoseKun.kMsgSendEditorToPlayer, bytes);
+            var memory = new MemoryStream();
+            var writer = new BinaryWriter(memory);
+            try
+            {
+                writer.Write((int)id);
+                var bytes = memory.ToArray();
+                EditorConnection.instance.Send(UnityChoseKun.kMsgSendEditorToPlayer, bytes);
+            }
+            finally
+            {
+                writer.Close();
+                memory.Close();
+            }
         }
 
     }

@@ -1,12 +1,13 @@
-﻿namespace Utj.UnityChoseKun
-{
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using UnityEngine;
-    using UnityEditor;
+﻿using System.IO;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+using UnityEditor;
 
-    
+
+namespace Utj.UnityChoseKun
+{        
     /// <summary>
     /// 
     /// </summary>
@@ -24,6 +25,7 @@
             [SerializeField] string tag;
             [SerializeField] int layer;
             
+
             public Settings(){}
             public void Set(GameObjectKun gameObjectKun){
                 if(gameObjectKun == null){
@@ -67,13 +69,38 @@
             }            
         }
 
+
+
         [SerializeField] Settings m_settings;
+        [SerializeField] private List<ComponentView> m_componentViews;
+        [SerializeField] Dictionary<int, GameObjectKun> m_gameObjectKuns;
+        [SerializeField] int m_selectGameObujectKunID;
+        [SerializeField] SceneKun m_sceneKun;
+
+
+        SceneKun sceneKun
+        {
+            get
+            {
+                if(m_sceneKun == null)
+                {
+                    m_sceneKun = new SceneKun();
+                }
+                return m_sceneKun;
+            }
+
+            set
+            {
+                m_sceneKun = value;
+            }
+        }
+
         Settings settings {
             get{if(m_settings == null){m_settings = new Settings();}return m_settings;}
             set{m_settings = value;}
         }
 
-        [SerializeField] private  List<ComponentView> m_componentViews;            
+
         List<ComponentView> componentViews{
             get {
                 if(m_componentViews == null){
@@ -84,14 +111,12 @@
             set {m_componentViews = value;}
         }                
         
-        [SerializeField] Dictionary<int,GameObjectKun> m_gameObjectKuns;
+
         Dictionary<int,GameObjectKun> gameObjectKuns {
             get {if(m_gameObjectKuns == null){m_gameObjectKuns = new Dictionary<int, GameObjectKun>();}return m_gameObjectKuns;}
         }                
         
-        [SerializeField] int m_selectGameObujectKunID = -1;
-        [SerializeField] SceneKun sceneKun;
-        [SerializeField] bool isNotRequirePush = false;
+        
 
 
         public InspectorView() {
@@ -99,6 +124,7 @@
             if (window != null){
                 window.selectionChangedCB = SelectionChangedCB;
             }
+            m_selectGameObujectKunID = -1;
         }
 
 
@@ -172,11 +198,15 @@
 
         }
         
-        public void OnMessageEvent(byte[] bytes)
-        {
-            Debug.Log("OnMessageEvent");
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bytes"></param>
+        public void OnMessageEvent(BinaryReader binaryReader)
+        {            
             gameObjectKuns.Clear();
-            sceneKun = UnityChoseKun.GetObject<SceneKun>(bytes);
+            sceneKun.Deserialize(binaryReader);
             
             for(var i = 0; i < sceneKun.gameObjectKuns.Length; i++){
                 gameObjectKuns.Add(sceneKun.gameObjectKuns[i].instanceID,sceneKun.gameObjectKuns[i]);
@@ -189,6 +219,11 @@
             }
         }
         
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="selectedIds"></param>
         void SelectionChangedCB(IList<int> selectedIds)
         {
             var window = (PlayerHierarchyWindow)EditorWindow.GetWindow(typeof(PlayerHierarchyWindow));

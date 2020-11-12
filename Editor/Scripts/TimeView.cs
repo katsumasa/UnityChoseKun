@@ -1,23 +1,33 @@
-﻿namespace Utj.UnityChoseKun
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEditor;
+using System.Linq;
+using System.IO;
+
+
+namespace Utj.UnityChoseKun
 {
-
-    using System.Collections;
-    using System.Collections.Generic;
-    using UnityEngine;
-    using UnityEditor;
-    using System.Linq;
-
+    /// <summary>
+    /// 
+    /// </summary>
     [System.Serializable]
     public class TimeView
     {
-        [SerializeField]TimeKun m_timeKun;
-        TimeKun timeKun {
-            get {if(m_timeKun == null){m_timeKun = new TimeKun();}return m_timeKun;}
-            set {m_timeKun = value;}
-        }
-
+        [SerializeField]TimeKun m_timeKun;        
         bool isDone = false;
 
+
+        TimeKun timeKun
+        {
+            get { if (m_timeKun == null) { m_timeKun = new TimeKun(); } return m_timeKun; }
+            set { m_timeKun = value; }
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
         public void OnGUI()
         {            
             if(isDone == false){
@@ -62,9 +72,14 @@
             EditorGUILayout.EndHorizontal();
         }
 
-        public void OnMessageEvent(byte[] bytes)
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="binaryReader"></param>
+        public void OnMessageEvent(BinaryReader binaryReader)
         {
-            timeKun = UnityChoseKun.GetObject<TimeKun>(bytes);
+            timeKun.Deserialize(binaryReader);
             isDone = true;
         }
 

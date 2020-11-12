@@ -1,5 +1,6 @@
 ﻿namespace Utj.UnityChoseKun
 {
+    using System.IO;
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
@@ -14,7 +15,6 @@
     using UnityEditor.Networking.PlayerConnection;
     using System;
     using System.Text;
-    using System.IO;
     using System.Reflection;
     using System.Runtime.InteropServices;
 #endif
@@ -32,7 +32,7 @@
         }
 
         delegate void Task();
-        delegate void OnMessageFunc(byte[] bytes);
+        delegate void OnMessageFunc(BinaryReader binaryReader);
         
                 
         [SerializeField] int                toolbarIdx = 0;
@@ -315,14 +315,23 @@
         /// </summary>
         /// <param name="args">メッセージデータ</param>
         private void OnMessageEvent(UnityEngine.Networking.PlayerConnection.MessageEventArgs args)
-        {            
-            var message = UnityChoseKun.GetObject<UnityChoseKunMessageData>(args.data);
-            UnityChoseKun.Log("UnityChosekunEditorWindow.OnMessageEvent(playerID: " + args.playerId + ",message.id" + message.id +")");            
-            if (onMessageFuncDict != null && onMessageFuncDict.ContainsKey(message.id) == true)
+        {
+            MemoryStream memoryStream = new MemoryStream(args.data);
+            BinaryReader binaryReader = new BinaryReader(memoryStream);
+
+            var messageID = (UnityChoseKun.MessageID)binaryReader.ReadInt32();
+
+
+            
+            UnityChoseKun.Log("UnityChosekunEditorWindow.OnMessageEvent(playerID: " + args.playerId + ",message.id" + messageID + ")");            
+            if (onMessageFuncDict != null && onMessageFuncDict.ContainsKey(messageID) == true)
             {
-                var func = onMessageFuncDict[message.id];
-                func(message.bytes);
+                var func = onMessageFuncDict[messageID];
+                func(binaryReader);
             }
+
+            binaryReader.Close();
+            memoryStream.Close();
         }
     }
 }

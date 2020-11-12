@@ -55,7 +55,6 @@
 
         private void Countup()
         {
-            componentCounts = new int[(int)ComponentKun.ComponentKunType.Max];
             var window = (PlayerHierarchyWindow)EditorWindow.GetWindow(typeof(PlayerHierarchyWindow));            
             foreach (var gameObjectKun in window.sceneKun.gameObjectKuns)
             {                

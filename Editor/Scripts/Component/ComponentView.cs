@@ -38,6 +38,8 @@
             {ComponentKun.ComponentKunType.MonoBehaviour,           typeof(MonoBehaviourView)},
             {ComponentKun.ComponentKunType.Behaviour,               typeof(BehaviourView)},
             {ComponentKun.ComponentKunType.Component,               typeof(ComponentView)},
+            
+            {ComponentKun.ComponentKunType.MissingMono,            typeof(MissingMonoView) },
         };
         
 

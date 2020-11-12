@@ -1,22 +1,29 @@
 ﻿namespace Utj.UnityChoseKun
 {
+    using System.IO;
     using System.Collections;
     using System.Collections.Generic;
     using UnityEngine;
     using UnityEditor;
 
+
     [System.Serializable]
     public class ScreenView
     {
         [SerializeField]ScreenKun m_screenKun;
+        [SerializeField] bool resolutionFoldout = false;
+        bool isDone = false;
+
+
         ScreenKun screenKun {
             get {if(m_screenKun == null){m_screenKun = new ScreenKun();}return m_screenKun;}            
             set {m_screenKun = value;}
         }
-        [SerializeField]bool resolutionFoldout = false;
-        bool isDone = false;
-
-
+        
+        
+        /// <summary>
+        /// 
+        /// </summary>
         public void OnGUI()
         {
             if(isDone == false){
@@ -118,9 +125,13 @@
         }
 
 
-        public void OnMessageEvent(byte[] bytes)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="binaryReader"></param>
+        public void OnMessageEvent(BinaryReader binaryReader)
         {
-            screenKun = UnityChoseKun.GetObject<ScreenKun>(bytes);            
+            screenKun.Deserialize(binaryReader);
             isDone = true;
         }
     }

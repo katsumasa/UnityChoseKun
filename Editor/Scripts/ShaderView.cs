@@ -1,32 +1,41 @@
-﻿using System.Collections;
+﻿using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+
 namespace Utj.UnityChoseKun {
         
-    
+    /// <summary>
+    /// 
+    /// </summary>
     public class ShadersView
     {
         // Member変数の定義
         [SerializeField] static ShaderKun[] m_shaderKuns;
+        [SerializeField] static string[] m_shaderNames;
+        [SerializeField] Vector2 m_scrollPos;
+
+
         public static ShaderKun[] shaderKuns {
             get{return m_shaderKuns;}
             private set{m_shaderKuns = value;}
         }
-
-        [SerializeField] static string[] m_shaderNames;
+        
         public static string[] shaderNames {
             get {return m_shaderNames;}
             private set {m_shaderNames = value;}
         }
-
-        [SerializeField] Vector2 m_scrollPos;
+        
         Vector2 scrollPos {
             get {return m_scrollPos;}
             set {m_scrollPos = value;}
         }
 
+
+        /// <summary>
+        /// 
+        /// </summary>
         public void OnGUI() 
         {
             int cnt = 0;
@@ -52,9 +61,16 @@ namespace Utj.UnityChoseKun {
             }
         }
 
-        public void OnMessageEvent(byte[] bytes)
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="binaryReader"></param>
+        public void OnMessageEvent(BinaryReader binaryReader)
         {
-            var shaderKunPacket = UnityChoseKun.GetObject<ShaderKunPacket>(bytes);
+            var shaderKunPacket = new ShaderKunPacket();
+            shaderKunPacket.Deserialize(binaryReader);
+
             shaderKuns = shaderKunPacket.shaderKuns;
             shaderNames = new string[shaderKuns.Length];
             for(var i = 0; i < shaderKuns.Length; i++)

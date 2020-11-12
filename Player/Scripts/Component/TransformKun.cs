@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.IO;
 using System.Linq;
 using UnityEngine;
 
@@ -61,6 +60,9 @@ namespace Utj.UnityChoseKun
         /// <param name="component"></param>
         public TransformKun(Component component):base(component){
             componentKunType = ComponentKunType.Transform;
+            m_localPosition = new Vector3Kun(0, 0, 0);
+            m_localScale = new Vector3Kun(1, 1, 1);
+            m_localRotation = new Vector3Kun();
             var transform = component as Transform;
             if(transform != null){
                 localPosition = transform.localPosition;
@@ -98,12 +100,95 @@ namespace Utj.UnityChoseKun
         }
 
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="instanceID"></param>
+        /// <returns></returns>
         public Transform GetTransform(int instanceID)
         {
             var transform = Transform.FindObjectsOfType<Transform>().FirstOrDefault(q => q.GetInstanceID() == instanceID);
 
 
             return transform;
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="binaryWriter"></param>
+        public override void Serialize(BinaryWriter binaryWriter)
+        {
+            base.Serialize(binaryWriter);
+
+            SerializerKun.Serialize<Vector3Kun>(binaryWriter, m_localPosition);
+            SerializerKun.Serialize<Vector3Kun>(binaryWriter, m_localScale);
+            SerializerKun.Serialize<Vector3Kun>(binaryWriter, m_localRotation);                        
+            binaryWriter.Write(m_parentInstanceID);
+            binaryWriter.Write(m_childCount);
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="binaryReader"></param>
+        public override void Deserialize(BinaryReader binaryReader)
+        {
+            base.Deserialize(binaryReader);
+
+            m_localPosition = SerializerKun.DesirializeObject<Vector3Kun>(binaryReader);
+            m_localScale = SerializerKun.DesirializeObject<Vector3Kun>(binaryReader);
+            m_localRotation = SerializerKun.DesirializeObject<Vector3Kun>(binaryReader);                        
+            m_parentInstanceID = binaryReader.ReadInt32();
+            m_childCount = binaryReader.ReadInt32();
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj)
+        {
+            var other = obj as TransformKun;
+            if(other == null)
+            {
+                return false;
+            }
+            if (m_localPosition.Equals(other.m_localPosition) == false)
+            {
+                return false;
+            }
+            if (m_localRotation.Equals(other.m_localRotation) == false)
+            {
+                return false;
+            }
+            if (m_localScale.Equals(other.m_localScale) == false)
+            {
+                return false;
+            }
+            if(m_parentInstanceID.Equals(other.parentInstanceID)== false)
+            {
+                return false;
+            }
+            if (childCount.Equals(other.childCount) == false)
+            {
+                return false;
+            }
+            return base.Equals(obj);
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
     } 
 

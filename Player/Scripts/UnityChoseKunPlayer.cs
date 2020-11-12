@@ -1,8 +1,6 @@
 ﻿
 namespace Utj.UnityChoseKun
-{
-
-    using System.Collections;
+{    
     using System.Collections.Generic;
     using UnityEngine;
     using UnityEngine.Events;
@@ -20,7 +18,7 @@ namespace Utj.UnityChoseKun
     /// </summary>
     public class UnityChoseKunPlayer : MonoBehaviour
     {              
-        delegate void OnMessageFunc(byte[] data);
+        delegate void OnMessageFunc(BinaryReader binaryReader);
         
         
         Dictionary<UnityChoseKun.MessageID, OnMessageFunc> onMessageFuncDict;
@@ -81,15 +79,7 @@ namespace Utj.UnityChoseKun
                 return m_hierarchyPlayer;
             }
         }
-
-        /// <summary>
-        /// Singletoneチェック用
-        /// </summary>
-        //static bool m_isCreated;
-
-        
-
-
+              
 
         /// <summary>
         /// 
@@ -184,7 +174,10 @@ namespace Utj.UnityChoseKun
         }
 
 
-        //
+        /// <summary>
+        /// EditorからPlayerへの受信
+        /// </summary>
+        /// <param name="args"></param>
         void OnMessageEvent(MessageEventArgs args)
         {
             UnityChoseKun.Log("UnityChoseKun::OnMessageEvent");
@@ -194,30 +187,51 @@ namespace Utj.UnityChoseKun
             }
             else
             {
-                var message = UnityChoseKun.GetObject<UnityChoseKunMessageData>(args.data);
-                if (message == null)
+                MemoryStream memory = new MemoryStream(args.data);
+                BinaryReader binaryReader = new BinaryReader(memory);
+
+                try
                 {
-                    UnityChoseKun.LogWarning("mesage == null");
-                    return;
+                    var messageID = (UnityChoseKun.MessageID)binaryReader.ReadInt32();
+                    UnityChoseKun.Log("message.id " + messageID);
+                    var func = onMessageFuncDict[messageID];
+                    func(binaryReader);
                 }
-                UnityChoseKun.Log("message.id " + message.id);                
-                var func = onMessageFuncDict[message.id];
-                func(message.bytes);
+
+                finally
+                {
+                    binaryReader.Close();
+                    memory.Close();
+                }
             }
         }
 
         
-        public static void SendMessage<T>(UnityChoseKun.MessageID id, T obj)
+        /// <summary>
+        /// PlayerからEditorへの送信
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="id"></param>
+        /// <param name="obj"></param>
+        public static void SendMessage<T>(UnityChoseKun.MessageID id, T obj) where T : ISerializerKun
         {
-            Debug.Log("UnityChoseKunPlayer.SendMessage<T>("+ id + ",obj)" );
-            
-            var message = new UnityChoseKunMessageData();
-            message.id = id;
-            UnityChoseKun.ObjectToBytes<T>(obj, out message.bytes);
+            UnityChoseKun.Log("UnityChoseKunPlayer.SendMessage<T>("+ id + ",obj)" );
 
-            byte[] bytes;
-            UnityChoseKun.ObjectToBytes<UnityChoseKunMessageData>(message, out bytes);            
-            PlayerConnection.instance.Send(UnityChoseKun.kMsgSendPlayerToEditor, bytes);
+            MemoryStream memoryStream = new MemoryStream();
+            BinaryWriter binaryWriter = new BinaryWriter(memoryStream);
+
+            try
+            {
+                binaryWriter.Write((int)id);
+                obj.Serialize(binaryWriter);
+                byte[] bytes = memoryStream.ToArray();
+                PlayerConnection.instance.Send(UnityChoseKun.kMsgSendPlayerToEditor, bytes);
+            }
+            finally
+            {
+                binaryWriter.Close();
+                memoryStream.Close();
+            }
         }
     }
 }

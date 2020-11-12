@@ -1,21 +1,27 @@
-﻿using System.Collections;
+﻿using System.IO;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+
 
 namespace Utj.UnityChoseKun
 {
     [System.Serializable]
     public class ApplicationView
     {
-        [SerializeField] ApplicationKun m_applicationKun;
+        [SerializeField] ApplicationKun m_applicationKun;        
+        [SerializeField] Vector2 m_scrollPos;
+        bool isDone = false;
+
+
         public ApplicationKun applicationKun
         {
             get { if (m_applicationKun == null) { m_applicationKun = new ApplicationKun(); } return m_applicationKun; }
             private set { m_applicationKun = value; }
         }
-        bool isDone = false;
-        [SerializeField] Vector2 m_scrollPos;
+        
+        
         Vector2 scrollPos
         {
             get { return m_scrollPos; }
@@ -23,7 +29,9 @@ namespace Utj.UnityChoseKun
         }
 
 
-
+        /// <summary>
+        /// 
+        /// </summary>
         public void OnGUI()
         {
             if (isDone == false)
@@ -95,9 +103,13 @@ namespace Utj.UnityChoseKun
             
         }
 
-        public void OnMessageEvent(byte[] bytes)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="binaryReader"></param>
+        public void OnMessageEvent(BinaryReader binaryReader)
         {
-            applicationKun = UnityChoseKun.GetObject<ApplicationKun>(bytes);
+            applicationKun.Deserialize(binaryReader);            
             isDone = true;
         }
     }

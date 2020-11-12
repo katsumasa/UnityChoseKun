@@ -1,41 +1,49 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.IO;
 using UnityEngine;
+
+
 namespace Utj.UnityChoseKun{
     // <summary>
     // Androidデバイス固有の設定
     // </summary>
     [System.Serializable]
-    public class AndroidKun 
+    public class AndroidKun : ISerializerKun
     {
         [SerializeField] bool m_isSustainedPerformanceMode;
+        [SerializeField] bool m_requestSustainedPerformanceMode;
+        [SerializeField] bool[] m_hasUserAuthorizedPermissions;
+        [SerializeField] bool[] m_requestUserPermissions;
+        [SerializeField] string[] m_permissions;
+
+
         public bool isSustainedPerformanceMode{
             get {return m_isSustainedPerformanceMode;}
             set {m_isSustainedPerformanceMode = value;}
         }
-        [SerializeField] bool m_requestSustainedPerformanceMode;
+        
         public bool requestSustainedPerformanceMode {
             get {return m_requestSustainedPerformanceMode;}
             set {m_requestSustainedPerformanceMode = value;}
         }
 
-        [SerializeField] string [] m_permissions;
+        
         public string[] permissions {
             get{return m_permissions;}
             set{m_permissions = value;}
         }
 
-        [SerializeField] bool[] m_hasUserAuthorizedPermissions;
+        
         public bool[] hasUserAuthorizedPermission{
             get {return m_hasUserAuthorizedPermissions; }
             private set { m_hasUserAuthorizedPermissions = value;}
         }
 
-        [SerializeField] bool[] m_requestUserPermissions;
+        
         public bool[] requestUserPermissions{
             get{return m_requestUserPermissions;}
             set{m_requestUserPermissions = value;}
         }
+
 
         // <summary>
         // コンストラクター
@@ -73,6 +81,10 @@ namespace Utj.UnityChoseKun{
 #endif
         }
 
+
+        /// <summary>
+        /// 
+        /// </summary>
         public void WriteBack()
         {
 #if UNITY_ANDROID
@@ -92,5 +104,84 @@ namespace Utj.UnityChoseKun{
 
 #endif
         }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="binaryWriter"></param>
+        public virtual void Serialize(BinaryWriter binaryWriter)
+        {
+            binaryWriter.Write(m_isSustainedPerformanceMode);
+            binaryWriter.Write(m_requestSustainedPerformanceMode);
+            SerializerKun.Serialize(binaryWriter, m_hasUserAuthorizedPermissions);
+            SerializerKun.Serialize(binaryWriter, m_requestUserPermissions);
+            SerializerKun.Serialize(binaryWriter, m_permissions);                        
+        }
+
+
+        /// <summary>
+        /// Deserialize
+        /// </summary>
+        /// <param name="binaryReader">BinaryReader</param>
+        public virtual void Deserialize(BinaryReader binaryReader)
+        {
+            m_isSustainedPerformanceMode = binaryReader.ReadBoolean();
+            m_requestSustainedPerformanceMode = binaryReader.ReadBoolean();
+            m_hasUserAuthorizedPermissions = SerializerKun.DesirializeBooleans(binaryReader);
+            m_requestUserPermissions = SerializerKun.DesirializeBooleans(binaryReader);
+            m_permissions = SerializerKun.DesirializeStrings(binaryReader);                        
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj)
+        {
+            var other = obj as AndroidKun;
+            if(other == null)
+            {
+                return false;
+            }
+            if (!m_isSustainedPerformanceMode.Equals(other.m_isSustainedPerformanceMode))
+            {
+                return false;
+            }
+            if (!m_requestSustainedPerformanceMode.Equals(other.m_requestSustainedPerformanceMode))
+            {
+                return false;
+            }
+
+            if(!SerializerKun.Equals<bool>(m_hasUserAuthorizedPermissions, other.m_hasUserAuthorizedPermissions))
+            {
+                return false;
+            }
+
+            if (!SerializerKun.Equals<bool>(m_requestUserPermissions, other.m_requestUserPermissions))
+            {
+                return false;
+            }
+
+            if (!SerializerKun.Equals<string>(m_permissions, other.m_permissions))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
     }
 }
