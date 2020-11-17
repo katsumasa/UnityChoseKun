@@ -5,7 +5,7 @@
 ## はじめに
 
 Unityで開発したアプリを実機上で実行している時に、GameObjectの内容をほんの少しだけ変更したいだけなのに、ビルド完了迄長時間待たされることで、貴重な開発時間を無駄にして悔しい思いをした事は無いでしょうか。
-UnityChoseKunは再ビルドを行うこと無く、UnityEditorj上で開発機で実行中のアプリの調整を行う為のEditor拡張です。
+UnityChoseKunは再ビルドを行うこと無く、UnityEditor上で開発機で実行中のアプリの調整を行う為のEditor拡張です。
 開発機が物理的に遠い場所にある人向けに実機で時以降中の画面をUnity Editorで表示する機能も保有しています。
 
 ## 概要
@@ -32,7 +32,7 @@ UnityChoseKunは再ビルドを行うこと無く、UnityEditorj上で開発機�
 
 - Unityのバージョン
   - Unity2018.4.26f1 (一部、機能制限あり)
-  - Unity2019.4.5f1
+  - Unity2019.4.11f1
 - プラットフォーム
   - Android
     - Pixel3XL
@@ -40,27 +40,39 @@ UnityChoseKunは再ビルドを行うこと無く、UnityEditorj上で開発機�
   - iOS
     - iPhone 6S
 
-## 対応しているObjectについて
+## 対応しているClassについて
 
 - [Application](docs.unity3d.com/ja/ScriptReference/Application.html)
 - [Screen](https://docs.unity3d.com/ja/ScriptReference/Screen.html)
 - [Time](https://docs.unity3d.com/ja/ScriptReference/Time.html)
 - [Shader](https://docs.unity3d.com/ja/ScriptReference/Shader.html)
 - [Texture](https://docs.unity3d.com/ja/ScriptReference/Texture.html)
+
 - [Component](docs.unity3d.com/ja/ScriptReference/Component.html)
-  - [Camera](https://docs.unity3d.com/ja/ScriptReference/Camera.html)
-  - [Light](https://docs.unity3d.com/ja/ScriptReference/Light.html)
-  - [Renderer](https://docs.unity3d.com/ja/ScriptReference/Renderer.html)
-  - [MeshRenderer](https://docs.unity3d.com/ja/ScriptReference/Renderer.html)
-  - [SkinnedMeshRenderer](https://docs.unity3d.com/ja/ScriptReference/SkinnedMeshRenderer.html)
-  - [MonoBehavior](https://docs.unity3d.com/ja/ScriptReference/MonoBehaviour.html)
-  - [Behavior](https://docs.unity3d.com/ja/ScriptReference/Behaviour.html)
-  - [Material](https://docs.unity3d.com/ja/ScriptReference/Material.html)
   - [Animator](https://docs.unity3d.com/ja/ScriptReference/Animator.html)
+  - [Behaviour](https://docs.unity3d.com/ja/current/ScriptReference/Behaviour.html)
+  - [Bounds](https://docs.unity3d.com/ja/current/ScriptReference/Bounds.html)
+  - [Camera](https://docs.unity3d.com/ja/ScriptReference/Camera.html)
   - [Collider](https://docs.unity3d.com/ja/ScriptReference/Collider.html)
+  - [Light](https://docs.unity3d.com/ja/ScriptReference/Light.html)
+  - [Material](https://docs.unity3d.com/ja/ScriptReference/Material.html)
+  - [Matrix4x4](https://docs.unity3d.com/ja/current/ScriptReference/Matrix4x4.html)
+  - [MeshRenderer](https://docs.unity3d.com/ja/ScriptReference/Renderer.html)
+  - [MonoBehavior](https://docs.unity3d.com/ja/ScriptReference/MonoBehaviour.html)
+  - [Object](https://docs.unity3d.com/ja/current/ScriptReference/Object.html)
+  - [Renderer](https://docs.unity3d.com/ja/ScriptReference/Renderer.html)
   - [ParticleSystem](https://docs.unity3d.com/ja/ScriptReference/ParticleSystem.html)
-  
-  
+  - [PhysicMaterial](https://docs.unity3d.com/ja/ScriptReference/PhysicMaterial.html)
+  - [Quartanion](https://docs.unity3d.com/ja/ScriptReference/Quaternion.html)
+  - [Rect](https://docs.unity3d.com/ja/ScriptReference/Rect.html)
+  - [Renderer](https://docs.unity3d.com/ja/ScriptReference/Renderer.html)
+  - [Resolution](https://docs.unity3d.com/ja/ScriptReference/Resolution.html)
+  - [Rigidbody](https://docs.unity3d.com/ja/ScriptReference/Rigidbody.html)
+  - [SkinnedMeshRenderer](https://docs.unity3d.com/ja/ScriptReference/SkinnedMeshRenderer.html)
+  - [Transform](https://docs.unity3d.com/ja/ScriptReference/Transform.html)
+  - [Vector2](https://docs.unity3d.com/ja/ScriptReference/Vector2.html)
+  - [Vector3](https://docs.unity3d.com/ja/ScriptReference/Vector3.html)
+  - [Vector4](https://docs.unity3d.com/ja/ScriptReference/Vector4.html)
 
 ## 注意事項・免責事項
 
@@ -101,57 +113,50 @@ MenuからWindow->UnityChoseKun->Player ViewでPlayerView Windowが表示され�
 
 接続先のデバイスを指定します。接続の仕組みはUnityProfilerと共有していますので、どちらかの接続先を切り替えると、もう片方の接続先も切り替わります。
 
+![img](docs/PlayIcon.png)　再生の開始/終了
+![img](docs/RecIcon.png)　録画の開始/終了
+![img](docs/ScreenShotIcon.png)　スクリーンショットを保存する
+![img](docs/SaveFolderIcon.png)　録画結果の保存先を指定する
+
 ###### Enable Async GPU Readback
 
 [Async GPU Readback](https://docs.unity3d.com/ja/2018.4/ScriptReference/Rendering.AsyncGPUReadback.html)の機能を使用して画像処理を行う為、MainThareadの負荷が軽減される場合があります。
 
-###### Skip frame
+###### Reflesh Interval
 
 画像の転送処理を行う間隔を指定します。
 間隔を開けることでCPU負荷が軽減されます。
 
-###### Recording Folde
+###### Record Folde
 
 録画時にファイルを書き出す先のフォルダー
 
-###### Recording Count
+###### Record Count Max
 
 録画に何コマ迄録画するかを指定出来ます。
 このコマまで録画を行うと録画は自動的に停止します。
 
-###### Play
-
-開発機の実行画面の再生を開始します。
-
-###### Stop
-
-実行画面の再生処理を停止します。
-
-###### Capture
-
-現在の画面をpng形式でファイルに書き出します。
-
-###### Rec/Stop
-
-録画(PNG形式で連番ファイルを指定したフォルダーに指定したFrame数まで書き出す)を行います。
-録画中は表記がStopとなり録画を停止します。
-
 ###### Record Count
 
-録画中は現在録画中のフレームカウンターを表示し、録画終了後は指定したフレーム数の表示を指定することが出来ます。
+録画内容をSeekすることが出来ます。
 
 ![img](docs/UnityChoseKunDemo04.gif)
 
 ##### 注意事項
 
-- Player Viewerは非常に負荷の高い処理です。Player Inspector->Screen->SetScreenからwidthとheightを調整したり、Skip Frameで実行間隔を調整してからPlayボタンを押すことをお勧めします。
+Player Viewerは非常に負荷の高い処理です。Player Inspector->Screen->SetScreenからwidthとheightを調整したり、Skip Frameで実行間隔を調整してから再生を実行することを*オススメ*します。
 
 #### Player Hierarchy
 
 ![img](docs/HierarchyView.jpg) </br>
 
+##### Reload
+
 実機で実行されているアプリケーションのScene情報を分析し、Hierarchy Treeとして展開します。
-Scene情報を取得分析する為には、初めに*Player Inspector*->*Inspector*で*Pull*を実行する必要があります。
+まず初めにReloadを実行し、Sceneの情報を取得することからスタートします。
+GameObjectが数万個存在するような複雑なSceneの場合、Reloadには時間がかかります。
+
+EditorのHierarchy同様にGameObjectの親子関係を変更したり、右クリックからのモーダルダイヤログでGameObjectを生成したり、基本的なComponentを追加することが出来ます。
 
 #### Player Inspector
 
@@ -166,9 +171,8 @@ Player Hierarchyで選択したGameObjectが持つComponentの内容を編集し
 ![img](docs/InspectorView.jpg)
 
 - [Connect To] : 接続先のデバイスを選択します。 Profilerと共有しています。
-- [Auto] : 項目を変更したら即座に変更内容を実機側に反映させます。※この項目が有効な場合[Push]は表示されません。
-- [Pull] : Scene内のHierarchy情報を収集します。
-- [Push] : 編集した内容を実機上に反映させます。
+- [Add Component] : GameObjectにComponentを追加します。(未実装)
+
   
 ##### Texture
 
@@ -218,3 +222,8 @@ Application Classのstaticメンバーに関する内容を編集することが
 - [Pull] : Application Classのstaticメンバーを取得します。
 - [Push] : 編集した内容を実機へ上書きします。
 - [Quit] : Application.Quite()を実行します。
+
+##### Android
+
+![img](docs/Inspector_AndroidView.jpg)
+Androidデバイス固有の機能を編集することが出来ます。
