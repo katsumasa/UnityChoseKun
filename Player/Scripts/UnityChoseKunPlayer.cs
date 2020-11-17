@@ -32,9 +32,11 @@ namespace Utj.UnityChoseKun
         ApplicationPlayer   m_applicationPlayer;
         AndroidPlayer       m_androidPlayer;
         HierarchyPlayer     m_hierarchyPlayer;
+        QualitySettingsPlayer m_qualitySettingsPlayer;
+    
 
 
-        ScreenPlayer playerScreen {
+            ScreenPlayer playerScreen {
             get {if(m_playerScreen == null){m_playerScreen = new ScreenPlayer();}　return m_playerScreen;}
         }
 
@@ -67,6 +69,12 @@ namespace Utj.UnityChoseKun
         {
             get { if (m_androidPlayer == null) { m_androidPlayer = new AndroidPlayer(); } return m_androidPlayer; }
         }
+
+        QualitySettingsPlayer qualitySettingsPlayer
+        {
+            get { if (m_qualitySettingsPlayer == null) { m_qualitySettingsPlayer = new QualitySettingsPlayer(); } return m_qualitySettingsPlayer; }
+        }
+
 
         HierarchyPlayer hierarchyPlayer
         {
@@ -115,6 +123,8 @@ namespace Utj.UnityChoseKun
                 {UnityChoseKun.MessageID.AndroidPull,       androidPlayer.OnMessageEventPull},
                 {UnityChoseKun.MessageID.AndroidPush,       androidPlayer.OnMessageEventPush},
                 {UnityChoseKun.MessageID.HierarchyPush,     hierarchyPlayer.OnMessageEventPush },
+                { UnityChoseKun.MessageID.QualitySettingsPull,qualitySettingsPlayer.OnMessageEventPull},
+                { UnityChoseKun.MessageID.QualitySettingsPush,qualitySettingsPlayer.OnMessageEventPush},
 
             };
 

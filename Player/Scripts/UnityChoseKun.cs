@@ -57,6 +57,8 @@ namespace Utj.UnityChoseKun
             AndroidPull,
             AndroidPush,
             HierarchyPush,
+            QualitySettingsPull,
+            QualitySettingsPush,
         }
 
 

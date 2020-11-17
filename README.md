@@ -47,7 +47,7 @@ UnityChoseKunは再ビルドを行うこと無く、UnityEditor上で開発機�
 - [Time](https://docs.unity3d.com/ja/ScriptReference/Time.html)
 - [Shader](https://docs.unity3d.com/ja/ScriptReference/Shader.html)
 - [Texture](https://docs.unity3d.com/ja/ScriptReference/Texture.html)
-
+- [QualitySettings](https://docs.unity3d.com/ja/ScriptReference/QualitySettings.html)
 - [Component](docs.unity3d.com/ja/ScriptReference/Component.html)
   - [Animator](https://docs.unity3d.com/ja/ScriptReference/Animator.html)
   - [Behaviour](https://docs.unity3d.com/ja/current/ScriptReference/Behaviour.html)
@@ -232,5 +232,10 @@ Application Classのstaticメンバーに関する内容を編集することが
 
 ![img](docs/Inspector_AndroidView.jpg)
 Androidデバイス固有の機能を編集することが出来ます。
+
+##### QualitySettings
+
+![img](docs/QualitySettingsView.jpg)
+QualitySettingを編集することが出来ます。
 
 以上

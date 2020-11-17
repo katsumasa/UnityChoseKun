@@ -45,6 +45,8 @@
         [SerializeField] AndroidView        m_androidView;        
         [SerializeField] Vector2            scrollPos;
         [SerializeField] ObjectCounterView  m_objectCounterView;
+        [SerializeField] QualitySettingsView m_qualitySettingsView;
+
 
         IConnectionState                                    m_attachProfilerState;
         Dictionary<UnityChoseKun.MessageID, OnMessageFunc>  onMessageFuncDict;
@@ -141,6 +143,18 @@
             }
         }
         
+        public QualitySettingsView qualitySettingsView
+        {
+            get
+            {
+                if(m_qualitySettingsView == null)
+                {
+                    m_qualitySettingsView = new QualitySettingsView();
+                }
+                return m_qualitySettingsView;
+            }
+        }
+
 
         [MenuItem("Window/UnityChoseKun/Player Inspector")]
         static void Inite()
@@ -263,6 +277,7 @@
                 {"Time",        timeView.OnGUI},
                 {"Application", applicationView.OnGUI},
                 {"Android",     androidView.OnGUI},
+                {"Quality", qualitySettingsView.OnGUI },
                 // 機能をここに追加していく                                              
             };
                         
@@ -275,6 +290,7 @@
                 {UnityChoseKun.MessageID.TexturePull,       texturesView.OnMessageEvent},
                 {UnityChoseKun.MessageID.ApplicationPull,   applicationView.OnMessageEvent },
                 {UnityChoseKun.MessageID.AndroidPull,       androidView.OnMessageEvent },
+                {UnityChoseKun.MessageID.QualitySettingsPull,   qualitySettingsView.OnMessageEvent},
 
                 // 機能をここに追加していく                                              
             };
