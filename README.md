@@ -173,7 +173,12 @@ Player Hierarchyで選択したGameObjectが持つComponentの内容を編集し
 - [Connect To] : 接続先のデバイスを選択します。 Profilerと共有しています。
 - [Add Component] : GameObjectにComponentを追加します。(未実装)
 
-  
+##### Component
+
+![img](docs/Inspector_Component.jpg)
+Scene上に存在するComponentの種類と数をカウントします。
+本Editor拡張で未対応なComponentは規定Classにカウントします。
+
 ##### Texture
 
 ![imag](docs/Inspector_Texture.png)
