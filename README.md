@@ -113,10 +113,10 @@ MenuからWindow->UnityChoseKun->Player ViewでPlayerView Windowが表示され�
 
 接続先のデバイスを指定します。接続の仕組みはUnityProfilerと共有していますので、どちらかの接続先を切り替えると、もう片方の接続先も切り替わります。
 
-![img](docs/PlayIcon.png)　再生の開始/終了
-![img](docs/RecIcon.png)　録画の開始/終了
-![img](docs/ScreenShotIcon.png)　スクリーンショットを保存する
-![img](docs/SaveFolderIcon.png)　録画結果の保存先を指定する
+![img](docs/PlayIcon.png)　再生の開始/終了<br>
+![img](docs/RecIcon.png)　録画の開始/終了<br>
+![img](docs/ScreenShotIcon.png)　スクリーンショットを保存する<br>
+![img](docs/SaveFolderIcon.png)　録画結果の保存先を指定する<br>
 
 ###### Enable Async GPU Readback
 
@@ -232,3 +232,5 @@ Application Classのstaticメンバーに関する内容を編集することが
 
 ![img](docs/Inspector_AndroidView.jpg)
 Androidデバイス固有の機能を編集することが出来ます。
+
+以上
