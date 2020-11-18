@@ -1,10 +1,12 @@
 ﻿namespace Utj.UnityChoseKun
 {
+    using System.IO;
     using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
     using UnityEngine;
     using UnityEditor;
+    using UnityEngine.Profiling;
 #if UNITY_2018_1_OR_NEWER
     using UnityEngine.Networking.PlayerConnection;
     using ConnectionUtility = UnityEditor.Experimental.Networking.PlayerConnection.EditorGUIUtility;
@@ -13,14 +15,15 @@
     using UnityEditor.Networking.PlayerConnection;
     using System;
     using System.Text;
-    using System.IO;
     using System.Reflection;
     using System.Runtime.InteropServices;
 #endif
 
    
 
-    // <summary>UnityChoseKunのEditorWindow部分</summary>
+    /// <summary>
+    /// UnityChoseKunのEditorWindow
+    /// </summary>
     public class UnityChoseKunEditorWindow : EditorWindow
     {
         private static class Styles
@@ -29,21 +32,32 @@
         }
 
         delegate void Task();
-        delegate void OnMessageFunc(byte[] bytes);
+        delegate void OnMessageFunc(BinaryReader binaryReader);
+        
+                
+        [SerializeField] int                toolbarIdx = 0;
+        [SerializeField] ScreenView         m_screenView;
+        [SerializeField] TimeView           m_timeView;
+        [SerializeField] InspectorView      m_inspectorView;
+        [SerializeField] ShadersView        m_shadersView;
+        [SerializeField] TexturesView       m_texturesView;
+        [SerializeField] ApplicationView    m_applicationView;
+        [SerializeField] AndroidView        m_androidView;        
+        [SerializeField] Vector2            scrollPos;
+        [SerializeField] ObjectCounterView  m_objectCounterView;
+        [SerializeField] QualitySettingsView m_qualitySettingsView;
 
-        IConnectionState m_attachProfilerState;
-        bool m_registered = false;
-        static UnityChoseKunEditorWindow m_window;
-        public static UnityChoseKunEditorWindow window
+
+        IConnectionState                                    m_attachProfilerState;
+        Dictionary<UnityChoseKun.MessageID, OnMessageFunc>  onMessageFuncDict;
+        Dictionary<string, Action>                          onGUILayoutFuncDict;
+
+
+        /// <summary>
+        /// ScreenView
+        /// </summary>
+        ScreenView screenView
         {
-            get {return m_window;}
-            private set {m_window = value;}
-        }
-
-
-        [SerializeField] int toolbarIdx = 0;
-        [SerializeField] ScreenView m_screenView;
-        ScreenView screenView{
             get {
                 if(m_screenView == null ){
                     m_screenView = new ScreenView();
@@ -54,7 +68,11 @@
                 m_screenView = value;
             }
         }        
-        [SerializeField] TimeView m_timeView;
+        
+
+        /// <summary>
+        /// TimeView
+        /// </summary>
         TimeView timeView{
             get {
                 if(m_timeView == null){
@@ -66,22 +84,35 @@
                 m_timeView = value;
             }
         }        
-        [SerializeField] InspectorView m_inspectorView ;
+
+
+        /// <summary>
+        /// InspectorView
+        /// </summary>
         InspectorView inspectorView {
             get {if(m_inspectorView == null){m_inspectorView = new InspectorView();}return m_inspectorView;}
         }
+        
 
-        [SerializeField] ShadersView m_shadersView;
+        /// <summary>
+        /// ShadersView
+        /// </summary>
         ShadersView shaderView {
             get{if(m_shadersView == null){m_shadersView = new ShadersView();}return m_shadersView;}
         }
+        
 
-        [SerializeField] TexturesView m_texturesView;
+        /// <summary>
+        /// TexturesView
+        /// </summary>
         TexturesView texturesView{
             get{if(m_texturesView == null){m_texturesView = new TexturesView();}return m_texturesView;}            
         }
+        
 
-        [SerializeField] ApplicationView m_applicationView;
+        /// <summary>
+        /// ApplicationView
+        /// </summary>
         public ApplicationView applicationView
         {
             get {
@@ -91,24 +122,44 @@
                 return m_applicationView;
             }
         }
-        [SerializeField] AndroidView m_androidView;
+
+        /// <summary>
+        /// AndroidView
+        /// </summary>
         public AndroidView androidView
         {
             get { if (m_androidView == null) { m_androidView = new AndroidView(); } return m_androidView; }            
         }
 
-
-        [SerializeField] Dictionary<string,Action> onGUILayoutFuncDict;
-        [SerializeField] Dictionary<UnityChoseKun.MessageID, OnMessageFunc> onMessageFuncDict;
-        [SerializeField] Vector2 scrollPos;
+        public ObjectCounterView objectCounterView
+        {
+            get
+            {
+                if(m_objectCounterView == null)
+                {
+                    m_objectCounterView = new ObjectCounterView();
+                }
+                return m_objectCounterView;
+            }
+        }
+        
+        public QualitySettingsView qualitySettingsView
+        {
+            get
+            {
+                if(m_qualitySettingsView == null)
+                {
+                    m_qualitySettingsView = new QualitySettingsView();
+                }
+                return m_qualitySettingsView;
+            }
+        }
 
 
         [MenuItem("Window/UnityChoseKun/Player Inspector")]
-        static void Create()
-        {
-            if(window == null){
-                window = (UnityChoseKunEditorWindow)EditorWindow.GetWindow(typeof(UnityChoseKunEditorWindow));
-            }
+        static void Inite()
+        {            
+            var window = (UnityChoseKunEditorWindow)EditorWindow.GetWindow(typeof(UnityChoseKunEditorWindow));            
             window.titleContent = Styles.TitleContent;
             window.wantsMouseMove = true;
             window.autoRepaintOnSceneChange = true;
@@ -116,6 +167,10 @@
         }
 
 
+        /// <summary>
+        /// Platformを取得する
+        /// </summary>
+        /// <returns></returns>
         public RuntimePlatform GetRuntimePlatform()
         {
             if (applicationView.applicationKun != null)
@@ -125,16 +180,12 @@
             return RuntimePlatform.WindowsEditor;
         }
 
-
-        private void Update()
-        {            
-        }
-
-
-        //
+        
+        /// <summary>
+        /// 描画処理
+        /// </summary>
         private void OnGUI()
         {                        
-           // Initialize();
             GUILayoutConnect();            
             EditorGUILayout.Space();
             
@@ -148,6 +199,7 @@
                 EditorGUILayout.Space();
 
                 var key = texts[toolbarIdx];
+                
                 Action onGUI;
                 onGUILayoutFuncDict.TryGetValue(key,out onGUI);
                 if (onGUI != null)
@@ -159,14 +211,38 @@
             }            
         }
 
+
+        /// <summary>
+        /// 接続先選択用GUI
+        /// </summary>
         private void GUILayoutConnect()
         {
             EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Connect To");
+
+            var contents = new GUIContent("Connect To");
+            var v2 = EditorStyles.label.CalcSize(contents);
+            EditorGUILayout.LabelField(contents, GUILayout.Width(v2.x));
             if (m_attachProfilerState != null)
             {
                 ConnectionGUILayout.AttachToPlayerDropdown(m_attachProfilerState, EditorStyles.toolbarDropDown);
+                switch (m_attachProfilerState.connectedToTarget)
+                {
+                    case ConnectionTarget.None:
+                        //This case can never happen within the Editor, since the Editor will always fall back onto a connection to itself.
+                        break;
+                    case ConnectionTarget.Player:
+                        Profiler.enabled = GUILayout.Toggle(Profiler.enabled, string.Format("Profile the attached Player ({0})", m_attachProfilerState.connectionName), EditorStyles.toolbarButton);
+                        break;
+                    case ConnectionTarget.Editor:
+                        // The name of the Editor or the PlayMode Player would be "Editor" so adding the connectionName here would not add anything.
+                        Profiler.enabled = GUILayout.Toggle(Profiler.enabled, "Profile the Player in the Editor", EditorStyles.toolbarButton);
+                        break;
+                    default:
+                        break;
+                }
             }
+
+
             EditorGUILayout.EndHorizontal();
 
             var playerCount = EditorConnection.instance.ConnectedPlayers.Count;
@@ -181,101 +257,97 @@
         }        
 
 
-        // SampleのようにOnEnable/OnDisableで処理すると通信が不安体になる
+        
         private void OnEnable()
         {
-            window = (UnityChoseKunEditorWindow)EditorWindow.GetWindow(typeof(UnityChoseKunEditorWindow));
+            Debug.Log("OnEnable");
 
-            if (m_attachProfilerState == null){            
-                m_attachProfilerState = ConnectionUtility.GetAttachToPlayerState(this);            
-            }
-            screenView = new ScreenView();
-            timeView = new TimeView();                        
 
-            Initialize();
+            m_attachProfilerState = ConnectionUtility.GetAttachToPlayerState(this);                        
+            UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Initialize();
+            UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Register(UnityChoseKun.kMsgSendPlayerToEditor, OnMessageEvent);
+
+            onGUILayoutFuncDict = new Dictionary<string, Action>()
+            {
+                {"Inspector",   inspectorView.OnGUI},
+                {"Component",   objectCounterView.OnGUI },
+                {"Texture",     texturesView.OnGUI},
+                {"Shader",      shaderView.OnGUI},
+                {"Screen",      screenView.OnGUI },
+                {"Time",        timeView.OnGUI},
+                {"Application", applicationView.OnGUI},
+                {"Android",     androidView.OnGUI},
+                {"Quality", qualitySettingsView.OnGUI },
+                // 機能をここに追加していく                                              
+            };
+                        
+            onMessageFuncDict = new Dictionary<UnityChoseKun.MessageID, OnMessageFunc>()
+            {
+                {UnityChoseKun.MessageID.ScreenPull,        screenView.OnMessageEvent},
+                {UnityChoseKun.MessageID.TimePull,          timeView.OnMessageEvent },
+                {UnityChoseKun.MessageID.GameObjectPull,    inspectorView.OnMessageEvent},
+                {UnityChoseKun.MessageID.ShaderPull,        shaderView.OnMessageEvent},
+                {UnityChoseKun.MessageID.TexturePull,       texturesView.OnMessageEvent},
+                {UnityChoseKun.MessageID.ApplicationPull,   applicationView.OnMessageEvent },
+                {UnityChoseKun.MessageID.AndroidPull,       androidView.OnMessageEvent },
+                {UnityChoseKun.MessageID.QualitySettingsPull,   qualitySettingsView.OnMessageEvent},
+
+                // 機能をここに追加していく                                              
+            };
+            
         }
 
         private void OnDisable()
         {
-            m_attachProfilerState.Dispose();
-            m_attachProfilerState = null;            
-        }        
+            Debug.Log("OnDisable");
 
-        private void OnDestroy()
-        {
-            if (m_registered == true)
-            {
-                UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Unregister(UnityChoseKun.kMsgSendPlayerToEditor, OnMessageEvent);
-                UnityEditor.Networking.PlayerConnection.EditorConnection.instance.DisconnectAll();
-                m_registered = false;
-            }
 
-            if(onMessageFuncDict != null)
+            if (onMessageFuncDict != null)
             {
                 onMessageFuncDict.Clear();
                 onMessageFuncDict = null;
             }
-
-            if(onGUILayoutFuncDict != null)
+            
+            if (onGUILayoutFuncDict != null)
             {
                 onGUILayoutFuncDict.Clear();
                 onGUILayoutFuncDict = null;
             }
-            window = null;
-        }
 
-        private void Initialize()
-        {
-            //if (m_registered == false)
+
+            UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Unregister(UnityChoseKun.kMsgSendPlayerToEditor, OnMessageEvent);
+            UnityEditor.Networking.PlayerConnection.EditorConnection.instance.DisconnectAll();
+
+            if (m_attachProfilerState != null)
             {
-                UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Initialize();
-                UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Register(UnityChoseKun.kMsgSendPlayerToEditor, OnMessageEvent);              
-                if (onGUILayoutFuncDict == null)
-                {
-                    onGUILayoutFuncDict = new Dictionary<string, Action>()
-                    {
-                        {"Inspector",   inspectorView.OnGUI},
-                        {"Texture",     texturesView.OnGUI},
-                        {"Shader",      shaderView.OnGUI},
-                        {"Screen",      screenView.OnGUI },
-                        {"Time",        timeView.OnGUI},
-                        {"Application", applicationView.OnGUI},
-                        {"Android",     androidView.OnGUI},
-                        // 機能をここに追加していく                                              
-                    };                    
-                }
-
-                if (onMessageFuncDict == null)
-                {
-                    onMessageFuncDict = new Dictionary<UnityChoseKun.MessageID, OnMessageFunc>()
-                    {
-                        {UnityChoseKun.MessageID.ScreenPull,screenView.OnMessageEvent},
-                        {UnityChoseKun.MessageID.TimePull,timeView.OnMessageEvent },                        
-                        {UnityChoseKun.MessageID.GameObjectPull, inspectorView.OnMessageEvent},
-                        {UnityChoseKun.MessageID.ShaderPull,shaderView.OnMessageEvent},
-                        {UnityChoseKun.MessageID.TexturePull,texturesView.OnMessageEvent},
-                        {UnityChoseKun.MessageID.ApplicationPull,applicationView.OnMessageEvent },
-                        {UnityChoseKun.MessageID.AndroidPull,androidView.OnMessageEvent },
-
-                        // 機能をここに追加していく                                              
-                    };
-                }
-                m_registered = true;
+                m_attachProfilerState.Dispose();
+                m_attachProfilerState = null;
             }
-        } 
+        }        
 
+               
+        /// <summary>
+        /// メッセージの受信CB
+        /// </summary>
+        /// <param name="args">メッセージデータ</param>
         private void OnMessageEvent(UnityEngine.Networking.PlayerConnection.MessageEventArgs args)
         {
-            //Debug.Log("OnMessageEvent");
-            var message= UnityChoseKun.GetObject<UnityChoseKunMessageData>(args.data);
+            MemoryStream memoryStream = new MemoryStream(args.data);
+            BinaryReader binaryReader = new BinaryReader(memoryStream);
+
+            var messageID = (UnityChoseKun.MessageID)binaryReader.ReadInt32();
+
 
             
-            //Debug.Log("message.id:"　+　message.id);
-            if (onMessageFuncDict != null && onMessageFuncDict.ContainsKey(message.id) == true)
+            UnityChoseKun.Log("UnityChosekunEditorWindow.OnMessageEvent(playerID: " + args.playerId + ",message.id" + messageID + ")");            
+            if (onMessageFuncDict != null && onMessageFuncDict.ContainsKey(messageID) == true)
             {
-                var func = onMessageFuncDict[message.id];
-                func(message.bytes);
+                var func = onMessageFuncDict[messageID];
+                func(binaryReader);
             }
+
+            binaryReader.Close();
+            memoryStream.Close();
         }
     }
 }

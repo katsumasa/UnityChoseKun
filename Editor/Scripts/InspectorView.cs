@@ -1,12 +1,16 @@
-﻿namespace Utj.UnityChoseKun
-{
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using UnityEngine;
-    using UnityEditor;
+﻿using System.IO;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+using UnityEditor;
 
-    
+
+namespace Utj.UnityChoseKun
+{        
+    /// <summary>
+    /// 
+    /// </summary>
     public class InspectorView
     {
         public sealed class Settings{
@@ -21,6 +25,7 @@
             [SerializeField] string tag;
             [SerializeField] int layer;
             
+
             public Settings(){}
             public void Set(GameObjectKun gameObjectKun){
                 if(gameObjectKun == null){
@@ -54,22 +59,48 @@
                 GUILayout.FlexibleSpace();
                 isStatic = EditorGUILayout.ToggleLeft("Static",isStatic);
                 EditorGUILayout.EndHorizontal();
-                GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));            
-
+                                
                 EditorGUI.indentLevel += 1;
+                EditorGUILayout.BeginHorizontal();
                 tag = EditorGUILayout.TagField("Tag",tag);
                 layer = EditorGUILayout.LayerField("Layer",layer);
+                EditorGUILayout.EndHorizontal();
                 EditorGUI.indentLevel --;
             }            
         }
 
+
+
         [SerializeField] Settings m_settings;
+        [SerializeField] private List<ComponentView> m_componentViews;
+        [SerializeField] Dictionary<int, GameObjectKun> m_gameObjectKuns;
+        [SerializeField] int m_selectGameObujectKunID;
+        [SerializeField] SceneKun m_sceneKun;
+
+
+        SceneKun sceneKun
+        {
+            get
+            {
+                if(m_sceneKun == null)
+                {
+                    m_sceneKun = new SceneKun();
+                }
+                return m_sceneKun;
+            }
+
+            set
+            {
+                m_sceneKun = value;
+            }
+        }
+
         Settings settings {
             get{if(m_settings == null){m_settings = new Settings();}return m_settings;}
             set{m_settings = value;}
         }
 
-        [SerializeField] private  List<ComponentView> m_componentViews;            
+
         List<ComponentView> componentViews{
             get {
                 if(m_componentViews == null){
@@ -80,21 +111,22 @@
             set {m_componentViews = value;}
         }                
         
-        [SerializeField] Dictionary<int,GameObjectKun> m_gameObjectKuns;
+
         Dictionary<int,GameObjectKun> gameObjectKuns {
             get {if(m_gameObjectKuns == null){m_gameObjectKuns = new Dictionary<int, GameObjectKun>();}return m_gameObjectKuns;}
         }                
         
-        [SerializeField] int m_selectGameObujectKunID = -1;
-        [SerializeField] SceneKun sceneKun;
-        [SerializeField] bool isNotRequirePush = false;
+        
 
 
         public InspectorView() {
-            if(PlayerHierarchyWindow.window != null){
-                PlayerHierarchyWindow.window.selectionChangedCB = SelectionChangedCB;
+            var window = (PlayerHierarchyWindow)EditorWindow.GetWindow(typeof(PlayerHierarchyWindow));
+            if (window != null){
+                window.selectionChangedCB = SelectionChangedCB;
             }
+            m_selectGameObujectKunID = -1;
         }
+
 
         void BuildComponentView(GameObjectKun gameObjectKun)
         {                        
@@ -114,50 +146,32 @@
         }
 
         
-
         public void OnGUI() {
             var isChange = false;
 
-            if(sceneKun == null) {
-                EditorGUILayout.HelpBox("Please Pull Request.",MessageType.Info);
-            }else{
-                isNotRequirePush = EditorGUILayout.Toggle(Settings.Styles.AutoPush,isNotRequirePush);
-                EditorGUI.BeginChangeCheck();
-                EditorGUI.BeginChangeCheck();
-                settings.DrawGameObject();
-                if(EditorGUI.EndChangeCheck()){
-                    if(m_gameObjectKuns.ContainsKey(m_selectGameObujectKunID)){
-                        var gameObjectKun = m_gameObjectKuns[m_selectGameObujectKunID];
-                        gameObjectKun.dirty = true;
-                    }
-                }                
-                foreach(var componentView in componentViews)
-                {
-                    componentView.OnGUI();
+                
+            EditorGUI.BeginChangeCheck();
+            settings.DrawGameObject();
+            if(EditorGUI.EndChangeCheck()){
+                if(m_gameObjectKuns.ContainsKey(m_selectGameObujectKunID)){
+                    var gameObjectKun = m_gameObjectKuns[m_selectGameObujectKunID];
+                    gameObjectKun.dirty = true;
                 }
-                if (EditorGUI.EndChangeCheck())
-                {
-                    if (isNotRequirePush)
-                    {
-                        isChange = true;
-                    }
-                }
-                GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(4));
             }
 
-
-            EditorGUILayout.BeginHorizontal();            
-            if(GUILayout.Button("Pull")){   
-                UnityChoseKunEditor.SendMessage(UnityChoseKun.MessageID.GameObjectPull);
-            }
-            if (isNotRequirePush == false)
+            EditorGUI.BeginChangeCheck();
+            foreach (var componentView in componentViews)
             {
-                if (GUILayout.Button("Push"))
-                {
-                    isChange = true;
-                }
+                componentView.OnGUI();
             }
-            EditorGUILayout.EndHorizontal();
+            if (EditorGUI.EndChangeCheck())
+            {
+                isChange = true;
+            }
+            GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(4));
+
+
+
 
             if (sceneKun != null)
             {
@@ -167,41 +181,53 @@
                     {
                         var gameObjectKun = m_gameObjectKuns[m_selectGameObujectKunID];
                         settings.Writeback(gameObjectKun);
-#if false
-                        for (var i = 0; i < gameObjectKun.componentKuns.Length; i++)
-                        {
-                            gameObjectKun.componentKuns[i] = m_componentViews[i].GetComponentKun();
-                        }
-#endif
                         UnityChoseKunEditor.SendMessage<GameObjectKun>(UnityChoseKun.MessageID.GameObjectPush, gameObjectKun);
                         gameObjectKun.ResetDirty();                        
                     }
-                }
+                }          
             }
+
+            using (new EditorGUI.DisabledScope(true))
+            {
+                EditorGUILayout.BeginHorizontal();
+                GUILayout.FlexibleSpace();
+                GUILayout.Button(new GUIContent("Add Component"));
+                GUILayout.FlexibleSpace();
+                EditorGUILayout.EndHorizontal();
+            }
+
         }
         
-        public void OnMessageEvent(byte[] bytes)
-        {
-            Debug.Log("OnMessageEvent");
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bytes"></param>
+        public void OnMessageEvent(BinaryReader binaryReader)
+        {            
             gameObjectKuns.Clear();
-            sceneKun = UnityChoseKun.GetObject<SceneKun>(bytes);
+            sceneKun.Deserialize(binaryReader);
             
             for(var i = 0; i < sceneKun.gameObjectKuns.Length; i++){
                 gameObjectKuns.Add(sceneKun.gameObjectKuns[i].instanceID,sceneKun.gameObjectKuns[i]);
-            }  
-            if(PlayerHierarchyWindow.window == null){
-                PlayerHierarchyWindow.Create();
             }
-            if(PlayerHierarchyWindow.window != null){                
-                PlayerHierarchyWindow.window.selectionChangedCB = SelectionChangedCB;
-                PlayerHierarchyWindow.window.sceneKun = sceneKun;                
-                PlayerHierarchyWindow.window.Reload();
+            var window = (PlayerHierarchyWindow)EditorWindow.GetWindow(typeof(PlayerHierarchyWindow));
+            if(window != null){                
+                window.selectionChangedCB = SelectionChangedCB;
+                window.sceneKun = sceneKun;                
+                window.Reload();
             }
         }
         
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="selectedIds"></param>
         void SelectionChangedCB(IList<int> selectedIds)
-        {            
-            var id = PlayerHierarchyWindow.window.lastClickedID;
+        {
+            var window = (PlayerHierarchyWindow)EditorWindow.GetWindow(typeof(PlayerHierarchyWindow));
+            var id = window.lastClickedID;
             if(gameObjectKuns.ContainsKey(id)){
                 var gameObjectKun = gameObjectKuns[id];
                 settings.Set(gameObjectKun);
@@ -210,8 +236,10 @@
                 settings.Set(null);
                 BuildComponentView(null);
             }            
-            if(UnityChoseKunEditorWindow.window != null){
-                UnityChoseKunEditorWindow.window.Repaint();
+
+            var choseKunEditorWindow = (UnityChoseKunEditorWindow)EditorWindow.GetWindow(typeof(UnityChoseKunEditorWindow));
+            if (choseKunEditorWindow != null){
+                choseKunEditorWindow.Repaint();
             }
         }
     }

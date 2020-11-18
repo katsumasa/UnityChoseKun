@@ -55,7 +55,7 @@ namespace Utj.UnityChoseKun
             return rigidbodyKun;
         }
 
-        public override void OnGUI()
+        public override bool OnGUI()
         {
             GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));                        
             m_rigidbodyFoldout = EditorGUILayout.Foldout(m_rigidbodyFoldout,Styles.Rigidbody);            
@@ -111,6 +111,8 @@ namespace Utj.UnityChoseKun
                 }
             }
             GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));
+
+            return true;
         }
 
     }

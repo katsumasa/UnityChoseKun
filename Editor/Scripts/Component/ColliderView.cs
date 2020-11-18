@@ -9,40 +9,52 @@ namespace Utj.UnityChoseKun
     {
         private static class Styles
         {
-            public static GUIContent ColliderFoldoutContent = new GUIContent((Texture2D)EditorGUIUtility.Load("d_BoxCollider Icon"));            
-            public static GUIContent ColliderToggleContent = new GUIContent("Collider");
-        }
-
-        ColliderKun colliderKun;
-        bool foldout = true;
-
-
-
-        public override void SetComponentKun(ComponentKun componentKun)
-        {
-            colliderKun = componentKun as ColliderKun;
+            public static Texture2D ComponentIcon = (Texture2D)EditorGUIUtility.Load("d_BoxCollider Icon");            
         }
 
 
-        public override ComponentKun GetComponentKun()
+        protected ColliderKun colliderKun
         {
-            return colliderKun;
+            get { return componentKun as ColliderKun; }
+            set { componentKun = value; }
         }
-
-
-        public override void OnGUI()
+        
+        public ColliderView()
         {
-            EditorGUI.BeginChangeCheck();
+            componentIcon = Styles.ComponentIcon;
+            foldout = true;
+        }        
+
+
+        protected virtual bool DrawHeader()
+        {
             GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));
             EditorGUILayout.BeginHorizontal();
-            foldout = EditorGUILayout.Foldout(foldout, Styles.ColliderFoldoutContent);
-            
-            colliderKun.enabled = EditorGUILayout.ToggleLeft(Styles.ColliderToggleContent, colliderKun.enabled);
+            var iconContent = new GUIContent(mComponentIcon);
+            foldout = EditorGUILayout.Foldout(foldout, iconContent);                          // Foldout & Icon
+
+            EditorGUI.BeginChangeCheck();
+            var content = new GUIContent(colliderKun.name);
+
+            var rect = EditorGUILayout.GetControlRect();
+            colliderKun.enabled = EditorGUI.ToggleLeft(new Rect(rect.x - 24, rect.y, rect.width, rect.height), content, colliderKun.enabled);
+            if (EditorGUI.EndChangeCheck())
+            {
+                colliderKun.dirty = true;
+            }
             GUILayout.FlexibleSpace();
             EditorGUILayout.EndHorizontal();
             GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));
-            if (foldout)
+
+            return foldout;
+        }
+
+
+        public override bool OnGUI()
+        {
+            if (DrawHeader())
             {
+                EditorGUI.BeginChangeCheck();
                 using (new EditorGUI.IndentLevelScope())
                 {
                     colliderKun.isTrigger = EditorGUILayout.Toggle("Is Trigger", colliderKun.isTrigger);                    
@@ -60,11 +72,15 @@ namespace Utj.UnityChoseKun
                     colliderKun.boundsKun.size = EditorGUILayout.Vector3Field("", colliderKun.boundsKun.size);
                     EditorGUILayout.EndHorizontal();
                 }
+                if (EditorGUI.EndChangeCheck())
+                {
+                    colliderKun.dirty = true;
+                }
+                return true;
             }
-            if (EditorGUI.EndChangeCheck())
-            {
-                colliderKun.dirty = true;
-            }
+            
+
+            return false;
         }
     }
 }

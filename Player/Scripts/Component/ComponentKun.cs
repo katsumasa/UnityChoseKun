@@ -2,6 +2,8 @@
 {
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Runtime.InteropServices;
     using UnityEngine;
 
     /// <summary>
@@ -9,6 +11,7 @@
     ///  Program by Katsumasa.Kimura
     /// </summary>
     [System.Serializable]
+    [StructLayout(LayoutKind.Sequential, Pack = 4, CharSet = CharSet.Ansi)]
     public class ComponentKun : ObjectKun{                    
         
         // 定数の定義
@@ -35,9 +38,14 @@
 
             Animator,
 
+            ParticleSystem,
+
+            MissingMono,    // Component == null
             MonoBehaviour,
             Behaviour,
-            Component,            
+            Component,           
+            
+            Max,
         };
 
         
@@ -70,6 +78,9 @@
 
             {ComponentKunType.Animator,new ComponentPair(typeof(Animator),typeof(AnimatorKun)) },
 
+            {ComponentKunType.ParticleSystem,new ComponentPair(typeof(ParticleSystem),typeof(ParticleSystemKun)) },
+
+            {ComponentKunType.MissingMono,new ComponentPair(typeof(MonoBehaviour),typeof(MonoBehaviourKun))},
             {ComponentKunType.MonoBehaviour,new ComponentPair(typeof(MonoBehaviour),typeof(MonoBehaviourKun))},
             {ComponentKunType.Behaviour,new ComponentPair(typeof(Behaviour),typeof(BehaviourKun))},
             {ComponentKunType.Component,new ComponentPair(typeof(Component),typeof(ComponentKun))},
@@ -83,6 +94,10 @@
         /// <returns>ComponentのComponentKunType</params>
         public static ComponentKunType GetComponentKunType(Component component)
         {
+            if(component == null)
+            {
+                return ComponentKunType.MissingMono;
+            }
             //
             // [NOTE] 基底クラスのチェックが後になるように記述する必要がある
             //
@@ -101,6 +116,9 @@
             if (component is Collider) { return ComponentKunType.Collider; }
 
             if (component is Animator) { return ComponentKunType.Animator; }
+
+            if(component is ParticleSystem) { return ComponentKunType.ParticleSystem; }
+
 
             if (component is MonoBehaviour){return ComponentKunType.MonoBehaviour;}
             if(component is Behaviour){return ComponentKunType.Behaviour;}
@@ -138,6 +156,11 @@
         /// <returns>ComponentKunのSystem.Type</returns>
         public static System.Type GetComponetKunSyetemType(ComponentKunType componentKunType)
         {
+            if (!componentPairDict.ContainsKey(componentKunType))
+            {
+                Debug.Log("NotContainKey");
+            }
+
             return componentPairDict[componentKunType].componenKunType;
         }
 
@@ -151,7 +174,104 @@
         {            
             return GetComponetKunSyetemType(GetComponentKunType(component));           
         }
-        
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="componentKunType"></param>
+        /// <returns></returns>
+        public static ComponentKun Instantiate(ComponentKunType componentKunType)
+        {
+            switch (componentKunType)
+            {
+                case ComponentKunType.Transform:
+                    {
+                        return new TransformKun();
+                    }
+
+                case ComponentKunType.Camera:
+                    {
+                        return new CameraKun();
+                    }
+                case ComponentKunType.Light:
+                    {
+                        return new LightKun();
+                    }
+
+                case ComponentKunType.SkinnedMeshMeshRenderer:
+                    {
+                        return new SkinnedMeshRendererKun();
+                    }
+
+                case ComponentKunType.MeshRenderer:
+                    {
+                        return new MeshRendererKun();
+                    }
+
+                case ComponentKunType.Renderer:
+                    {
+                        return new RendererKun();
+                    }
+
+                case ComponentKunType.Rigidbody:
+                    {
+                        return new RigidbodyKun();
+                    }
+
+                case ComponentKunType.CapsuleCollider:
+                    {
+                        return new CapsuleColliderKun();
+                    }
+
+                case ComponentKunType.MeshCollider:
+                    {
+                        return new MeshColliderKun();
+                    }
+
+
+                case ComponentKunType.Collider:
+                    {
+                        return new ColliderKun();
+                    }
+
+                case ComponentKunType.Animator:
+                    {
+                        return new AnimatorKun();
+                    }
+
+                case ComponentKunType.ParticleSystem:
+                    {
+                        return new ParticleSystemKun();
+                    }
+
+                case ComponentKunType.MissingMono:
+                    {
+                        return new MonoBehaviourKun();
+                    }
+
+                case ComponentKunType.MonoBehaviour:
+                    {
+                        return new MonoBehaviourKun();
+                    }
+
+                case ComponentKunType.Behaviour:
+                    {
+                        return new BehaviourKun();
+                    }
+                case ComponentKunType.Component:
+                    {
+                        return new ComponentKun();
+                    }
+                default:
+                    {
+                        return new BehaviourKun();
+                    }
+            }
+        }
+
+
+
 
         //
         // Memberの定義
@@ -171,6 +291,12 @@
         /// コンストラクタ 
         /// </summary>
         public ComponentKun():this(null){}
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="component"></param>
         public ComponentKun(Component component):base(component)
         {
             componentKunType = ComponentKunType.Component;                        
@@ -186,6 +312,80 @@
         {
             return base.WriteBack(component);            
         }
-        
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="binaryWriter"></param>
+        public override void Serialize(BinaryWriter binaryWriter)
+        {
+            base.Serialize(binaryWriter);
+            binaryWriter.Write((int)m_componentKunType);
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="binaryReader"></param>
+        public override void Deserialize(BinaryReader binaryReader)
+        {
+            base.Deserialize(binaryReader);
+            m_componentKunType = (ComponentKunType)binaryReader.ReadInt32();
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj)
+        {
+            var componentKun = obj as ComponentKun;
+            if(componentKun == null)
+            {
+                return false;
+            }
+            if(componentKun.componentKunType != componentKunType)
+            {
+                return false;
+            }
+            
+            return base.Equals(obj);
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public static new ComponentKun Allocater()
+        {
+            return new ComponentKun();
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="len"></param>
+        /// <returns></returns>
+        public static new ComponentKun[] Allocater(int len)
+        {
+            return new ComponentKun[len];
+        }
+
     }
 }

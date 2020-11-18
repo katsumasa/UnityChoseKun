@@ -1,9 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.IO;
+using System.Runtime.InteropServices;
 using UnityEngine;
+
+
 namespace Utj.UnityChoseKun{
+
+    /// <summary>
+    /// MeshRendererをSerialize/Deserializeする為のClass
+    /// </summary>
     [System.Serializable]
-    public class MeshRendererKun :RendererKun
+    [StructLayout(LayoutKind.Sequential, Pack = 4, CharSet = CharSet.Ansi)]
+    public class MeshRendererKun : RendererKun
     {
         public MeshRendererKun():this(null){}
 
@@ -24,5 +31,17 @@ namespace Utj.UnityChoseKun{
             }
             return false;
         }
+
+        public override void Serialize(BinaryWriter binaryWriter)
+        {
+            base.Serialize(binaryWriter);
+        }
+
+
+        public override void Deserialize(BinaryReader binaryReader)
+        {
+            base.Deserialize(binaryReader);
+        }
+        
     }
 }

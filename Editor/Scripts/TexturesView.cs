@@ -1,30 +1,45 @@
-﻿using System.Collections;
+﻿using System.IO;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+
 
 namespace Utj.UnityChoseKun {
     
     [System.Serializable]
     public class TextureView {
         public static readonly Texture2D TextureIcon = (Texture2D)EditorGUIUtility.Load("d_Texture Icon");
+
         [SerializeField] TextureKun m_textureKun;
-        TextureKun textureKun{
+        [SerializeField] bool m_textureFoldout = false;
+
+
+        TextureKun textureKun {
             get{return m_textureKun;}
             set{m_textureKun = value;}
         }
+
+        bool textureFoldout
+        {
+            get { return m_textureFoldout; }
+            set { m_textureFoldout = value; }
+        }
+
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="textureKun"></param>
         public TextureView(TextureKun textureKun){
             this.textureKun = textureKun;
         }
         
-        [SerializeField] bool m_textureFoldout = false;
-        bool textureFoldout{
-            get{return m_textureFoldout;}
-            set{m_textureFoldout = value;}            
-        }
-
-
-
+        
+        /// <summary>
+        /// 
+        /// </summary>
         void DrawTexture()
         {
             EditorGUI.BeginChangeCheck();
@@ -73,34 +88,47 @@ namespace Utj.UnityChoseKun {
             }
         }
     }    
-        
+
+
+
+            
     [System.Serializable]
     public class TexturesView
     {
         [SerializeField] static TextureKun[] m_textureKuns;
+        [SerializeField] TextureView[] m_textureViews;
+        [SerializeField] Vector2 m_scrollPos;
+        public static string[] m_textureNames;
+
+
         public static TextureKun[] textureKuns {
             get{return m_textureKuns;}
             set{m_textureKuns = value;}
         }
 
-        public static string[] m_textureNames;
+        
+        
         public static string[] textureNames{
             get{return m_textureNames;}
             private set{m_textureNames = value;}
         }
 
-        [SerializeField] TextureView [] m_textureViews;
+
         TextureView [] textureViews {
             get{return m_textureViews;}
             set{m_textureViews = value;}
         }
 
-        [SerializeField] Vector2 m_scrollPos;
+
         Vector2 scrollPos{
             get {return m_scrollPos;}
             set {m_scrollPos = value;}
         }
 
+
+        /// <summary>
+        /// 
+        /// </summary>
         public void OnGUI() {
             int cnt = 0;            
             if(textureViews != null){
@@ -129,8 +157,15 @@ namespace Utj.UnityChoseKun {
 
         }
         
-        public void OnMessageEvent(byte[] bytes){
-            var textureKunPacket = UnityChoseKun.GetObject <TexturePlayer.TextureKunPacket>(bytes);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="binaryReader"></param>
+        public void OnMessageEvent(BinaryReader binaryReader)
+        {            
+            var textureKunPacket = new TexturePlayer.TextureKunPacket();
+            textureKunPacket.Deserialize(binaryReader);
             textureKuns = textureKunPacket.textureKuns;
             textureViews = new TextureView[textureKuns.Length];
             textureNames = new string[textureKuns.Length];

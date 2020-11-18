@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.IO;
 using UnityEngine;
 using UnityEditor;
 
@@ -11,13 +10,25 @@ namespace Utj.UnityChoseKun
     public class AndroidView 
     {
         [SerializeField] AndroidKun m_androidKun;
+        [SerializeField] Vector2 m_scrollPos;
+
         public AndroidKun androidKun
         {
-            get { return m_androidKun; }
-            set { m_androidKun = value; }
+            get { 
+                if(m_androidKun == null)
+                {
+                    m_androidKun = new AndroidKun();
+                }
+                return m_androidKun; 
+            }
+                        
+            set
+            { 
+                m_androidKun = value; 
+            }
         }
         
-        [SerializeField] Vector2 m_scrollPos;
+
         Vector2 scrollPos
         {
             get { return m_scrollPos; }
@@ -67,20 +78,25 @@ namespace Utj.UnityChoseKun
             EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Pull"))
             {
-                UnityChoseKunEditor.SendMessage<AndroidKun>(UnityChoseKun.MessageID.AndroidPull, androidKun);
+                UnityChoseKunEditor.SendMessage(UnityChoseKun.MessageID.AndroidPull);
             }
+
             if (GUILayout.Button("Push")) {
                 UnityChoseKunEditor.SendMessage<AndroidKun>(UnityChoseKun.MessageID.AndroidPush, androidKun);
                 
             }
-
             EditorGUILayout.EndHorizontal();
 
         }
 
-        public void OnMessageEvent(byte[] bytes)
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="binaryReader"></param>
+        public void OnMessageEvent(BinaryReader binaryReader)
         {
-            androidKun = UnityChoseKun.GetObject<AndroidKun>(bytes);
+            androidKun.Deserialize(binaryReader);
             isDone = true;
         }
 

@@ -1,34 +1,139 @@
-﻿using System.Collections;
+﻿using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
+
+
 namespace Utj.UnityChoseKun{
 
     // <summary>
     // ShaderKunの配列を送る為の構造体
     // </summary>
     [System.Serializable]
-    public class ShaderKunPacket {
+    public class ShaderKunPacket : ISerializerKun
+    {
         [SerializeField] public ShaderKun[] shaderKuns;
+
+
+        /// <summary>
+        /// Serialize
+        /// </summary>
+        /// <param name="binaryWriter">BinaryWriter</param>
+        public virtual void Serialize(BinaryWriter binaryWriter)
+        {
+            if(shaderKuns == null)
+            {
+                binaryWriter.Write(-1);
+            } else
+            {
+                binaryWriter.Write(shaderKuns.Length);
+                for(var i = 0; i < shaderKuns.Length; i++)
+                {
+                    shaderKuns[i].Serialize(binaryWriter);
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Deserialize
+        /// </summary>
+        /// <param name="binaryReader">BinaryReader</param>
+        public virtual void Deserialize(BinaryReader binaryReader)
+        {
+            var len = binaryReader.ReadInt32();
+            if(len != -1)
+            {
+                shaderKuns = new ShaderKun[len];
+                for(var i = 0; i < len; i++)
+                {
+                    shaderKuns[i] = new ShaderKun();
+                    shaderKuns[i].Deserialize(binaryReader);
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public override bool Equals(object obj)
+        {
+            var other = obj as ShaderKunPacket;
+            if(other == null)
+            {
+                return false;
+            }
+            if(shaderKuns != null)
+            {
+                if(other.shaderKuns == null)
+                {
+                    return false;
+                }
+                if(shaderKuns.Length != other.shaderKuns.Length)
+                {
+                    return false;
+                }
+                for(var i = 0; i < shaderKuns.Length; i++)
+                {
+                    if (!ShaderKun.Equals(shaderKuns[i], other.shaderKuns[i]))
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
     }
     
+
+    /// <summary>
+    /// 
+    /// </summary>
     public class ShaderPlayer : BasePlayer
     {
         Dictionary<string,Shader> m_shaderDict;
+
         Dictionary<string,Shader> shaderDict{
             get{if(m_shaderDict == null){m_shaderDict = new Dictionary<string, Shader>();}return m_shaderDict;}
             set {m_shaderDict = value;}            
         }
 
+
+        /// <summary>
+        /// 
+        /// </summary>
         public ShaderPlayer():base(){
             shaderDict = new Dictionary<string, Shader>();
         }
 
+
+        /// <summary>
+        /// 
+        /// </summary>
         ~ShaderPlayer()
         {
             shaderDict = null;
         }
 
-        public void OnMessageEventPull(byte[] bytes){
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bytes"></param>
+        public void OnMessageEventPull(BinaryReader binaryReader){
             GetAllShader();
             var shaderKuns = new ShaderKun[shaderDict.Count];
             var  i = 0;
@@ -38,19 +143,23 @@ namespace Utj.UnityChoseKun{
             }
             var shaderKunPacket = new ShaderKunPacket();
             shaderKunPacket.shaderKuns = shaderKuns;
-            SendMessage<ShaderKunPacket>(UnityChoseKun.MessageID.ShaderPull,shaderKunPacket);
+            UnityChoseKunPlayer.SendMessage<ShaderKunPacket>(UnityChoseKun.MessageID.ShaderPull,shaderKunPacket);
         }
 
-        public void OnMessageEventPush(string json){
-
-        }
-
+        
+        /// <summary>
+        /// 
+        /// </summary>
         public void GetAllShader()
         {
             GetAllShaderInResources();
             GetAllShaderInScene();
         }
 
+
+        /// <summary>
+        /// 
+        /// </summary>
         public void GetAllShaderInResources()
         {
             var shaders = Resources.FindObjectsOfTypeAll(typeof(Shader)) as Shader[];
@@ -63,6 +172,9 @@ namespace Utj.UnityChoseKun{
         }
 
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void GetAllShaderInScene()
         {            
             var scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
@@ -84,6 +196,13 @@ namespace Utj.UnityChoseKun{
 
         }
 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="go"></param>
+        /// <param name="components"></param>
         void GetSComponentsInChildren<T>(GameObject go,List<T> components)
         {            
             go.GetComponents<T>(components);

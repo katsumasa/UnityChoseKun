@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.IO;
 using UnityEngine;
 
 namespace Utj.UnityChoseKun
@@ -7,19 +6,33 @@ namespace Utj.UnityChoseKun
 
     public class ApplicationPlayer : BasePlayer
     {
-        public void OnMessageEventPull(byte[] bytes)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="binaryReader"></param>
+        public void OnMessageEventPull(BinaryReader binaryReader)
         {
-            SendMessage<ApplicationKun>(UnityChoseKun.MessageID.ApplicationPull, new ApplicationKun(true));
+            UnityChoseKunPlayer.SendMessage<ApplicationKun>(UnityChoseKun.MessageID.ApplicationPull, new ApplicationKun(true));
         }
 
 
-        public void OnMessageEventPush(byte[] bytes)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="binaryReader"></param>
+        public void OnMessageEventPush(BinaryReader binaryReader)
         {
-            var applicationKun = UnityChoseKun.GetObject<ApplicationKun>(bytes);
+            var applicationKun = new ApplicationKun();
+            applicationKun.Deserialize(binaryReader);
             applicationKun.WriteBack();
         }
 
-        public void OnMessageEventQuit(byte[] bytes)
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="binaryReader"></param>
+        public void OnMessageEventQuit(BinaryReader binaryReader)
         {
             Application.Quit();
         }

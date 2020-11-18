@@ -11,6 +11,7 @@ namespace Utj.UnityChoseKun{
     public class RendererView : ComponentView
     { 
         private static class Styles {
+            public static readonly Texture2D ComponentIcon = (Texture2D)EditorGUIUtility.Load("d_MeshRenderer Icon");
             public static readonly GUIContent Icon = new GUIContent((Texture2D)EditorGUIUtility.Load("d_MeshRenderer Icon"));
             public static  GUIContent RendererName = new GUIContent("Renderer");
         }
@@ -47,32 +48,23 @@ namespace Utj.UnityChoseKun{
             set{m_materialViews = value;}
         }
 
-        [SerializeField]RendererKun m_rendererKun;
-        RendererKun rendererKun{
-            get{return m_rendererKun;}
-            set{m_rendererKun = value;}
-        }
-
-
-        protected virtual bool DrawTitle(RendererKun rendererKun)
-        {
-            GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));            
-            EditorGUILayout.BeginHorizontal();
-            titleFoldout = EditorGUILayout.Foldout(titleFoldout,Styles.Icon);
-
-            EditorGUI.BeginChangeCheck();
-            rendererKun.enabled = EditorGUILayout.ToggleLeft(Styles.RendererName,rendererKun.enabled);                
-            if(EditorGUI.EndChangeCheck()){
-                rendererKun.dirty = true;
+        
+        public RendererKun rendererKun{
+            get{return componentKun as RendererKun;}
+            set{ 
+                componentKun = value;                
             }
-            
-            GUILayout.FlexibleSpace();
-            EditorGUILayout.EndHorizontal();
-            GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));         
-            
-            return titleFoldout;
         }
-            
+
+
+        public RendererView():base()
+        {
+            componentIcon = Styles.ComponentIcon;
+            foldout = true;
+        }
+
+
+                      
         protected virtual void DrawMaterials(RendererKun rendererKun)
         {            
             materialsFoldout = EditorGUILayout.Foldout(materialsFoldout,"Materials");
@@ -104,6 +96,7 @@ namespace Utj.UnityChoseKun{
         }
 
 
+
         public override void SetComponentKun(ComponentKun componentKun)
         {
             rendererKun = componentKun as RendererKun;
@@ -125,25 +118,42 @@ namespace Utj.UnityChoseKun{
         }
 
 
-        public override ComponentKun GetComponentKun()
+        protected virtual bool DrawHeader()
         {
-            return rendererKun;
+            GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));
+            EditorGUILayout.BeginHorizontal();
+            var iconContent = new GUIContent(mComponentIcon);
+            foldout = EditorGUILayout.Foldout(foldout, iconContent);                          // Foldout & Icon
+
+            EditorGUI.BeginChangeCheck();
+            var content = new GUIContent(rendererKun.name);
+
+            var rect = EditorGUILayout.GetControlRect();
+            rendererKun.enabled = EditorGUI.ToggleLeft(new Rect(rect.x - 24, rect.y, rect.width, rect.height), content, rendererKun.enabled);
+            if (EditorGUI.EndChangeCheck())
+            {
+                rendererKun.dirty = true;
+            }
+            GUILayout.FlexibleSpace();
+            EditorGUILayout.EndHorizontal();
+            GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));
+
+            return foldout;
         }
 
 
-        public override void OnGUI()
+
+        public override bool OnGUI()
         {
-            if(rendererKun != null){
-                if(DrawTitle(rendererKun)){
-                    using (new EditorGUI.IndentLevelScope()){
-                        EditorGUI.BeginChangeCheck();
+            if (DrawHeader()) {
+                using (new EditorGUI.IndentLevelScope()){
+                    EditorGUI.BeginChangeCheck();
                         
-                        DrawMaterials(rendererKun);
-                        DrawLighting(rendererKun);
+                    DrawMaterials(rendererKun);
+                    DrawLighting(rendererKun);
                         
-                        if(EditorGUI.EndChangeCheck()){
-                            rendererKun.dirty = true;
-                        }
+                    if(EditorGUI.EndChangeCheck()){
+                        rendererKun.dirty = true;
                     }
                 }
             }
@@ -154,7 +164,9 @@ namespace Utj.UnityChoseKun{
             }
             if(EditorGUI.EndChangeCheck()){
                 rendererKun.dirty = true;
-            }    
+            }
+
+            return true;
         }
 
 

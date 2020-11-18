@@ -1,11 +1,21 @@
-﻿using System.Collections;
+﻿using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
-namespace Utj.UnityChoseKun{    
+
+
+namespace Utj.UnityChoseKun{
+    
+    /// <summary>
+    /// 
+    /// </summary>
     public class TexturePlayer : BasePlayer
     {
+        /// <summary>
+        /// TextureKunPacket
+        /// </summary>
         [System.Serializable]
-        public class TextureKunPacket {
+        public class TextureKunPacket : ISerializerKun
+        {
             [SerializeField] bool m_isResources;
             [SerializeField] bool m_isScene;
             [SerializeField] TextureKun[] m_textureKuns;
@@ -23,14 +33,128 @@ namespace Utj.UnityChoseKun{
                 set{m_textureKuns = value;}
             }
 
-            public TextureKunPacket(){}
+
+            /// <summary>
+            /// 
+            /// </summary>
+            public TextureKunPacket():this(null){}
+            
+            
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="textureKuns"></param>
             public TextureKunPacket(TextureKun[] textureKuns)
             {
                 this.textureKuns = textureKuns;
             }
+
+
+            /// <summary>
+            /// Serialize
+            /// </summary>
+            /// <param name="binaryWriter">BinaryWriter</param>
+            public virtual void Serialize(BinaryWriter binaryWriter)
+            {
+                binaryWriter.Write(m_isResources);
+                binaryWriter.Write(m_isScene);
+                if(m_textureKuns == null)
+                {
+                    binaryWriter.Write(-1);
+                }
+                else
+                {
+                    binaryWriter.Write(m_textureKuns.Length);
+                    for(var i = 0; i < m_textureKuns.Length; i++)
+                    {
+                        m_textureKuns[i].Serialize(binaryWriter);
+                    }
+                }
+            }
+
+
+            /// <summary>
+            /// Deserialize
+            /// </summary>
+            /// <param name="binaryReader">BinaryReader</param>
+            public virtual void Deserialize(BinaryReader binaryReader)
+            {
+                m_isResources = binaryReader.ReadBoolean();
+                m_isScene = binaryReader.ReadBoolean();
+                var len = binaryReader.ReadInt32();
+                if(len != -1)
+                {
+                    m_textureKuns = new TextureKun[len];
+                    for(var i = 0; i < len; i++)
+                    {
+                        m_textureKuns[i] = new TextureKun();
+                        m_textureKuns[i].Deserialize(binaryReader);
+                    }
+                }
+            }
+
+
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="obj"></param>
+            /// <returns></returns>
+            public override bool Equals(object obj)
+            {
+                var other = obj as TextureKunPacket;
+                if(other == null)
+                {
+                    return false;
+                }
+                if (!m_isResources.Equals(other.m_isResources))
+                {
+                    return false;
+                }
+                if (!m_isScene.Equals(other.m_isScene))
+                {
+                    return false;
+                }
+                if (m_textureKuns != null)
+                {
+                    if(other.m_textureKuns == null)
+                    {
+                        return false;
+                    }
+                    if(m_textureKuns.Length != other.m_textureKuns.Length)
+                    {
+                        return false;
+                    }
+                    for(var i = 0; i < m_textureKuns.Length; i++)
+                    {
+                        if (!TextureKun.Equals(m_textureKuns[i], other.m_textureKuns[i]))
+                        {
+                            return false;
+                        }
+                    }
+                } 
+                else if(other.m_textureKuns != null)
+                {
+                    return false;
+                }
+                return true;
+            }
+
+
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <returns></returns>
+            public override int GetHashCode()
+            {
+                return base.GetHashCode();
+            }
+
         }
         
+
         static Dictionary<int,Texture> m_textureDict;
+
+
         public static Dictionary<int,Texture> textureDict
         {
             get{if(m_textureDict == null){m_textureDict = new Dictionary<int, Texture>();}return m_textureDict;}
@@ -38,15 +162,24 @@ namespace Utj.UnityChoseKun{
         }
         
 
+        /// <summary>
+        /// 
+        /// </summary>
         ~TexturePlayer(){
             textureDict.Clear();
             textureDict = null;
         }
 
 
-        public void OnMessageEventPull(byte[] bytes){
-            Debug.Log("TextureKunPlayer:TextureKunPlayer");
-            var textureKunPacket = UnityChoseKun.GetObject<TextureKunPacket>(bytes);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bytes"></param>
+        public void OnMessageEventPull(BinaryReader binaryReader){
+
+            var textureKunPacket = new TextureKunPacket();
+            textureKunPacket.Deserialize(binaryReader);
+            
             if(textureKunPacket.isScene){
                 GetAllTextureInScene();
             }
@@ -59,11 +192,14 @@ namespace Utj.UnityChoseKun{
                 textureKuns[i++] = new TextureKun(texture);                
             }
             
-            textureKunPacket = new TextureKunPacket(textureKuns);              
-            SendMessage<TextureKunPacket>(UnityChoseKun.MessageID.TexturePull,textureKunPacket);
+            textureKunPacket = new TextureKunPacket(textureKuns);
+            UnityChoseKunPlayer.SendMessage<TextureKunPacket>(UnityChoseKun.MessageID.TexturePull,textureKunPacket);
         }
 
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void GetAllTextureInResources()
         {
             var textures = Resources.FindObjectsOfTypeAll(typeof(Texture)) as Texture[];
@@ -78,6 +214,9 @@ namespace Utj.UnityChoseKun{
         }
         
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void GetAllTextureInScene()
         {            
             #if UNITY_2019_1_OR_NEWER
@@ -147,6 +286,12 @@ namespace Utj.UnityChoseKun{
         }
 
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="go"></param>
+        /// <param name="components"></param>
         void GetSComponentsInChildren<T>(GameObject go,List<T> components)
         {
             if (go != null)
@@ -157,7 +302,8 @@ namespace Utj.UnityChoseKun{
                     var child = go.transform.GetChild(i).gameObject;
                     GetSComponentsInChildren<T>(child, components);
                 }
-            } else
+            }
+            else
             {
                 Debug.LogWarning("go == null");
             }

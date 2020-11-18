@@ -51,31 +51,42 @@ namespace Utj.UnityChoseKun{
         bool DrawTitle()
         {            
             EditorGUILayout.LabelField(new GUIContent(materialKun.name,MaterialIcon));
-            if(ShadersView.shaderNames == null){
-                EditorGUILayout.HelpBox("If you want to change shaders,you need to Shader->Pull.",MessageType.Info);
+
+            if (ShadersView.shaderNames == null)
+            {
+                EditorGUILayout.HelpBox("If you want to change shaders,you need to Shader->Pull.", MessageType.Info);
             }
-            EditorGUILayout.BeginHorizontal();
-            foldout = EditorGUILayout.Foldout(foldout,new GUIContent("Shader",ShaderIcon));
-            if(ShadersView.shaderNames != null){
-                var idx = 0;
-                for(var i = 0; i < ShadersView.shaderNames.Length; i++){
-                    if(ShadersView.shaderNames[i] == shader.name){
-                        idx = i;
-                        break;
+            using (new EditorGUI.IndentLevelScope())
+            {                
+                EditorGUILayout.BeginHorizontal();
+                foldout = EditorGUILayout.Foldout(foldout, new GUIContent("Shader", ShaderIcon));
+                if (ShadersView.shaderNames != null)
+                {
+                    var idx = 0;
+                    for (var i = 0; i < ShadersView.shaderNames.Length; i++)
+                    {
+                        if (ShadersView.shaderNames[i] == shader.name)
+                        {
+                            idx = i;
+                            break;
+                        }
+                    }
+                    EditorGUI.BeginChangeCheck();
+                    idx = EditorGUILayout.Popup("", idx, ShadersView.shaderNames);
+                    if (EditorGUI.EndChangeCheck())
+                    {
+                        shader = ShadersView.shaderKuns[idx];
+                        materialKun.dirty = true;
                     }
                 }
-                EditorGUI.BeginChangeCheck();
-                idx = EditorGUILayout.Popup("",idx,ShadersView.shaderNames);
-                if(EditorGUI.EndChangeCheck()){
-                    shader = ShadersView.shaderKuns[idx];
-                    materialKun.dirty = true;                           
-                }
-            } else {
+                else
+                {
 
-                EditorGUILayout.TextField(shader.name);
+                    EditorGUILayout.TextField(shader.name);
+                }
+                EditorGUILayout.EndHorizontal();
             }
-            EditorGUILayout.EndHorizontal();
-            return m_foldout;
+            return foldout;
         }
 
 
@@ -209,20 +220,27 @@ namespace Utj.UnityChoseKun{
 
         void DrawBody()
         {
-            EditorGUILayout.IntField("Render Queue",renderQueue);   
-            EditorGUILayout.Toggle("Enable GUP Instancing",enableInstancing);
+            EditorGUILayout.IntField("Render Queue",renderQueue);
+            var content = new GUIContent("Enable GUP Instancing");
+            var v2 = EditorStyles.toggle.CalcSize(content);
+            EditorGUILayout.Toggle(new GUIContent("Enable GUP Instancing"),enableInstancing);
         }                            
+
 
         public  void OnGUI(){
             GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));         
             if(DrawTitle()){
-                using (new EditorGUI.IndentLevelScope()){                    
-                    EditorGUI.BeginChangeCheck();
-                    DrawProperty();
-                    DrawShaderKeyWords();
-                    DrawBody();
-                    if(EditorGUI.EndChangeCheck()){
-                        materialKun.dirty = true;
+                using (new EditorGUI.IndentLevelScope()){
+                    using (new EditorGUI.IndentLevelScope())
+                    {
+                        EditorGUI.BeginChangeCheck();
+                        DrawProperty();
+                        DrawShaderKeyWords();
+                        DrawBody();
+                        if (EditorGUI.EndChangeCheck())
+                        {
+                            materialKun.dirty = true;
+                        }
                     }
                 }
             }

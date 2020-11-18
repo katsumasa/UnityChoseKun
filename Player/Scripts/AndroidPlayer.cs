@@ -1,21 +1,32 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.IO;
+
 
 namespace Utj.UnityChoseKun {
+    /// <summary>
+    /// 
+    /// </summary>
     public class AndroidPlayer : BasePlayer
     {
-        public void OnMessageEventPull(byte[] bytes)
-        {            
-            SendMessage<AndroidKun>(UnityChoseKun.MessageID.AndroidPull, new AndroidKun());
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="binaryReader"></param>
+        public void OnMessageEventPull(BinaryReader binaryReader)
+        {
+            UnityChoseKunPlayer.SendMessage<AndroidKun>(UnityChoseKun.MessageID.AndroidPull, new AndroidKun());
         }
 
 
-        public void OnMessageEventPush(byte[] bytes)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="binaryReader"></param>
+        public void OnMessageEventPush(BinaryReader binaryReader)
         {         
-            var androidKun = UnityChoseKun.GetObject<AndroidKun>(bytes);
+            var androidKun = new AndroidKun();
+            androidKun.Deserialize(binaryReader);
             androidKun.WriteBack();
-            SendMessage<AndroidKun>(UnityChoseKun.MessageID.AndroidPush, androidKun);
+            UnityChoseKunPlayer.SendMessage<AndroidKun>(UnityChoseKun.MessageID.AndroidPush, androidKun);
         }
     }
 }

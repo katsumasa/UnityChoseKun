@@ -32,11 +32,14 @@
             {ComponentKun.ComponentKunType.Collider,                typeof(ColliderView) },
 
             {ComponentKun.ComponentKunType.Animator,                typeof(AnimatorView) },
+            {ComponentKun.ComponentKunType.ParticleSystem,          typeof(ParticleSystemView) },
 
 
             {ComponentKun.ComponentKunType.MonoBehaviour,           typeof(MonoBehaviourView)},
             {ComponentKun.ComponentKunType.Behaviour,               typeof(BehaviourView)},
             {ComponentKun.ComponentKunType.Component,               typeof(ComponentView)},
+            
+            {ComponentKun.ComponentKunType.MissingMono,            typeof(MissingMonoView) },
         };
         
 
@@ -44,9 +47,6 @@
         {        
             return componentViewTbls[componentType];
         }
-
-
-
 
         private static class Styles
         {
@@ -61,8 +61,25 @@
             set { m_componentKun = value; }
         }
 
+        /// <summary>
+        /// Class名の横に表示されるアイコン
+        /// </summary>
         protected Texture2D mComponentIcon;
-
+        protected Texture2D componentIcon
+        {
+            get { return mComponentIcon;}
+            set { mComponentIcon = value;}
+        }
+        
+        /// <summary>
+        /// Foldoutの値
+        /// </summary>
+        [SerializeField] bool mFoldout;
+        protected bool foldout
+        {
+            get { return mFoldout; }
+            set { mFoldout = value; }
+        }
 
         /// <summary>
         /// ComponentKunを設定する
@@ -86,23 +103,35 @@
 
         public ComponentView()
         {
-            mComponentIcon = Styles.ComponentIcon;
+            componentIcon = Styles.ComponentIcon;
+
+            foldout = false;
         }
 
 
         /// <summary>
         /// OnGUIから呼び出す処理
         /// </summary>
-        public virtual void OnGUI()
+        public virtual bool OnGUI()
         {
+            GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));
+            EditorGUILayout.BeginHorizontal();                        
+            var iconContent = new GUIContent(mComponentIcon);
+            foldout = EditorGUILayout.Foldout(foldout, iconContent);
+                         
             EditorGUI.BeginChangeCheck();
-            GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));            
-            var content = new GUIContent(componentKun.name, mComponentIcon);
-            EditorGUILayout.LabelField(content);
-            GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));            
+            var rect = EditorGUILayout.GetControlRect();
+            var content = new GUIContent(componentKun.name);
+            EditorGUI.LabelField(new Rect(rect.x - 8,rect.y,rect.width,rect.height),content);
+            //EditorGUILayout.LabelField(content);
+
             if (EditorGUI.EndChangeCheck()){
                 componentKun.dirty = true;
             }
+            GUILayout.FlexibleSpace();
+            EditorGUILayout.EndHorizontal();
+            GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));
+            return foldout;
         }
     }
 }

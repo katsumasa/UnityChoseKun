@@ -1,22 +1,32 @@
-﻿namespace Utj.UnityChoseKun
+﻿using System.IO;
+
+
+namespace Utj.UnityChoseKun
 {
-    using System.Collections;
-    using System.Collections.Generic;
-    using UnityEngine;
-
-    
-
+    /// <summary>
+    /// 
+    /// </summary>
     public class TimePlayer : BasePlayer
     {
-        public  void OnMessageEventPull(byte[] bytes)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="binaryReader"></param>
+        public  void OnMessageEventPull(BinaryReader binaryReader)
         {
             var timeKun = new TimeKun(true);
-            SendMessage<TimeKun>(UnityChoseKun.MessageID.TimePull,timeKun);
+            UnityChoseKunPlayer.SendMessage<TimeKun>(UnityChoseKun.MessageID.TimePull,timeKun);
         }
 
-        public void OnMessageEventPush(byte[] bytes)
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="binaryReader"></param>
+        public void OnMessageEventPush(BinaryReader binaryReader)
         {
-            var timeKun = UnityChoseKun.GetObject<TimeKun>(bytes);
+            var timeKun = new TimeKun();
+            timeKun.Deserialize(binaryReader);
             timeKun.WriteBack();
         }        
     }
