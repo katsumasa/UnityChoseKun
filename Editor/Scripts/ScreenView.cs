@@ -40,8 +40,9 @@
 
                 screenKun.fullScreen = EditorGUILayout.ToggleLeft("fullScreen", screenKun.fullScreen);
                 screenKun.sleepTimeout = EditorGUILayout.IntField("sleepTimeout", screenKun.sleepTimeout);
+#if UNITY_2019_1_OR_NEWER
                 screenKun.brightness = EditorGUILayout.FloatField("brightness", screenKun.brightness);
-
+#endif
                 EditorGUILayout.Space();
 
                 EditorGUILayout.FloatField("dpi", screenKun.dpi);
@@ -55,7 +56,7 @@
                 EditorGUILayout.IntField("refreshRate", screenKun.currentResolutionRefreshRate);
                 EditorGUI.indentLevel--;
                 EditorGUILayout.Space();
-
+#if UNITY_2019_1_OR_NEWER
                 EditorGUILayout.LabelField("cutouts");
                 if (screenKun.cutouts != null)
                 {
@@ -68,6 +69,7 @@
                 }
 
                 EditorGUILayout.Space();
+#endif
 
                 
                 if (screenKun.resolutions == null)

@@ -19,6 +19,13 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 #endif
+
+#if UNITY_2019_1_OR_NEWER
+#else
+using UnityEngine.Experimental.UIElements;
+using UnityEditor.Experimental.UIElements;
+#endif
+
 using UnityEditor.IMGUI.Controls;
 
 
@@ -35,8 +42,12 @@ namespace Utj.UnityChoseKun
     {
         public static class Styles
         {                                
-            public static readonly GUIContent TitleContent      = new GUIContent("Player Hierarchy", (Texture2D)EditorGUIUtility.FindTexture("d_UnityEditor.SceneHierarchyWindow"));            
+            public static readonly GUIContent TitleContent      = new GUIContent("Player Hierarchy", (Texture2D)EditorGUIUtility.FindTexture("d_UnityEditor.SceneHierarchyWindow"));
+#if UNITY_2019_1_OR_NEWER
             public static readonly GUIContent NetworkMessages   = new GUIContent("Reload",(Texture2D)EditorGUIUtility.LoadRequired("d_Profiler.NetworkMessages@2x"),"Hierarchyの情報を取得");
+#else
+            public static readonly GUIContent NetworkMessages = new GUIContent("Reload","Hierarchyの情報を取得");
+#endif
             public static readonly GUIContent Rename            = new GUIContent("Rename");
             public static readonly GUIContent Duplicate         = new GUIContent("Duplicate");
             public static readonly GUIContent Delete            = new GUIContent("Delete");
@@ -181,7 +192,12 @@ namespace Utj.UnityChoseKun
             {
                 // MouseがWindow無いに入っていればMenuを表示する
                 var window = (PlayerHierarchyWindow)EditorWindow.GetWindow(typeof(PlayerHierarchyWindow));
+#if UNITY_2019_1_OR_NEWER
                 if (window.rootVisualElement.localBound.Contains(evt.mousePosition))
+#else
+                
+                if (this.GetRootVisualContainer().localBound.Contains(evt.mousePosition))
+#endif
                 {
                     var menu = new GenericMenu();
                     menu.AddDisabledItem(Styles.Rename);
