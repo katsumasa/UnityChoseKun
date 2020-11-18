@@ -113,10 +113,10 @@ MenuからWindow->UnityChoseKun->Player ViewでPlayerView Windowが表示され�
 
 接続先のデバイスを指定します。接続の仕組みはUnityProfilerと共有していますので、どちらかの接続先を切り替えると、もう片方の接続先も切り替わります。
 
-![img](docs/PlayIcon.png)　再生の開始/終了<br>
-![img](docs/RecIcon.png)　録画の開始/終了<br>
-![img](docs/ScreenShotIcon.png)　スクリーンショットを保存する<br>
-![img](docs/SaveFolderIcon.png)　録画結果の保存先を指定する<br>
+![img](docs/PlayIcon.png)　再生の開始/終了</br>
+![img](docs/RecIcon.png)　録画の開始/終了</br>
+![img](docs/ScreenShotIcon.png)　スクリーンショットを保存する</br>
+![img](docs/SaveFolderIcon.png)　録画結果の保存先を指定する</br>
 
 ###### Enable Async GPU Readback
 
@@ -144,7 +144,7 @@ MenuからWindow->UnityChoseKun->Player ViewでPlayerView Windowが表示され�
 
 ##### 注意事項
 
-Player Viewerは非常に負荷の高い処理です。Player Inspector->Screen->SetScreenからwidthとheightを調整したり、Skip Frameで実行間隔を調整してから再生を実行することを*オススメ*します。
+Player Viewerは非常に負荷の高い処理です。Player Inspector->Screen->SetScreenからwidthとheightを調整したり、Reflesh Intervalで実行間隔を調整してから再生を実行することを*オススメ*します。
 
 #### Player Hierarchy
 
@@ -157,6 +157,9 @@ Player Viewerは非常に負荷の高い処理です。Player Inspector->Screen-
 GameObjectが数万個存在するような複雑なSceneの場合、Reloadには時間がかかります。
 
 EditorのHierarchy同様にGameObjectの親子関係を変更したり、右クリックからのモーダルダイヤログでGameObjectを生成したり、基本的なComponentを追加することが出来ます。
+
+*NOTE* </br>
+アプリケーションに含まれていないComponentを追加するとエラーとなります。
 
 #### Player Inspector
 
