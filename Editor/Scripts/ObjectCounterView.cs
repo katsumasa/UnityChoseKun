@@ -9,7 +9,7 @@
     [System.Serializable]
     public class ObjectCounterView
     {
-        int[] mComponentCounts;
+        [SerializeField]int[] mComponentCounts;
 
         int[] componentCounts
         {

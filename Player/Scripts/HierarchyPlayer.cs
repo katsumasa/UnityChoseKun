@@ -36,9 +36,16 @@ namespace Utj.UnityChoseKun
             binaryWriter.Write((int)messageID);
             binaryWriter.Write(baseID);
             binaryWriter.Write((int)primitiveType);
-
-            systemType = type.ToString();
+            if (type != null)
+            {
+                systemType = type.ToString();
+            } 
+            else
+            {
+                systemType = "";
+            }
             binaryWriter.Write(systemType);
+            //SerializerKun.Serialize(binaryWriter, systemType);
         }
 
 
@@ -51,8 +58,15 @@ namespace Utj.UnityChoseKun
             messageID = (MessageID)binaryReader.ReadInt32();
             baseID = binaryReader.ReadInt32();
             primitiveType = (PrimitiveType)binaryReader.ReadInt32();
+            
+            //systemType = SerializerKun.DesirializeString(binaryReader);
             systemType = binaryReader.ReadString();
-            type = System.Type.GetType(systemType);
+
+            if (!string.IsNullOrEmpty(systemType))
+            {
+                type = System.Type.GetType(systemType);
+            } 
+            
         }
 
 
@@ -140,19 +154,21 @@ namespace Utj.UnityChoseKun
                     {
                         var parent = FindGameObjectInScene(message.baseID);
                         var go = new GameObject();
-                        if (parent != null)
+                        if (go != null)
                         {
-                            go.transform.parent = parent.transform;
+                            if (parent != null)
+                            {
+                                go.transform.parent = parent.transform;
+                            }
+                            else
+                            {
+                                go.transform.parent = null;
+                            }
+
+                            go.transform.localPosition = Vector3.zero;
+                            go.transform.localRotation = Quaternion.identity;
+                            go.transform.localScale = Vector3.one;
                         }
-                        else
-                        {
-                            go.transform.parent = null;
-                        }
-                        
-                        go.transform.localPosition  = Vector3.zero;
-                        go.transform.localRotation  = Quaternion.identity;
-                        go.transform.localScale     = Vector3.one;
-                        
                     }
                     break;
 
@@ -160,18 +176,21 @@ namespace Utj.UnityChoseKun
                     {                        
                         var parent = FindGameObjectInScene(message.baseID);
                         var go = new GameObject(message.type.Name,message.type);
-                        if (parent != null)
+                        if (go != null)
                         {
-                            go.transform.parent = parent.transform;
-                        }
-                        else
-                        {
-                            go.transform.parent = null;
-                        }
+                            if (parent != null)
+                            {
+                                go.transform.parent = parent.transform;
+                            }
+                            else
+                            {
+                                go.transform.parent = null;
+                            }
 
-                        go.transform.localPosition = Vector3.zero;
-                        go.transform.localRotation = Quaternion.identity;
-                        go.transform.localScale = Vector3.one;
+                            go.transform.localPosition = Vector3.zero;
+                            go.transform.localRotation = Quaternion.identity;
+                            go.transform.localScale = Vector3.one;
+                        }
                     }            
                     break;
 
@@ -179,18 +198,21 @@ namespace Utj.UnityChoseKun
                     {
                         var parent = FindGameObjectInScene(message.baseID);
                         var go = GameObject.CreatePrimitive(message.primitiveType);
-                        if (parent != null)
+                        if (go != null)
                         {
-                            go.transform.parent = parent.transform;
-                        }
-                        else
-                        {
-                            go.transform.parent = null;
-                        }
+                            if (parent != null)
+                            {
+                                go.transform.parent = parent.transform;
+                            }
+                            else
+                            {
+                                go.transform.parent = null;
+                            }
 
-                        go.transform.localPosition = Vector3.zero;
-                        go.transform.localRotation = Quaternion.identity;
-                        go.transform.localScale = Vector3.one;
+                            go.transform.localPosition = Vector3.zero;
+                            go.transform.localRotation = Quaternion.identity;
+                            go.transform.localScale = Vector3.one;
+                        }
                     }
                     break;
             }

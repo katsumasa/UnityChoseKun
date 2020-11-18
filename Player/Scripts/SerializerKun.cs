@@ -114,9 +114,19 @@ namespace Utj.UnityChoseKun
             }
         }
 
+        public static void Serialize(BinaryWriter binaryWriter, string obj)
+        {
+            if (obj == null)
+            {
+                binaryWriter.Write(false);
+            }
+            else
+            {
+                binaryWriter.Write(true);
+                binaryWriter.Write(obj);
+            }
+        }
 
-
-        
 
         public static bool[] DesirializeBooleans(BinaryReader binaryReader)
         {
@@ -166,6 +176,16 @@ namespace Utj.UnityChoseKun
             return arrays;
         }
 
+
+        public static string DesirializeString(BinaryReader binaryReader)
+        {
+            bool result = binaryReader.ReadBoolean();
+            if (result)
+            {
+                return binaryReader.ReadString();
+            }
+            return null;
+        }
 
 
         /// <summary>

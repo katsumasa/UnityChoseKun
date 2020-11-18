@@ -461,6 +461,7 @@ namespace Utj.UnityChoseKun{
             {
                 return false;
             }
+#if UNITY_2019_1_OR_NEWER
             if(propertys == null && other.propertys != null)
             {
                 return false;
@@ -483,6 +484,7 @@ namespace Utj.UnityChoseKun{
                     }
                 }
             }
+#endif
             if (isSupported.Equals(other.isSupported) == false)
             {
                 return false;
