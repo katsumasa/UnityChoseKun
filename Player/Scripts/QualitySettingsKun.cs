@@ -35,7 +35,9 @@ namespace Utj.UnityChoseKun
         [SerializeField] public ShadowProjection shadowProjection;
         [SerializeField] public ShadowResolution shadowResolution;
         [SerializeField] public ShadowQuality shadows;
+#if UNITY_2019_1_OR_NEWER
         [SerializeField] public SkinWeights skinWeights;
+#endif
         [SerializeField] public bool softParticles;
         [SerializeField] public bool softVegetation;
         [SerializeField] public bool streamingMipmapsActive;
@@ -97,7 +99,9 @@ namespace Utj.UnityChoseKun
                 shadowProjection = QualitySettings.shadowProjection;
                 shadowResolution = QualitySettings.shadowResolution;
                 shadows = QualitySettings.shadows;
+#if UNITY_2019_1_OR_NEWER
                 skinWeights = QualitySettings.skinWeights;
+#endif
                 softParticles = QualitySettings.softParticles;
                 softVegetation = QualitySettings.softVegetation;
                 streamingMipmapsActive = QualitySettings.streamingMipmapsActive;
@@ -141,7 +145,9 @@ namespace Utj.UnityChoseKun
                 QualitySettings.shadowProjection = shadowProjection;
                 QualitySettings.shadowResolution = shadowResolution;
                 QualitySettings.shadows = shadows;
+#if UNITY_2019_1_OR_NEWER
                 QualitySettings.skinWeights = skinWeights; ;
+#endif
                 QualitySettings.softParticles = softParticles;
                 QualitySettings.softVegetation = softVegetation;
                 QualitySettings.streamingMipmapsActive = streamingMipmapsActive;
@@ -187,7 +193,9 @@ namespace Utj.UnityChoseKun
             binaryWriter.Write((int)shadowProjection);
             binaryWriter.Write((int)shadowResolution);
             binaryWriter.Write((int)shadows);
+#if UNITY_2019_1_OR_NEWER
             binaryWriter.Write((int)skinWeights);
+#endif
             binaryWriter.Write(softParticles);
             binaryWriter.Write(softVegetation);
             binaryWriter.Write(streamingMipmapsActive);
@@ -233,7 +241,9 @@ namespace Utj.UnityChoseKun
             shadowProjection = (ShadowProjection)binaryReader.ReadInt32();
             shadowResolution = (ShadowResolution)binaryReader.ReadInt32();
             shadows = (ShadowQuality)binaryReader.ReadInt32();
+#if UNITY_2019_1_OR_NEWER
             skinWeights = (SkinWeights)binaryReader.ReadInt32();
+#endif
             softParticles = binaryReader.ReadBoolean();
             softVegetation = binaryReader.ReadBoolean();
             streamingMipmapsActive = binaryReader.ReadBoolean();

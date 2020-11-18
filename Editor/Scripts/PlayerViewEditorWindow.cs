@@ -208,13 +208,13 @@
                         texture = Style.TVOS_ICON;
                     }
                     break;
-
+#if UNITY_2019_1_OR_NEWER
                 case RuntimePlatform.Stadia:
                     {
                         texture = Style.STADIA_ICON;
                     }
                     break;
-
+#endif
                 case RuntimePlatform.XboxOne:
                     {
                         texture = Style.XBOXONE_ICON;

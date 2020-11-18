@@ -226,10 +226,12 @@ namespace Utj.UnityChoseKun {
             {
                 return false;
             }
+#if UNITY_2019_1_OR_NEWER
             if(mipmapCount.Equals(other.mipmapCount) == false)
             {
                 return false;
             }
+#endif
             if (anisoLevel.Equals(other.anisoLevel) == false)
             {
                 return false;

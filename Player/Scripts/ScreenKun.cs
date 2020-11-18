@@ -19,12 +19,16 @@
         [SerializeField] bool m_autorotateToPortrait;
         [SerializeField] bool m_autorotateToPortraitUpsideDown;
         [SerializeField] bool m_fullScreen;
+#if UNITY_2019_1_OR_NEWER
         [SerializeField] float m_brightness;
+#endif
         [SerializeField] float m_dpi;
         [SerializeField] FullScreenMode m_fullScreenMode;
         [SerializeField] ScreenOrientation m_orientation;
         [SerializeField] RectKun m_safeArea;
+#if UNITY_2019_1_OR_NEWER
         [SerializeField] RectKun[] m_cutouts;
+#endif
         [SerializeField] ResolutionKun[] m_resolutions;
 
         public bool autorotateToLandscapeLeft{
@@ -46,12 +50,12 @@
             get{return m_autorotateToPortraitUpsideDown;}
             set{m_autorotateToPortraitUpsideDown = value;}
         }
-        
+#if UNITY_2019_1_OR_NEWER
         public float brightness{
             get{return m_brightness;}
             set{m_brightness = value;}
         }
-        
+#endif
         public int currentResolutionWidth{
             get{return m_currentResolutionWidth;}
             set{m_currentResolutionWidth = value;}
@@ -66,7 +70,7 @@
             get{return m_currentResolutionRefreshRate;}
             set{m_currentResolutionRefreshRate = value;}
         }
-        
+#if UNITY_2019_1_OR_NEWER
         public Rect[] cutouts{
             get
             {
@@ -86,7 +90,7 @@
                 }
             }
         }
-        
+#endif
         public float dpi{
             get{return m_dpi;}
             set{m_dpi = value;}
@@ -211,9 +215,9 @@
         /// </summary>
         public void WriteBack()
         {
-            #if UNITY_2019_1_OR_NEWER
+#if UNITY_2019_1_OR_NEWER
             Screen.brightness = brightness;
-            #endif
+#endif
             
             Screen.autorotateToLandscapeLeft = autorotateToLandscapeLeft;
             Screen.autorotateToLandscapeRight = autorotateToLandscapeRight;
@@ -245,7 +249,11 @@
             binaryWriter.Write(m_autorotateToPortrait);
             binaryWriter.Write(m_autorotateToPortraitUpsideDown);
             binaryWriter.Write(m_fullScreen);
+
+#if UNITY_2019_1_OR_NEWER
             binaryWriter.Write(m_brightness);
+#endif
+
             binaryWriter.Write(m_dpi);
             binaryWriter.Write((int)m_fullScreenMode);
             binaryWriter.Write((int)m_orientation);
@@ -257,7 +265,8 @@
                 binaryWriter.Write(1);
                 m_safeArea.Serialize(binaryWriter);
             }
-            
+
+#if UNITY_2019_1_OR_NEWER
             if(m_cutouts == null)
             {
                 binaryWriter.Write(-1);
@@ -269,6 +278,7 @@
                     m_cutouts[i].Serialize(binaryWriter);
                 }
             }
+#endif
 
             if(m_resolutions == null)
             {
@@ -304,7 +314,9 @@
             m_autorotateToPortrait = binaryReader.ReadBoolean();
             m_autorotateToPortraitUpsideDown = binaryReader.ReadBoolean();
             m_fullScreen = binaryReader.ReadBoolean();
+#if UNITY_2019_1_OR_NEWER
             m_brightness = binaryReader.ReadSingle();
+#endif
             m_dpi = binaryReader.ReadSingle();
             m_fullScreenMode = (FullScreenMode)binaryReader.ReadInt32();
             m_orientation = (ScreenOrientation)binaryReader.ReadInt32();
@@ -316,6 +328,7 @@
                 m_safeArea.Deserialize(binaryReader);
             }
 
+#if UNITY_2019_1_OR_NEWER
             len = binaryReader.ReadInt32();
             if (len != -1)
             {
@@ -327,6 +340,7 @@
 
                 }
             }
+#endif
 
             len = binaryReader.ReadInt32();
             if (len != -1)
@@ -399,10 +413,12 @@
             {
                 return false;
             }
+#if UNITY_2019_1_OR_NEWER
             if (!m_brightness.Equals(other.m_brightness))
             {
                 return false;
             }
+#endif
             if (!m_dpi.Equals(other.m_dpi))
             {
                 return false;
@@ -419,7 +435,7 @@
             {
                 return false;
             }
-
+#if UNITY_2019_1_OR_NEWER
             if(m_cutouts != null)
             {
                 if(other.m_cutouts == null)
@@ -438,7 +454,7 @@
                     }
                 }
             }
-            
+#endif
             if(m_resolutions != null)
             {
                 if(other.m_resolutions == null)

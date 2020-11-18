@@ -69,7 +69,9 @@ namespace Utj.UnityChoseKun
 
             GUILayout.Space(10);
             GUILayout.Label("Other", EditorStyles.boldLabel);
+#if UNITY_2019_1_OR_NEWER
             qualitySettingsKun.skinWeights = (SkinWeights)EditorGUILayout.EnumPopup("Skin Weights", qualitySettingsKun.skinWeights);
+#endif
             qualitySettingsKun.vSyncCount = EditorGUILayout.IntPopup("VSync Count", qualitySettingsKun.vSyncCount,Styles.VSyncCountLabels,Styles.VSyncCountValues);
             qualitySettingsKun.lodBias = EditorGUILayout.FloatField("LOD Bias", qualitySettingsKun.lodBias);
             qualitySettingsKun.maximumLODLevel = EditorGUILayout.IntField("Maximum LOD Level", qualitySettingsKun.maximumLODLevel);
