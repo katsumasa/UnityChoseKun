@@ -203,8 +203,6 @@ namespace Utj.UnityChoseKun{
         public void GetAllTextureInResources()
         {
             var textures = Resources.FindObjectsOfTypeAll(typeof(Texture)) as Texture[];
-            Debug.Log("Resourecs Texture count is " + textures.Length);
-
             foreach(var texture in textures)
             {
                 if(textureDict.ContainsKey(texture.GetInstanceID()) == false){
@@ -241,18 +239,18 @@ namespace Utj.UnityChoseKun{
                                 if (shader != null)
                                 {
                                     var cnt = shader.GetPropertyCount();
-                                    Debug.Log(shader.name + " cnt " + cnt);
+                                    //Debug.Log(shader.name + " cnt " + cnt);
                                     for (var j = 0; j < cnt; j++)
                                     {
                                         var type = shader.GetPropertyType(j);
-                                        Debug.Log(type);
+                                        //Debug.Log(type);
                                         if (type != UnityEngine.Rendering.ShaderPropertyType.Texture)
                                         {
                                             continue;
                                         }
                                         var nameId = shader.GetPropertyNameId(j);
                                         var texture = material.GetTexture(nameId);
-                                        Debug.Log("nameId:" + nameId);
+                                        //Debug.Log("nameId:" + nameId);
 
                                         if (texture != null)
                                         {
@@ -263,24 +261,24 @@ namespace Utj.UnityChoseKun{
                                             textureDict.Add(texture.GetInstanceID(), texture);
                                         } else
                                         {
-                                            Debug.Log("texture == null");
+                                            //Debug.Log("texture == null");
                                         }
                                     }
                                 }
                                 else
                                 {
-                                    Debug.LogWarning("shader == null");
+                                    UnityChoseKun.LogWarning("shader == null");
                                 }
                             } else
                             {
-                                Debug.LogWarning("material == null");
+                                UnityChoseKun.LogWarning("material == null");
                             }
                         }
                     }
                 }
             } else
             {
-                Debug.LogWarning("scene == null");
+                UnityChoseKun.LogWarning("scene == null");
             }
             #endif
         }

@@ -158,7 +158,7 @@
         {
             if (!componentPairDict.ContainsKey(componentKunType))
             {
-                Debug.Log("NotContainKey");
+                UnityChoseKun.LogError("NotContainKey");
             }
 
             return componentPairDict[componentKunType].componenKunType;

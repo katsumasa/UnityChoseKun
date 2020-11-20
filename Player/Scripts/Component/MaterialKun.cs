@@ -443,7 +443,6 @@ namespace Utj.UnityChoseKun{
         // TODO : Materialのwrite back
         public override bool WriteBack(Object obj)
         {
-            Debug.Log("Material.WriteBack(" + dirty + ")");
             var result = base.WriteBack(obj);
             var material = obj as Material;
             if (material)

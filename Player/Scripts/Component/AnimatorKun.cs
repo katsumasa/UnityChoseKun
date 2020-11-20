@@ -101,8 +101,7 @@ namespace Utj.UnityChoseKun {
             {
                 var animator = component as Animator;
                 if (animator)
-                {
-                    Debug.Log("animator.enabled" + animator.enabled);
+                {                    
                     animator.applyRootMotion = applyRootMotion;
                     animator.updateMode = updateMode;
                     animator.cullingMode = cullingMode;

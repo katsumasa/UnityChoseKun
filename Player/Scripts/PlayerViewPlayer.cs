@@ -85,7 +85,7 @@
 
         private void OnEnable()
         {
-            Debug.Log("OnEnable");
+            //Debug.Log("OnEnable");
             PlayerConnection.instance.Register(PlayerView.kMsgSendEditorToPlayer, OnMessageEvent);
         }
 
@@ -93,7 +93,7 @@
         //
         private void OnDisable()
         {
-            Debug.Log("OnDisable");
+            //Debug.Log("OnDisable");
             PlayerConnection.instance.Unregister(PlayerView.kMsgSendEditorToPlayer, OnMessageEvent);
         }
 
@@ -115,7 +115,7 @@
 
         private void OnMessageEvent(MessageEventArgs args)
         {
-            Debug.Log("OnMessageEvent");
+            //Debug.Log("OnMessageEvent");
             var json = System.Text.Encoding.ASCII.GetString(args.data);
             editorSendData = JsonUtility.FromJson<PlayerView.EditorSendData>(json);
             switch (editorSendData.command)
@@ -256,7 +256,7 @@
         {
             if (request.hasError == true)
             {                
-                Debug.Log("AsyncGPUReadbackRequest has error.");
+                Debug.LogError("AsyncGPUReadbackRequest has error.");
             }
             else
             {        

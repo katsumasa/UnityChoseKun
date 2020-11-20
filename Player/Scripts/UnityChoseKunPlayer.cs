@@ -161,8 +161,7 @@ namespace Utj.UnityChoseKun
         //
         void OnDestroy()
         {
-            UnityChoseKun.Log("OnDestroy");
-
+            //UnityChoseKun.Log("OnDestroy");
             if(onMessageFuncDict != null)
             {
                 onMessageFuncDict.Clear();
@@ -174,7 +173,7 @@ namespace Utj.UnityChoseKun
         //
         void OnEnable()
         {
-            UnityChoseKun.Log("OnEnable");
+            //UnityChoseKun.Log("OnEnable");
             PlayerConnection.instance.Register(UnityChoseKun.kMsgSendEditorToPlayer, OnMessageEvent);
         }
 
@@ -182,7 +181,7 @@ namespace Utj.UnityChoseKun
         //
         void OnDisable()
         {
-            UnityChoseKun.Log("OnDisable");
+            //UnityChoseKun.Log("OnDisable");
             PlayerConnection.instance.Unregister(UnityChoseKun.kMsgSendEditorToPlayer, OnMessageEvent);
         }
 
@@ -193,7 +192,7 @@ namespace Utj.UnityChoseKun
         /// <param name="args"></param>
         void OnMessageEvent(MessageEventArgs args)
         {
-            UnityChoseKun.Log("UnityChoseKun::OnMessageEvent");
+            //UnityChoseKun.Log("UnityChoseKun::OnMessageEvent");
             if (args.data == null)
             {
                 UnityChoseKun.LogError("args.data == null");
@@ -206,7 +205,7 @@ namespace Utj.UnityChoseKun
                 try
                 {
                     var messageID = (UnityChoseKun.MessageID)binaryReader.ReadInt32();
-                    UnityChoseKun.Log("message.id " + messageID);
+                    //UnityChoseKun.Log("message.id " + messageID);
                     var func = onMessageFuncDict[messageID];
                     func(binaryReader);
                 }
@@ -228,11 +227,9 @@ namespace Utj.UnityChoseKun
         /// <param name="obj"></param>
         public static void SendMessage<T>(UnityChoseKun.MessageID id, T obj) where T : ISerializerKun
         {
-            UnityChoseKun.Log("UnityChoseKunPlayer.SendMessage<T>("+ id + ",obj)" );
-
+            //UnityChoseKun.Log("UnityChoseKunPlayer.SendMessage<T>("+ id + ",obj)" );
             MemoryStream memoryStream = new MemoryStream();
             BinaryWriter binaryWriter = new BinaryWriter(memoryStream);
-
             try
             {
                 binaryWriter.Write((int)id);

@@ -66,8 +66,6 @@ namespace Utj.UnityChoseKun
                 mEffectiveRenderFrameRate = OnDemandRendering.effectiveRenderFrameRate;
                 mRenderFrameInterval = OnDemandRendering.renderFrameInterval;
                 mWillCurrentFrameRender = OnDemandRendering.willCurrentFrameRender;
-
-                UnityChoseKun.Log("mEffectiveRenderFrameRate " + mEffectiveRenderFrameRate);
 #endif
             }
         }

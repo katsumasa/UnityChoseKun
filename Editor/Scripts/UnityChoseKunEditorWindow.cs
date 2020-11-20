@@ -273,9 +273,6 @@
         
         private void OnEnable()
         {
-            Debug.Log("OnEnable");
-
-
             m_attachProfilerState = ConnectionUtility.GetAttachToPlayerState(this);                        
             UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Initialize();
             UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Register(UnityChoseKun.kMsgSendPlayerToEditor, OnMessageEvent);
@@ -313,10 +310,7 @@
         }
 
         private void OnDisable()
-        {
-            Debug.Log("OnDisable");
-
-
+        {            
             if (onMessageFuncDict != null)
             {
                 onMessageFuncDict.Clear();
