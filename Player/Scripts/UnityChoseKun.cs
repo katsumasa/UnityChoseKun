@@ -1,5 +1,5 @@
 ﻿#if DEBUG
-#define UNITY_CHOSEKUN_DEBUG
+//#define UNITY_CHOSEKUN_DEBUG
 #else
 #undef UNITY_CHOSEKUN_DEBUG
 #endif
@@ -59,6 +59,9 @@ namespace Utj.UnityChoseKun
             HierarchyPush,
             QualitySettingsPull,
             QualitySettingsPush,
+            OnDemandRenderingPull,
+            OnDemandRenderingPush,
+
         }
 
 

@@ -23,7 +23,7 @@ namespace Utj.UnityChoseKun
 
         [SerializeField] QualitySettingsKun mQualitySettingsKun;
         [SerializeField] Vector2 mScrollPos;
-
+        static bool mIsInit;
 
         public QualitySettingsKun qualitySettingsKun
         {
@@ -34,78 +34,77 @@ namespace Utj.UnityChoseKun
 
         public void OnGUI()
         {
-            mScrollPos = EditorGUILayout.BeginScrollView(mScrollPos);
-            EditorGUI.BeginChangeCheck();
-            EditorGUILayout.LabelField("Rendering");
-            qualitySettingsKun.pixelLightCount = EditorGUILayout.IntField("Pixel Light Count", qualitySettingsKun.pixelLightCount);
-            qualitySettingsKun.anisotropicFiltering = (AnisotropicFiltering)EditorGUILayout.EnumPopup("Anisotropic Textures", qualitySettingsKun.anisotropicFiltering);
-            qualitySettingsKun.antiAliasing = EditorGUILayout.IntPopup("Anti Aliasing",qualitySettingsKun.antiAliasing, Styles.AntiAliasingLabels, Styles.AntiAliasingValuess);
-            qualitySettingsKun.softParticles = EditorGUILayout.Toggle("Soft Particles", qualitySettingsKun.softParticles);
-            qualitySettingsKun.realtimeReflectionProbes = EditorGUILayout.Toggle("Realtime Reflection Probes", qualitySettingsKun.realtimeReflectionProbes);
-            qualitySettingsKun.billboardsFaceCameraPosition = EditorGUILayout.Toggle("Billboards Face Camera Position", qualitySettingsKun.billboardsFaceCameraPosition);
-            qualitySettingsKun.resolutionScalingFixedDPIFactor = EditorGUILayout.FloatField("Resolution Scaling Fixed DPI Factor", qualitySettingsKun.resolutionScalingFixedDPIFactor);
-            qualitySettingsKun.streamingMipmapsActive = EditorGUILayout.Toggle("Texture Streaming", qualitySettingsKun.streamingMipmapsActive);
-            if (qualitySettingsKun.streamingMipmapsActive)
+            if (mIsInit)
             {
-                EditorGUI.indentLevel++;
-                qualitySettingsKun.streamingMipmapsAddAllCameras = EditorGUILayout.Toggle("Add All Cameras", qualitySettingsKun.streamingMipmapsAddAllCameras);
-                qualitySettingsKun.streamingMipmapsMemoryBudget = EditorGUILayout.FloatField("Memory Buget", qualitySettingsKun.streamingMipmapsMemoryBudget);
-                qualitySettingsKun.streamingMipmapsRenderersPerFrame = EditorGUILayout.IntField("Memory Per Frame", qualitySettingsKun.streamingMipmapsRenderersPerFrame);
-                qualitySettingsKun.streamingMipmapsMaxLevelReduction = EditorGUILayout.IntField("Max Level Reduction", qualitySettingsKun.streamingMipmapsMaxLevelReduction);
-                qualitySettingsKun.streamingMipmapsMaxFileIORequests = EditorGUILayout.IntField("Max IO Requests", qualitySettingsKun.streamingMipmapsMaxFileIORequests);
+                mScrollPos = EditorGUILayout.BeginScrollView(mScrollPos);
+                EditorGUI.BeginChangeCheck();
+                EditorGUILayout.LabelField("Rendering");
+                qualitySettingsKun.pixelLightCount = EditorGUILayout.IntField("Pixel Light Count", qualitySettingsKun.pixelLightCount);
+                qualitySettingsKun.anisotropicFiltering = (AnisotropicFiltering)EditorGUILayout.EnumPopup("Anisotropic Textures", qualitySettingsKun.anisotropicFiltering);
+                qualitySettingsKun.antiAliasing = EditorGUILayout.IntPopup("Anti Aliasing", qualitySettingsKun.antiAliasing, Styles.AntiAliasingLabels, Styles.AntiAliasingValuess);
+                qualitySettingsKun.softParticles = EditorGUILayout.Toggle("Soft Particles", qualitySettingsKun.softParticles);
+                qualitySettingsKun.realtimeReflectionProbes = EditorGUILayout.Toggle("Realtime Reflection Probes", qualitySettingsKun.realtimeReflectionProbes);
+                qualitySettingsKun.billboardsFaceCameraPosition = EditorGUILayout.Toggle("Billboards Face Camera Position", qualitySettingsKun.billboardsFaceCameraPosition);
+                qualitySettingsKun.resolutionScalingFixedDPIFactor = EditorGUILayout.Slider("Resolution Scaling Fixed DPI Factor", qualitySettingsKun.resolutionScalingFixedDPIFactor, 0.001f, 5.0f, GUILayout.ExpandWidth(true));
+                qualitySettingsKun.streamingMipmapsActive = EditorGUILayout.Toggle("Texture Streaming", qualitySettingsKun.streamingMipmapsActive);
+                if (qualitySettingsKun.streamingMipmapsActive)
+                {
+                    EditorGUI.indentLevel++;
+                    qualitySettingsKun.streamingMipmapsAddAllCameras = EditorGUILayout.Toggle("Add All Cameras", qualitySettingsKun.streamingMipmapsAddAllCameras);
+                    qualitySettingsKun.streamingMipmapsMemoryBudget = EditorGUILayout.FloatField("Memory Buget", qualitySettingsKun.streamingMipmapsMemoryBudget);
+                    qualitySettingsKun.streamingMipmapsRenderersPerFrame = EditorGUILayout.IntField("Memory Per Frame", qualitySettingsKun.streamingMipmapsRenderersPerFrame);
+                    qualitySettingsKun.streamingMipmapsMaxLevelReduction = EditorGUILayout.IntField("Max Level Reduction", qualitySettingsKun.streamingMipmapsMaxLevelReduction);
+                    qualitySettingsKun.streamingMipmapsMaxFileIORequests = EditorGUILayout.IntField("Max IO Requests", qualitySettingsKun.streamingMipmapsMaxFileIORequests);
 
-                EditorGUI.indentLevel--;
-            }
+                    EditorGUI.indentLevel--;
+                }
 
-            GUILayout.Space(10);
-            GUILayout.Label("Shadows", EditorStyles.boldLabel);
-            qualitySettingsKun.shadowmaskMode = (ShadowmaskMode)EditorGUILayout.EnumPopup("Shadowmask Mode", qualitySettingsKun.shadowmaskMode);
-            qualitySettingsKun.shadows = (ShadowQuality)EditorGUILayout.EnumPopup("Shadows", qualitySettingsKun.shadows);
-            qualitySettingsKun.shadowResolution = (ShadowResolution)EditorGUILayout.EnumPopup("Shadow Resolution", qualitySettingsKun.shadowResolution);
-            qualitySettingsKun.shadowProjection = (ShadowProjection)EditorGUILayout.EnumPopup("Shadow Projection", qualitySettingsKun.shadowProjection);
-            qualitySettingsKun.shadowDistance = EditorGUILayout.FloatField("Shadow Distance", qualitySettingsKun.shadowDistance);
-            qualitySettingsKun.shadowNearPlaneOffset = EditorGUILayout.FloatField("Shadow Near Plane Offset", qualitySettingsKun.shadowNearPlaneOffset);
-            qualitySettingsKun.shadowCascades = EditorGUILayout.IntPopup("Shadow Cascades", qualitySettingsKun.shadowCascades ,Styles.ShadowCascadeLabels, Styles.ShadowCascadeValues);
+                GUILayout.Space(10);
+                GUILayout.Label("Shadows", EditorStyles.boldLabel);
+                qualitySettingsKun.shadowmaskMode = (ShadowmaskMode)EditorGUILayout.EnumPopup("Shadowmask Mode", qualitySettingsKun.shadowmaskMode);
+                qualitySettingsKun.shadows = (ShadowQuality)EditorGUILayout.EnumPopup("Shadows", qualitySettingsKun.shadows);
+                qualitySettingsKun.shadowResolution = (ShadowResolution)EditorGUILayout.EnumPopup("Shadow Resolution", qualitySettingsKun.shadowResolution);
+                qualitySettingsKun.shadowProjection = (ShadowProjection)EditorGUILayout.EnumPopup("Shadow Projection", qualitySettingsKun.shadowProjection);
+                qualitySettingsKun.shadowDistance = EditorGUILayout.FloatField("Shadow Distance", qualitySettingsKun.shadowDistance);
+                qualitySettingsKun.shadowNearPlaneOffset = EditorGUILayout.FloatField("Shadow Near Plane Offset", qualitySettingsKun.shadowNearPlaneOffset);
+                qualitySettingsKun.shadowCascades = EditorGUILayout.IntPopup("Shadow Cascades", qualitySettingsKun.shadowCascades, Styles.ShadowCascadeLabels, Styles.ShadowCascadeValues);
 
-            GUILayout.Space(10);
-            GUILayout.Label("Other", EditorStyles.boldLabel);
+                GUILayout.Space(10);
+                GUILayout.Label("Other", EditorStyles.boldLabel);
 #if UNITY_2019_1_OR_NEWER
-            qualitySettingsKun.skinWeights = (SkinWeights)EditorGUILayout.EnumPopup("Skin Weights", qualitySettingsKun.skinWeights);
+                qualitySettingsKun.skinWeights = (SkinWeights)EditorGUILayout.EnumPopup("Skin Weights", qualitySettingsKun.skinWeights);
 #endif
-            qualitySettingsKun.vSyncCount = EditorGUILayout.IntPopup("VSync Count", qualitySettingsKun.vSyncCount,Styles.VSyncCountLabels,Styles.VSyncCountValues);
-            qualitySettingsKun.lodBias = EditorGUILayout.FloatField("LOD Bias", qualitySettingsKun.lodBias);
-            qualitySettingsKun.maximumLODLevel = EditorGUILayout.IntField("Maximum LOD Level", qualitySettingsKun.maximumLODLevel);
-            qualitySettingsKun.particleRaycastBudget = EditorGUILayout.IntField("Particle Raycast Budget", qualitySettingsKun.particleRaycastBudget);
-            qualitySettingsKun.asyncUploadTimeSlice = EditorGUILayout.IntSlider("Async Upload Time Slice", qualitySettingsKun.asyncUploadTimeSlice,1,33);
-            qualitySettingsKun.asyncUploadBufferSize = EditorGUILayout.IntSlider("Async Upload Buffer Size", qualitySettingsKun.asyncUploadBufferSize,2,512);
-            qualitySettingsKun.asyncUploadPersistentBuffer = EditorGUILayout.Toggle("Async Upload Persistent Buffer", qualitySettingsKun.asyncUploadPersistentBuffer);
-            
-            if (EditorGUI.EndChangeCheck())
-            {
-                qualitySettingsKun.isDirty = true;
+                qualitySettingsKun.vSyncCount = EditorGUILayout.IntPopup("VSync Count", qualitySettingsKun.vSyncCount, Styles.VSyncCountLabels, Styles.VSyncCountValues);
+                qualitySettingsKun.lodBias = EditorGUILayout.FloatField("LOD Bias", qualitySettingsKun.lodBias);
+                qualitySettingsKun.maximumLODLevel = EditorGUILayout.IntField("Maximum LOD Level", qualitySettingsKun.maximumLODLevel);
+                qualitySettingsKun.particleRaycastBudget = EditorGUILayout.IntField("Particle Raycast Budget", qualitySettingsKun.particleRaycastBudget);
+                qualitySettingsKun.asyncUploadTimeSlice = EditorGUILayout.IntSlider("Async Upload Time Slice", qualitySettingsKun.asyncUploadTimeSlice, 1, 33);
+                qualitySettingsKun.asyncUploadBufferSize = EditorGUILayout.IntSlider("Async Upload Buffer Size", qualitySettingsKun.asyncUploadBufferSize, 2, 512);
+                qualitySettingsKun.asyncUploadPersistentBuffer = EditorGUILayout.Toggle("Async Upload Persistent Buffer", qualitySettingsKun.asyncUploadPersistentBuffer);
+
+                if (EditorGUI.EndChangeCheck())
+                {
+                    qualitySettingsKun.isDirty = true;
+                    UnityChoseKunEditor.SendMessage<QualitySettingsKun>(UnityChoseKun.MessageID.QualitySettingsPush, qualitySettingsKun);
+                    qualitySettingsKun.isDirty = false;
+
+                }
+                EditorGUILayout.EndScrollView();
             }
-            EditorGUILayout.EndScrollView();
 
             EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Pull"))
             {
                 UnityChoseKunEditor.SendMessage<QualitySettingsKun>(UnityChoseKun.MessageID.QualitySettingsPull, null);
-            }
-            using (new EditorGUI.DisabledScope(!qualitySettingsKun.isDirty))
-            {
-                if (GUILayout.Button("Push"))
-                {
-                    UnityChoseKunEditor.SendMessage<QualitySettingsKun>(UnityChoseKun.MessageID.QualitySettingsPush, qualitySettingsKun);
-                }
-            }
-
+            }            
             EditorGUILayout.EndHorizontal();
         }
 
 
         public void OnMessageEvent(BinaryReader binaryReader)
         {
-            qualitySettingsKun.Deserialize(binaryReader);            
+            qualitySettingsKun.Deserialize(binaryReader);
+            mIsInit = true;
         }
     }
 }

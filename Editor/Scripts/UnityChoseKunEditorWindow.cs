@@ -46,7 +46,7 @@
         [SerializeField] Vector2            scrollPos;
         [SerializeField] ObjectCounterView  m_objectCounterView;
         [SerializeField] QualitySettingsView m_qualitySettingsView;
-
+        [SerializeField] OnDemandRenderingView m_onDemandRenderingView;
 
         IConnectionState                                    m_attachProfilerState;
         Dictionary<UnityChoseKun.MessageID, OnMessageFunc>  onMessageFuncDict;
@@ -156,6 +156,19 @@
         }
 
 
+        public OnDemandRenderingView onDemandRenderingView
+        {
+            get
+            {
+                if(m_onDemandRenderingView == null)
+                {
+                    m_onDemandRenderingView = new OnDemandRenderingView();
+                }
+                return m_onDemandRenderingView;
+            }
+        }
+
+
         [MenuItem("Window/UnityChoseKun/Player Inspector")]
         static void Inite()
         {            
@@ -260,9 +273,6 @@
         
         private void OnEnable()
         {
-            Debug.Log("OnEnable");
-
-
             m_attachProfilerState = ConnectionUtility.GetAttachToPlayerState(this);                        
             UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Initialize();
             UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Register(UnityChoseKun.kMsgSendPlayerToEditor, OnMessageEvent);
@@ -278,6 +288,8 @@
                 {"Application", applicationView.OnGUI},
                 {"Android",     androidView.OnGUI},
                 {"Quality", qualitySettingsView.OnGUI },
+                {"OnDemandRendering",onDemandRenderingView.OnGUI },
+
                 // 機能をここに追加していく                                              
             };
                         
@@ -291,17 +303,14 @@
                 {UnityChoseKun.MessageID.ApplicationPull,   applicationView.OnMessageEvent },
                 {UnityChoseKun.MessageID.AndroidPull,       androidView.OnMessageEvent },
                 {UnityChoseKun.MessageID.QualitySettingsPull,   qualitySettingsView.OnMessageEvent},
-
+                {UnityChoseKun.MessageID.OnDemandRenderingPull,onDemandRenderingView.OnMessageEvent },
                 // 機能をここに追加していく                                              
             };
             
         }
 
         private void OnDisable()
-        {
-            Debug.Log("OnDisable");
-
-
+        {            
             if (onMessageFuncDict != null)
             {
                 onMessageFuncDict.Clear();

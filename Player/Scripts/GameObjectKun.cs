@@ -155,10 +155,10 @@
                 var systemType = ComponentKun.GetComponentSystemType(componentKunType);                
                 var component = gameObject.GetComponent(systemType);
                 
-                Debug.Log(componentKunType);
+                //UnityChoseKun.Log(componentKunType);
 
                 if(component == null){                
-                    Debug.LogWarning("component == null");
+                    UnityChoseKun.LogWarning("component == null");
                     continue;
                 }                               
                 componentKuns[i].WriteBack(component);
