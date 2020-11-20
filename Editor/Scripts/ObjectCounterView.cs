@@ -9,13 +9,13 @@
     [System.Serializable]
     public class ObjectCounterView
     {
-        [SerializeField]int[] mComponentCounts;
+        int[] mComponentCounts;
 
         int[] componentCounts
         {
             get
             {
-                if(mComponentCounts == null)
+                if(mComponentCounts == null || mComponentCounts.Length != (int)ComponentKun.ComponentKunType.Max)
                 {
                     mComponentCounts = new int[(int)ComponentKun.ComponentKunType.Max];
                 }
