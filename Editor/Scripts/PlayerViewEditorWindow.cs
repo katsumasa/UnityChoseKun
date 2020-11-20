@@ -150,13 +150,16 @@
             RuntimePlatform platform = RuntimePlatform.WindowsEditor;
             Texture2D texture = null;
 
-            var chosekunEdotorWindow = (UnityChoseKunEditorWindow)EditorWindow.GetWindow(typeof(UnityChoseKunEditorWindow));
-
-
-            if (chosekunEdotorWindow != null)
-            {
-                platform = chosekunEdotorWindow.GetRuntimePlatform();
+            if (EditorWindow.HasOpenInstances<UnityChoseKunEditorWindow>()){
+                var chosekunEdotorWindow = (UnityChoseKunEditorWindow)EditorWindow.GetWindow(typeof(UnityChoseKunEditorWindow));
+                if (chosekunEdotorWindow != null)
+                {
+                    platform = chosekunEdotorWindow.GetRuntimePlatform();
+                }
             }
+
+
+            
             switch (platform)
             {
                 case RuntimePlatform.IPhonePlayer:
@@ -249,46 +252,49 @@
         // ----------------------------------------------------------------------------------------
         private void OnMessageEvent(UnityEngine.Networking.PlayerConnection.MessageEventArgs args)
         {
-            if ((playerViewTexture == null) ||
-                (playerViewTexture.width != textureHeader.width) ||
-                (playerViewTexture.height != textureHeader.height) ||
-                (playerViewTexture.format != textureHeader.textureFormat)
-            )
+            if (textureHeader != null)
             {
-                if (playerViewTexture != null)
+                if ((playerViewTexture == null) ||
+                    (playerViewTexture.width != textureHeader.width) ||
+                    (playerViewTexture.height != textureHeader.height) ||
+                    (playerViewTexture.format != textureHeader.textureFormat)
+                )
                 {
-                    DestroyImmediate(playerViewTexture);
+                    if (playerViewTexture != null)
+                    {
+                        DestroyImmediate(playerViewTexture);
+                    }
+                    playerViewTexture = new Texture2D(
+                        textureHeader.width,
+                        textureHeader.height,
+                        textureHeader.textureFormat,
+                        textureHeader.mipChain);
                 }
-                playerViewTexture = new Texture2D(
-                    textureHeader.width,
-                    textureHeader.height, 
-                    textureHeader.textureFormat,
-                    textureHeader.mipChain);
-            }
 
-            byte[] raw;
-            int slide = textureHeader.width * 4;
-            // 画像データが上下反転しているケースがある
-            if (textureHeader.flip)
-            {
-                raw = new byte[args.data.Length];
-                for (var y = 0; y < textureHeader.height; y++)
+                byte[] raw;
+                int slide = textureHeader.width * 4;
+                // 画像データが上下反転しているケースがある
+                if (textureHeader.flip)
                 {
-                    var i1 = (textureHeader.height - (y + 1)) * slide;
-                    var i2 = y * slide;
-                    System.Array.Copy(args.data, i1, raw, i2, slide);
+                    raw = new byte[args.data.Length];
+                    for (var y = 0; y < textureHeader.height; y++)
+                    {
+                        var i1 = (textureHeader.height - (y + 1)) * slide;
+                        var i2 = y * slide;
+                        System.Array.Copy(args.data, i1, raw, i2, slide);
+                    }
                 }
-            }
-            else
-            {
-                raw = args.data;
-            }
-            playerViewTexture.LoadRawTextureData(raw);
-            playerViewTexture.Apply();
-            // EditorWidowを再描画
-            if (window != null)
-            {
-                window.Repaint();
+                else
+                {
+                    raw = args.data;
+                }
+                playerViewTexture.LoadRawTextureData(raw);
+                playerViewTexture.Apply();
+                // EditorWidowを再描画
+                if (window != null)
+                {
+                    window.Repaint();
+                }
             }
         }
 
