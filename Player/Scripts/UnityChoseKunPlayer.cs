@@ -87,6 +87,7 @@ namespace Utj.UnityChoseKun
                 return m_hierarchyPlayer;
             }
         }
+
               
 
         /// <summary>
@@ -123,8 +124,10 @@ namespace Utj.UnityChoseKun
                 {UnityChoseKun.MessageID.AndroidPull,       androidPlayer.OnMessageEventPull},
                 {UnityChoseKun.MessageID.AndroidPush,       androidPlayer.OnMessageEventPush},
                 {UnityChoseKun.MessageID.HierarchyPush,     hierarchyPlayer.OnMessageEventPush },
-                { UnityChoseKun.MessageID.QualitySettingsPull,qualitySettingsPlayer.OnMessageEventPull},
-                { UnityChoseKun.MessageID.QualitySettingsPush,qualitySettingsPlayer.OnMessageEventPush},
+                {UnityChoseKun.MessageID.QualitySettingsPull,qualitySettingsPlayer.OnMessageEventPull},
+                {UnityChoseKun.MessageID.QualitySettingsPush,qualitySettingsPlayer.OnMessageEventPush},
+                {UnityChoseKun.MessageID.OnDemandRenderingPull, OnDemandRenderingPlayer.OnMessageEventPull},
+                {UnityChoseKun.MessageID.OnDemandRenderingPush,OnDemandRenderingPlayer.OnMessageEventPush},
 
             };
 

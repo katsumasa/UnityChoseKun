@@ -59,6 +59,9 @@ namespace Utj.UnityChoseKun
             HierarchyPush,
             QualitySettingsPull,
             QualitySettingsPush,
+            OnDemandRenderingPull,
+            OnDemandRenderingPush,
+
         }
 
 
