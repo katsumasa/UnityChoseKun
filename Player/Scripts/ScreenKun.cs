@@ -93,7 +93,7 @@
 #endif
         public float dpi{
             get{return m_dpi;}
-            set{m_dpi = value;}
+            private set{m_dpi = value;}
         }
         
         public bool fullScreen{
@@ -194,7 +194,7 @@
                 currentResolutionWidth = Screen.currentResolution.width;
                 currentResolutionHeight = Screen.currentResolution.height;
                 currentResolutionRefreshRate = Screen.currentResolution.refreshRate;
-
+                dpi = Screen.dpi;
                 
                 height = Screen.height;
                 orientation = Screen.orientation;
@@ -257,42 +257,12 @@
             binaryWriter.Write(m_dpi);
             binaryWriter.Write((int)m_fullScreenMode);
             binaryWriter.Write((int)m_orientation);
-            if(m_safeArea == null)
-            {
-                binaryWriter.Write(-1);
-            } else
-            {
-                binaryWriter.Write(1);
-                m_safeArea.Serialize(binaryWriter);
-            }
 
+            SerializerKun.Serialize<RectKun>(binaryWriter, m_safeArea);
 #if UNITY_2019_1_OR_NEWER
-            if(m_cutouts == null)
-            {
-                binaryWriter.Write(-1);
-            } else
-            {
-                binaryWriter.Write(m_cutouts.Length);
-                for(var i = 0; i < m_cutouts.Length; i++)
-                {
-                    m_cutouts[i].Serialize(binaryWriter);
-                }
-            }
+            SerializerKun.Serialize<RectKun>(binaryWriter, m_cutouts);
 #endif
-
-            if(m_resolutions == null)
-            {
-                binaryWriter.Write(-1);
-            }
-            else
-            {
-                binaryWriter.Write(m_resolutions.Length);
-                for(var i = 0; i < m_resolutions.Length; i++)
-                {
-                    m_resolutions[i].Serialize(binaryWriter);
-                }
-            }
-
+            SerializerKun.Serialize<ResolutionKun>(binaryWriter, m_resolutions);
         }
 
 
@@ -320,38 +290,11 @@
             m_dpi = binaryReader.ReadSingle();
             m_fullScreenMode = (FullScreenMode)binaryReader.ReadInt32();
             m_orientation = (ScreenOrientation)binaryReader.ReadInt32();
-
-            var len = binaryReader.ReadInt32();
-            if (len != -1)
-            {
-                m_safeArea = new RectKun();
-                m_safeArea.Deserialize(binaryReader);
-            }
-
+            m_safeArea = SerializerKun.DesirializeObject<RectKun>(binaryReader);
 #if UNITY_2019_1_OR_NEWER
-            len = binaryReader.ReadInt32();
-            if (len != -1)
-            {
-                m_cutouts = new RectKun[len];
-                for(var i = 0; i < len; i++)
-                {
-                    m_cutouts[i] = new RectKun();
-                    m_cutouts[i].Deserialize(binaryReader);
-
-                }
-            }
+            m_cutouts = SerializerKun.DesirializeObjects<RectKun>(binaryReader);
 #endif
-
-            len = binaryReader.ReadInt32();
-            if (len != -1)
-            {
-                m_resolutions = new ResolutionKun[len];
-                for(var i = 0; i < len; i++)
-                {
-                    m_resolutions[i] = new ResolutionKun();
-                    m_resolutions[i].Deserialize(binaryReader);
-                }
-            }
+            m_resolutions = SerializerKun.DesirializeObjects<ResolutionKun>(binaryReader);            
         }
 
 
