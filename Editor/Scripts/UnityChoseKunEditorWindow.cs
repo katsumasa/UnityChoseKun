@@ -9,9 +9,16 @@
     using UnityEngine.Profiling;
 #if UNITY_2018_1_OR_NEWER
     using UnityEngine.Networking.PlayerConnection;
+
+#if UNITY_2020_1_OR_NEWER
+    using ConnectionUtility = UnityEditor.Networking.PlayerConnection.PlayerConnectionGUIUtility;
+    using ConnectionGUILayout = UnityEditor.Networking.PlayerConnection.PlayerConnectionGUILayout;
+#else
     using ConnectionUtility = UnityEditor.Experimental.Networking.PlayerConnection.EditorGUIUtility;
     using ConnectionGUILayout = UnityEditor.Experimental.Networking.PlayerConnection.EditorGUILayout;
     using UnityEngine.Experimental.Networking.PlayerConnection;
+#endif
+
     using UnityEditor.Networking.PlayerConnection;
     using System;
     using System.Text;
@@ -237,7 +244,11 @@
             EditorGUILayout.LabelField(contents, GUILayout.Width(v2.x));
             if (m_attachProfilerState != null)
             {
+#if UNITY_2020_1_OR_NEWER
+                ConnectionGUILayout.ConnectionTargetSelectionDropdown(m_attachProfilerState, EditorStyles.toolbarDropDown);
+#else
                 ConnectionGUILayout.AttachToPlayerDropdown(m_attachProfilerState, EditorStyles.toolbarDropDown);
+#endif
                 switch (m_attachProfilerState.connectedToTarget)
                 {
                     case ConnectionTarget.None:
@@ -272,8 +283,12 @@
 
         
         private void OnEnable()
-        {
-            m_attachProfilerState = ConnectionUtility.GetAttachToPlayerState(this);                        
+        {            
+#if UNITY_2020_1_OR_NEWER
+            m_attachProfilerState = ConnectionUtility.GetConnectionState(this);
+#else
+            m_attachProfilerState = ConnectionUtility.GetAttachToPlayerState(this);
+#endif
             UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Initialize();
             UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Register(UnityChoseKun.kMsgSendPlayerToEditor, OnMessageEvent);
 
