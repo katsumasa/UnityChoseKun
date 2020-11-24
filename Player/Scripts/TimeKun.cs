@@ -8,7 +8,6 @@
     public class TimeKun : ISerializerKun
     {
         [SerializeField] int m_frameCount; // RO               
-        [SerializeField] int m_captureFramerate;
         [SerializeField] bool m_inFixedTimeStep;//RO
         [SerializeField] float m_deltaTime;
         [SerializeField] float m_fixedUnscaledDeltaTime;// RO
@@ -22,8 +21,12 @@
         [SerializeField] float m_fixedDeltaTime;
         [SerializeField] float m_maximumDeltaTime;
         [SerializeField] float m_timeScale;
+#if UNITY_2019_2_OR_NEWER
+        [SerializeField] float m_captureDeltaTime;
+#else
+        [SerializeField] int m_captureFramerate;      
+#endif
 
-        
 
         public float deltaTime{
             get{return m_deltaTime;}
@@ -79,11 +82,7 @@
             get{return m_inFixedTimeStep;}
             private set {m_inFixedTimeStep = value;}
         }
-        
-        public int captureFramerate{
-            get{return m_captureFramerate;}
-            set{m_captureFramerate = value;}
-        }
+                
         
         public float fixedDeltaTime{
             get{return m_fixedDeltaTime;}
@@ -100,10 +99,28 @@
             set{m_timeScale = value;}
         }
 
+#if UNITY_2019_2_OR_NEWER
+        public float captureDeltaTime
+        {
+            get { return m_captureDeltaTime; }
+            set { m_captureDeltaTime = value; }
+        }
 
-        /// <summary>
-        /// 
-        /// </summary>
+        public int captureFramerate
+        {
+            get { return captureDeltaTime == 0.0f ? 0 : (int)Mathf.Round(1.0f / captureDeltaTime); }
+            set { captureDeltaTime = value == 0 ? 0.0f : 1.0f / value; }
+        }
+#else
+        public int captureFramerate{
+            get{return m_captureFramerate;}
+            set{m_captureFramerate = value;}
+        }
+#endif
+
+            /// <summary>
+            /// 
+            /// </summary>
         public TimeKun():this(false){}
 
 
@@ -125,11 +142,16 @@
                 unscaledDeltaTime = Time.unscaledDeltaTime;
                 unscaledTime = Time.unscaledTime;
 
-                captureFramerate = Time.captureFramerate;
+     
                 fixedDeltaTime = Time.fixedDeltaTime;
                 inFixedTimeStep = Time.inFixedTimeStep;
                 maximumDeltaTime = Time.maximumDeltaTime;
                 timeScale = Time.timeScale;
+#if UNITY_2019_2_OR_NEWER                
+                captureDeltaTime = Time.captureDeltaTime;
+#else
+                captureFramerate = Time.captureFramerate;
+#endif
             }
         }
 
@@ -139,10 +161,15 @@
         /// </summary>
         public void WriteBack()
         {
-            Time.captureFramerate = captureFramerate;
+
             Time.fixedDeltaTime = fixedDeltaTime;
             Time.maximumDeltaTime = maximumDeltaTime;
-            Time.timeScale = timeScale;   
+            Time.timeScale = timeScale;
+#if UNITY_2019_2_OR_NEWER
+            Time.captureDeltaTime = captureDeltaTime;
+#else
+            Time.captureFramerate = captureFramerate;
+#endif
         }
 
 
@@ -153,7 +180,6 @@
         public virtual void Serialize(BinaryWriter binaryWriter)
         {
             binaryWriter.Write(m_frameCount);
-            binaryWriter.Write(m_captureFramerate);
             binaryWriter.Write(m_inFixedTimeStep);
             binaryWriter.Write(m_deltaTime);
             binaryWriter.Write(m_fixedUnscaledDeltaTime);
@@ -167,6 +193,11 @@
             binaryWriter.Write(m_fixedDeltaTime);
             binaryWriter.Write(m_maximumDeltaTime);
             binaryWriter.Write(m_timeScale);
+#if UNITY_2019_2_OR_NEWER
+            binaryWriter.Write(m_captureDeltaTime);
+#else
+            binaryWriter.Write(m_captureFramerate);
+#endif
         }
 
 
@@ -177,7 +208,6 @@
         public virtual void Deserialize(BinaryReader binaryReader)
         {
             m_frameCount = binaryReader.ReadInt32();
-            m_captureFramerate = binaryReader.ReadInt32();
             m_inFixedTimeStep = binaryReader.ReadBoolean();
             m_deltaTime = binaryReader.ReadSingle();
             m_fixedUnscaledDeltaTime = binaryReader.ReadSingle();
@@ -191,6 +221,11 @@
             m_fixedDeltaTime = binaryReader.ReadSingle();
             m_maximumDeltaTime = binaryReader.ReadSingle();
             m_timeScale = binaryReader.ReadSingle();
+#if UNITY_2019_2_OR_NEWER
+            m_captureDeltaTime = binaryReader.ReadSingle();
+#else
+            m_captureFramerate = binaryReader.ReadInt32();
+#endif
         }
 
 
@@ -210,10 +245,7 @@
             {
                 return false;
             }
-            if (!m_captureFramerate.Equals(other.m_captureFramerate))
-            {
-                return false;
-            }
+            
             if (!m_inFixedTimeStep.Equals(other.m_inFixedTimeStep))
             {
                 return false;
@@ -264,6 +296,16 @@
             {
                 return false;
             }
+#if UNITY_2019_2_OR_NEWER
+            if (!m_captureDeltaTime.Equals(other.m_captureDeltaTime)){
+                return false;
+            }
+#else
+            if (!m_captureFramerate.Equals(other.m_captureFramerate))
+            {
+                return false;
+            }
+#endif
             return true;
         }
 
