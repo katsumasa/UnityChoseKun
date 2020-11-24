@@ -50,6 +50,9 @@ namespace Utj.UnityChoseKun
                     EditorGUILayout.Space();
 
                     timeKun.captureFramerate = EditorGUILayout.IntField("captureFramerate", timeKun.captureFramerate);
+#if UNITY_2019_2_OR_NEWER
+                    timeKun.captureDeltaTime = EditorGUILayout.FloatField("captureDeltaTime",timeKun.captureDeltaTime);
+#endif
                     timeKun.fixedDeltaTime = EditorGUILayout.FloatField("fixedDeltaTime", timeKun.fixedDeltaTime);
                     timeKun.maximumDeltaTime = EditorGUILayout.FloatField("maximumDeltaTime", timeKun.maximumDeltaTime);
                     timeKun.timeScale = EditorGUILayout.FloatField("timeScale", timeKun.timeScale);
