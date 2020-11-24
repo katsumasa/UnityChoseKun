@@ -7,9 +7,15 @@
     using UnityEngine;
     using UnityEditor;
     using UnityEditor.Networking.PlayerConnection;
+#if UNITY_2020_1_OR_NEWER
+    using UnityEngine.Networking.PlayerConnection;
+    using PlayerConnectionUtility = UnityEditor.Networking.PlayerConnection.PlayerConnectionGUIUtility;
+    using PlayerConnectionGUILayout = UnityEditor.Networking.PlayerConnection.PlayerConnectionGUILayout;
+#else
     using UnityEngine.Experimental.Networking.PlayerConnection;
     using PlayerConnectionUtility = UnityEditor.Experimental.Networking.PlayerConnection.EditorGUIUtility;
     using PlayerConnectionGUILayout = UnityEditor.Experimental.Networking.PlayerConnection.EditorGUILayout;
+#endif
     using System.Security.AccessControl;
     using TMPro;
     using System;
@@ -114,7 +120,11 @@
             }
             if (attachProfilerState == null)
             {
+#if UNITY_2020_1_OR_NEWER
+                attachProfilerState = PlayerConnectionUtility.GetConnectionState(this);
+#else
                 attachProfilerState = PlayerConnectionUtility.GetAttachToPlayerState(this);
+#endif
             }
         }
 
@@ -318,7 +328,11 @@
         {
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.LabelField("Connect To", GUILayout.ExpandWidth(false));
+#if UNITY_2020_1_OR_NEWER
+            PlayerConnectionGUILayout.ConnectionTargetSelectionDropdown(attachProfilerState, EditorStyles.toolbarDropDown);
+#else
             PlayerConnectionGUILayout.AttachToPlayerDropdown(attachProfilerState, EditorStyles.toolbarDropDown);
+#endif
             
             // Play
             {
