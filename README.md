@@ -243,4 +243,23 @@ Androidデバイス固有の機能を編集することが出来ます。
 ![img](docs/QualitySettingsView.jpg)
 QualitySettingを編集することが出来ます。
 
-以上
+##### OnDemandRendering
+
+renderFrameInterval を調整することが出来ます。
+Home画面等画面の動きが激しく無い場合、値を調整することで、バッテリー消費を抑えることが期待出来ます。
+
+#### ScalableBufferManager
+
+ScalableBufferManagerを編集することが出来ます。
+この機能を使用する場合、下記の条件を満たしている必要があります。
+
+- Project Settings -> `Enable Frame Timing Stats`にチェックを入れた状態でアプリケーションをビルドしている。
+- CameraもしくはRenderTextureの[Allow Dynamic Resolution](https://docs.unity3d.com/ja/2018.4/uploads/Main/DynamicResolution.png)が有効になっている。
+- プラットフォーム(及びGraphicドライバ)が下記のいずれかである
+  - Xbox One
+  - PS4
+  - Nintendo Switch
+  - iOS/tvOS (Metal のみ)
+  - Android (Vulkan のみ)
+
+</br>以上
