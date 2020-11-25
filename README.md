@@ -48,6 +48,8 @@ UnityChoseKunは再ビルドを行うこと無く、UnityEditor上で開発機�
 - [Shader](https://docs.unity3d.com/ja/ScriptReference/Shader.html)
 - [Texture](https://docs.unity3d.com/ja/ScriptReference/Texture.html)
 - [QualitySettings](https://docs.unity3d.com/ja/ScriptReference/QualitySettings.html)
+- [OnDemandRendering](https://docs.unity3d.com/ja/current/ScriptReference/Rendering.OnDemandRendering.html)
+- [ScalableBufferManager](https://docs.unity3d.com/ja/ScriptReference/ScalableBufferManager.html)
 - [Component](docs.unity3d.com/ja/ScriptReference/Component.html)
   - [Animator](https://docs.unity3d.com/ja/ScriptReference/Animator.html)
   - [Behaviour](https://docs.unity3d.com/ja/current/ScriptReference/Behaviour.html)
