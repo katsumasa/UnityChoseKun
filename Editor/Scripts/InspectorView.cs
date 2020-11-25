@@ -120,9 +120,14 @@ namespace Utj.UnityChoseKun
 
 
         public InspectorView() {
-            if (!EditorWindow.HasOpenInstances<PlayerHierarchyWindow>())
+            
+#if UNITY_2019_1_OR_NEWER
+            if (EditorWindow.HasOpenInstances<PlayerHierarchyWindow>())
+#else
+            if (HasOpenInstances<PlayerHierarchyWindow>())
+#endif
             {
-                PlayerHierarchyWindow.Create();
+                    PlayerHierarchyWindow.Create();
             }
             var window = (PlayerHierarchyWindow)EditorWindow.GetWindow(typeof(PlayerHierarchyWindow));
             if (window != null){
@@ -216,7 +221,13 @@ namespace Utj.UnityChoseKun
                 gameObjectKuns.Add(sceneKun.gameObjectKuns[i].instanceID,sceneKun.gameObjectKuns[i]);
             }
 
-            if (!EditorWindow.HasOpenInstances<PlayerHierarchyWindow>())
+
+#if UNITY_2019_1_OR_NEWER
+            if (EditorWindow.HasOpenInstances<PlayerHierarchyWindow>())
+#else
+            if (HasOpenInstances<PlayerHierarchyWindow>())
+#endif
+                
             {
                 PlayerHierarchyWindow.Create();
             }
@@ -254,5 +265,13 @@ namespace Utj.UnityChoseKun
                 choseKunEditorWindow.Repaint();
             }
         }
+
+
+        public static bool HasOpenInstances<T>() where T : UnityEditor.EditorWindow
+        {
+            UnityEngine.Object[] wins = Resources.FindObjectsOfTypeAll(typeof(T));
+            return wins != null && wins.Length > 0;
+        }
+
     }
 }
