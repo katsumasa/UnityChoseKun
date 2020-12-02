@@ -9,7 +9,9 @@
     [System.Serializable]
     public class ObjectCounterView
     {
+        [SerializeField] Vector2 mScrollPos;
         int[] mComponentCounts;
+       
 
         int[] componentCounts
         {
@@ -31,8 +33,8 @@
 
         public void OnGUI()
         {
-            
-            for(var i = 0; i < (int)ComponentKun.ComponentKunType.Max; i++)
+            mScrollPos = EditorGUILayout.BeginScrollView(mScrollPos);
+            for (var i = 0; i < (int)ComponentKun.ComponentKunType.Max; i++)
             {
                 var t = (ComponentKun.ComponentKunType)i;
                 int count = 0;
@@ -40,10 +42,10 @@
                 {
                     count = componentCounts[i];
                 }
-
-
                 EditorGUILayout.IntField(new GUIContent(t.ToString()), count);
             }
+            EditorGUILayout.EndScrollView();
+
 
             if (GUILayout.Button("Analayze"))
             {

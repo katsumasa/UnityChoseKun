@@ -48,7 +48,7 @@ namespace Utj.UnityChoseKun {
 
             using (new EditorGUI.IndentLevelScope()){
                 if(shaderKuns != null){
-                    EditorGUILayout.BeginScrollView(scrollPos);
+                    scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
                     for(var i = 0; i < shaderKuns.Length; i++){
                         EditorGUILayout.LabelField(shaderKuns[i].name);
                     }

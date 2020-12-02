@@ -24,6 +24,12 @@ namespace Utj.UnityChoseKun
             set { m_timeKun = value; }
         }
 
+        Vector2 scrollPos
+        {
+            get;
+            set;
+        }
+
 
         /// <summary>
         /// 
@@ -34,6 +40,7 @@ namespace Utj.UnityChoseKun
                 EditorGUILayout.HelpBox("Please Pull Request.",MessageType.Info);
             } else {
                 using (new EditorGUI.IndentLevelScope()){
+                    scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
                     EditorGUILayout.FloatField("deltaTime", timeKun.deltaTime);
                     EditorGUILayout.FloatField("fixedUnscaledDeltaTime", timeKun.fixedUnscaledDeltaTime);
                     EditorGUILayout.FloatField("fixedUnscaledTime", timeKun.fixedUnscaledTime);
@@ -57,7 +64,8 @@ namespace Utj.UnityChoseKun
                     timeKun.maximumDeltaTime = EditorGUILayout.FloatField("maximumDeltaTime", timeKun.maximumDeltaTime);
                     timeKun.timeScale = EditorGUILayout.FloatField("timeScale", timeKun.timeScale);
 
-                    EditorGUILayout.Space();            
+                    EditorGUILayout.Space();
+                    EditorGUILayout.EndScrollView();
                 }
             }
 

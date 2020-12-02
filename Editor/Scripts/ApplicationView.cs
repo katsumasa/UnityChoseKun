@@ -40,7 +40,7 @@ namespace Utj.UnityChoseKun
             }
             else
             {
-                EditorGUILayout.BeginScrollView(scrollPos);
+                scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
                 EditorGUILayout.LabelField("absoluteURL", applicationKun.absoluteURL);
                 EditorGUILayout.LabelField("buildGUID", applicationKun.buildGUID);
                 EditorGUILayout.LabelField("cloudProjectId", applicationKun.cloudProjectId);

@@ -30,12 +30,22 @@ namespace Utj.UnityChoseKun
             }
         }
 
+
+        Vector2 scrollPos
+        {
+            get;
+            set;
+        }
+
+
         public void OnGUI()
         {
+            scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
             if (isPull == false)
             {
                 EditorGUILayout.HelpBox("Please Pull Request.", MessageType.Info);
             }
+            
             EditorGUI.BeginChangeCheck();
             scalableBufferManagerKun.widthScaleFactor = EditorGUILayout.Slider("widthScale", scalableBufferManagerKun.widthScaleFactor, 0.01f, 10.0f);
             scalableBufferManagerKun.heightScaleFactor = EditorGUILayout.Slider("heightScale", scalableBufferManagerKun.heightScaleFactor, 0.01f, 10.0f);
@@ -48,8 +58,9 @@ namespace Utj.UnityChoseKun
                     scalableBufferManagerKun.isDirty = false;
                 }
             }
+            EditorGUILayout.EndScrollView();
 
-            
+
             if (GUILayout.Button("Pull"))
             {
                 UnityChoseKunEditor.SendMessage<ScalableBufferManagerKun>(UnityChoseKun.MessageID.ScalableBufferManagerPull, null);
