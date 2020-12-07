@@ -42,13 +42,13 @@ UnityChoseKunは再ビルドを行うこと無く、UnityEditor上で開発機�
 
 ## 対応しているClassについて
 
-- [Application](docs.unity3d.com/ja/ScriptReference/Application.html)
+- [Application](https://docs.unity3d.com/ja/current/ScriptReference/Application.html)
 - [Screen](https://docs.unity3d.com/ja/ScriptReference/Screen.html)
 - [Time](https://docs.unity3d.com/ja/ScriptReference/Time.html)
 - [Shader](https://docs.unity3d.com/ja/ScriptReference/Shader.html)
 - [Texture](https://docs.unity3d.com/ja/ScriptReference/Texture.html)
 - [QualitySettings](https://docs.unity3d.com/ja/ScriptReference/QualitySettings.html)
-- [Component](docs.unity3d.com/ja/ScriptReference/Component.html)
+- [Component](https://docs.unity3d.com/ja/current/ScriptReference/Component.html)
   - [Animator](https://docs.unity3d.com/ja/ScriptReference/Animator.html)
   - [Behaviour](https://docs.unity3d.com/ja/current/ScriptReference/Behaviour.html)
   - [Bounds](https://docs.unity3d.com/ja/current/ScriptReference/Bounds.html)
@@ -57,10 +57,9 @@ UnityChoseKunは再ビルドを行うこと無く、UnityEditor上で開発機�
   - [Light](https://docs.unity3d.com/ja/ScriptReference/Light.html)
   - [Material](https://docs.unity3d.com/ja/ScriptReference/Material.html)
   - [Matrix4x4](https://docs.unity3d.com/ja/current/ScriptReference/Matrix4x4.html)
-  - [MeshRenderer](https://docs.unity3d.com/ja/ScriptReference/Renderer.html)
+  - [MeshRenderer](https://docs.unity3d.com/ja/current/ScriptReference/MeshRenderer.html)
   - [MonoBehavior](https://docs.unity3d.com/ja/ScriptReference/MonoBehaviour.html)
   - [Object](https://docs.unity3d.com/ja/current/ScriptReference/Object.html)
-  - [Renderer](https://docs.unity3d.com/ja/ScriptReference/Renderer.html)
   - [ParticleSystem](https://docs.unity3d.com/ja/ScriptReference/ParticleSystem.html)
   - [PhysicMaterial](https://docs.unity3d.com/ja/ScriptReference/PhysicMaterial.html)
   - [Quartanion](https://docs.unity3d.com/ja/ScriptReference/Quaternion.html)
@@ -241,4 +240,5 @@ Androidデバイス固有の機能を編集することが出来ます。
 ![img](docs/QualitySettingsView.jpg)
 QualitySettingを編集することが出来ます。
 
-以上
+##　以上、FBやコメント受けてつけております：
+__木村 勝将：katsumasa@unity3d.com
