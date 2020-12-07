@@ -12,7 +12,7 @@ UnityChoseKunは再ビルドを行うこと無く、UnityEditor上で開発機�
 
 実機上で実行しているアプリ内の画面をUnityEditorで表示たり、GameObjectをUnityEditorから調整する事が出来る、Editor拡張です。
 
-実機で実行中のアプリ内のComponenを調整したり・・
+実機で実行中のアプリ内のComponentを調整したり・・
 ![img](docs/UnityChoseKunDemo02.gif)
 
 実機(開発機)の画面をUnityEditorに表示したり・・・
@@ -42,13 +42,13 @@ UnityChoseKunは再ビルドを行うこと無く、UnityEditor上で開発機�
 
 ## 対応しているClassについて
 
-- [Application](docs.unity3d.com/ja/ScriptReference/Application.html)
+- [Application](https://docs.unity3d.com/ja/current/ScriptReference/Application.html)
 - [Screen](https://docs.unity3d.com/ja/ScriptReference/Screen.html)
 - [Time](https://docs.unity3d.com/ja/ScriptReference/Time.html)
 - [Shader](https://docs.unity3d.com/ja/ScriptReference/Shader.html)
 - [Texture](https://docs.unity3d.com/ja/ScriptReference/Texture.html)
 - [QualitySettings](https://docs.unity3d.com/ja/ScriptReference/QualitySettings.html)
-- [Component](docs.unity3d.com/ja/ScriptReference/Component.html)
+- [Component](https://docs.unity3d.com/ja/current/ScriptReference/Component.html)
   - [Animator](https://docs.unity3d.com/ja/ScriptReference/Animator.html)
   - [Behaviour](https://docs.unity3d.com/ja/current/ScriptReference/Behaviour.html)
   - [Bounds](https://docs.unity3d.com/ja/current/ScriptReference/Bounds.html)
@@ -57,10 +57,9 @@ UnityChoseKunは再ビルドを行うこと無く、UnityEditor上で開発機�
   - [Light](https://docs.unity3d.com/ja/ScriptReference/Light.html)
   - [Material](https://docs.unity3d.com/ja/ScriptReference/Material.html)
   - [Matrix4x4](https://docs.unity3d.com/ja/current/ScriptReference/Matrix4x4.html)
-  - [MeshRenderer](https://docs.unity3d.com/ja/ScriptReference/Renderer.html)
+  - [MeshRenderer](https://docs.unity3d.com/ja/current/ScriptReference/MeshRenderer.html)
   - [MonoBehavior](https://docs.unity3d.com/ja/ScriptReference/MonoBehaviour.html)
   - [Object](https://docs.unity3d.com/ja/current/ScriptReference/Object.html)
-  - [Renderer](https://docs.unity3d.com/ja/ScriptReference/Renderer.html)
   - [ParticleSystem](https://docs.unity3d.com/ja/ScriptReference/ParticleSystem.html)
   - [PhysicMaterial](https://docs.unity3d.com/ja/ScriptReference/PhysicMaterial.html)
   - [Quartanion](https://docs.unity3d.com/ja/ScriptReference/Quaternion.html)
@@ -122,12 +121,12 @@ MenuからWindow->UnityChoseKun->Player ViewでPlayerView Windowが表示され�
 
 [Async GPU Readback](https://docs.unity3d.com/ja/2018.4/ScriptReference/Rendering.AsyncGPUReadback.html)の機能を使用して画像処理を行う為、MainThareadの負荷が軽減される場合があります。
 
-###### Reflesh Interval
+###### Refresh Interval
 
 画像の転送処理を行う間隔を指定します。
 間隔を開けることでCPU負荷が軽減されます。
 
-###### Record Folde
+###### Record Folder
 
 録画時にファイルを書き出す先のフォルダー
 
@@ -144,7 +143,7 @@ MenuからWindow->UnityChoseKun->Player ViewでPlayerView Windowが表示され�
 
 ##### 注意事項
 
-Player Viewerは非常に負荷の高い処理です。Player Inspector->Screen->SetScreenからwidthとheightを調整したり、Reflesh Intervalで実行間隔を調整してから再生を実行することを*オススメ*します。
+Player Viewerは非常に負荷の高い処理です。Player Inspector->Screen->SetScreenからwidthとheightを調整したり、Refresh Intervalで実行間隔を調整してから再生を実行することを*オススメ*します。
 
 #### Player Hierarchy
 
@@ -241,4 +240,5 @@ Androidデバイス固有の機能を編集することが出来ます。
 ![img](docs/QualitySettingsView.jpg)
 QualitySettingを編集することが出来ます。
 
-以上
+## 以上、FBやコメント受けてつけております：
+__木村 勝将：katsumasa@unity3d.com__
