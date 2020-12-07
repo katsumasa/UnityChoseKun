@@ -241,4 +241,4 @@ Androidデバイス固有の機能を編集することが出来ます。
 QualitySettingを編集することが出来ます。
 
 ## 以上、FBやコメント受けてつけております：
-__木村 勝将：katsumasa@unity3d.com
+__木村 勝将：katsumasa@unity3d.com__
