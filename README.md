@@ -12,7 +12,7 @@ UnityChoseKunは再ビルドを行うこと無く、UnityEditor上で開発機�
 
 実機上で実行しているアプリ内の画面をUnityEditorで表示たり、GameObjectをUnityEditorから調整する事が出来る、Editor拡張です。
 
-実機で実行中のアプリ内のComponenを調整したり・・
+実機で実行中のアプリ内のComponentを調整したり・・
 ![img](docs/UnityChoseKunDemo02.gif)
 
 実機(開発機)の画面をUnityEditorに表示したり・・・
@@ -122,12 +122,12 @@ MenuからWindow->UnityChoseKun->Player ViewでPlayerView Windowが表示され�
 
 [Async GPU Readback](https://docs.unity3d.com/ja/2018.4/ScriptReference/Rendering.AsyncGPUReadback.html)の機能を使用して画像処理を行う為、MainThareadの負荷が軽減される場合があります。
 
-###### Reflesh Interval
+###### Refresh Interval
 
 画像の転送処理を行う間隔を指定します。
 間隔を開けることでCPU負荷が軽減されます。
 
-###### Record Folde
+###### Record Folder
 
 録画時にファイルを書き出す先のフォルダー
 
@@ -144,7 +144,7 @@ MenuからWindow->UnityChoseKun->Player ViewでPlayerView Windowが表示され�
 
 ##### 注意事項
 
-Player Viewerは非常に負荷の高い処理です。Player Inspector->Screen->SetScreenからwidthとheightを調整したり、Reflesh Intervalで実行間隔を調整してから再生を実行することを*オススメ*します。
+Player Viewerは非常に負荷の高い処理です。Player Inspector->Screen->SetScreenからwidthとheightを調整したり、Refresh Intervalで実行間隔を調整してから再生を実行することを*オススメ*します。
 
 #### Player Hierarchy
 
