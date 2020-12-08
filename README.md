@@ -48,7 +48,9 @@ UnityChoseKunは再ビルドを行うこと無く、UnityEditor上で開発機�
 - [Shader](https://docs.unity3d.com/ja/ScriptReference/Shader.html)
 - [Texture](https://docs.unity3d.com/ja/ScriptReference/Texture.html)
 - [QualitySettings](https://docs.unity3d.com/ja/ScriptReference/QualitySettings.html)
-- [Component](https://docs.unity3d.com/ja/current/ScriptReference/Component.html)
+- [OnDemandRendering](https://docs.unity3d.com/ja/current/ScriptReference/Rendering.OnDemandRendering.html)
+- [ScalableBufferManager](https://docs.unity3d.com/ja/ScriptReference/ScalableBufferManager.html)
+- [Component](docs.unity3d.com/ja/ScriptReference/Component.html)
   - [Animator](https://docs.unity3d.com/ja/ScriptReference/Animator.html)
   - [Behaviour](https://docs.unity3d.com/ja/current/ScriptReference/Behaviour.html)
   - [Bounds](https://docs.unity3d.com/ja/current/ScriptReference/Bounds.html)
@@ -240,5 +242,26 @@ Androidデバイス固有の機能を編集することが出来ます。
 ![img](docs/QualitySettingsView.jpg)
 QualitySettingを編集することが出来ます。
 
+
+##### OnDemandRendering
+
+renderFrameInterval を調整することが出来ます。
+Home画面等画面の動きが激しく無い場合、値を調整することで、バッテリー消費を抑えることが期待出来ます。
+
+#### ScalableBufferManager
+
+ScalableBufferManagerを編集することが出来ます。
+この機能を使用する場合、下記の条件を満たしている必要があります。
+
+- Project Settings -> `Enable Frame Timing Stats`にチェックを入れた状態でアプリケーションをビルドしている。
+- CameraもしくはRenderTextureの[Allow Dynamic Resolution](https://docs.unity3d.com/ja/2018.4/uploads/Main/DynamicResolution.png)が有効になっている。
+- プラットフォーム(及びGraphicドライバ)が下記のいずれかである
+  - Xbox One
+  - PS4
+  - Nintendo Switch
+  - iOS/tvOS (Metal のみ)
+  - Android (Vulkan のみ)
+
 ## 以上、FBやコメント受けてつけております：
 __木村 勝将：katsumasa@unity3d.com__
+=======

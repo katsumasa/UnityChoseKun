@@ -119,12 +119,12 @@ namespace Utj.UnityChoseKun
         
 
 
-        public InspectorView() {
-            
+        public InspectorView() 
+        {            
 #if UNITY_2019_1_OR_NEWER
-            if (EditorWindow.HasOpenInstances<PlayerHierarchyWindow>())
+            if (!EditorWindow.HasOpenInstances<PlayerHierarchyWindow>())
 #else
-            if (HasOpenInstances<PlayerHierarchyWindow>())
+            if (!HasOpenInstances<PlayerHierarchyWindow>())
 #endif
             {
                     PlayerHierarchyWindow.Create();
@@ -223,15 +223,13 @@ namespace Utj.UnityChoseKun
 
 
 #if UNITY_2019_1_OR_NEWER
-            if (EditorWindow.HasOpenInstances<PlayerHierarchyWindow>())
+            if (!EditorWindow.HasOpenInstances<PlayerHierarchyWindow>())
 #else
-            if (HasOpenInstances<PlayerHierarchyWindow>())
-#endif
-                
+            if (!HasOpenInstances<PlayerHierarchyWindow>())
+#endif                
             {
                 PlayerHierarchyWindow.Create();
-            }
-            
+            }            
             var window = (PlayerHierarchyWindow)EditorWindow.GetWindow(typeof(PlayerHierarchyWindow));
             if (window != null)
             {
@@ -249,6 +247,14 @@ namespace Utj.UnityChoseKun
         /// <param name="selectedIds"></param>
         void SelectionChangedCB(IList<int> selectedIds)
         {
+#if UNITY_2019_1_OR_NEWER
+            if (!EditorWindow.HasOpenInstances<PlayerHierarchyWindow>())
+#else
+            if (!HasOpenInstances<PlayerHierarchyWindow>())
+#endif
+            {
+                PlayerHierarchyWindow.Create();
+            }
             var window = (PlayerHierarchyWindow)EditorWindow.GetWindow(typeof(PlayerHierarchyWindow));
             var id = window.lastClickedID;
             if(gameObjectKuns.ContainsKey(id)){

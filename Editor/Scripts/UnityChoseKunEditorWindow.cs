@@ -54,6 +54,7 @@
         [SerializeField] ObjectCounterView  m_objectCounterView;
         [SerializeField] QualitySettingsView m_qualitySettingsView;
         [SerializeField] OnDemandRenderingView m_onDemandRenderingView;
+        [SerializeField] ScalableBufferManagerView m_scalableBufferManagerView;
 
         IConnectionState                                    m_attachProfilerState;
         Dictionary<UnityChoseKun.MessageID, OnMessageFunc>  onMessageFuncDict;
@@ -172,6 +173,19 @@
                     m_onDemandRenderingView = new OnDemandRenderingView();
                 }
                 return m_onDemandRenderingView;
+            }
+        }
+
+
+        public ScalableBufferManagerView scalableBufferManagerView
+        {
+            get
+            {
+                if(m_scalableBufferManagerView == null)
+                {
+                    m_scalableBufferManagerView = new ScalableBufferManagerView();
+                }
+                return m_scalableBufferManagerView;
             }
         }
 
@@ -304,6 +318,7 @@
                 {"Android",     androidView.OnGUI},
                 {"Quality", qualitySettingsView.OnGUI },
                 {"OnDemandRendering",onDemandRenderingView.OnGUI },
+                {"ScalableBuffer", scalableBufferManagerView.OnGUI},
 
                 // 機能をここに追加していく                                              
             };
@@ -319,6 +334,7 @@
                 {UnityChoseKun.MessageID.AndroidPull,       androidView.OnMessageEvent },
                 {UnityChoseKun.MessageID.QualitySettingsPull,   qualitySettingsView.OnMessageEvent},
                 {UnityChoseKun.MessageID.OnDemandRenderingPull,onDemandRenderingView.OnMessageEvent },
+                {UnityChoseKun.MessageID.ScalableBufferManagerPull,scalableBufferManagerView.OnMessageEvent },
                 // 機能をここに追加していく                                              
             };
             
