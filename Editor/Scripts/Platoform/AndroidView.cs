@@ -46,8 +46,7 @@ namespace Utj.UnityChoseKun
             }
             else
             {
-
-
+                scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
                 EditorGUILayout.LabelField("Permission");
                 using (new EditorGUI.IndentLevelScope())
                 {
@@ -72,7 +71,7 @@ namespace Utj.UnityChoseKun
                     androidKun.requestSustainedPerformanceMode = true;
                 }
 #endif
-
+                EditorGUILayout.EndScrollView();
             }
 
             EditorGUILayout.BeginHorizontal();
@@ -80,7 +79,6 @@ namespace Utj.UnityChoseKun
             {
                 UnityChoseKunEditor.SendMessage(UnityChoseKun.MessageID.AndroidPull);
             }
-
             if (GUILayout.Button("Push")) {
                 UnityChoseKunEditor.SendMessage<AndroidKun>(UnityChoseKun.MessageID.AndroidPush, androidKun);
                 

@@ -139,6 +139,7 @@ namespace Utj.UnityChoseKun
             EditorGUILayout.IntField(Styles.MaxComputeWorkGroupSizeZ, systemInfoKun.maxComputeWorkGroupSizeZ);
             EditorGUILayout.IntField(Styles.MaxCubemapSize, systemInfoKun.maxCubemapSize);
             EditorGUILayout.IntField(Styles.MaxTextureSize, systemInfoKun.maxTextureSize);
+            EditorGUILayout.Toggle(Styles.MinConstantBufferOffsetAlignment, systemInfoKun.minConstantBufferOffsetAlignment);
             EditorGUILayout.EnumPopup(Styles.NpotSupport, systemInfoKun.npotSupport);
             EditorGUILayout.TextField(Styles.OperatingSystem, systemInfoKun.operatingSystem);
             EditorGUILayout.EnumPopup(Styles.OperatingSystemFamily, systemInfoKun.operatingSystemFamily);

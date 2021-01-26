@@ -12,6 +12,7 @@
     {
         [SerializeField]ScreenKun m_screenKun;
         [SerializeField] bool resolutionFoldout = false;
+        [SerializeField] Vector2 m_scrollPos;
         bool isDone = false;
 
 
@@ -19,8 +20,13 @@
             get {if(m_screenKun == null){m_screenKun = new ScreenKun();}return m_screenKun;}            
             set {m_screenKun = value;}
         }
-        
-        
+
+        Vector2 scrollPos
+        {
+            get { return m_scrollPos; }
+            set { m_scrollPos = value; }
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -29,7 +35,7 @@
             if(isDone == false){
                 EditorGUILayout.HelpBox("Please Pull Request.",MessageType.Info);
             } else {
-            
+                scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
                 screenKun.autorotateToLandscapeLeft = EditorGUILayout.ToggleLeft("autorotateToLandscapeLeft", screenKun.autorotateToLandscapeLeft);
                 screenKun.autorotateToLandscapeRight = EditorGUILayout.ToggleLeft("autorotateToLandscapeRight", screenKun.autorotateToLandscapeRight);
                 screenKun.autorotateToPortrait = EditorGUILayout.ToggleLeft("autorotateToPortrait", screenKun.autorotateToPortrait);
@@ -108,6 +114,7 @@
                 screenKun.preferredRefreshRate = EditorGUILayout.IntField("preferredRefreshRate", screenKun.preferredRefreshRate);
                 EditorGUI.indentLevel--;
                 EditorGUILayout.Space();
+                EditorGUILayout.EndScrollView();
             }
 
             EditorGUILayout.BeginHorizontal();

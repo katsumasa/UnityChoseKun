@@ -54,6 +54,7 @@
         [SerializeField] ObjectCounterView  m_objectCounterView;
         [SerializeField] QualitySettingsView m_qualitySettingsView;
         [SerializeField] OnDemandRenderingView m_onDemandRenderingView;
+        [SerializeField] ScalableBufferManagerView m_scalableBufferManagerView;
         [SerializeField] SystemInfoView m_systemInfoView;
 
         IConnectionState                                    m_attachProfilerState;
@@ -189,6 +190,19 @@
         }
 
 
+        public ScalableBufferManagerView scalableBufferManagerView
+        {
+            get
+            {
+                if(m_scalableBufferManagerView == null)
+                {
+                    m_scalableBufferManagerView = new ScalableBufferManagerView();
+                }
+                return m_scalableBufferManagerView;
+            }
+        }
+
+
         [MenuItem("Window/UnityChoseKun/Player Inspector")]
         static void Inite()
         {            
@@ -317,7 +331,9 @@
                 {"Android",     androidView.OnGUI},
                 {"Quality", qualitySettingsView.OnGUI },
                 {"OnDemandRendering",onDemandRenderingView.OnGUI },
+                {"ScalableBuffer", scalableBufferManagerView.OnGUI},
                 {"SystemInfo" ,systemInfoView.OnGUI}
+
 
                 // 機能をここに追加していく                                              
             };
@@ -333,6 +349,7 @@
                 {UnityChoseKun.MessageID.AndroidPull,       androidView.OnMessageEvent },
                 {UnityChoseKun.MessageID.QualitySettingsPull,   qualitySettingsView.OnMessageEvent},
                 {UnityChoseKun.MessageID.OnDemandRenderingPull,onDemandRenderingView.OnMessageEvent },
+                {UnityChoseKun.MessageID.ScalableBufferManagerPull,scalableBufferManagerView.OnMessageEvent },
                 {UnityChoseKun.MessageID.SystemInfoPull,systemInfoView.OnMessageEvent },
                 // 機能をここに追加していく                                              
             };

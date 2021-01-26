@@ -141,7 +141,10 @@ namespace Utj.UnityChoseKun
                 {UnityChoseKun.MessageID.QualitySettingsPush,qualitySettingsPlayer.OnMessageEventPush},
                 {UnityChoseKun.MessageID.OnDemandRenderingPull, OnDemandRenderingPlayer.OnMessageEventPull},
                 {UnityChoseKun.MessageID.OnDemandRenderingPush,OnDemandRenderingPlayer.OnMessageEventPush},
-                {UnityChoseKun.MessageID.SystemInfoPull,systemInfoPlayer.OnMessageEventPull},
+                    {UnityChoseKun.MessageID.ScalableBufferManagerPull,ScalableBufferManagerPlayer.OnMessageEventPull },
+                    {UnityChoseKun.MessageID.ScalableBufferManagerPush,ScalableBufferManagerPlayer.OnMessageEventPush },
+                    {UnityChoseKun.MessageID.SystemInfoPull,systemInfoPlayer.OnMessageEventPull},
+
 
             };
 

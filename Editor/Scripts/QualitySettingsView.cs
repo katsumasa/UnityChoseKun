@@ -91,13 +91,11 @@ namespace Utj.UnityChoseKun
                 }
                 EditorGUILayout.EndScrollView();
             }
-
-            EditorGUILayout.BeginHorizontal();
+            
             if (GUILayout.Button("Pull"))
             {
                 UnityChoseKunEditor.SendMessage<QualitySettingsKun>(UnityChoseKun.MessageID.QualitySettingsPull, null);
-            }            
-            EditorGUILayout.EndHorizontal();
+            }                     
         }
 
 
