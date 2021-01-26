@@ -251,7 +251,7 @@
             binaryWriter.Write(m_fullScreen);
 
 #if UNITY_2019_1_OR_NEWER
-            binaryWriter.Write(m_brightness);
+            binaryWriter.Write(m_brightness);            
 #endif
 
             binaryWriter.Write(m_dpi);

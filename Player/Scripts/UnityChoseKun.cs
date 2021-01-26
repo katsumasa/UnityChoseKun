@@ -61,7 +61,7 @@ namespace Utj.UnityChoseKun
             QualitySettingsPush,
             OnDemandRenderingPull,
             OnDemandRenderingPush,
-
+            SystemInfoPull,
         }
 
 

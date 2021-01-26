@@ -54,6 +54,7 @@
         [SerializeField] ObjectCounterView  m_objectCounterView;
         [SerializeField] QualitySettingsView m_qualitySettingsView;
         [SerializeField] OnDemandRenderingView m_onDemandRenderingView;
+        [SerializeField] SystemInfoView m_systemInfoView;
 
         IConnectionState                                    m_attachProfilerState;
         Dictionary<UnityChoseKun.MessageID, OnMessageFunc>  onMessageFuncDict;
@@ -172,6 +173,18 @@
                     m_onDemandRenderingView = new OnDemandRenderingView();
                 }
                 return m_onDemandRenderingView;
+            }
+        }
+
+        public SystemInfoView systemInfoView
+        {
+            get
+            {
+                if (m_systemInfoView == null)
+                {
+                    m_systemInfoView = new SystemInfoView();
+                }
+                return m_systemInfoView;
             }
         }
 
@@ -304,6 +317,7 @@
                 {"Android",     androidView.OnGUI},
                 {"Quality", qualitySettingsView.OnGUI },
                 {"OnDemandRendering",onDemandRenderingView.OnGUI },
+                {"SystemInfo" ,systemInfoView.OnGUI}
 
                 // 機能をここに追加していく                                              
             };
@@ -319,6 +333,7 @@
                 {UnityChoseKun.MessageID.AndroidPull,       androidView.OnMessageEvent },
                 {UnityChoseKun.MessageID.QualitySettingsPull,   qualitySettingsView.OnMessageEvent},
                 {UnityChoseKun.MessageID.OnDemandRenderingPull,onDemandRenderingView.OnMessageEvent },
+                {UnityChoseKun.MessageID.SystemInfoPull,systemInfoView.OnMessageEvent },
                 // 機能をここに追加していく                                              
             };
             

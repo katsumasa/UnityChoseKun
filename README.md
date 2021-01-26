@@ -33,6 +33,7 @@ UnityChoseKunは再ビルドを行うこと無く、UnityEditor上で開発機�
 - Unityのバージョン
   - Unity2018.4.26f1 (一部、機能制限あり)
   - Unity2019.4.11f1
+  - Unity2020.2.2f1
 - プラットフォーム
   - Android
     - Pixel3XL
@@ -48,6 +49,7 @@ UnityChoseKunは再ビルドを行うこと無く、UnityEditor上で開発機�
 - [Shader](https://docs.unity3d.com/ja/ScriptReference/Shader.html)
 - [Texture](https://docs.unity3d.com/ja/ScriptReference/Texture.html)
 - [QualitySettings](https://docs.unity3d.com/ja/ScriptReference/QualitySettings.html)
+- [SystemInfo](https://docs.unity3d.com/ja/current/ScriptReference/SystemInfo.html)
 - [Component](https://docs.unity3d.com/ja/current/ScriptReference/Component.html)
   - [Animator](https://docs.unity3d.com/ja/ScriptReference/Animator.html)
   - [Behaviour](https://docs.unity3d.com/ja/current/ScriptReference/Behaviour.html)
@@ -240,5 +242,6 @@ Androidデバイス固有の機能を編集することが出来ます。
 ![img](docs/QualitySettingsView.jpg)
 QualitySettingを編集することが出来ます。
 
-## 以上、FBやコメント受けてつけております：
+## 以上、何かありましたらissue Trackerからご連絡下さい
+
 __木村 勝将：katsumasa@unity3d.com__

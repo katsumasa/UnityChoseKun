@@ -33,6 +33,7 @@ namespace Utj.UnityChoseKun
         AndroidPlayer       m_androidPlayer;
         HierarchyPlayer     m_hierarchyPlayer;
         QualitySettingsPlayer m_qualitySettingsPlayer;
+        SystemInfoPlayer m_systemInfoPlayer;
     
 
 
@@ -88,7 +89,19 @@ namespace Utj.UnityChoseKun
             }
         }
 
-              
+        SystemInfoPlayer systemInfoPlayer
+        {
+            get
+            {
+                if(m_systemInfoPlayer == null)
+                {
+                    m_systemInfoPlayer = new SystemInfoPlayer();
+                }
+                return m_systemInfoPlayer;
+            }
+        }
+
+
 
         /// <summary>
         /// 
@@ -128,6 +141,7 @@ namespace Utj.UnityChoseKun
                 {UnityChoseKun.MessageID.QualitySettingsPush,qualitySettingsPlayer.OnMessageEventPush},
                 {UnityChoseKun.MessageID.OnDemandRenderingPull, OnDemandRenderingPlayer.OnMessageEventPull},
                 {UnityChoseKun.MessageID.OnDemandRenderingPush,OnDemandRenderingPlayer.OnMessageEventPush},
+                {UnityChoseKun.MessageID.SystemInfoPull,systemInfoPlayer.OnMessageEventPull},
 
             };
 
