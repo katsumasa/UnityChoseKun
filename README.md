@@ -244,11 +244,6 @@ Androidデバイス固有の機能を編集することが出来ます。
 ![img](docs/QualitySettingsView.jpg)
 QualitySettingを編集することが出来ます。
 
-<<<<<<< HEAD
-## 以上、何かありましたらissue Trackerからご連絡下さい
-
-=======
-
 ##### OnDemandRendering
 
 renderFrameInterval を調整することが出来ます。
@@ -268,7 +263,6 @@ ScalableBufferManagerを編集することが出来ます。
   - iOS/tvOS (Metal のみ)
   - Android (Vulkan のみ)
 
-## 以上、FBやコメント受けてつけております：
->>>>>>> 7951db3637e3c235efff3493bc65621b02e42878
+## 以上、FBやコメントを受けつけております
 __木村 勝将：katsumasa@unity3d.com__
-=======
+
