@@ -264,5 +264,5 @@ ScalableBufferManagerを編集することが出来ます。
   - Android (Vulkan のみ)
 
 ## 以上、FBやコメントを受けつけております
-__木村 勝将：katsumasa@unity3d.com__
 
+## _木村 勝将：katsumasa@unity3d.com_
