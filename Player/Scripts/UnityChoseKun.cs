@@ -19,8 +19,7 @@ namespace Utj.UnityChoseKun
     using System.Runtime.InteropServices;
     using System.IO;
     using System.Runtime.Serialization.Formatters.Binary;
-    using UnityEngine;
-    using TMPro;
+    using UnityEngine;   
     using System;
 
     /// <summary>

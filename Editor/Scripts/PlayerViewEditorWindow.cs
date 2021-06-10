@@ -16,8 +16,7 @@
     using PlayerConnectionUtility = UnityEditor.Experimental.Networking.PlayerConnection.EditorGUIUtility;
     using PlayerConnectionGUILayout = UnityEditor.Experimental.Networking.PlayerConnection.EditorGUILayout;
 #endif
-    using System.Security.AccessControl;
-    using TMPro;
+    using System.Security.AccessControl;    
     using System;
 
 
