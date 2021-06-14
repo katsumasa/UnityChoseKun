@@ -139,7 +139,7 @@
         //
         private void OnGUI()
         {
-            ChangeTitleContent();
+            //ChangeTitleContent();
             GUILayoutConnect();
             EditorGUILayout.Separator();
             GUILayoutPlayView();
