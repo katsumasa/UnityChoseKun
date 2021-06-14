@@ -56,15 +56,24 @@ namespace Utj.UnityChoseKun
         public virtual void Deserialize(BinaryReader binaryReader)
         {
             messageID = (MessageID)binaryReader.ReadInt32();
+            //Debug.Log("messageID " + messageID);
+
             baseID = binaryReader.ReadInt32();
+            //Debug.Log("baseID " + baseID);
+
             primitiveType = (PrimitiveType)binaryReader.ReadInt32();
-            
+            //Debug.Log("primitiveType " + primitiveType);
+
             //systemType = SerializerKun.DesirializeString(binaryReader);
             systemType = binaryReader.ReadString();
 
             if (!string.IsNullOrEmpty(systemType))
             {
+                //Debug.Log("systemType " + systemType);
+
                 type = System.Type.GetType(systemType);
+
+                //Debug.Log("type "+type);
             } 
             
         }
@@ -121,6 +130,8 @@ namespace Utj.UnityChoseKun
     {
         public void OnMessageEventPush(BinaryReader binaryReader)
         {
+            Debug.Log("OnMessageEventPush");
+
             HierarchyMessage message = new HierarchyMessage();
             message.Deserialize(binaryReader);
             
@@ -173,23 +184,30 @@ namespace Utj.UnityChoseKun
                     break;
 
                 case HierarchyMessage.MessageID.CreateClass:
-                    {                        
-                        var parent = FindGameObjectInScene(message.baseID);
-                        var go = new GameObject(message.type.Name,message.type);
-                        if (go != null)
+                    {
+                        if (message.type != null)
                         {
-                            if (parent != null)
+                            var parent = FindGameObjectInScene(message.baseID);
+                            var go = new GameObject(message.type.Name, message.type);
+                            if (go != null)
                             {
-                                go.transform.parent = parent.transform;
-                            }
-                            else
-                            {
-                                go.transform.parent = null;
-                            }
+                                if (parent != null)
+                                {
+                                    go.transform.parent = parent.transform;
+                                }
+                                else
+                                {
+                                    go.transform.parent = null;
+                                }
 
-                            go.transform.localPosition = Vector3.zero;
-                            go.transform.localRotation = Quaternion.identity;
-                            go.transform.localScale = Vector3.one;
+                                go.transform.localPosition = Vector3.zero;
+                                go.transform.localRotation = Quaternion.identity;
+                                go.transform.localScale = Vector3.one;
+                            }
+                        }
+                        else
+                        {
+                            Debug.LogError(message.systemType + " is not include in the app.");
                         }
                     }            
                     break;
