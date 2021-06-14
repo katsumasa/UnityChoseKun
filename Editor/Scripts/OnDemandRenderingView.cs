@@ -47,24 +47,32 @@ namespace Utj.UnityChoseKun
         {
 #if UNITY_2019_3_OR_NEWER
             scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
-            EditorGUILayout.IntField("effectiveRenderFrameRate",onDemandRenderingKun.effectiveRenderFrameRate);
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField(new GUIContent("effectiveRenderFrameRate", "現在の設定から想定される描画[FPS]"));
+            EditorGUILayout.LabelField(onDemandRenderingKun.effectiveRenderFrameRate.ToString() + "[FPS]");
+            //EditorGUILayout.Toggle(new GUIContent("willCurrentFrameRender","現在のフレームが描画が発生するフレームであるか"), onDemandRenderingKun.willCurrentFrameRender);
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.Space();
+
             EditorGUI.BeginChangeCheck();
-            onDemandRenderingKun.renderFrameInterval = EditorGUILayout.IntSlider("renderFrameInterval", onDemandRenderingKun.renderFrameInterval, 0, 100);
+            onDemandRenderingKun.renderFrameInterval = EditorGUILayout.IntSlider(new GUIContent("renderFrameInterval","描画を行うフレーム間隔"), onDemandRenderingKun.renderFrameInterval, 1, 100);
             if (EditorGUI.EndChangeCheck())
             {
                 onDemandRenderingKun.isDirty = true;
+                UnityChoseKunEditor.SendMessage<OnDemandRenderingKun>(UnityChoseKun.MessageID.OnDemandRenderingPush, onDemandRenderingKun);
             }
-            EditorGUILayout.Toggle("willCurrentFrameRender", onDemandRenderingKun.willCurrentFrameRender);
+
             EditorGUILayout.EndScrollView();
 
             EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("Pull"))
+            //if (GUILayout.Button("Pull"))
             {
                 UnityChoseKunEditor.SendMessage<OnDemandRenderingKun>(UnityChoseKun.MessageID.OnDemandRenderingPull, null);
             }
-            if (GUILayout.Button("Push"))
+            //if (GUILayout.Button("Push"))
             {
-                UnityChoseKunEditor.SendMessage<OnDemandRenderingKun>(UnityChoseKun.MessageID.OnDemandRenderingPush, onDemandRenderingKun);
+               // UnityChoseKunEditor.SendMessage<OnDemandRenderingKun>(UnityChoseKun.MessageID.OnDemandRenderingPush, onDemandRenderingKun);
             }
             EditorGUILayout.EndHorizontal();
 #else
@@ -80,6 +88,7 @@ namespace Utj.UnityChoseKun
         public void OnMessageEvent(BinaryReader binaryReader)
         {
             onDemandRenderingKun.Deserialize(binaryReader);
+
         }
     }
 }

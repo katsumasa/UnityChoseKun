@@ -43,7 +43,7 @@ namespace Utj.UnityChoseKun {
                 cnt = shaderKuns.Length;
                 EditorGUILayout.LabelField("Shader List("+cnt+")");
             }else {
-                EditorGUILayout.HelpBox("Please Pull Request.",MessageType.Info);
+                EditorGUILayout.HelpBox("You can display a list of Shaders. Please Push Pull Button.", MessageType.Info);
             }
 
             using (new EditorGUI.IndentLevelScope()){
