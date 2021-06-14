@@ -238,11 +238,15 @@
             
             //if (onGUILayoutFuncDict != null)
             {
-                var texts = onGUILayoutFuncDict.Keys.ToArray();                
+                var texts = onGUILayoutFuncDict.Keys.ToArray();
+#if false
                 toolbarIdx = GUILayout.Toolbar(
                     toolbarIdx,
                     texts,
                     EditorStyles.toolbarButton);
+#else
+                toolbarIdx = EditorGUILayout.Popup(toolbarIdx, texts);
+#endif
                 EditorGUILayout.Space();
 
                 var key = texts[toolbarIdx];
