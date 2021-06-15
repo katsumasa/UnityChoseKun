@@ -69,7 +69,7 @@ namespace Utj.UnityChoseKun
         
         [SerializeField] SearchField                            m_searchField;          
         [SerializeField] TreeViewState                          m_treeViewState;
-        [SerializeField] HierarchyTreeView                      m_hierarchyTreeView;
+        HierarchyTreeView                                       m_hierarchyTreeView;
         [SerializeField] HierarchyTreeView.SelectionChangedCB   m_selectionChangedCB;
         [SerializeField] SceneKun                               m_sceneKun;
 
@@ -165,10 +165,12 @@ namespace Utj.UnityChoseKun
             m_attachProfilerState = ConnectionUtility.GetAttachToPlayerState(this);
 #endif
 
-            if (treeViewState == null){
-                treeViewState = new TreeViewState();
+            if (m_treeViewState == null){
+                m_treeViewState = new TreeViewState();
             }
+            m_hierarchyTreeView = new HierarchyTreeView(m_treeViewState);
             
+
             Reload();
             if(m_searchField == null){
                 m_searchField = new SearchField();

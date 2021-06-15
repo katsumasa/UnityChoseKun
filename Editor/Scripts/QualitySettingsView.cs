@@ -45,7 +45,12 @@ namespace Utj.UnityChoseKun
                 qualitySettingsKun.softParticles = EditorGUILayout.Toggle("Soft Particles", qualitySettingsKun.softParticles);
                 qualitySettingsKun.realtimeReflectionProbes = EditorGUILayout.Toggle("Realtime Reflection Probes", qualitySettingsKun.realtimeReflectionProbes);
                 qualitySettingsKun.billboardsFaceCameraPosition = EditorGUILayout.Toggle("Billboards Face Camera Position", qualitySettingsKun.billboardsFaceCameraPosition);
+
+                EditorGUILayout.Space();
+                EditorGUILayout.HelpBox("To enable this feature, we need to change the value of Player -> Resolution and Presentation -> Resolution Scaling Mode from Disable to Fixed DPI.", MessageType.Info);
                 qualitySettingsKun.resolutionScalingFixedDPIFactor = EditorGUILayout.Slider("Resolution Scaling Fixed DPI Factor", qualitySettingsKun.resolutionScalingFixedDPIFactor, 0.001f, 5.0f, GUILayout.ExpandWidth(true));
+                EditorGUILayout.Space();
+
                 qualitySettingsKun.streamingMipmapsActive = EditorGUILayout.Toggle("Texture Streaming", qualitySettingsKun.streamingMipmapsActive);
                 if (qualitySettingsKun.streamingMipmapsActive)
                 {

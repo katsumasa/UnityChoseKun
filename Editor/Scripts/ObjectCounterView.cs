@@ -33,6 +33,8 @@
 
         public void OnGUI()
         {
+            EditorGUILayout.LabelField("Number of Components in a Scene");
+
             mScrollPos = EditorGUILayout.BeginScrollView(mScrollPos);
             for (var i = 0; i < (int)ComponentKun.ComponentKunType.Max; i++)
             {

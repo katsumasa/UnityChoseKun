@@ -135,7 +135,7 @@ namespace Utj.UnityChoseKun {
                 cnt = textureViews.Length;
                 EditorGUILayout.LabelField("Texture List("+cnt+")");
             } else {
-                EditorGUILayout.HelpBox("Please Pull Request.",MessageType.Info);
+                EditorGUILayout.HelpBox("You can display list of Texture.Please Push Pull Button.",MessageType.Info);
             }
             
             if(cnt != 0){

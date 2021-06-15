@@ -79,7 +79,10 @@ namespace Utj.UnityChoseKun
             if (mIsDirty)
             {
 #if UNITY_2019_3_OR_NEWER
-                OnDemandRendering.renderFrameInterval = mRenderFrameInterval;
+                if (OnDemandRendering.renderFrameInterval != mRenderFrameInterval)
+                {
+                    OnDemandRendering.renderFrameInterval = mRenderFrameInterval;
+                }
 #endif
             }
         }
