@@ -23,6 +23,7 @@ namespace Utj.UnityChoseKun
         [SerializeField] public int baseID;
         [SerializeField] public PrimitiveType primitiveType;        
         [SerializeField] public string systemType;
+        [SerializeField] public string manifestModule;
 
         public System.Type type;
 
@@ -39,13 +40,15 @@ namespace Utj.UnityChoseKun
             if (type != null)
             {
                 systemType = type.ToString();
+                manifestModule = type.Assembly.ManifestModule.ToString();
             } 
             else
             {
                 systemType = "";
+                manifestModule = "";
             }
             binaryWriter.Write(systemType);
-            //SerializerKun.Serialize(binaryWriter, systemType);
+            binaryWriter.Write(manifestModule);
         }
 
 
@@ -55,27 +58,23 @@ namespace Utj.UnityChoseKun
         /// <param name="binaryReader">BinaryReader</param>
         public virtual void Deserialize(BinaryReader binaryReader)
         {
-            messageID = (MessageID)binaryReader.ReadInt32();
-            //Debug.Log("messageID " + messageID);
-
-            baseID = binaryReader.ReadInt32();
-            //Debug.Log("baseID " + baseID);
-
-            primitiveType = (PrimitiveType)binaryReader.ReadInt32();
-            //Debug.Log("primitiveType " + primitiveType);
-
-            //systemType = SerializerKun.DesirializeString(binaryReader);
-            systemType = binaryReader.ReadString();
-
+            messageID = (MessageID)binaryReader.ReadInt32();            
+            baseID = binaryReader.ReadInt32();            
+            primitiveType = (PrimitiveType)binaryReader.ReadInt32();                        
+            systemType = binaryReader.ReadString();            
+            manifestModule = binaryReader.ReadString();            
             if (!string.IsNullOrEmpty(systemType))
             {
-                //Debug.Log("systemType " + systemType);
-
-                type = System.Type.GetType(systemType);
-
-                //Debug.Log("type "+type);
-            } 
-            
+                if (string.IsNullOrEmpty(manifestModule))
+                {
+                    type = System.Type.GetType(systemType);
+                } 
+                else
+                {
+                    var tmp = systemType + "," + manifestModule;
+                    type = System.Type.GetType(tmp);
+                }
+            }            
         }
 
 
@@ -103,8 +102,11 @@ namespace Utj.UnityChoseKun
             {
                 return false;
             }
-
             if (!type.Equals(other.type))
+            {
+                return false;
+            }
+            if (!manifestModule.Equals(other.manifestModule))
             {
                 return false;
             }

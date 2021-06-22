@@ -145,17 +145,24 @@
                 gameObject.name = name;
             }
 
-            // ComponentKun側がDirtyであるかいなかはComponentKun側に依存する
-            for(var i = 0; i < componentKunTypes.Length; i++){                        
+            // instanceIDが一致するComponetを探し出してWriteBackを実行する。
+            // ※ComponentKun側がDirtyであるかいなかはGameObjectKunではなく各ComponentKun側に依存する
+            var components = gameObject.GetComponents<Component>();
+            for (var i = 0; i < componentKunTypes.Length; i++){                        
                 var componentKunType = componentKunTypes[i];
                 if(componentKunType == ComponentKun.ComponentKunType.MissingMono)
                 {
                     continue;
+                }                
+                Component component = null;                
+                for(var j = 0; j < components.Length; j++)
+                {                    
+                    if (components[j] != null && components[j].GetInstanceID() == componentKuns[i].instanceID)
+                    {
+                        component = components[j];
+                        break;
+                    }
                 }
-                var systemType = ComponentKun.GetComponentSystemType(componentKunType);                
-                var component = gameObject.GetComponent(systemType);
-                
-                //UnityChoseKun.Log(componentKunType);
 
                 if(component == null){                
                     UnityChoseKun.LogWarning("component == null");
