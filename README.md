@@ -87,6 +87,7 @@ UnityChoseKunは再ビルドを行うこと無く、UnityEditor上で開発機�
 - Unity2018では以下の機能に対応していません。
   - Materialが参照しているTextureの差し替え
   - PlayerViewのAsync GPU Readback機能
+- DeviceとUnityChoseKunが接続したままの状態で、UnityEditorを終了させると`EditorConnection.instance.DisconnectAll()`内でクラッシュが発生します。これを防ぐ為には、UnityChoseKunの接続先をEditorに変更するなどしてDeviceとの接続を解除する必要があります。
 
 ## 使い方
 
@@ -147,7 +148,7 @@ MenuからWindow->UnityChoseKun->Player ViewでPlayerView Windowが表示され�
 
 ##### 注意事項
 
-Player Viewerは非常に負荷の高い処理です。Player Inspector->Screen->SetScreenからwidthとheightを調整したり、Refresh Intervalで実行間隔を調整してから再生を実行することを*オススメ*します。
+- Player Viewerは非常に負荷の高い処理です。Player Inspector->Screen->SetScreenからwidthとheightを調整したり、Refresh Intervalで実行間隔を調整してから再生を実行することを*オススメ*します。
 
 #### Player Hierarchy
 

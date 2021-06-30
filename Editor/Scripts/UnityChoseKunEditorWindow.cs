@@ -56,6 +56,8 @@
         [SerializeField] OnDemandRenderingView m_onDemandRenderingView;
         [SerializeField] ScalableBufferManagerView m_scalableBufferManagerView;
         [SerializeField] SystemInfoView m_systemInfoView;
+        [SerializeField] bool m_IsConnected;
+
 
         IConnectionState                                    m_attachProfilerState;
         Dictionary<UnityChoseKun.MessageID, OnMessageFunc>  onMessageFuncDict;
@@ -269,7 +271,6 @@
         private void GUILayoutConnect()
         {
             EditorGUILayout.BeginHorizontal();
-
             var contents = new GUIContent("Connect To");
             var v2 = EditorStyles.label.CalcSize(contents);
             EditorGUILayout.LabelField(contents, GUILayout.Width(v2.x));
@@ -280,6 +281,8 @@
 #else
                 ConnectionGUILayout.AttachToPlayerDropdown(m_attachProfilerState, EditorStyles.toolbarDropDown);
 #endif
+
+#if false
                 switch (m_attachProfilerState.connectedToTarget)
                 {
                     case ConnectionTarget.None:
@@ -295,6 +298,7 @@
                     default:
                         break;
                 }
+#endif
             }
 
 
@@ -322,6 +326,9 @@
 #endif
             UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Initialize();
             UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Register(UnityChoseKun.kMsgSendPlayerToEditor, OnMessageEvent);
+            UnityEditor.Networking.PlayerConnection.EditorConnection.instance.RegisterConnection(OnConnection);
+            UnityEditor.Networking.PlayerConnection.EditorConnection.instance.RegisterDisconnection(OnDisConnection);
+
 
             onGUILayoutFuncDict = new Dictionary<string, Action>()
             {
@@ -374,15 +381,31 @@
                 onGUILayoutFuncDict = null;
             }
 
-
-            UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Unregister(UnityChoseKun.kMsgSendPlayerToEditor, OnMessageEvent);
-            UnityEditor.Networking.PlayerConnection.EditorConnection.instance.DisconnectAll();
-
             if (m_attachProfilerState != null)
             {
                 m_attachProfilerState.Dispose();
                 m_attachProfilerState = null;
             }
+
+
+            // Deviceと接続した状態でUnityEditorを終了させるとUnityEditorがクラッシュする。
+            // スクリプトリファレンスに記載されているサンプルでもOnDisableで処理しているので謎
+            // しかし、呼ばないと次に接続した時に繋がらなくなる。
+            // 呼ぶ必要はあるが、呼ぶとクラッシュする謎仕様。
+            //  ========== OUTPUTTING STACK TRACE ==================
+            //  0x00007FF774558B79(Unity) profiling::ProfilerSession::OnConnectTo
+            //  0x00007FF7753BA87C(Unity) GeneralConnection::DisconnectAll
+            //  0x00007FF7733DF6B6(Unity) EditorConnectionInternal_CUSTOM_DisconnectAll
+            //  0x0000023E504F1115(Mono JIT Code)(wrapper managed - to - native) UnityEditor.EditorConnectionInternal:DisconnectAll()
+            //  0x0000023E504F0FB3(Mono JIT Code) UnityEditor.EditorConnectionInternal:UnityEngine.IPlayerEditorConnectionNative.DisconnectAll()
+            //  0x0000023E504F0E84(Mono JIT Code) UnityEditor.Networking.PlayerConnection.EditorConnection:DisconnectAll()
+            //  0x0000023E504EF963(Mono JIT Code)[D:\SandBox\unitychan - crs - master\Assets\UTJ\UnityChoseKun\Editor\Scripts\PlayerViewEditorWindow.cs:141] Utj.UnityChoseKun.PlayerViewKunEditorWindow:OnDisable()
+            UnityEditor.Networking.PlayerConnection.EditorConnection.instance.DisconnectAll();
+                                        
+            UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Unregister(UnityChoseKun.kMsgSendPlayerToEditor, OnMessageEvent);
+            UnityEditor.Networking.PlayerConnection.EditorConnection.instance.UnregisterConnection(OnConnection);
+            UnityEditor.Networking.PlayerConnection.EditorConnection.instance.UnregisterDisconnection(OnDisConnection);
+
         }        
 
                
@@ -409,6 +432,21 @@
             binaryReader.Close();
             memoryStream.Close();
         }
+
+
+        private void OnConnection(int playerId)
+        {
+            Debug.Log("connected "+ playerId);
+            m_IsConnected = true;
+        }
+
+
+        private void OnDisConnection(int playerId)
+        {
+            Debug.Log("disconect " + playerId);
+            m_IsConnected = false;
+        }
+
     }
 }
 

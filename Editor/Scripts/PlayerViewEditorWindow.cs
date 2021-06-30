@@ -64,6 +64,7 @@
         [SerializeField] int recordCount;
         [SerializeField] bool isPlay;
         [SerializeField] PlayerViewPlayer.TextureHeader textureHeader;
+        [SerializeField] List<int> m_players;
 
         /// <summary>
         /// 関数の定義 
@@ -89,24 +90,22 @@
         
         private void Awake()
         {            
-            UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Initialize();
-            UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Register(PlayerView.kMsgSendPlayerToEditor, OnMessageEvent);
-            UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Register(PlayerView.kMsgSendPlayerToEditorHeader, OnMessageEventHeader);
+
             playerViewTexture = new Texture2D(2960, 1140, TextureFormat.RGBA32, false);
             editorSendData.frameCount = 1;
             recordMaxFrame = 200;
-             
+            m_players = new List<int>();
+
+
         }
 
         //
         private void OnDestroy()
         {            
-            UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Unregister(PlayerView.kMsgSendPlayerToEditor, OnMessageEvent);
-            UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Unregister(PlayerView.kMsgSendPlayerToEditorHeader, OnMessageEventHeader);
-            UnityEditor.Networking.PlayerConnection.EditorConnection.instance.DisconnectAll();
+            
             if (playerViewTexture == null)
                 DestroyImmediate(playerViewTexture);
-            window = null;
+            window = null;        
         }
 
 
@@ -125,6 +124,10 @@
                 attachProfilerState = PlayerConnectionUtility.GetAttachToPlayerState(this);
 #endif
             }
+            UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Initialize();
+            UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Register(PlayerView.kMsgSendPlayerToEditor, OnMessageEvent);
+            UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Register(PlayerView.kMsgSendPlayerToEditorHeader, OnMessageEventHeader);
+            UnityEditor.Networking.PlayerConnection.EditorConnection.instance.RegisterConnection(OnConnection);
         }
 
 
@@ -133,6 +136,13 @@
         {
             attachProfilerState.Dispose();
             attachProfilerState = null;
+            
+            UnityEditor.Networking.PlayerConnection.EditorConnection.instance.DisconnectAll();
+
+            UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Unregister(PlayerView.kMsgSendPlayerToEditor, OnMessageEvent);
+            UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Unregister(PlayerView.kMsgSendPlayerToEditorHeader, OnMessageEventHeader);
+            UnityEditor.Networking.PlayerConnection.EditorConnection.instance.UnregisterConnection(OnConnection);
+            UnityEditor.Networking.PlayerConnection.EditorConnection.instance.UnregisterDisconnection(OnDisConnection);
         }
 
 
@@ -143,6 +153,28 @@
             GUILayoutConnect();
             EditorGUILayout.Separator();
             GUILayoutPlayView();
+        }
+
+
+
+
+        private void OnConnection(int playerId)
+        {
+            if (m_players.Contains(playerId) == false)
+            {
+                m_players.Add(playerId);
+                Debug.Log("connected " + playerId);
+            }
+        }
+
+
+        private void OnDisConnection(int playerId)
+        {
+            if (m_players.Contains(playerId) == true)
+            {
+                m_players.Remove(playerId);
+                Debug.Log("disconnected " + playerId);
+            }
         }
 
 
