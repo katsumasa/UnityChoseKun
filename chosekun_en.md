@@ -72,6 +72,10 @@ You can make adjustments on the following components
 - Following functions cannot be made in Unity2018:
   - Replace referenced texture.
   - Readback feature of PlayerView's Async GPU.
+- If you quit Unity Editor while the device and UnityChoseKun remain connected, crash will occur inside `EditorConnection.instance.DisconnectAll()`
+To prevent that, disconnect from the device by changing the access point of UnityChoseKun to the Editor.
+
+
 
 ## How to use
 Place the entire contents of this repository under the Asset folder of the UnityProject.
