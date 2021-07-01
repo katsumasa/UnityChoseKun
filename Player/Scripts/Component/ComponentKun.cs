@@ -25,7 +25,11 @@
             Invalid = -1,
             Transform = 0,
             Camera,
-            Light,            
+            Light,
+
+
+            SpriteRenderer,
+
             SkinnedMeshMeshRenderer,
             MeshRenderer,
             Renderer,
@@ -39,6 +43,8 @@
             Animator,
 
             ParticleSystem,
+
+            
 
             MissingMono,    // Component == null
             MonoBehaviour,
@@ -66,8 +72,12 @@
             {ComponentKunType.Transform,new ComponentPair(typeof(Transform),typeof(TransformKun))},
             {ComponentKunType.Camera,new ComponentPair(typeof(Camera),typeof(CameraKun))},
             {ComponentKunType.Light,new ComponentPair(typeof(Light),typeof(LightKun))},
+
+            {ComponentKunType.SpriteRenderer,new ComponentPair(typeof(SpriteRenderer),typeof(SpriteRendererKun))},
+
             {ComponentKunType.SkinnedMeshMeshRenderer,new ComponentPair(typeof(SkinnedMeshRenderer),typeof(SkinnedMeshRendererKun))},            
             {ComponentKunType.MeshRenderer,new ComponentPair(typeof(MeshRenderer),typeof(MeshRendererKun))},
+            
             {ComponentKunType.Renderer,new ComponentPair(typeof(Renderer),typeof(RendererKun))},
             
             {ComponentKunType.Rigidbody,new ComponentPair(typeof(Rigidbody),typeof(RigidbodyKun))},
@@ -84,6 +94,7 @@
             {ComponentKunType.MonoBehaviour,new ComponentPair(typeof(MonoBehaviour),typeof(MonoBehaviourKun))},
             {ComponentKunType.Behaviour,new ComponentPair(typeof(Behaviour),typeof(BehaviourKun))},
             {ComponentKunType.Component,new ComponentPair(typeof(Component),typeof(ComponentKun))},
+            
         };
 
 
@@ -105,6 +116,8 @@
             if (component is Camera) { return ComponentKunType.Camera; }
             if (component is Light) { return ComponentKunType.Light; }
 
+            if (component is SpriteRenderer) { return ComponentKunType.SpriteRenderer;}
+
             if (component is MeshRenderer) { return ComponentKunType.MeshRenderer; }
             if (component is SkinnedMeshRenderer) { return ComponentKunType.SkinnedMeshMeshRenderer; }
             if (component is Renderer) { return ComponentKunType.Renderer; }
@@ -119,6 +132,7 @@
 
             if(component is ParticleSystem) { return ComponentKunType.ParticleSystem; }
 
+            
 
             if (component is MonoBehaviour){return ComponentKunType.MonoBehaviour;}
             if(component is Behaviour){return ComponentKunType.Behaviour;}
@@ -199,6 +213,11 @@
                         return new LightKun();
                     }
 
+                case ComponentKunType.SpriteRenderer:
+                    {
+                        return new SpriteRendererKun();
+                    }
+
                 case ComponentKunType.SkinnedMeshMeshRenderer:
                     {
                         return new SkinnedMeshRendererKun();
@@ -263,6 +282,9 @@
                     {
                         return new ComponentKun();
                     }
+
+
+
                 default:
                     {
                         return new BehaviourKun();
