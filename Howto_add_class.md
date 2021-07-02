@@ -34,13 +34,14 @@ UnityEditorとDeviceの間を行き来する為のClassを作成します。こ�
 - classに`System.Serializable`Attributeを追加する
 - DeviceとUnityEditor間でやり取りを行いたい変数を定義する。変数には`Serializable` Attributeがを追加する。
 - コンストラクタの定義（コンストラクタは引数無しとSerialize元のClassを引数とした２種類を用意します。）
+- `WriteBack` Methodのoverride
 - `Serialize`/`Deserialize` Methodのoverride
 - `Equals`Methodのoverride
 - `GetHashCode`Methodのoverride
 
 `Serialize`/`Deserialize`にはそれぞれ`BinaryWriter`/`BinaryReader`を使用します。
 処理する変数の順番を一致させる必要があることに注意して下さい。
-
+`WriteBack`MethodではHogeKunからHogeへ内容を書き戻す処理を記載します。
 実際のHogeKunは下記のような実装になります。
 
 ```:HogeKun.cs
@@ -70,6 +71,16 @@ namespace Utj.UnityChoseKun
         public HogeKun() : this(null)
         {
             text = "";
+        }
+
+
+        public override bool WriteBack(Component component)
+        {
+            base.WriteBack(component);
+            var hoge = component as Hoge;
+            hoge.text = text;
+
+            return true;
         }
 
         public override void Serialize(BinaryWriter binaryWriter)
