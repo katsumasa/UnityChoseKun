@@ -1,15 +1,15 @@
-# Classの追加方法
+# How to add new Class 
 
-UnityChoseKunに新しいClassを追加する場合、次の作業が必要となります。
+To add a new class to UnityChoseKun requires following steps:
 
-- Serialize/Desrialize用のClassの作成
-- PlayerInspecterViewに表示する為のClassの作成
-- ComponentKun.csの編集
-- ComponentView.csの編集
+- Create a Class for Serialize/Deserialize
+- Create a Class to display in PlayerInspectorView
+- Edit ComponentKun.cs
+- Edit ComponentView.cs
 
-ここでは、 `MonoBehaviour`を継承した`Hoge`という名前のClassを追加する方法を例とします。
+Here is an example of how to add a Class named `Hoge` that inherits from `MonoBehaviour`.
 
-Hogeはstring型のtextという名前の変数を持ち、Update内でコンソールにtextを出力するだけのClassで、次のように定義されています。
+Hoge is a string variable that contains the name text, which is a Class that outputs text to the console in Update and it's defined as:
 
 ```:Hoge.cs
 using UnityEngine;
@@ -26,22 +26,20 @@ public class Hoge : MonoBehaviour
 }
 ```
 
-## Serialize/Desrialize用のClassの作成
+## Creating Class for Serialize/Deserialize
 
-UnityEditorとDeviceの間を行き来する為のClassを作成します。このClassで重要なポイントは下記の通りです。
+Need this Class to go back and forth between Unity Editor and the actual Device. These are the important points that need to be checked for this Class:
 
-- `namespace`が`Utj.UnityChoseKun`である
-- classに`System.Serializable`Attributeを追加する
-- DeviceとUnityEditor間でやり取りを行いたい変数を定義する。変数には`Serializable` Attributeがを追加する。
-- コンストラクタの定義（コンストラクタは引数無しとSerialize元のClassを引数とした２種類を用意します。）
-- `Serialize`/`Deserialize` Methodのoverride
-- `Equals`Methodのoverride
-- `GetHashCode`Methodのoverride
+- The `namespace` is `Utj.UnityChoseKun`
+- Add `System.Serializable`Attribute to the Class
+- Define the variables you want to exchange between the Device and Unity Editor.  Also to add `Serializable` Attribute to the variable.
+- Define Constructor. (We'll need to prepare two tpyes: 1.With no arguement 2.Original Class of Serialize as an argument)
+- Override `WriteBack` Method
+- Override `Serialize`/`Deserialize` Method 
+- Override `Equals` Method
+- Override `GetHashCode` Method
 
-`Serialize`/`Deserialize`にはそれぞれ`BinaryWriter`/`BinaryReader`を使用します。
-処理する変数の順番を一致させる必要があることに注意して下さい。
-
-実際のHogeKunは下記のような実装になります。
+We'll be using `BinaryWriter`/`BinaryReader` for `Serialize`/`Deserialize` respectively. Note that you need to match the order of the variables to be processed. `WriteBack` Method describes the process of writing back the contents from HogeKun to Hoge. Hoge has the following implementation:
 
 ```:HogeKun.cs
 using System.IO;
@@ -107,13 +105,13 @@ namespace Utj.UnityChoseKun
 }
 ```
 
-## ComponentKun.csの編集
+## Editing ComponentKun.cs
 
-[ComponentKun.cs](https://github.com/katsumasa/UnityChoseKun/blob/master/Player/Scripts/Component/ComponentKun.cs)を編集し、HogeとHogeKunをUnityChoseKunに登録します。
+Edit [ComponentKun.cs](https://github.com/katsumasa/UnityChoseKun/blob/master/Player/Scripts/Component/ComponentKun.cs) and register Hoge and HogeKun with UnityChoseKun.
 
-### ComponentKunTypeの定義
+### Definition of ComponentKunType
 
-`ComponentKunType`に追加したいClassTypeの定義を追加します。
+Add the definition of ClassType you want to add to `ComponentKunType`.
 
 ```:cs
 public enum ComponentKunType {            
@@ -146,24 +144,24 @@ public enum ComponentKunType {
 };
 ```
 
-### componentPairDictへの追加
+### Add to componentPairDict
 
-`ComponentKunType.Hoge`,`typeof(Hoge)`,`typeof(HogeKun)`をcomponentPairDictへ登録して関連付けを行います。
+Register `ComponentKunType.Hoge`, `typeof(Hoge)`, `typeof(HogeKun)` in componentPairDict and associate them.
 
 ```:cs
 static readonly Dictionary<ComponentKunType,ComponentPair> componentPairDict = new Dictionary<ComponentKunType, ComponentPair>() 
 {
-    // 省略
+    // ...
     {ComponentKunType.Component,new ComponentPair(typeof(Component),typeof(ComponentKun))},
     {ComponentKunType.Hoge,new ComponentPair(typeof(Hoge),typeof(HogeKun))},    
 };
 ```
 
-### GetComponentKunTypeへの追加
+### Add to GetComponentKunType
 
-`Component`と`ChoseKunType`の関連付けを行います。
-注意すべき点としては、追加する`Class`は`BaseClass`の手前に設定する必要があるということです。
-HogeのBase ClassはMonoBehaviourですのでMonoBehaviourの手前に追加します。
+Associates `Component` with `ChoseKunType`.
+Please note that the `Class` that you wish to add needs to be set before the `BaseClass`.
+Hoge's Base Class is MonoBehaviour, so add it before MonoBehaviour.
 
 ```:cs
 public static ComponentKunType GetComponentKunType(Component component)
@@ -172,9 +170,9 @@ public static ComponentKunType GetComponentKunType(Component component)
     {
         return ComponentKunType.MissingMono;
     }
-    // 省略
+    // ...
 
-    if (component is Hoge){return ComponentKunType.Hoge;} // <== 追加
+    if (component is Hoge){return ComponentKunType.Hoge;} // <== Add
 
     if (component is MonoBehaviour){return ComponentKunType.MonoBehaviour;}
     if(component is Behaviour){return ComponentKunType.Behaviour;}
@@ -184,40 +182,40 @@ public static ComponentKunType GetComponentKunType(Component component)
 }
 ```
 
-### Instantiateの追加
+### Add Instantiate
 
 ```:cs
  public static ComponentKun Instantiate(ComponentKunType componentKunType)
 {
     switch (componentKunType)
     {
-        // 省略
+        // ...
         case ComponentKunType.Hoge:
         {
             return new HogeKun();
         }
-        // 省略
+        // ...
     }
 }
 ```
 
-## Player Inspector Viewへの表示を行うClass
+## Class to display in Player Inspector View
 
-このClassでは下記のMethodをoverrideする必要があります。
+In this Class, you'll need to override the following Methods:
 
 - OnGUI()
 - GetComponentKun()/SetComponentKun()
 
 ### OnGUI
 
-Player Inspectorで表示・編集を行う内容です。
-Hogeではstring型の変数を一つ表示するだけです。
+This is the content to be display/edit with Player Inspector.
+Hoge displays only one string type variable.
 
 ### GetComponentKun/SetComponentKun
 
-ComponentKun型とHogeKun型の変数のやり取りを行う変数です。
-HogeView.csは下記のようになります。
-※HogeView.csは`Editor`フォルダ以下へ作成する必要があることに注意して下さい。
+Allows to exchange the variables of ComponentKun and HogeKun.
+HogeView.cs will look something similar to the following :
+※Note that HogeView.cs must be created under th `Editor` folder.
 
 ```:HogeView.cs
 using UnityEditor;
@@ -256,22 +254,22 @@ namespace Utj.UnityChoseKun
 }
 ```
 
-## ComponentView.csの編集
+## Edit ComponentView.cs
 
-[ComponentView.cs](https://github.com/katsumasa/UnityChoseKun/blob/master/Editor/Scripts/Component/ComponentView.cs)を編集して上記で作成したPlayerInspector用のClassを登録します。
-追加する箇所はcomponentViewTblsです。
+Edit [ComponentView.cs](https://github.com/katsumasa/UnityChoseKun/blob/master/Editor/Scripts/Component/ComponentView.cs) and register the Class for PlayerInspector that was created above.  
+Add to componentViewTbls.
 
 ```:ComponentView.cs
 static Dictionary<ComponentKun.ComponentKunType,System.Type> componentViewTbls = new Dictionary<BehaviourKun.ComponentKunType, System.Type>{
 {
-　// 省略
+　// ...
   {ComponentKun.ComponentKunType.MissingMono,  typeof(MissingMonoView) },
   
   {ComponentKun.ComponentKunType.Hoge,typeof(HogeView) }, // <== Add
 };
 ```
 
-以上で完了です。
-追加したClassはPlayerInspecterで下記のように表示されます。
+That'll be all.
+The added Class will appear in PlayerInspector as the image shown below:
 
 ![image](https://user-images.githubusercontent.com/29646672/123935827-8b181100-d9cf-11eb-9060-d6b6a58be84b.png)
