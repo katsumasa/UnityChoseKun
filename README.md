@@ -77,6 +77,9 @@ UnityChoseKunは再ビルドを行うこと無く、UnityEditor上で開発機�
   - [Vector3](https://docs.unity3d.com/ja/ScriptReference/Vector3.html)
   - [Vector4](https://docs.unity3d.com/ja/ScriptReference/Vector4.html)
 
+Classの追加方法に関してはこちらをご覧ください：
+[Howto_add_class.md](https://github.com/katsumasa/UnityChoseKun/blob/master/Howto_add_class.md)
+
 ## 注意事項・免責事項
 
 - 万が一*不測の事態が起きても一切保証は出来ませんのでご注意下さい。*
