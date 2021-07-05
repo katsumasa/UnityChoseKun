@@ -159,7 +159,7 @@ static readonly Dictionary<ComponentKunType,ComponentPair> componentPairDict = n
 
 ### Add to GetComponentKunType
 
-Associates `Component` with `ChoseKunType`.
+Associate `Component` with `ChoseKunType`.
 Please note that the `Class` that you wish to add needs to be set before the `BaseClass`.
 Hoge's Base Class is MonoBehaviour, so add it before MonoBehaviour.
 
