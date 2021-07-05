@@ -63,6 +63,9 @@ You can make adjustments on the following components
   - [Vector3](https://docs.unity3d.com/ScriptReference/Vector3.html)
   - [Vector4](https://docs.unity3d.com/ScriptReference/Vector4.html)
 
+Here is a step of how to add new component/class:
+[Howto_add_class_en.md](https://github.com/katsumasa/UnityChoseKun/blob/master/Howto_add_class_en.md)
+
 ## Caution
 - Will not take any responsibility for any damage that are caused by using this tool.
 - Cannot be used with Script Debugging.
