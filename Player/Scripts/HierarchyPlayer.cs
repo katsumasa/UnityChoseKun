@@ -234,7 +234,7 @@ namespace Utj.UnityChoseKun
                             go.transform.localScale = Vector3.one;
                         }
                     }
-                    break;
+                    break;                
             }
 
             var scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();

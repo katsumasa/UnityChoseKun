@@ -34,10 +34,11 @@ namespace Utj.UnityChoseKun
         HierarchyPlayer     m_hierarchyPlayer;
         QualitySettingsPlayer m_qualitySettingsPlayer;
         SystemInfoPlayer m_systemInfoPlayer;
-    
+        AssetPlayer<Sprite,SpriteKun> m_spritePlayer;
+        SortingLayerPlayer m_sortingLayerPlayer;
 
 
-            ScreenPlayer playerScreen {
+        ScreenPlayer playerScreen {
             get {if(m_playerScreen == null){m_playerScreen = new ScreenPlayer();}　return m_playerScreen;}
         }
 
@@ -51,6 +52,18 @@ namespace Utj.UnityChoseKun
             }
         }
         
+        SortingLayerPlayer sortingLayerPlayer
+        {
+            get
+            {
+                if(m_sortingLayerPlayer == null)
+                {
+                    m_sortingLayerPlayer = new SortingLayerPlayer();
+                }
+                return m_sortingLayerPlayer;
+            }
+        }
+
         public ComponentPlayer componentPlayer {
             get {if(m_componentPlayer == null){m_componentPlayer = new ComponentPlayer();}return m_componentPlayer;}
             private set {m_componentPlayer = value;}
@@ -60,6 +73,18 @@ namespace Utj.UnityChoseKun
             get{if(m_texturePlayer == null){m_texturePlayer = new TexturePlayer();}return m_texturePlayer;}            
         }
         
+        public AssetPlayer<Sprite,SpriteKun> spritePlayer
+        {
+            get
+            {
+                if(m_spritePlayer == null)
+                {
+                    m_spritePlayer = new AssetPlayer<Sprite, SpriteKun>(UnityChoseKun.MessageID.SpritePull);
+                }
+                return m_spritePlayer;
+            }
+        }
+
         ApplicationPlayer applicationPlayer
         {
             get { if (m_applicationPlayer == null) { m_applicationPlayer = new ApplicationPlayer(); } return m_applicationPlayer; }            
@@ -122,28 +147,30 @@ namespace Utj.UnityChoseKun
 
                 // MessageIDと対応するCBを登録する必要がある
                 onMessageFuncDict = new Dictionary<UnityChoseKun.MessageID, OnMessageFunc>()
-            {
-                {UnityChoseKun.MessageID.ScreenPull,        playerScreen.OnMessageEventPull},
-                {UnityChoseKun.MessageID.ScreenPush,        playerScreen.OnMessageEventPush},
-                {UnityChoseKun.MessageID.TimePull,          playerTime.OnMessageEventPull},
-                {UnityChoseKun.MessageID.TimePush,          playerTime.OnMessageEventPush},
-                {UnityChoseKun.MessageID.GameObjectPull,    componentPlayer.OnMessageEventPull},
-                {UnityChoseKun.MessageID.GameObjectPush,    componentPlayer.OnMessageEventPush },
-                {UnityChoseKun.MessageID.ShaderPull,        shaderPlayer.OnMessageEventPull},
-                {UnityChoseKun.MessageID.TexturePull,       texturePlayer.OnMessageEventPull},
-                {UnityChoseKun.MessageID.ApplicationPull,   applicationPlayer.OnMessageEventPull},
-                {UnityChoseKun.MessageID.ApplicationPush,   applicationPlayer.OnMessageEventPush},
-                {UnityChoseKun.MessageID.ApplicationQuit,   applicationPlayer.OnMessageEventQuit},
-                {UnityChoseKun.MessageID.AndroidPull,       androidPlayer.OnMessageEventPull},
-                {UnityChoseKun.MessageID.AndroidPush,       androidPlayer.OnMessageEventPush},
-                {UnityChoseKun.MessageID.HierarchyPush,     hierarchyPlayer.OnMessageEventPush },
-                {UnityChoseKun.MessageID.QualitySettingsPull,qualitySettingsPlayer.OnMessageEventPull},
-                {UnityChoseKun.MessageID.QualitySettingsPush,qualitySettingsPlayer.OnMessageEventPush},
-                {UnityChoseKun.MessageID.OnDemandRenderingPull, OnDemandRenderingPlayer.OnMessageEventPull},
-                {UnityChoseKun.MessageID.OnDemandRenderingPush,OnDemandRenderingPlayer.OnMessageEventPush},
+                {
+                    {UnityChoseKun.MessageID.ScreenPull,        playerScreen.OnMessageEventPull},
+                    {UnityChoseKun.MessageID.ScreenPush,        playerScreen.OnMessageEventPush},
+                    {UnityChoseKun.MessageID.TimePull,          playerTime.OnMessageEventPull},
+                    {UnityChoseKun.MessageID.TimePush,          playerTime.OnMessageEventPush},
+                    {UnityChoseKun.MessageID.GameObjectPull,    componentPlayer.OnMessageEventPull},
+                    {UnityChoseKun.MessageID.GameObjectPush,    componentPlayer.OnMessageEventPush },
+                    {UnityChoseKun.MessageID.ShaderPull,        shaderPlayer.OnMessageEventPull},
+                    {UnityChoseKun.MessageID.TexturePull,       texturePlayer.OnMessageEventPull},
+                    {UnityChoseKun.MessageID.ApplicationPull,   applicationPlayer.OnMessageEventPull},
+                    {UnityChoseKun.MessageID.ApplicationPush,   applicationPlayer.OnMessageEventPush},
+                    {UnityChoseKun.MessageID.ApplicationQuit,   applicationPlayer.OnMessageEventQuit},
+                    {UnityChoseKun.MessageID.AndroidPull,       androidPlayer.OnMessageEventPull},
+                    {UnityChoseKun.MessageID.AndroidPush,       androidPlayer.OnMessageEventPush},
+                    {UnityChoseKun.MessageID.HierarchyPush,     hierarchyPlayer.OnMessageEventPush },
+                    {UnityChoseKun.MessageID.QualitySettingsPull,qualitySettingsPlayer.OnMessageEventPull},
+                    {UnityChoseKun.MessageID.QualitySettingsPush,qualitySettingsPlayer.OnMessageEventPush},
+                    {UnityChoseKun.MessageID.OnDemandRenderingPull, OnDemandRenderingPlayer.OnMessageEventPull},
+                    {UnityChoseKun.MessageID.OnDemandRenderingPush,OnDemandRenderingPlayer.OnMessageEventPush},
                     {UnityChoseKun.MessageID.ScalableBufferManagerPull,ScalableBufferManagerPlayer.OnMessageEventPull },
                     {UnityChoseKun.MessageID.ScalableBufferManagerPush,ScalableBufferManagerPlayer.OnMessageEventPush },
                     {UnityChoseKun.MessageID.SystemInfoPull,systemInfoPlayer.OnMessageEventPull},
+                    {UnityChoseKun.MessageID.SpritePull,spritePlayer.OnMessageEventPull},
+                    {UnityChoseKun.MessageID.SortingLayerPull, sortingLayerPlayer.OnMessageEventPull},
 
 
             };
@@ -162,19 +189,7 @@ namespace Utj.UnityChoseKun
             }
         }
 
-
-        // Start is called before the first frame update
-        void Start()
-        {            
-        }
-
-
-        // Update is called once per frame
-        void Update()
-        {
-        }
-
-
+        
         //
         void OnDestroy()
         {

@@ -63,8 +63,8 @@ namespace Utj.UnityChoseKun
             ScalableBufferManagerPull,
             ScalableBufferManagerPush,
             SystemInfoPull,
-
-
+            SpritePull,
+            SortingLayerPull,
         }
 
 
