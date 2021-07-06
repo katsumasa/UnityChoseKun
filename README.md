@@ -204,7 +204,18 @@ Scene上に存在するComponentの種類と数をカウントします。
 
 ##### Sprite
 
+![image](https://user-images.githubusercontent.com/29646672/124558681-d4f07380-de75-11eb-9db4-8bc46445f2b7.png)
+
 実機で実行されているアプリのScene上から参照されているSprite及びResourcesに含まれるSpriteの一覧を表示します。
+SpriteRendererのSpriteを変更する場合事前にPullを実行する必要があります。
+
+#### Sorting Layer
+
+![image](https://user-images.githubusercontent.com/29646672/124559206-6f50b700-de76-11eb-92b0-2456ce9d6bdc.png)
+
+
+実機上の[SortingLayer.layers](https://docs.unity3d.com/ja/current/ScriptReference/SortingLayer-layers.html)を取得します。
+SpriteRendererのSortingLayerを変更する場合、事前にPULLを実行する必要があります。
 
 ##### Shader
 
