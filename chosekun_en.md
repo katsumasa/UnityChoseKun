@@ -32,12 +32,16 @@ The following tasks can be performed in the UnityEditor
 ## Adjustable Components
 You can make adjustments on the following components
 - [Application](https://docs.unity3d.com/ScriptReference/Application.html)
-- [Screen](https://docs.unity3d.com/ScriptReference/Screen.html)
-- [Time](https://docs.unity3d.com/ScriptReference/Time.html)
-- [Shader](https://docs.unity3d.com/ScriptReference/Shader.html)
-- [Texture](https://docs.unity3d.com/ScriptReference/Texture.html)
+- [OnDemandRendering](https://docs.unity3d.com/2019.4/Documentation/ScriptReference/Rendering.OnDemandRendering.html)
 - [QualitySettings](https://docs.unity3d.com/ScriptReference/QualitySettings.html)
+- [Screen](https://docs.unity3d.com/ScriptReference/Screen.html)
+- [Shader](https://docs.unity3d.com/ScriptReference/Shader.html)
+- [Sprite](https://docs.unity3d.com/2019.4/Documentation/ScriptReference/SpriteRenderer-sprite.html)
 - [SystemInfo](https://docs.unity3d.com/ScriptReference/SystemInfo.html)
+- [ScalableBufferManager](https://docs.unity3d.com/ScriptReference/ScalableBufferManager.html)
+- [SortingLayer](https://docs.unity3d.com/ScriptReference/SortingLayer.html)
+- [Texture](https://docs.unity3d.com/ScriptReference/Texture.html)
+- [Time](https://docs.unity3d.com/ScriptReference/Time.html)
 - [Component](https://docs.unity3d.com/ScriptReference/Component.html)
   - [Animator](https://docs.unity3d.com/ScriptReference/Animator.html)
   - [Behaviour](https://docs.unity3d.com/ScriptReference/Behaviour.html)
@@ -58,12 +62,13 @@ You can make adjustments on the following components
   - [Resolution](https://docs.unity3d.com/ScriptReference/Resolution.html)
   - [Rigidbody](https://docs.unity3d.com/ScriptReference/Rigidbody.html)
   - [SkinnedMeshRenderer](https://docs.unity3d.com/ScriptReference/SkinnedMeshRenderer.html)
+  - [SpriteRenderer](https://docs.unity3d.com/ScriptReference/SpriteRenderer-sprite.html)
   - [Transform](https://docs.unity3d.com/ScriptReference/Transform.html)
   - [Vector2](https://docs.unity3d.com/ScriptReference/Vector2.html)
   - [Vector3](https://docs.unity3d.com/ScriptReference/Vector3.html)
   - [Vector4](https://docs.unity3d.com/ScriptReference/Vector4.html)
 
-Here is a step of how to add new component/class:
+Here is a step on how to add new component/class:
 [Howto_add_class_en.md](https://github.com/katsumasa/UnityChoseKun/blob/master/Howto_add_class_en.md)
 
 ## Caution
