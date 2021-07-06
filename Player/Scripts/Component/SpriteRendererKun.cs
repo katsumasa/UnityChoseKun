@@ -82,16 +82,16 @@ namespace Utj.UnityChoseKun
 
 
         public override bool WriteBack(Component component)
-        {
-            Debug.Log("WriteBack");
+        {            
             base.WriteBack(component);
 
             var spriteRenderer = component as SpriteRenderer;
             if (spriteRenderer)
             {
-                if (spriteRenderer.sprite.GetInstanceID() != sprite.GetInstanceID())
+                if (spriteRenderer.sprite == null ||
+                    spriteRenderer.sprite.GetInstanceID() != sprite.GetInstanceID())
                 {
-                    var tmp = SpriteKun.GetSprite(sprite.instanceID);
+                    var tmp = ObjectKun.GetCache(sprite.instanceID) as Sprite;
                     if (tmp != null)
                     {
                         spriteRenderer.sprite = tmp;
@@ -103,10 +103,6 @@ namespace Utj.UnityChoseKun
                 spriteRenderer.drawMode = drawMode;
                 spriteRenderer.maskInteraction = maskInteraction;
                 spriteRenderer.spriteSortPoint = spriteSortPoint;
-
-
-                Debug.Log("WriteBack");
-
                 return true;
             }
 

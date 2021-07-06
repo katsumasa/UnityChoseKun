@@ -223,7 +223,7 @@ namespace Utj.UnityChoseKun
                     menu.AddDisabledItem(new GUIContent("3D Object/Tree"));
                     menu.AddDisabledItem(new GUIContent("3D Object/WindZone"));
                     
-                    menu.AddDisabledItem(new GUIContent("2D Object/Sprite"));
+                    menu.AddItem(new GUIContent("2D Object/Sprite"),false,CreateSpriteCB,lastClickedID);
                     menu.AddDisabledItem(new GUIContent("2D Object/Sprite Mask"));
                     menu.AddDisabledItem(new GUIContent("2D Object/Tilemap"));
                     menu.AddDisabledItem(new GUIContent("2D Object/Hexagonal Point Top Tilemap"));
@@ -427,6 +427,9 @@ namespace Utj.UnityChoseKun
             CreatePrimitiveCommon(HierarchyMessage.MessageID.CreatePrimitive, (int)obj, PrimitiveType.Cylinder);
         }
 
-        
+        private void CreateSpriteCB(object obj)
+        {
+            CreateClassCommon(typeof(SpriteRenderer), (int)obj);
+        }
     }
 }

@@ -43,12 +43,34 @@ namespace Utj.UnityChoseKun
             if (DrawHeader())
             {
                 using (new EditorGUI.IndentLevelScope())
-                {
-                    EditorGUI.BeginChangeCheck();
-                    //EditorGUILayout.LabelField(Styles.Sprite, spriteRendererKun.sprite.name);
-                    EditorGUILayout.TextField(Styles.Sprite,spriteRendererKun.sprite.name);
-                    spriteRendererKun.color = new ColorKun(EditorGUILayout.ColorField(Styles.Color, spriteRendererKun.color.GetColor()));
+                {                                            
+                    var idx = -1;
+                    if (SpritesView.spriteKuns != null && spriteRendererKun.sprite != null)
+                    {
+                        for (var i = 0; i < SpritesView.spriteKuns.Length; i++)
+                        {
+                            if (SpritesView.spriteKuns[i].GetInstanceID() == spriteRendererKun.sprite.GetInstanceID())
+                            {
+                                idx = i;
+                                break;
+                            }
+                        }
+                        EditorGUI.BeginChangeCheck();
+                        idx = EditorGUILayout.Popup("Sprite", idx, SpritesView.spriteNames);
+                        if (EditorGUI.EndChangeCheck())
+                        {
+                            spriteRendererKun.sprite = SpritesView.spriteKuns[idx];
+                            spriteRendererKun.dirty = true;
+                        }
+                    }
+                    else
+                    {
+                        EditorGUILayout.HelpBox("If you want to change sprite,Please Sprite-> Pull", MessageType.Info);
+                        EditorGUILayout.TextField(Styles.Sprite, spriteRendererKun.sprite.name);
+                    }
 
+                    EditorGUI.BeginChangeCheck();
+                    spriteRendererKun.color = new ColorKun(EditorGUILayout.ColorField(Styles.Color, spriteRendererKun.color.GetColor()));
                     EditorGUILayout.BeginHorizontal();
                     EditorGUILayout.LabelField(Styles.Flip);
                     spriteRendererKun.flipX = EditorGUILayout.ToggleLeft("X", spriteRendererKun.flipX);
@@ -66,7 +88,38 @@ namespace Utj.UnityChoseKun
                     {
                         using (new EditorGUI.IndentLevelScope())
                         {
-                            spriteRendererKun.sortingLayerID = EditorGUILayout.LayerField(Styles.SortingLayer, spriteRendererKun.sortingLayerID);
+                            // sorting layer
+                            if (SortingLayerKun.layers == null)
+                            {
+                                EditorGUILayout.HelpBox("If you want to change sorting layer,Please Sorting Layer-> Pull", MessageType.Info);
+                                spriteRendererKun.sortingLayerName = spriteRendererKun.sortingLayerName;
+                            }
+                            else
+                            {
+                                string[] names = new string[SortingLayerKun.layers.Length];
+                                for(var i = 0; i < names.Length; i++)
+                                {
+                                    names[i] = SortingLayerKun.layers[i].name;
+                                }
+
+                                int id = -1;
+                                for(var i = 0; i < SortingLayerKun.layers.Length; i++)
+                                {
+                                    if(SortingLayerKun.layers[i].id == spriteRendererKun.sortingLayerID)
+                                    {
+                                        id = i;
+                                        break;
+                                    }
+                                }
+                                id = EditorGUILayout.Popup(id, names);
+                                if (id!= -1)
+                                {
+                                    spriteRendererKun.sortingLayerID = SortingLayerKun.layers[id].id;
+                                    spriteRendererKun.sortingLayerName = names[id];
+                                }
+                            }
+
+                            // sorting order
                             spriteRendererKun.sortingOrder = EditorGUILayout.IntField(Styles.OrderInLayer, spriteRendererKun.sortingOrder);
                         }
                     }

@@ -8,23 +8,11 @@ namespace Utj.UnityChoseKun
 {
     [System.Serializable]
     public class SpriteKun : ObjectKun
-    {
-        static Sprite[] m_Sprites;
+    {        
+        [SerializeField] public Vector2Kun pivot;
+        [SerializeField] public Vector4Kun border;
 
-        public static Sprite GetSprite(int instanceID)
-        {
-            if (m_Sprites != null)
-            {
-                foreach (var sprite in m_Sprites)
-                {
-                    if (sprite.GetInstanceID() == instanceID)
-                    {
-                        return sprite;
-                    }
-                }
-            }
-            return null;
-        }
+        
 
 
         public SpriteKun(Sprite sprite) : base(sprite)
@@ -32,6 +20,13 @@ namespace Utj.UnityChoseKun
             if (sprite != null)
             {
                 name = sprite.name;
+                pivot = new Vector2Kun(sprite.pivot);
+                border = new Vector4Kun(sprite.border);
+            } 
+            else
+            {
+                pivot = new Vector2Kun();
+                border = new Vector4Kun();
             }
         }
 
@@ -39,17 +34,21 @@ namespace Utj.UnityChoseKun
 
         public override bool WriteBack(UnityEngine.Object obj)
         {
-            return base.WriteBack(obj);
+            return base.WriteBack(obj);                        
         }
 
         public override void Serialize(BinaryWriter binaryWriter)
         {
             base.Serialize(binaryWriter);
+            SerializerKun.Serialize<Vector2Kun>(binaryWriter, pivot);
+            SerializerKun.Serialize<Vector4Kun>(binaryWriter, border);            
         }
 
         public override void Deserialize(BinaryReader binaryReader)
         {
             base.Deserialize(binaryReader);
+            pivot = SerializerKun.DesirializeObject<Vector2Kun>(binaryReader);
+            border = SerializerKun.DesirializeObject<Vector4Kun>(binaryReader);
         }
     }
 }

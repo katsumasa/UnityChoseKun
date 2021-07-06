@@ -44,14 +44,16 @@ UnityChoseKunは再ビルドを行うこと無く、UnityEditor上で開発機�
 ## 対応しているClassについて
 
 - [Application](https://docs.unity3d.com/ja/current/ScriptReference/Application.html)
-- [Screen](https://docs.unity3d.com/ja/ScriptReference/Screen.html)
-- [Time](https://docs.unity3d.com/ja/ScriptReference/Time.html)
-- [Shader](https://docs.unity3d.com/ja/ScriptReference/Shader.html)
-- [Texture](https://docs.unity3d.com/ja/ScriptReference/Texture.html)
-- [QualitySettings](https://docs.unity3d.com/ja/ScriptReference/QualitySettings.html)
-- [SystemInfo](https://docs.unity3d.com/ja/current/ScriptReference/SystemInfo.html)
 - [OnDemandRendering](https://docs.unity3d.com/ja/current/ScriptReference/Rendering.OnDemandRendering.html)
+- [QualitySettings](https://docs.unity3d.com/ja/ScriptReference/QualitySettings.html)
+- [Screen](https://docs.unity3d.com/ja/ScriptReference/Screen.html)
+- [Shader](https://docs.unity3d.com/ja/ScriptReference/Shader.html)
+- [Sprite](https://docs.unity3d.com/ja/current/ScriptReference/SpriteRenderer-sprite.html)
+- [SystemInfo](https://docs.unity3d.com/ja/current/ScriptReference/SystemInfo.html) 
 - [ScalableBufferManager](https://docs.unity3d.com/ja/ScriptReference/ScalableBufferManager.html)
+- [SortingLayer](https://docs.unity3d.com/ja/current/ScriptReference/SortingLayer.html)
+- [Texture](https://docs.unity3d.com/ja/ScriptReference/Texture.html)
+- [Time](https://docs.unity3d.com/ja/ScriptReference/Time.html)
 - [Component](docs.unity3d.com/ja/ScriptReference/Component.html)
   - [Animator](https://docs.unity3d.com/ja/ScriptReference/Animator.html)
   - [Behaviour](https://docs.unity3d.com/ja/current/ScriptReference/Behaviour.html)
@@ -72,6 +74,7 @@ UnityChoseKunは再ビルドを行うこと無く、UnityEditor上で開発機�
   - [Resolution](https://docs.unity3d.com/ja/ScriptReference/Resolution.html)
   - [Rigidbody](https://docs.unity3d.com/ja/ScriptReference/Rigidbody.html)
   - [SkinnedMeshRenderer](https://docs.unity3d.com/ja/ScriptReference/SkinnedMeshRenderer.html)
+  - [SpriteRenderer](https://docs.unity3d.com/ja/current/ScriptReference/SpriteRenderer.html)
   - [Transform](https://docs.unity3d.com/ja/ScriptReference/Transform.html)
   - [Vector2](https://docs.unity3d.com/ja/ScriptReference/Vector2.html)
   - [Vector3](https://docs.unity3d.com/ja/ScriptReference/Vector3.html)
@@ -195,6 +198,10 @@ Scene上に存在するComponentの種類と数をカウントします。
 - [Pull] : Scene上のGameObjectから参照及びResourcesに含まれるTextureの一覧を取得します。
   
 ※*Materialが参照しているTextureを変更する場合は、事前にPullを実行しておく必要があります。*
+
+##### Sprite
+
+実機で実行されているアプリのScene上から参照されているSprite及びResourcesに含まれるSpriteの一覧を表示します。
 
 ##### Shader
 

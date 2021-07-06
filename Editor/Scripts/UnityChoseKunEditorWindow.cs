@@ -57,7 +57,8 @@
         [SerializeField] ScalableBufferManagerView m_scalableBufferManagerView;
         [SerializeField] SystemInfoView m_systemInfoView;
         [SerializeField] bool m_IsConnected;
-
+        [SerializeField] SpritesView m_spritesView;
+        [SerializeField] SortingLayerView m_sortingLayerView;
 
         IConnectionState                                    m_attachProfilerState;
         Dictionary<UnityChoseKun.MessageID, OnMessageFunc>  onMessageFuncDict;
@@ -120,6 +121,30 @@
             get{if(m_texturesView == null){m_texturesView = new TexturesView();}return m_texturesView;}            
         }
         
+        SpritesView spritesView
+        {
+            get
+            {
+                if (m_spritesView == null)
+                {
+                    m_spritesView = new SpritesView();
+                }
+                return m_spritesView;
+            }
+        }
+
+
+        SortingLayerView sortingLayerView
+        {
+            get
+            {
+                if(m_sortingLayerView == null)
+                {
+                    m_sortingLayerView = new SortingLayerView();
+                }
+                return m_sortingLayerView;
+            }
+        }
 
         /// <summary>
         /// ApplicationView
@@ -336,6 +361,8 @@
                 {"Component",   objectCounterView.OnGUI },
                 {"Texture",     texturesView.OnGUI},
                 {"Shader",      shaderView.OnGUI},
+                {"Sprite", spritesView.OnGUI},
+                {"SortingLayer",sortingLayerView.OnGUI },
                 {"Screen",      screenView.OnGUI },
                 {"Time",        timeView.OnGUI},
                 {"Application", applicationView.OnGUI},
@@ -343,7 +370,8 @@
                 {"Quality", qualitySettingsView.OnGUI },
                 {"OnDemandRendering",onDemandRenderingView.OnGUI },
                 {"ScalableBuffer", scalableBufferManagerView.OnGUI},
-                {"SystemInfo" ,systemInfoView.OnGUI}
+                {"SystemInfo" ,systemInfoView.OnGUI},
+
 
 
                 // 機能をここに追加していく                                              
@@ -362,6 +390,8 @@
                 {UnityChoseKun.MessageID.OnDemandRenderingPull,onDemandRenderingView.OnMessageEvent },
                 {UnityChoseKun.MessageID.ScalableBufferManagerPull,scalableBufferManagerView.OnMessageEvent },
                 {UnityChoseKun.MessageID.SystemInfoPull,systemInfoView.OnMessageEvent },
+                {UnityChoseKun.MessageID.SpritePull,spritesView.OnMessageEvent },
+                {UnityChoseKun.MessageID.SortingLayerPull,sortingLayerView.OnMessageEvent },
                 // 機能をここに追加していく                                              
             };
             

@@ -13,7 +13,45 @@ namespace Utj.UnityChoseKun{
     /// </summary>    
     [System.Serializable]    
     public class ObjectKun : ISerializerKun
-    {        
+    {
+        static Dictionary<int,UnityEngine.Object> m_caches;
+
+
+        public static void AddCache(UnityEngine.Object obj)
+        {
+            if(m_caches == null)
+            {
+                m_caches = new Dictionary<int, UnityEngine.Object>();
+            }
+
+            if (m_caches.ContainsKey(obj.GetInstanceID()) == false)
+            {
+                m_caches.Add(obj.GetInstanceID(), obj);
+            }
+        }
+
+
+        public static UnityEngine.Object GetCache(int instanceID)
+        {
+            UnityEngine.Object result = null;
+            if (m_caches != null)
+            {
+                m_caches.TryGetValue(instanceID, out result);
+            }
+            return result;
+        }
+
+
+        public static void ClearCache()
+        {
+            if (m_caches != null)
+            {
+                m_caches.Clear();
+            }
+        }
+
+
+
         [SerializeField] protected string m_name;
         [SerializeField] protected int m_instanceID;
         [SerializeField] bool m_dirty;
