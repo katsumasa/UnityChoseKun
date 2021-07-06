@@ -42,7 +42,6 @@ UnityEditorとDeviceの間を行き来する為のClassを作成します。こ�
 `Serialize`/`Deserialize`にはそれぞれ`BinaryWriter`/`BinaryReader`を使用します。
 処理する変数の順番を一致させる必要があることに注意して下さい。
 `WriteBack`MethodではHogeKunからHogeへ内容を書き戻す処理を記載します。
-
 実際のHogeKunは下記のような実装になります。
 
 ```:HogeKun.cs
