@@ -165,6 +165,7 @@ namespace Utj.UnityChoseKun
                 if(m_gameObjectKuns.ContainsKey(m_selectGameObujectKunID)){
                     var gameObjectKun = m_gameObjectKuns[m_selectGameObujectKunID];
                     gameObjectKun.dirty = true;
+                    isChange = true;
                 }
             }
 

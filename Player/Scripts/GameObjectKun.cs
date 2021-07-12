@@ -183,6 +183,7 @@
         /// <param name="binaryWriter">BinaryWriter</param>
         public virtual void Serialize(BinaryWriter binaryWriter)
         {
+            binaryWriter.Write(m_dirty);
             binaryWriter.Write(m_activeSelf);
             binaryWriter.Write(m_isStatic);
             binaryWriter.Write(m_layer);
@@ -226,6 +227,7 @@
         /// <param name="binaryReader">BinaryReader</param>
         public virtual void Deserialize(BinaryReader binaryReader)
         {
+            m_dirty = binaryReader.ReadBoolean();
             m_activeSelf = binaryReader.ReadBoolean();
             m_isStatic = binaryReader.ReadBoolean();
             m_layer = binaryReader.ReadInt32();
