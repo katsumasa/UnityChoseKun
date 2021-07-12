@@ -1,6 +1,7 @@
 ﻿namespace  Utj.UnityChoseKun {
     using System;
-    using System.IO;    
+    using System.IO;
+    using System.Collections.Generic;
     using UnityEngine;
 
 
@@ -8,7 +9,7 @@
     // CameraをPlayer/Editorの両方でシリアライズ/デシリアライズする為のClass
     // </summary>
     [System.Serializable]
-    public class CameraKun : BehaviourKun{
+    public class CameraKun : BehaviourKun {
         private static readonly Vector2[] k_ApertureFormatValues =
         {
             new Vector2(4.8f, 3.5f) , // 8mm
@@ -25,7 +26,7 @@
 
         // メンバー変数の定義        
         [SerializeField] public CameraClearFlags clearFlags;
-        [SerializeField] private ColorKun m_backgroundColor;                
+        [SerializeField] private ColorKun m_backgroundColor;
         [SerializeField] public int cullingMask;
         // Projection
         [SerializeField] public bool orthographic;
@@ -34,7 +35,7 @@
         [SerializeField] public bool usePhysicalProperties;
         // 物理カメラの設定
         [SerializeField] public float focalLength;
-        [SerializeField] public int sensorType;        
+        [SerializeField] public int sensorType;
         [SerializeField] private Vector2Kun m_lensShift;
         [SerializeField] public Camera.GateFitMode gateFit;
         // Clipping Plane
@@ -61,13 +62,44 @@
         public Vector2 lensShift
         {
             get { return m_lensShift.GetVector2(); }
-            set { m_lensShift = new Vector2Kun(value);}
+            set { m_lensShift = new Vector2Kun(value); }
         }
 
         public Rect rect {
             get { return m_rect.GetRect(); }
-            set { m_rect = new RectKun(value);}
+            set { m_rect = new RectKun(value); }
         }
+
+
+        static List<CameraKun> m_AllCameras;
+        
+
+        public static List<CameraKun> allCameraList
+        {
+            set
+            {
+                m_AllCameras = value;
+            }
+        }
+
+
+        public static CameraKun[] allCameras
+        {
+            get
+            {
+                if(m_AllCameras == null)
+                {
+                    return null;
+                } 
+                else
+                {
+                    return m_AllCameras.ToArray();
+                }
+            }            
+        }
+
+    
+
 
 
         /// <summary>
@@ -113,8 +145,9 @@
                 allowMSAA = camera.allowMSAA;
                 allowDynamicResolution = camera.allowDynamicResolution;
                 targetEye = (int)camera.stereoTargetEye;                
-            }
+            }         
         }
+                        
 
         public override bool WriteBack(Component component) 
         {
@@ -306,7 +339,7 @@
         {
             return base.GetHashCode();
         }
-
+        
     }
 
 

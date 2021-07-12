@@ -47,9 +47,9 @@ namespace Utj.UnityChoseKun
     {
         public static class Styles
         {                                
-            public static readonly GUIContent TitleContent      = new GUIContent("Player Hierarchy", (Texture2D)EditorGUIUtility.FindTexture("d_UnityEditor.SceneHierarchyWindow"));
+            public static readonly GUIContent TitleContent      = new GUIContent("Player Hierarchy", (Texture2D)EditorGUIUtility.Load("d_UnityEditor.SceneHierarchyWindow"));
 #if UNITY_2019_1_OR_NEWER
-            public static readonly GUIContent NetworkMessages   = new GUIContent("Reload",(Texture2D)EditorGUIUtility.LoadRequired("d_Profiler.NetworkMessages@2x"),"Hierarchyの情報を取得");
+            public static readonly GUIContent NetworkMessages   = new GUIContent("Reload",(Texture2D)EditorGUIUtility.Load("d_Profiler.NetworkMessages@2x"),"Hierarchyの情報を取得");
 #else
             public static readonly GUIContent NetworkMessages = new GUIContent("Reload","Hierarchyの情報を取得");
 #endif

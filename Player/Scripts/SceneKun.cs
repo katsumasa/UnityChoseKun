@@ -98,11 +98,27 @@
             var len = binaryReader.ReadInt32();
             if(len != -1)
             {
+                List<CameraKun> cameraKuns = new List<CameraKun>();
+
                 mGameObjectKuns = new GameObjectKun[len];
                 for(var i = 0; i < len; i++)
                 {
                     mGameObjectKuns[i] = new GameObjectKun();
                     mGameObjectKuns[i].Deserialize(binaryReader);
+
+                    var cameraKun = mGameObjectKuns[i].GetComponentKun<CameraKun>();
+                    if(cameraKun != null)
+                    {
+                        cameraKuns.Add(cameraKun);
+                    }
+                }
+                if (cameraKuns.Count > 0)
+                {
+                    CameraKun.allCameraList = cameraKuns;
+                } 
+                else
+                {
+                    CameraKun.allCameraList = null;
                 }
             }
         }

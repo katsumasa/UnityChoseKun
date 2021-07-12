@@ -1,11 +1,11 @@
 ﻿namespace Utj.UnityChoseKun
 {
-    
     using System.IO;
     using System.Runtime.InteropServices;
     using System.Runtime.Serialization.Formatters.Binary;
     using UnityEngine;
     using System;
+    using System.Collections.Generic;
 
     /// <summary>
     /// GameObjectをSerialize/Deserializeする為のClass
@@ -112,6 +112,7 @@
                 componentKunTypes[i] = ComponentKun.GetComponentKunType(component);                
                 var systemType = ComponentKun.GetComponetKunSyetemType(componentKunTypes[i]);
                 componentKuns[i] = System.Activator.CreateInstance(systemType, new object[] { component }) as ComponentKun;
+                componentKuns[i].gameObjectKun = this;
                 i++;                
             }                        
             dirty = false;
@@ -250,6 +251,7 @@
                 {
                     m_componentKuns[i] = ComponentKun.Instantiate(m_componentKunTypes[i]);
                     m_componentKuns[i].Deserialize(binaryReader);
+                    m_componentKuns[i].gameObjectKun = this;
                 }
             }
         }
@@ -332,6 +334,63 @@
         public override int GetHashCode()
         {
             return base.GetHashCode();
+        }
+
+        public T AddComponent<T>() where T : ComponentKun,new()
+        {
+            var componentKun = new T();
+            
+            
+            componentKun.gameObjectKun = this;
+
+
+            if (componentKuns == null)
+            {
+                componentKuns = new ComponentKun[1];
+                componentKuns[0] = componentKun;
+
+                componentKunTypes = new ComponentKun.ComponentKunType[1];
+                componentKunTypes[0] = componentKun.componentKunType;
+            }
+            else
+            {
+                var list = new List<ComponentKun>(componentKuns);
+                list.Add(componentKun);
+                componentKuns = list.ToArray();
+
+                var types = new List<ComponentKun.ComponentKunType>(componentKunTypes);
+                types.Add(componentKun.componentKunType);
+                componentKunTypes = types.ToArray();
+            }
+                        
+
+            return componentKun;
+        }
+
+
+        public ComponentKun GetComponentKun(Type type)
+        {
+            foreach (var componentKun in componentKuns)
+            {
+                if(componentKun.GetType() == type)
+                {
+                    return componentKun;
+                }                                
+            }
+            return null;
+        }
+
+
+        public T GetComponentKun<T>()where T : ComponentKun
+        {
+            foreach (var componentKun in componentKuns)
+            {
+                if (componentKun.GetType() == typeof(T))
+                {
+                    return (T)componentKun;
+                }
+            }
+            return null;
         }
 
     }

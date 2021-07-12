@@ -37,6 +37,7 @@
             {ComponentKun.ComponentKunType.Animator,                typeof(AnimatorView) },
             {ComponentKun.ComponentKunType.ParticleSystem,          typeof(ParticleSystemView) },
 
+            {ComponentKun.ComponentKunType.Canvas,                  typeof(CanvasView) },
 
             {ComponentKun.ComponentKunType.MonoBehaviour,           typeof(MonoBehaviourView)},
             {ComponentKun.ComponentKunType.Behaviour,               typeof(BehaviourView)},

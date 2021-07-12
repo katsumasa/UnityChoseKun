@@ -79,6 +79,8 @@ UnityChoseKunは再ビルドを行うこと無く、UnityEditor上で開発機�
   - [Vector2](https://docs.unity3d.com/ja/ScriptReference/Vector2.html)
   - [Vector3](https://docs.unity3d.com/ja/ScriptReference/Vector3.html)
   - [Vector4](https://docs.unity3d.com/ja/ScriptReference/Vector4.html)
+  - [UI](https://docs.unity3d.com/Packages/com.unity.ugui@1.0/manual/index.html)
+    - [Canvas](https://docs.unity3d.com/Packages/com.unity.ugui@1.0/manual/class-Canvas.html)
 
 ## 注意事項・免責事項
 

@@ -66,9 +66,18 @@ namespace Utj.UnityChoseKun
                 // Scene
                 var scene = new TreeViewItem(id: 0, depth: 0, displayName: sceneKun.name);
                 root.AddChild(scene);
-                                
+
                 // Sceneの直下に来るGameObjectとその子になるGameObjectを再帰的に追加
-                var parents = sceneKun.gameObjectKuns.Where((q) => q.transformKun.parentInstanceID == 0);
+                //var parents = sceneKun.gameObjectKuns.Where((q) => q.transformKun.parentInstanceID == 0);
+                var parents = new List<GameObjectKun>();
+                foreach(var go in sceneKun.gameObjectKuns)
+                {
+                    if(go.transformKun.parentInstanceID == 0)
+                    {
+                        parents.Add(go);
+                    }
+                }
+
 
                 if (parents != null && parents.Count() != 0) {
                     foreach (var parent in parents)

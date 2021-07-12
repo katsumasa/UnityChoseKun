@@ -268,6 +268,17 @@ public class UnityChoseKunTest
         SerializerKunTest<PhysicMaterialKun>(new PhysicMaterialKun(), new PhysicMaterialKun());
     }
 
+    [Test]
+    public void SpriteRendererKunTest()
+    {
+        SerializerKunTest<SpriteRendererKun>(new SpriteRendererKun(), new SpriteRendererKun());
+    }
+
+    [Test]
+    public void CanvasKunTest()
+    {
+        SerializerKunTest<CanvasKun>(new CanvasKun(), new CanvasKun());
+    }
 
     [Test]
     public void ResolutionKunTest()
@@ -284,6 +295,15 @@ public class UnityChoseKunTest
         //var scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
         var sceneKun = new SceneKun(scene);
         SerializerKunTest<SceneKun>(sceneKun, new SceneKun());
+    }
+
+    [Test]
+    public void AllCamerasTest()
+    {
+        var scene = UnityEditor.SceneManagement.EditorSceneManager.OpenScene(mTestSceneName);
+        var sceneKun = new SceneKun(scene);
+        var cameras = CameraKun.allCameras;
+
     }
 
 
@@ -306,8 +326,27 @@ public class UnityChoseKunTest
             Debug.Log(i + " " + list[i].name);
             var gameObjectKun1 = new GameObjectKun(list[i]);            
             SerializerKunTest<GameObjectKun>(gameObjectKun1, new GameObjectKun());
-        }
+        }        
 #endif
+    }
+
+    [Test]
+    public void AddComponentTest()
+    {
+        var gameObjectKun = new GameObjectKun();
+        var componentKun = gameObjectKun.AddComponent<CameraKun>();
+
+        
+    }
+
+    [Test]
+    public void GetComponentTest()
+    {
+        var gameObjectKun = new GameObjectKun();
+        var componentKun1 = gameObjectKun.AddComponent<CameraKun>();
+        var componentKun2 = gameObjectKun.GetComponentKun<CameraKun>();
+
+        UnityEngine.Assertions.Assert.AreEqual(componentKun1, componentKun2);        
     }
 
     
