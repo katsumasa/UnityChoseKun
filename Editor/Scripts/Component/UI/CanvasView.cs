@@ -104,8 +104,11 @@ namespace Utj.UnityChoseKun
                             break;                            
                     }
                 }
+#if UNITY_2019_1_OR_NEWER
+                canvasKun.additionalShaderChannels = (AdditionalCanvasShaderChannels)EditorGUILayout.EnumFlagsField(Styles.AdditionalCanvasShaderChannels, canvasKun.additionalShaderChannels);
+#else
                 canvasKun.additionalShaderChannels = (AdditionalCanvasShaderChannels)EditorGUILayout.EnumMaskField(Styles.AdditionalCanvasShaderChannels, canvasKun.additionalShaderChannels);
-
+#endif
                 if (EditorGUI.EndChangeCheck())
                 {
                     canvasKun.dirty = true;
