@@ -92,7 +92,9 @@ UnityChoseKunは再ビルドを行うこと無く、UnityEditor上で開発機�
 - Unity2018では以下の機能に対応していません。
   - Materialが参照しているTextureの差し替え
   - PlayerViewのAsync GPU Readback機能
-- DeviceとUnityChoseKunが接続したままの状態で、UnityEditorを終了させると`EditorConnection.instance.DisconnectAll()`内でクラッシュが発生します。これを防ぐ為には、UnityChoseKunの接続先をEditorに変更するなどしてDeviceとの接続を解除する必要があります。
+  
+  - ~~DeviceとUnityChoseKunが接続したままの状態で、UnityEditorを終了させると`EditorConnection.instance.DisconnectAll()`内でクラッシュが発生します。これを防ぐ為には、UnityChoseKunの接続先をEditorに変更するなどしてDeviceとの接続を解除する必要があります。~~
+  DisconectAll()の実行をコメントアウトしました。これでしばらく様子をみます。
 
 ## 使い方
 
