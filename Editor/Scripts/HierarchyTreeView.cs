@@ -31,7 +31,7 @@ namespace Utj.UnityChoseKun
         }
 
 
-        [SerializeField] SceneKun m_sceneKun;
+        SceneKun m_sceneKun;
         [SerializeField] SelectionChangedCB m_selectionChangeCB;
 
         public SceneKun sceneKun
