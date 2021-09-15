@@ -42,7 +42,11 @@ namespace Utj.UnityChoseKun
         [SerializeField] public int maxComputeWorkGroupSizeZ;
         [SerializeField] public int maxCubemapSize;
         [SerializeField] public int maxTextureSize;
+#if UNITY_2020_1_OR_NEWER
+        [SerializeField] public int constantBufferOffsetAlignment;
+#else
         [SerializeField] public bool minConstantBufferOffsetAlignment;
+#endif
         [SerializeField] public NPOTSupport npotSupport;
         [SerializeField] public string operatingSystem;
         [SerializeField] public OperatingSystemFamily operatingSystemFamily;
@@ -127,7 +131,11 @@ namespace Utj.UnityChoseKun
                 maxComputeWorkGroupSizeZ = SystemInfo.maxComputeWorkGroupSizeX;
                 maxCubemapSize = SystemInfo.maxCubemapSize;
                 maxTextureSize = SystemInfo.maxTextureSize;
+#if UNITY_2020_1_OR_NEWER
+                constantBufferOffsetAlignment = SystemInfo.constantBufferOffsetAlignment;
+#else
                 minConstantBufferOffsetAlignment = SystemInfo.minConstantBufferOffsetAlignment;
+#endif
                 npotSupport = SystemInfo.npotSupport;
                 operatingSystem = SystemInfo.operatingSystem;
                 operatingSystemFamily = SystemInfo.operatingSystemFamily;
@@ -219,7 +227,11 @@ namespace Utj.UnityChoseKun
             binaryWriter.Write(maxComputeWorkGroupSizeZ);
             binaryWriter.Write(maxCubemapSize);
             binaryWriter.Write(maxTextureSize);
+#if UNITY_2020_1_OR_NEWER
+            binaryWriter.Write(constantBufferOffsetAlignment);
+#else
             binaryWriter.Write(minConstantBufferOffsetAlignment);
+#endif
             binaryWriter.Write((int)npotSupport);
             binaryWriter.Write(operatingSystem);
             binaryWriter.Write((int)operatingSystemFamily);
@@ -298,7 +310,11 @@ namespace Utj.UnityChoseKun
             maxComputeWorkGroupSizeZ = binaryReader.ReadInt32();
             maxCubemapSize = binaryReader.ReadInt32();
             maxTextureSize = binaryReader.ReadInt32();
+#if UNITY_2020_1_OR_NEWER
+            constantBufferOffsetAlignment = binaryReader.ReadInt32();
+#else
             minConstantBufferOffsetAlignment = binaryReader.ReadBoolean();
+#endif
             npotSupport = (NPOTSupport)binaryReader.ReadInt32();
             operatingSystem = binaryReader.ReadString();
             operatingSystemFamily = (OperatingSystemFamily)binaryReader.ReadInt32();

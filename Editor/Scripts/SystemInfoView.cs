@@ -44,7 +44,11 @@ namespace Utj.UnityChoseKun
             public static readonly GUIContent MaxComputeWorkGroupSizeZ = new GUIContent("maxComputeWorkGroupSizeZ", "The maximum number of work groups that a compute shader can use in Z dimension ");
             public static readonly GUIContent MaxCubemapSize = new GUIContent("maxCubemapSize", "Maximum Cubemap texture size ");
             public static readonly GUIContent MaxTextureSize = new GUIContent("maxTextureSize", "テクスチャの最大サイズ");
+#if UNITY_2020_1_OR_NEWER
+            public static readonly GUIContent ConstantBufferOffsetAlignment = new GUIContent("constantBufferOffsetAlignment", "Minimum buffer offset (in bytes) when binding a constant buffer using Shader.SetConstantBuffer or Material.SetConstantBuffer.");
+#else
             public static readonly GUIContent MinConstantBufferOffsetAlignment = new GUIContent("minConstantBufferOffsetAlignment", "Minimum buffer offset (in bytes) when binding a constant buffer using Shader.SetConstantBuffer or Material.SetConstantBuffer.");
+#endif
             public static readonly GUIContent NpotSupport = new GUIContent("npotSupport", "GPU はどのような NPOT (2の2乗でない) テクスチャのサポートを提供するか。");
             public static readonly GUIContent OperatingSystem = new GUIContent("operatingSystem", "OS 名とバージョン");
             public static readonly GUIContent OperatingSystemFamily = new GUIContent("OperatingSystemFamily", "Returns the operating system family the game is running on ");
@@ -139,7 +143,12 @@ namespace Utj.UnityChoseKun
             EditorGUILayout.IntField(Styles.MaxComputeWorkGroupSizeZ, systemInfoKun.maxComputeWorkGroupSizeZ);
             EditorGUILayout.IntField(Styles.MaxCubemapSize, systemInfoKun.maxCubemapSize);
             EditorGUILayout.IntField(Styles.MaxTextureSize, systemInfoKun.maxTextureSize);
+#if UNITY_2020_1_OR_NEWER
+            EditorGUILayout.IntField(Styles.MaxTextureSize, systemInfoKun.constantBufferOffsetAlignment);
+#else
             EditorGUILayout.Toggle(Styles.MinConstantBufferOffsetAlignment, systemInfoKun.minConstantBufferOffsetAlignment);
+#endif
+
             EditorGUILayout.EnumPopup(Styles.NpotSupport, systemInfoKun.npotSupport);
             EditorGUILayout.TextField(Styles.OperatingSystem, systemInfoKun.operatingSystem);
             EditorGUILayout.EnumPopup(Styles.OperatingSystemFamily, systemInfoKun.operatingSystemFamily);
