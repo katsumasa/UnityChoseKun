@@ -34,6 +34,8 @@ UnityChoseKunは再ビルドを行うこと無く、UnityEditor上で開発機�
   - Unity2018.4.26f1 (一部、機能制限あり)
   - Unity2019.4.11f1
   - Unity2020.2.2f1
+  - Unity2020.3.18f1
+  - Unity2021.1.0a8
 - プラットフォーム
   - Android
     - Pixel3XL
