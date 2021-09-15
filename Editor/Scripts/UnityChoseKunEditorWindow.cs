@@ -463,15 +463,13 @@
 
         private void OnConnection(int playerId)
         {
-            Debug.Log("connected "+ playerId);
-            m_IsConnected = true;
+            Debug.Log("connected "+ playerId);            
         }
 
 
         private void OnDisConnection(int playerId)
         {
-            Debug.Log("disconect " + playerId);
-            m_IsConnected = false;
+            Debug.Log("disconect " + playerId);            
         }
 
     }
