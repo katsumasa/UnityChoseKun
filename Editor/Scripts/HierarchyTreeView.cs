@@ -174,7 +174,7 @@ namespace Utj.UnityChoseKun
         /// <returns></returns>
         protected override bool CanStartDrag(CanStartDragArgs args)
         {
-            Debug.Log("CanStartDrag");
+            //Debug.Log("CanStartDrag");
             base.CanStartDrag(args);
             return true;
         }
@@ -182,7 +182,7 @@ namespace Utj.UnityChoseKun
 
         protected override void SetupDragAndDrop(SetupDragAndDropArgs args)
         {
-            Debug.Log("SetupDragAndDrop");
+            //Debug.Log("SetupDragAndDrop");
             base.SetupDragAndDrop(args);
 
 
@@ -197,7 +197,7 @@ namespace Utj.UnityChoseKun
 
         protected override DragAndDropVisualMode HandleDragAndDrop (DragAndDropArgs args)
         {
-            Debug.Log("HandleDragAndDrop: " + args.dragAndDropPosition);
+            //Debug.Log("HandleDragAndDrop: " + args.dragAndDropPosition);
 
 
             base.HandleDragAndDrop(args);
@@ -217,7 +217,7 @@ namespace Utj.UnityChoseKun
                         bool validDrag = ValidDrag(args.parentItem, draggedRows);
                         if (args.performDrop && validDrag)                            
                         {
-                            Debug.Log("Drop");
+                            //Debug.Log("Drop");
                             MoveTreeViewItem(draggedRows[0], args.parentItem, args.insertAtIndex);                                                        
                         }
                         return validDrag ? DragAndDropVisualMode.Move : DragAndDropVisualMode.None;
@@ -227,7 +227,7 @@ namespace Utj.UnityChoseKun
                     {
                         if (args.performDrop)
                         {
-                            Debug.Log("Drop");
+                            //Debug.Log("Drop");
                             //OnDropDraggedElementsAtIndex(draggedRows, m_TreeModel.root, m_TreeModel.root.children.Count);
                         }
                         return DragAndDropVisualMode.Move;
