@@ -55,8 +55,7 @@
         [SerializeField] QualitySettingsView m_qualitySettingsView;
         [SerializeField] OnDemandRenderingView m_onDemandRenderingView;
         [SerializeField] ScalableBufferManagerView m_scalableBufferManagerView;
-        [SerializeField] SystemInfoView m_systemInfoView;
-        [SerializeField] bool m_IsConnected;
+        [SerializeField] SystemInfoView m_systemInfoView;        
         [SerializeField] SpritesView m_spritesView;
         [SerializeField] SortingLayerView m_sortingLayerView;
 
