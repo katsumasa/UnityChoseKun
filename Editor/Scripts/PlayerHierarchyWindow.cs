@@ -71,7 +71,7 @@ namespace Utj.UnityChoseKun
         [SerializeField] TreeViewState                          m_treeViewState;
         HierarchyTreeView                                       m_hierarchyTreeView;
         [SerializeField] HierarchyTreeView.SelectionChangedCB   m_selectionChangedCB;
-        [SerializeField] SceneKun                               m_sceneKun;
+        
 
 #if ENABLE_PROFILER_STATES
         IConnectionState m_attachProfilerState;
