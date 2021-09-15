@@ -12,9 +12,9 @@
     [System.Serializable]
     public class SceneKun : ISerializerKun
     {
-        [SerializeField] public string name;
-        [SerializeField] public int rootCount;
-        [SerializeField] public GameObjectKun [] mGameObjectKuns;     
+        public string name;
+        public int rootCount;
+        public GameObjectKun [] mGameObjectKuns;     
         
         
         /// <summary>
