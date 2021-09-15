@@ -43,8 +43,9 @@
             Animator,
 
             ParticleSystem,
-
             
+            Canvas,
+
 
             MissingMono,    // Component == null
             MonoBehaviour,
@@ -90,6 +91,9 @@
 
             {ComponentKunType.ParticleSystem,new ComponentPair(typeof(ParticleSystem),typeof(ParticleSystemKun)) },
 
+            {ComponentKunType.Canvas,new ComponentPair(typeof(Canvas),typeof(CanvasKun)) },
+
+
             {ComponentKunType.MissingMono,new ComponentPair(typeof(MonoBehaviour),typeof(MonoBehaviourKun))},
             {ComponentKunType.MonoBehaviour,new ComponentPair(typeof(MonoBehaviour),typeof(MonoBehaviourKun))},
             {ComponentKunType.Behaviour,new ComponentPair(typeof(Behaviour),typeof(BehaviourKun))},
@@ -112,15 +116,15 @@
             //
             // [NOTE] 基底クラスのチェックが後になるように記述する必要がある
             //
-            if (component is Transform) { return ComponentKunType.Transform; }
-            if (component is Camera) { return ComponentKunType.Camera; }
-            if (component is Light) { return ComponentKunType.Light; }
+            if (component is Transform)             { return ComponentKunType.Transform; }
+            if (component is Camera)                { return ComponentKunType.Camera; }
+            if (component is Light)                 { return ComponentKunType.Light; }
 
-            if (component is SpriteRenderer) { return ComponentKunType.SpriteRenderer;}
+            if (component is SpriteRenderer)        { return ComponentKunType.SpriteRenderer;}
 
-            if (component is MeshRenderer) { return ComponentKunType.MeshRenderer; }
-            if (component is SkinnedMeshRenderer) { return ComponentKunType.SkinnedMeshMeshRenderer; }
-            if (component is Renderer) { return ComponentKunType.Renderer; }
+            if (component is MeshRenderer)          { return ComponentKunType.MeshRenderer; }
+            if (component is SkinnedMeshRenderer)   { return ComponentKunType.SkinnedMeshMeshRenderer; }
+            if (component is Renderer)              { return ComponentKunType.Renderer; }
 
             if (component is Rigidbody) { return ComponentKunType.Rigidbody;}
 
@@ -132,7 +136,7 @@
 
             if(component is ParticleSystem) { return ComponentKunType.ParticleSystem; }
 
-            
+            if (component is Canvas) { return ComponentKunType.Canvas; }
 
             if (component is MonoBehaviour){return ComponentKunType.MonoBehaviour;}
             if(component is Behaviour){return ComponentKunType.Behaviour;}
@@ -208,6 +212,7 @@
                     {
                         return new CameraKun();
                     }
+
                 case ComponentKunType.Light:
                     {
                         return new LightKun();
@@ -248,7 +253,6 @@
                         return new MeshColliderKun();
                     }
 
-
                 case ComponentKunType.Collider:
                     {
                         return new ColliderKun();
@@ -283,7 +287,10 @@
                         return new ComponentKun();
                     }
 
-
+                case ComponentKunType.Canvas:
+                    {
+                        return new CanvasKun();
+                    }
 
                 default:
                     {
@@ -291,8 +298,6 @@
                     }
             }
         }
-
-
 
 
         //
@@ -308,6 +313,34 @@
             protected set{m_componentKunType = value;}
         }
 
+        // GameObjectKunのコンストラクタ・Deserialize及びAddComponentでこの変数に値が設定される。
+        [SerializeField]
+        public GameObjectKun m_gameObjectKun;
+        public GameObjectKun gameObjectKun
+        {
+            get
+            {
+                return m_gameObjectKun;
+            }
+
+            set
+            {
+                m_gameObjectKun = value;
+            }
+        }
+
+
+        public TransformKun transformKun
+        {
+            get 
+            {
+                if(gameObjectKun == null)
+                {
+                    return null;
+                }
+                return gameObjectKun.transformKun; 
+            }
+        }
         
         /// <summary>
         /// コンストラクタ 

@@ -34,6 +34,8 @@ UnityChoseKunは再ビルドを行うこと無く、UnityEditor上で開発機�
   - Unity2018.4.26f1 (一部、機能制限あり)
   - Unity2019.4.11f1
   - Unity2020.2.2f1
+  - Unity2020.3.18f1
+  - Unity2021.1.0a8
 - プラットフォーム
   - Android
     - Pixel3XL
@@ -79,6 +81,8 @@ UnityChoseKunは再ビルドを行うこと無く、UnityEditor上で開発機�
   - [Vector2](https://docs.unity3d.com/ja/ScriptReference/Vector2.html)
   - [Vector3](https://docs.unity3d.com/ja/ScriptReference/Vector3.html)
   - [Vector4](https://docs.unity3d.com/ja/ScriptReference/Vector4.html)
+  - [UI](https://docs.unity3d.com/Packages/com.unity.ugui@1.0/manual/index.html)
+    - [Canvas](https://docs.unity3d.com/Packages/com.unity.ugui@1.0/manual/class-Canvas.html)
 
 Classの追加方法に関してはこちらをご覧ください：
 [Howto_add_class.md](https://github.com/katsumasa/UnityChoseKun/blob/master/Howto_add_class.md)
@@ -93,7 +97,9 @@ Classの追加方法に関してはこちらをご覧ください：
 - Unity2018では以下の機能に対応していません。
   - Materialが参照しているTextureの差し替え
   - PlayerViewのAsync GPU Readback機能
-- DeviceとUnityChoseKunが接続したままの状態で、UnityEditorを終了させると`EditorConnection.instance.DisconnectAll()`内でクラッシュが発生します。これを防ぐ為には、UnityChoseKunの接続先をEditorに変更するなどしてDeviceとの接続を解除する必要があります。
+  
+  - ~~DeviceとUnityChoseKunが接続したままの状態で、UnityEditorを終了させると`EditorConnection.instance.DisconnectAll()`内でクラッシュが発生します。これを防ぐ為には、UnityChoseKunの接続先をEditorに変更するなどしてDeviceとの接続を解除する必要があります。~~
+  DisconectAll()の実行をコメントアウトしました。これでしばらく様子をみます。
 
 ## 使い方
 

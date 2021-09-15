@@ -55,8 +55,7 @@
         [SerializeField] QualitySettingsView m_qualitySettingsView;
         [SerializeField] OnDemandRenderingView m_onDemandRenderingView;
         [SerializeField] ScalableBufferManagerView m_scalableBufferManagerView;
-        [SerializeField] SystemInfoView m_systemInfoView;
-        [SerializeField] bool m_IsConnected;
+        [SerializeField] SystemInfoView m_systemInfoView;        
         [SerializeField] SpritesView m_spritesView;
         [SerializeField] SortingLayerView m_sortingLayerView;
 
@@ -325,8 +324,6 @@
                 }
 #endif
             }
-
-
             EditorGUILayout.EndHorizontal();
 
             var playerCount = EditorConnection.instance.ConnectedPlayers.Count;
@@ -396,7 +393,7 @@
             };
             
         }
-
+    
         private void OnDisable()
         {            
             if (onMessageFuncDict != null)
@@ -412,11 +409,15 @@
             }
 
             if (m_attachProfilerState != null)
-            {
+            {                
                 m_attachProfilerState.Dispose();
                 m_attachProfilerState = null;
             }
 
+
+            UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Unregister(UnityChoseKun.kMsgSendPlayerToEditor, OnMessageEvent);
+            UnityEditor.Networking.PlayerConnection.EditorConnection.instance.UnregisterConnection(OnConnection);
+            UnityEditor.Networking.PlayerConnection.EditorConnection.instance.UnregisterDisconnection(OnDisConnection);
 
             // Deviceと接続した状態でUnityEditorを終了させるとUnityEditorがクラッシュする。
             // スクリプトリファレンスに記載されているサンプルでもOnDisableで処理しているので謎
@@ -430,12 +431,8 @@
             //  0x0000023E504F0FB3(Mono JIT Code) UnityEditor.EditorConnectionInternal:UnityEngine.IPlayerEditorConnectionNative.DisconnectAll()
             //  0x0000023E504F0E84(Mono JIT Code) UnityEditor.Networking.PlayerConnection.EditorConnection:DisconnectAll()
             //  0x0000023E504EF963(Mono JIT Code)[D:\SandBox\unitychan - crs - master\Assets\UTJ\UnityChoseKun\Editor\Scripts\PlayerViewEditorWindow.cs:141] Utj.UnityChoseKun.PlayerViewKunEditorWindow:OnDisable()
-            UnityEditor.Networking.PlayerConnection.EditorConnection.instance.DisconnectAll();
-                                        
-            UnityEditor.Networking.PlayerConnection.EditorConnection.instance.Unregister(UnityChoseKun.kMsgSendPlayerToEditor, OnMessageEvent);
-            UnityEditor.Networking.PlayerConnection.EditorConnection.instance.UnregisterConnection(OnConnection);
-            UnityEditor.Networking.PlayerConnection.EditorConnection.instance.UnregisterDisconnection(OnDisConnection);
-
+            
+            //  UnityEditor.Networking.PlayerConnection.EditorConnection.instance.DisconnectAll();                                                  
         }        
 
                
@@ -466,15 +463,13 @@
 
         private void OnConnection(int playerId)
         {
-            Debug.Log("connected "+ playerId);
-            m_IsConnected = true;
+            Debug.Log("connected "+ playerId);            
         }
 
 
         private void OnDisConnection(int playerId)
         {
-            Debug.Log("disconect " + playerId);
-            m_IsConnected = false;
+            Debug.Log("disconect " + playerId);            
         }
 
     }

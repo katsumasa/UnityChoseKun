@@ -358,7 +358,11 @@ namespace  Utj.UnityChoseKun
                 {
                     EditorGUI.BeginChangeCheck();                    
                     DrawType();
+#if UNITY_2020_1_OR_NEWER
+                    if (Lightmapping.lightingSettings.lightmapper == UnityEngine.LightingSettings.Lightmapper.Enlighten && lightKun.lightType == LightType.Disc)
+#else
                     if (LightmapEditorSettings.lightmapper == LightmapEditorSettings.Lightmapper.Enlighten && lightKun.lightType == LightType.Disc)
+#endif
                         EditorGUILayout.HelpBox(StylesEx.noDiscLightInEnlighten.text, MessageType.Warning);
                     
                     EditorGUILayout.Space();

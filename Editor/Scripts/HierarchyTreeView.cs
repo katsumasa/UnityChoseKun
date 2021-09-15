@@ -31,7 +31,7 @@ namespace Utj.UnityChoseKun
         }
 
 
-        [SerializeField] SceneKun m_sceneKun;
+        SceneKun m_sceneKun;
         [SerializeField] SelectionChangedCB m_selectionChangeCB;
 
         public SceneKun sceneKun
@@ -66,9 +66,18 @@ namespace Utj.UnityChoseKun
                 // Scene
                 var scene = new TreeViewItem(id: 0, depth: 0, displayName: sceneKun.name);
                 root.AddChild(scene);
-                                
+
                 // Sceneの直下に来るGameObjectとその子になるGameObjectを再帰的に追加
-                var parents = sceneKun.gameObjectKuns.Where((q) => q.transformKun.parentInstanceID == 0);
+                //var parents = sceneKun.gameObjectKuns.Where((q) => q.transformKun.parentInstanceID == 0);
+                var parents = new List<GameObjectKun>();
+                foreach(var go in sceneKun.gameObjectKuns)
+                {
+                    if(go.transformKun.parentInstanceID == 0)
+                    {
+                        parents.Add(go);
+                    }
+                }
+
 
                 if (parents != null && parents.Count() != 0) {
                     foreach (var parent in parents)
@@ -165,7 +174,7 @@ namespace Utj.UnityChoseKun
         /// <returns></returns>
         protected override bool CanStartDrag(CanStartDragArgs args)
         {
-            Debug.Log("CanStartDrag");
+            //Debug.Log("CanStartDrag");
             base.CanStartDrag(args);
             return true;
         }
@@ -173,7 +182,7 @@ namespace Utj.UnityChoseKun
 
         protected override void SetupDragAndDrop(SetupDragAndDropArgs args)
         {
-            Debug.Log("SetupDragAndDrop");
+            //Debug.Log("SetupDragAndDrop");
             base.SetupDragAndDrop(args);
 
 
@@ -188,7 +197,7 @@ namespace Utj.UnityChoseKun
 
         protected override DragAndDropVisualMode HandleDragAndDrop (DragAndDropArgs args)
         {
-            Debug.Log("HandleDragAndDrop: " + args.dragAndDropPosition);
+            //Debug.Log("HandleDragAndDrop: " + args.dragAndDropPosition);
 
 
             base.HandleDragAndDrop(args);
@@ -208,7 +217,7 @@ namespace Utj.UnityChoseKun
                         bool validDrag = ValidDrag(args.parentItem, draggedRows);
                         if (args.performDrop && validDrag)                            
                         {
-                            Debug.Log("Drop");
+                            //Debug.Log("Drop");
                             MoveTreeViewItem(draggedRows[0], args.parentItem, args.insertAtIndex);                                                        
                         }
                         return validDrag ? DragAndDropVisualMode.Move : DragAndDropVisualMode.None;
@@ -218,7 +227,7 @@ namespace Utj.UnityChoseKun
                     {
                         if (args.performDrop)
                         {
-                            Debug.Log("Drop");
+                            //Debug.Log("Drop");
                             //OnDropDraggedElementsAtIndex(draggedRows, m_TreeModel.root, m_TreeModel.root.children.Count);
                         }
                         return DragAndDropVisualMode.Move;
