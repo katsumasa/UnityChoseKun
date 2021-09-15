@@ -161,6 +161,11 @@ namespace Utj.UnityChoseKun
 
         private void OnEnable() 
         {
+            this.titleContent = Styles.TitleContent;
+            this.wantsMouseMove = true;
+            this.autoRepaintOnSceneChange = true;
+
+
 #if ENABLE_PROFILER_STATES
             m_attachProfilerState = ConnectionUtility.GetAttachToPlayerState(this);
 #endif
@@ -295,7 +300,7 @@ namespace Utj.UnityChoseKun
             var rect = EditorGUILayout.GetControlRect(false,position.height - 16); 
             hierarchyTreeView.OnGUI(rect);            
         }
-
+        
 #if ENABLE_PROFILER_STATES
         /// <summary>
         /// 接続先選択用GUI
