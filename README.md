@@ -51,7 +51,7 @@ UnityChoseKunは再ビルドを行うこと無く、UnityEditor上で開発機�
 - [Screen](https://docs.unity3d.com/ja/ScriptReference/Screen.html)
 - [Shader](https://docs.unity3d.com/ja/ScriptReference/Shader.html)
 - [Sprite](https://docs.unity3d.com/ja/current/ScriptReference/SpriteRenderer-sprite.html)
-- [SystemInfo](https://docs.unity3d.com/ja/current/ScriptReference/SystemInfo.html) 
+- [SystemInfo](https://docs.unity3d.com/ja/current/ScriptReference/SystemInfo.html)
 - [ScalableBufferManager](https://docs.unity3d.com/ja/ScriptReference/ScalableBufferManager.html)
 - [SortingLayer](https://docs.unity3d.com/ja/current/ScriptReference/SortingLayer.html)
 - [Texture](https://docs.unity3d.com/ja/ScriptReference/Texture.html)
@@ -215,7 +215,6 @@ SpriteRendererのSpriteを変更する場合事前にPullを実行する必要�
 #### Sorting Layer
 
 ![image](https://user-images.githubusercontent.com/29646672/124559206-6f50b700-de76-11eb-92b0-2456ce9d6bdc.png)
-
 
 実機上の[SortingLayer.layers](https://docs.unity3d.com/ja/current/ScriptReference/SortingLayer-layers.html)を取得します。
 SpriteRendererのSortingLayerを変更する場合、事前にPULLを実行する必要があります。
