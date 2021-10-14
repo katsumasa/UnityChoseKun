@@ -10,13 +10,14 @@ UnityChoseKunは再ビルドを行うこと無く、UnityEditor上で開発機�
 
 ## 概要
 
-実機上で実行しているアプリ内の画面をUnityEditorで表示たり、GameObjectをUnityEditorから調整する事が出来る、Editor拡張です。
+実機上で実行しているアプリ内の画面をUnityEditorで表示たり、GameObjectをUnityEditorから調整する事が出来るEditor拡張です。
 
-実機で実行中のアプリ内のComponentを調整したり・・
-![img](docs/UnityChoseKunDemo02.gif)
+実機で実行中のアプリ内のComponentを調整</br>
+<img width="800" alt="UnityChoseKunDemo02" src="https://user-images.githubusercontent.com/29646672/137236126-f7b9c064-3dcc-41d5-9ce6-9f9175d9d315.gif">
 
-実機(開発機)の画面をUnityEditorに表示したり・・・
-![img](docs/UnityChoseKunDemo03.gif)
+実機(開発機)の画面をUnityEditorに表示<br>
+<img width="800" alt="UnityChoseKunDemo03" src="https://user-images.githubusercontent.com/29646672/137236618-7539f774-b200-45e9-a4d5-87e7ceb6b208.gif">
+
 
 ## このプロジェクトで出来ること
 
@@ -114,7 +115,7 @@ UnityChoseKunは再ビルドを行うこと無く、UnityEditor上で開発機�
 
 実機で表示している内容をUnityEditor上で再生するViewerです。
 
-![img](docs/PlayerView.png)
+<img width="800" alt="PlayerView" src="https://user-images.githubusercontent.com/29646672/137237372-637a0a77-5913-4bfc-835e-03737e0a5013.png">
 
 ##### 起動方法
 
@@ -126,10 +127,10 @@ MenuからWindow->UnityChoseKun->Player ViewでPlayerView Windowが表示され�
 
 接続先のデバイスを指定します。接続の仕組みはUnityProfilerと共有していますので、どちらかの接続先を切り替えると、もう片方の接続先も切り替わります。
 
-![img](docs/PlayIcon.png)　再生の開始/終了</br>
-![img](docs/RecIcon.png)　録画の開始/終了</br>
-![img](docs/ScreenShotIcon.png)　スクリーンショットを保存する</br>
-![img](docs/SaveFolderIcon.png)　録画結果の保存先を指定する</br>
+<img width="20" alt="PlayIcon" src="https://user-images.githubusercontent.com/29646672/137236748-d4c3ad04-c66c-4e42-81f4-547649720f02.png"> 再生の開始/終了</br>
+<img width="20" alt="RecIcon" src="https://user-images.githubusercontent.com/29646672/137236785-25596da8-ba35-4cf9-a622-5f2e014baa8a.png"> 録画の開始/終了</br>
+<img width="20" alt="ScreenShotIcon" src="https://user-images.githubusercontent.com/29646672/137236826-10a97a17-40b3-41c8-affd-d499e64e7475.png">スクリーンショットを保存する</br>
+<img width="20" alt="SaveFolderIcon" src="https://user-images.githubusercontent.com/29646672/137236850-d88a79ec-0e32-46a8-97cd-d736020dd659.png">録画結果の保存先を指定する</br>
 
 ###### Enable Async GPU Readback
 
@@ -153,7 +154,7 @@ MenuからWindow->UnityChoseKun->Player ViewでPlayerView Windowが表示され�
 
 録画内容をSeekすることが出来ます。
 
-![img](docs/UnityChoseKunDemo04.gif)
+<img width="800" alt="UnityChoseKunDemo04" src="https://user-images.githubusercontent.com/29646672/137240645-7e4f1d5d-1214-4247-b846-971e09f852d1.gif">
 
 ##### 注意事項
 
@@ -161,7 +162,9 @@ MenuからWindow->UnityChoseKun->Player ViewでPlayerView Windowが表示され�
 
 #### Player Hierarchy
 
-![img](docs/HierarchyView.jpg) </br>
+![HierarchyView](https://user-images.githubusercontent.com/29646672/137240924-d089e4b6-9ff7-4bbe-ba31-f19cc7459aca.jpg)
+
+
 
 ##### Reload
 
@@ -184,20 +187,22 @@ Player Hierarchyで選択したGameObjectが持つComponentの内容を編集し
 すべてのComponetの内容を編集出来る訳ではなく、現時点では一部のComponentに限定されています。
 非対応のComponentに関しては、Componentのenableのみ編集可能となっています。
 
-![img](docs/InspectorView.jpg)
+![InspectorView](https://user-images.githubusercontent.com/29646672/137236992-9d2f6619-a2bd-4d03-b363-ac11fe5ac99c.jpg)
+
 
 - [Connect To] : 接続先のデバイスを選択します。 Profilerと共有しています。
 - [Add Component] : GameObjectにComponentを追加します。(未実装)
 
 ##### Component
 
-![img](docs/Inspector_Component.jpg)
+![Inspector_Component](https://user-images.githubusercontent.com/29646672/137237020-38558ca0-e30f-4144-b3f1-fef26a69664f.jpg)
+
 Scene上に存在するComponentの種類と数をカウントします。
 本Editor拡張で未対応なComponentは規定Classにカウントします。
 
 ##### Texture
 
-![imag](docs/Inspector_Texture.png)
+![Inspector_Texture](https://user-images.githubusercontent.com/29646672/137237036-ab8d310d-830b-415e-9e5a-a106b6a785e7.png)
 
 実行中のアプリからScene内から参照されているTextureとResourcesに含まれているTextureの一覧表示します。
 
@@ -221,7 +226,7 @@ SpriteRendererのSortingLayerを変更する場合、事前にPULLを実行す�
 
 ##### Shader
 
-![img](docs/Inspector_Shader.png)
+![Inspector_Shader](https://user-images.githubusercontent.com/29646672/137237071-3a32615f-f566-492a-9c09-9cd56766b8fa.png)
 
 実機で実行されているアプリのScene上から参照されているShader及びResourcesに含まれるShaderの一覧を表示します。
 
@@ -231,7 +236,7 @@ SpriteRendererのSortingLayerを変更する場合、事前にPULLを実行す�
 
 ##### Screen
 
-![img](docs/Inspector_Screen.png)
+![Inspector_Screen](https://user-images.githubusercontent.com/29646672/137237098-7ca68dd4-42d9-42f2-acd9-887429bfbada.jpg)
 
 Screen Classのstaticメンバーに関する内容を編集することが出来ます。
 
@@ -240,7 +245,7 @@ Screen Classのstaticメンバーに関する内容を編集することが出�
 
 ##### Time
 
-![img](docs/Inspector_Time.jpg)
+![Inspector_Time](https://user-images.githubusercontent.com/29646672/137237225-6cfadb92-41c3-4a04-84b4-eb2bf6c5940e.jpg)
 
 Time Classのstaticメンバーに関する内容を編集することが出来ます。
 
@@ -249,7 +254,7 @@ Time Classのstaticメンバーに関する内容を編集することが出来�
 
 ##### Application
 
-![img](docs/Inspector_Application.png)
+<img width="800" alt="Inspector_Application" src="https://user-images.githubusercontent.com/29646672/137237244-14fe2c38-e81d-4817-8eda-74bf5ab00661.png">
 
 Application Classのstaticメンバーに関する内容を編集することが出来ます。
 また、Application.Quit()を実行することが可能です。
@@ -260,12 +265,15 @@ Application Classのstaticメンバーに関する内容を編集することが
 
 ##### Android
 
-![img](docs/Inspector_AndroidView.jpg)
+<img width="800" alt="Inspector_AndroidView" src="https://user-images.githubusercontent.com/29646672/137237284-3a9aa132-6794-464f-9cc3-b4995065c734.jpg">
+
+
 Androidデバイス固有の機能を編集することが出来ます。
 
 ##### QualitySettings
 
-![img](docs/QualitySettingsView.jpg)
+<img width="800" alt="QualitySettingsView" src="https://user-images.githubusercontent.com/29646672/137237300-f2db3084-1dc4-4ba3-bd17-870af7db40f9.jpg">
+
 QualitySettingを編集することが出来ます。
 
 ##### OnDemandRendering
