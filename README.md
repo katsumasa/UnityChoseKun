@@ -1,6 +1,6 @@
 # UnityChoseKun
 
-[English Ver. README](chosekun_en.md)
+[English Ver. README](Documentation~/UnityChoseKun.md)
 
 ## はじめに
 
