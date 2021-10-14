@@ -1,5 +1,8 @@
 # UnityChoseKun
 
+![GitHub package.json version](https://img.shields.io/github/package-json/v/katsumasa/UnityChoseKun?style=plastic)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/katsumasa/UnityChoseKun?style=plastic)
+
 [English Ver. README](Documentation~/UnityChoseKun.md)
 
 ## はじめに
