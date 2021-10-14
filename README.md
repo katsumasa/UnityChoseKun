@@ -87,6 +87,9 @@ UnityChoseKunは再ビルドを行うこと無く、UnityEditor上で開発機�
   - [UI](https://docs.unity3d.com/Packages/com.unity.ugui@1.0/manual/index.html)
     - [Canvas](https://docs.unity3d.com/Packages/com.unity.ugui@1.0/manual/class-Canvas.html)
 
+Classの追加方法に関してはこちらをご覧ください：
+[Howto_add_class.md](https://github.com/katsumasa/UnityChoseKun/blob/master/Howto_add_class.md)
+
 ## 注意事項・免責事項
 
 - 万が一*不測の事態が起きても一切保証は出来ませんのでご注意下さい。*
