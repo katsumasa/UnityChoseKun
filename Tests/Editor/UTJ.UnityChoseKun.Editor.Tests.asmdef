@@ -1,0 +1,18 @@
+{
+    "name": "UTJ.UnityChoseKun.Editor.Tests",
+    "references": [
+        "GUID:d70eed40b78610b4aab3604b3ddf9304",
+        "GUID:3ea9c11c0c7b38c49ae89bf5cca41fac"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

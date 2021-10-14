@@ -1,0 +1,17 @@
+{
+    "name": "UTJ.UnityChoseKun.Editor",
+    "references": [
+        "GUID:d70eed40b78610b4aab3604b3ddf9304"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
