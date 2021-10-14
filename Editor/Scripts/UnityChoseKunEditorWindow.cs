@@ -229,7 +229,7 @@
         }
 
 
-        [MenuItem("Window/UnityChoseKun/Player Inspector")]
+        [MenuItem("Window/UTJ/UnityChoseKun/Player Inspector")]
         static void Inite()
         {            
             var window = (UnityChoseKunEditorWindow)EditorWindow.GetWindow(typeof(UnityChoseKunEditorWindow));            

@@ -69,7 +69,7 @@
         /// <summary>
         /// 関数の定義 
         /// </summary>
-        [MenuItem("Window/UnityChoseKun/Player View")]
+        [MenuItem("Window/UTJ/UnityChoseKun/Player View")]
         static void Create()
         {
             if (window == null)

@@ -134,7 +134,7 @@ namespace Utj.UnityChoseKun
         /// <summary>
         /// EditorWindowの生成
         /// </summary>
-        [MenuItem("Window/UnityChoseKun/Player Hierarchy")]
+        [MenuItem("Window/UTJ/UnityChoseKun/Player Hierarchy")]
         public static void Create()
         {            
             var window = (PlayerHierarchyWindow)EditorWindow.GetWindow(typeof(PlayerHierarchyWindow));                        
