@@ -1,24 +1,28 @@
 # UnityChoseKun
+
 ## Introduction
-Have you ever experienced time being wasted to complete a build every time for a small setting changed in the GamObject? This tool not only allows to make changes to your GameObject without rebuilding every time, but also can while the actual device is running.    
+
+Have you ever experienced time being wasted to complete a build every time for a small setting changed in the GamObject? This tool not only allows to make changes to your GameObject without rebuilding every time, but also can while the actual device is running.
 
 ## Overview
 
 Tool used to control application built with Unity running on a real device (Switch,Android,iOS,etc) from UnityEditor.
 
 Can adjust the component inside the application that are running on the actual device:
-![img](docs/UnityChoseKunDemo02.gif)
+<img width="800" alt="UnityChoseKunDemo02" src="https://user-images.githubusercontent.com/29646672/137236126-f7b9c064-3dcc-41d5-9ce6-9f9175d9d315.gif">
 
 Could show UnityEditor from the device's screen:
-![img](docs/UnityChoseKunDemo03.gif)
+<img width="800" alt="UnityChoseKunDemo03" src="https://user-images.githubusercontent.com/29646672/137236618-7539f774-b200-45e9-a4d5-87e7ceb6b208.gif">
 
 ## What you can do with this project
+
 The following tasks can be performed in the UnityEditor
 - Display the screen rendered on the actual device (PlayerView).
 - Display hierarchy of the scene being played in the actual device (Hierarchy View)
 - Reflect the changes made to the selected GameObject's component to the actual device (Inspector View).
 
 ## Operating Environment
+
 - Unity version
   - Unity2018.4.26f1 (Some functions are limited)
   - Unity2019.4.11f1
@@ -64,6 +68,7 @@ You can make adjustments on the following components
   - [Vector4](https://docs.unity3d.com/ScriptReference/Vector4.html)
 
 ## Caution
+
 - Will not take any responsibility for any damage that are caused by using this tool.
 - Cannot be used with Script Debugging.
 - Enabling the Player View makes the device __hot__. The ammount of CPU resources being used depends on the screen resolution.  Before playing the PlayerView, it is recommended to change the screen resolution from Screen in Player Inspector.  In Pixel4XL's case, the CPU resources were'nt used at all when the screen resolution was reduced to 604x288.
@@ -75,52 +80,61 @@ You can make adjustments on the following components
 - If you quit Unity Editor while the device and UnityChoseKun remain connected, crash will occur inside `EditorConnection.instance.DisconnectAll()`
 To prevent that, disconnect from the device by changing the access point of UnityChoseKun to the Editor.
 
-
-
 ## How to use
 Place the entire contents of this repository under the Asset folder of the UnityProject.
 
 ### Building
+
 - Put [UnityChoseKun.prefab](https://github.com/katsumasa/UnityChoseKun/blob/master/Player/Prefabs/UnityChoseKun.prefab) in a Scene and build the app.
 - You must have the check box checked [Development Build and Autoconnect Profiler](https://docs.unity3d.com/2019.4/Documentation/Manual/BuildSettingsStandalone.html) when building.
 - You must specify IL2CPP [Scripting BackEnd](https://docs.unity3d.com/2018.4/Documentation/Manual/windowsstore-scriptingbackends.html).
 
 ### Features
+
 #### PlayerViewer
+
 Viewer that plays the content displayed on the actual device in UnityEditor.
-![img](docs/PlayerView.png)
+
+<img width="800" alt="PlayerView" src="https://user-images.githubusercontent.com/29646672/137237372-637a0a77-5913-4bfc-835e-03737e0a5013.png">
 
 #### Launch Method
+
 From Menu, choose Window->UnityChoseKun->Player View. The PlayerView Window shows up.
 
 #### How to operate
 
 ###### Connect To
+
 Specify the device you want to connect. The connection mechanism is shared with UnityProfiler, so when you switch to one of them, the other one will switch as well.
 
-![img](docs/PlayIcon.png)　Play Begin/End</br>
-![img](docs/RecIcon.png)　Record Begin/End</br>
-![img](docs/ScreenShotIcon.png)　Save Screenshot</br>
-![img](docs/SaveFolderIcon.png)　Specify the path of the recording results</br>
+<img width="20" alt="PlayIcon" src="https://user-images.githubusercontent.com/29646672/137236748-d4c3ad04-c66c-4e42-81f4-547649720f02.png">　Play Begin/End</br>
+<img width="20" alt="RecIcon" src="https://user-images.githubusercontent.com/29646672/137236785-25596da8-ba35-4cf9-a622-5f2e014baa8a.png">　Record Begin/End</br>
+<img width="20" alt="ScreenShotIcon" src="https://user-images.githubusercontent.com/29646672/137236826-10a97a17-40b3-41c8-affd-d499e64e7475.png">　Save Screenshot</br>
+<img width="20" alt="SaveFolderIcon" src="https://user-images.githubusercontent.com/29646672/137236850-d88a79ec-0e32-46a8-97cd-d736020dd659.png">　Specify the path of the recording results</br>
 
 ###### Enable Async GPU Readback
+
 If you check this box, you will be able to use [Async GPU Readback](https://docs.unity3d.com/2018.4/Documentation/ScriptReference/Rendering.AsyncGPUReadback.html) to process images. This may reduce the load of the MainTharead.
 
 ###### Reflesh Interval
+
 Specify the process interval images being transfered.
 By giving interval, it may lead to reducing CPU load.
 
 ###### Record Folder
+
 Folder where the recorded results will export to.
 
 ###### Record Count Max
+
 Specify which frame to start record.
 The recording will automatically stop once you have set the frame.
 
 ###### Record Count
+
 You can seek the recorded result.
 
-![img](docs/UnityChoseKunDemo04.gif)
+<img width="800" alt="UnityChoseKunDemo04" src="https://user-images.githubusercontent.com/29646672/137240645-7e4f1d5d-1214-4247-b846-971e09f852d1.gif">
 
 
 ##### Warning
@@ -130,7 +144,7 @@ You can seek the recorded result.
 
 #### PlayerHierarchy
 
-![img](docs/HierarchyView.jpg) </br>
+![HierarchyView](https://user-images.githubusercontent.com/29646672/137240924-d089e4b6-9ff7-4bbe-ba31-f19cc7459aca.jpg)
 
 ##### Reload
 
@@ -151,23 +165,23 @@ Windows that allows you to edit contens inside the class of UnityEngine that are
 ##### Inspector
 
 Edits the content of selected GameObject's Component in Player Hierarchy.
-Currently, there are few components are editable. But enable can be editable for almost any components.   
+Currently, there are few components are editable. But enable can be editable for almost any components.
 
-![img](docs/InspectorView.jpg)
+![InspectorView](https://user-images.githubusercontent.com/29646672/137236992-9d2f6619-a2bd-4d03-b363-ac11fe5ac99c.jpg)
 
 - [Connect To] : Select the device you wish to connectc. It's shared with the Profiler
 - [Add Component] : Add Component to GameObject (Currently in progress).
 
 ##### Component
 
-![img](docs/Inspector_Component.jpg)
+![Inspector_Component](https://user-images.githubusercontent.com/29646672/137237020-38558ca0-e30f-4144-b3f1-fef26a69664f.jpg)
 
 Counts the type and number of components that exists in a scene.
 Components that are not supported by this tool are counted in the Specified Class.
 
 ##### Texture
 
-![imag](docs/Inspector_Texture.png)
+![Inspector_Texture](https://user-images.githubusercontent.com/29646672/137237036-ab8d310d-830b-415e-9e5a-a106b6a785e7.png)
 
 Lists the textures that are referenced in a scene as well as textures that are included in resources runned by an app.
 
@@ -175,9 +189,17 @@ Lists the textures that are referenced in a scene as well as textures that are i
   
 ※*You need to run the Pull command before changing the Texture that Material is referencing*
 
+##### Sprite
+
+![image](https://user-images.githubusercontent.com/29646672/124558681-d4f07380-de75-11eb-9db4-8bc46445f2b7.png)
+
+#### Sorting Layer
+
+![image](https://user-images.githubusercontent.com/29646672/124559206-6f50b700-de76-11eb-92b0-2456ce9d6bdc.png)
+
 ##### Shader
 
-![img](docs/Inspector_Shader.png)
+![Inspector_Shader](https://user-images.githubusercontent.com/29646672/137237071-3a32615f-f566-492a-9c09-9cd56766b8fa.png)
 
 List of Shader that are included in Resources and scene of the app running on actual device.
 
@@ -187,7 +209,7 @@ List of Shader that are included in Resources and scene of the app running on ac
 
 ##### Screen
 
-![img](docs/Inspector_Screen.png)
+![Inspector_Screen](https://user-images.githubusercontent.com/29646672/137237098-7ca68dd4-42d9-42f2-acd9-887429bfbada.jpg)
 
 Edit the static members of the Screen Class.
 
@@ -196,7 +218,7 @@ Edit the static members of the Screen Class.
 
 ##### Time
 
-![img](docs/Inspector_Time.jpg)
+![Inspector_Time](https://user-images.githubusercontent.com/29646672/137237225-6cfadb92-41c3-4a04-84b4-eb2bf6c5940e.jpg)
 
 Edit the static members of the Time Class.
 
@@ -205,7 +227,8 @@ Edit the static members of the Time Class.
 
 ##### Application
 
-![img](docs/Inspector_Application.png)
+<img width="800" alt="Inspector_Application" src="https://user-images.githubusercontent.com/29646672/137237244-14fe2c38-e81d-4817-8eda-74bf5ab00661.png">
+
 
 Edit the static members of the Application Class.
 Also could run Application.Quit().
@@ -216,15 +239,20 @@ Also could run Application.Quit().
 
 ##### Android
 
-![img](docs/Inspector_AndroidView.jpg)
+<img width="800" alt="Inspector_AndroidView" src="https://user-images.githubusercontent.com/29646672/137237284-3a9aa132-6794-464f-9cc3-b4995065c734.jpg">
+
 
 You can edit the Android device's specific features.
 
 ##### QualitySettings
 
-![img](docs/QualitySettingsView.jpg)
+<img width="800" alt="QualitySettingsView" src="https://user-images.githubusercontent.com/29646672/137237300-f2db3084-1dc4-4ba3-bd17-870af7db40f9.jpg">
 
 You can edit QualitySetting.
+
+##### OnDemandRendering
+
+#### ScalableBufferManager
 
 ## Thats all! Appreciate your comments and feedback!
 

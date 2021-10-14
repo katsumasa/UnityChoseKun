@@ -15,9 +15,8 @@ UnityChoseKunは再ビルドを行うこと無く、UnityEditor上で開発機�
 実機で実行中のアプリ内のComponentを調整</br>
 <img width="800" alt="UnityChoseKunDemo02" src="https://user-images.githubusercontent.com/29646672/137236126-f7b9c064-3dcc-41d5-9ce6-9f9175d9d315.gif">
 
-実機(開発機)の画面をUnityEditorに表示<br>
+実機(開発機)の画面をUnityEditorに表示</br>
 <img width="800" alt="UnityChoseKunDemo03" src="https://user-images.githubusercontent.com/29646672/137236618-7539f774-b200-45e9-a4d5-87e7ceb6b208.gif">
-
 
 ## このプロジェクトで出来ること
 
@@ -266,7 +265,6 @@ Application Classのstaticメンバーに関する内容を編集することが
 ##### Android
 
 <img width="800" alt="Inspector_AndroidView" src="https://user-images.githubusercontent.com/29646672/137237284-3a9aa132-6794-464f-9cc3-b4995065c734.jpg">
-
 
 Androidデバイス固有の機能を編集することが出来ます。
 
