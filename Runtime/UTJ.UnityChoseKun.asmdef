@@ -1,3 +1,13 @@
-﻿{
-	"name": "UTJ.UnityChoseKun"
+{
+    "name": "UTJ.UnityChoseKun",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

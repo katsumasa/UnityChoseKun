@@ -21,8 +21,9 @@ namespace Utj.UnityChoseKun
 
         static class Styles
         {
-            public static Texture2D gameObjectIcon = (Texture2D)EditorGUIUtility.Load("d_GameObject Icon");
-            public static Texture2D prefabIcon = (Texture2D)EditorGUIUtility.Load("d_Prefab Icon");
+            public static Texture2D gameObjectIcon  = (Texture2D)EditorGUIUtility.Load("d_GameObject Icon");
+            public static Texture2D prefabIcon      = (Texture2D)EditorGUIUtility.Load("d_Prefab Icon");
+
 #if UNITY_2019_1_OR_NEWER
             public static Texture2D sceneAssetIcon = (Texture2D)EditorGUIUtility.Load("d_SceneAsset Icon");
 #else
@@ -31,14 +32,26 @@ namespace Utj.UnityChoseKun
         }
 
 
-        SceneKun m_sceneKun;
+        
         [SerializeField] SelectionChangedCB m_selectionChangeCB;
 
-        public SceneKun sceneKun
+        SceneManagerKun m_sceneManagerKun;
+
+        public SceneManagerKun sceneManagerKun
         {
-            get { if (m_sceneKun == null) { m_sceneKun = new SceneKun(); } return m_sceneKun; }
-            set { m_sceneKun = value; }
+            get 
+            { 
+                if(m_sceneManagerKun == null)
+                {
+                    m_sceneManagerKun = new SceneManagerKun(false);
+                }
+                return m_sceneManagerKun;
+            }
+
+            set { m_sceneManagerKun = value; }
         }
+
+
 
         public SelectionChangedCB selectionChangeCB
         {
@@ -62,29 +75,36 @@ namespace Utj.UnityChoseKun
         {                 
             var root = new TreeViewItem(id: -1, depth: -1, displayName: "Root");
             root.children = new List<TreeViewItem>();
-            if (sceneKun != null && sceneKun.gameObjectKuns != null) {
-                // Scene
-                var scene = new TreeViewItem(id: 0, depth: 0, displayName: sceneKun.name);
-                root.AddChild(scene);
-
-                // Sceneの直下に来るGameObjectとその子になるGameObjectを再帰的に追加
-                //var parents = sceneKun.gameObjectKuns.Where((q) => q.transformKun.parentInstanceID == 0);
-                var parents = new List<GameObjectKun>();
-                foreach(var go in sceneKun.gameObjectKuns)
+            if (sceneManagerKun != null && sceneManagerKun.sceneKuns != null)
+            {
+                for (var i = 0; i < sceneManagerKun.sceneKuns.Length; i++)
                 {
-                    if(go.transformKun.parentInstanceID == 0)
+                    var sceneKun = sceneManagerKun.sceneKuns[i];
+                    if (sceneKun != null && sceneKun.gameObjectKuns != null)
                     {
-                        parents.Add(go);
-                    }
-                }
+                        // Scene
+                        var scene = new TreeViewItem(id: i, depth: 0, displayName: sceneKun.name);
+                        root.AddChild(scene);
 
+                        // Sceneの直下に来るGameObjectとその子になるGameObjectを再帰的に追加                        
+                        var parents = new List<GameObjectKun>();
+                        foreach (var go in sceneKun.gameObjectKuns)
+                        {
+                            if (go.transformKun.parentInstanceID == 0)
+                            {
+                                parents.Add(go);
+                            }
+                        }
 
-                if (parents != null && parents.Count() != 0) {
-                    foreach (var parent in parents)
-                    {
-                        var treeViewItem = MakeTreeViewRecursive(parent, 1);
-                        scene.AddChild(treeViewItem);
-                        
+                        if (parents != null && parents.Count() != 0)
+                        {
+                            foreach (var parent in parents)
+                            {
+                                var treeViewItem = MakeTreeViewRecursive(parent, 1);
+                                scene.AddChild(treeViewItem);
+
+                            }
+                        }
                     }
                 }
             }
@@ -99,24 +119,19 @@ namespace Utj.UnityChoseKun
         protected override void RowGUI (RowGUIArgs args)
         {
             Texture2D icon;
-
             var colorBackUp = GUI.color;
-            if(sceneKun.gameObjectKuns != null){            
-                var gameObjectKun = sceneKun.gameObjectKuns.Where((g)=>g.instanceID == args.item.id).FirstOrDefault();
-                if(gameObjectKun != null){
-                    if(gameObjectKun.activeSelf){
-                        GUI.color = Color.white;                
-                    } else {
-                        GUI.color = Color.gray;
-                    }
-                }
-            }
-
-            if(args.item.id == 0){
+            if (args.item.depth == 0)
+            {
+                GUI.color = Color.white;
                 icon = Styles.sceneAssetIcon;
-            } else {
+            }
+            else
+            {
+                var go = GetGameObjectKunInSceneManagerKun(args.item.id);
+                GUI.color = (go != null && go.activeSelf) ? Color.white : Color.gray;
                 icon = Styles.gameObjectIcon;
             }
+            
             var toggleRect = args.rowRect;
             toggleRect.x += GetContentIndent(args.item);
             toggleRect.width = 16f;
@@ -135,16 +150,25 @@ namespace Utj.UnityChoseKun
         /// <returns>GameObjectKunのTreeViewIten</returns>
         TreeViewItem MakeTreeViewRecursive(GameObjectKun go,int depth)
         {
-            var treeViewItem = new TreeViewItem(id:go.instanceID,depth:depth,displayName:go.name);            
-            var children = sceneKun.gameObjectKuns.Where((q)=>q.transformKun.parentInstanceID == go.transformKun.instanceID);
-            if(children != null && children.Count() != 0){
-                treeViewItem.children = new List<TreeViewItem>();
-                foreach(var child in children){
-                    var tvi = MakeTreeViewRecursive(child, depth + 1);
-                    tvi.parent = treeViewItem;
-                    treeViewItem.children.Add(tvi);
+            var treeViewItem = new TreeViewItem(id:go.instanceID,depth:depth,displayName:go.name);
+            IEnumerable<GameObjectKun> children;
+            for (var i = 0; i < sceneManagerKun.sceneKuns.Length; i++)
+            {
+                var sceneKun = sceneManagerKun.sceneKuns[i];
+                children = sceneKun.gameObjectKuns.Where((q) => q.transformKun.parentInstanceID == go.transformKun.instanceID);
+
+                if (children != null && children.Count() != 0)
+                {
+                    treeViewItem.children = new List<TreeViewItem>();
+                    foreach (var child in children)
+                    {
+                        var tvi = MakeTreeViewRecursive(child, depth + 1);
+                        tvi.parent = treeViewItem;
+                        treeViewItem.children.Add(tvi);
+                    }
+                    return treeViewItem;
                 }
-            }            
+            }
             return treeViewItem;
         }
 
@@ -160,6 +184,7 @@ namespace Utj.UnityChoseKun
                 m_selectionChangeCB(selectedIds);
             }
         }
+
 
 
         // == Drag & Drop==
@@ -257,11 +282,10 @@ namespace Utj.UnityChoseKun
 
         void MoveGameObjectKun(TreeViewItem treeViewItem, TreeViewItem parent)
         {
-            var gameObjectKun = sceneKun.gameObjectKuns.Where((g) => g.instanceID == treeViewItem.id).FirstOrDefault();
-
+            var gameObjectKun = GetGameObjectKunInSceneManagerKun(treeViewItem.id);
             if (parent != null)
             {
-                var parentKun = sceneKun.gameObjectKuns.Where((g) => g.instanceID == parent.id).FirstOrDefault();
+                var parentKun = GetGameObjectKunInSceneManagerKun(parent.id);
                 if (parentKun == null)
                 {
                     gameObjectKun.transformKun.parentInstanceID = 0;
@@ -280,6 +304,29 @@ namespace Utj.UnityChoseKun
             gameObjectKun.dirty = true;
             UnityChoseKunEditor.SendMessage<GameObjectKun>(UnityChoseKun.MessageID.GameObjectPush, gameObjectKun);
             gameObjectKun.ResetDirty();
+        }
+
+
+        GameObjectKun GetGameObjectKunInSceneManagerKun(int instanceID)
+        {
+            for(var i = 0; i < sceneManagerKun.sceneKuns.Length; i++)            
+            {
+                var sceneKun = sceneManagerKun.sceneKuns[i];
+                var gameObjectKun = GetGameObjectKunInSceneKun(instanceID, sceneKun);
+                if(gameObjectKun != null)
+                {
+                    return gameObjectKun;
+                }
+            }
+
+            return null;
+        }
+
+
+
+        GameObjectKun GetGameObjectKunInSceneKun(int instanceID,SceneKun sceneKun)
+        {
+            return sceneKun.gameObjectKuns.Where((g) => g.instanceID == instanceID).FirstOrDefault();
         }
 
 

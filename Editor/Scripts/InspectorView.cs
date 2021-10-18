@@ -75,25 +75,35 @@ namespace Utj.UnityChoseKun
         [SerializeField] private List<ComponentView> m_componentViews;
         [SerializeField] Dictionary<int, GameObjectKun> m_gameObjectKuns;
         [SerializeField] int m_selectGameObujectKunID;
-        [SerializeField] SceneKun m_sceneKun;
+        [SerializeField] SceneManagerKun m_sceneManagerKun;
+                
 
-
-        SceneKun sceneKun
+        SceneManagerKun sceneManagerKun
         {
             get
             {
-                if(m_sceneKun == null)
+                if(m_sceneManagerKun == null)
                 {
-                    m_sceneKun = new SceneKun();
+                    m_sceneManagerKun = new SceneManagerKun(false);
+                    for (var i = 0; i < m_sceneManagerKun.sceneKuns.Length; i++)
+                    {
+                        var sceneKun = sceneManagerKun.sceneKuns[i];
+                        foreach (var go in sceneKun.gameObjectKuns)
+                        {
+                            gameObjectKuns.Add(go.instanceID, go);
+                        }
+                    }
                 }
-                return m_sceneKun;
+                return m_sceneManagerKun;
             }
 
             set
             {
-                m_sceneKun = value;
+                m_sceneManagerKun = value;
             }
         }
+
+
 
         Settings settings {
             get{if(m_settings == null){m_settings = new Settings();}return m_settings;}
@@ -183,7 +193,7 @@ namespace Utj.UnityChoseKun
 
 
 
-            if (sceneKun != null)
+            if (sceneManagerKun != null)
             {
                 if (isChange)
                 {
@@ -216,12 +226,15 @@ namespace Utj.UnityChoseKun
         public void OnMessageEvent(BinaryReader binaryReader)
         {            
             gameObjectKuns.Clear();
-            sceneKun.Deserialize(binaryReader);
-            
-            for(var i = 0; i < sceneKun.gameObjectKuns.Length; i++){
-                gameObjectKuns.Add(sceneKun.gameObjectKuns[i].instanceID,sceneKun.gameObjectKuns[i]);
-            }
-
+            sceneManagerKun.Deserialize(binaryReader);
+            for(var i = 0; i < sceneManagerKun.sceneKuns.Length; i++)
+            {
+                var sceneKun = sceneManagerKun.sceneKuns[i];
+                foreach(var go in sceneKun.gameObjectKuns)
+                {
+                    gameObjectKuns.Add(go.instanceID, go);
+                }
+            }            
 
 #if UNITY_2019_1_OR_NEWER
             if (!EditorWindow.HasOpenInstances<PlayerHierarchyWindow>())
@@ -235,7 +248,7 @@ namespace Utj.UnityChoseKun
             if (window != null)
             {
                 window.selectionChangedCB = SelectionChangedCB;
-                window.sceneKun = sceneKun;
+                window.sceneManagerKun = sceneManagerKun;
                 window.Reload();
             }
             

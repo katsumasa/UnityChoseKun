@@ -44,7 +44,13 @@ namespace Utj.UnityChoseKun{
         [SerializeField]MaterialView[] m_materialViews;
         protected MaterialView[] materialViews
         {
-            get{return m_materialViews;}
+            get{
+                if(m_materialViews == null)
+                {
+                    m_materialViews = new MaterialView[0];
+                }
+                return m_materialViews;
+            }
             set{m_materialViews = value;}
         }
 

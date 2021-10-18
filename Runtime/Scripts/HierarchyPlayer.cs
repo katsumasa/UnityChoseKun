@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 
 namespace Utj.UnityChoseKun
@@ -237,9 +238,8 @@ namespace Utj.UnityChoseKun
                     break;                
             }
 
-            var scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
-            var sceneKun = new SceneKun(scene);
-            UnityChoseKunPlayer.SendMessage<SceneKun>(UnityChoseKun.MessageID.GameObjectPull, sceneKun);
+            var sceneManagerKun = new SceneManagerKun(true);            
+            UnityChoseKunPlayer.SendMessage<SceneManagerKun>(UnityChoseKun.MessageID.GameObjectPull, sceneManagerKun);
         }
 
 
@@ -253,12 +253,16 @@ namespace Utj.UnityChoseKun
         /// <returns>instanceIDが一致するGameObject</returns>
         public static GameObject FindGameObjectInScene(int instanceID)
         {
-            foreach (var obj in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+            for(var i = 0; i < SceneManager.sceneCount; i++)
             {
-                var go = FindGameObjectInChildren(obj, instanceID);
-                if(go != null)
+                var scene = SceneManager.GetSceneAt(i);
+                foreach (var obj in scene.GetRootGameObjects())
                 {
-                    return go;
+                    var go = FindGameObjectInChildren(obj, instanceID);
+                    if (go != null)
+                    {
+                        return go;
+                    }
                 }
             }
             return null;

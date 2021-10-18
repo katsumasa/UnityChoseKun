@@ -62,11 +62,15 @@
             var window = (PlayerHierarchyWindow)EditorWindow.GetWindow(typeof(PlayerHierarchyWindow));
 
             componentCounts = null;
-            foreach (var gameObjectKun in window.sceneKun.gameObjectKuns)
-            {                
-                foreach(var componentKunType in gameObjectKun.componentKunTypes)
+
+            foreach (var sceneKun in window.sceneManagerKun.sceneKuns)
+            {
+                foreach (var gameObjectKun in sceneKun.gameObjectKuns)
                 {
-                    componentCounts[(int)componentKunType]++;
+                    foreach (var componentKunType in gameObjectKun.componentKunTypes)
+                    {
+                        componentCounts[(int)componentKunType]++;
+                    }
                 }
             }
         }

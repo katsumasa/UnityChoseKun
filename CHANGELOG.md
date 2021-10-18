@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.2.0] - 2021-10-18
+
+### Change
+
+- Added support for multiple scenes.
+
 ## [0.1.0] - 2021-10-14
 
 ### Changes
