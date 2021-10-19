@@ -309,16 +309,21 @@ namespace Utj.UnityChoseKun
 
         GameObjectKun GetGameObjectKunInSceneManagerKun(int instanceID)
         {
-            for(var i = 0; i < sceneManagerKun.sceneKuns.Length; i++)            
+            if (sceneManagerKun != null && sceneManagerKun.sceneKuns != null)
             {
-                var sceneKun = sceneManagerKun.sceneKuns[i];
-                var gameObjectKun = GetGameObjectKunInSceneKun(instanceID, sceneKun);
-                if(gameObjectKun != null)
+                for (var i = 0; i < sceneManagerKun.sceneKuns.Length; i++)
                 {
-                    return gameObjectKun;
+                    var sceneKun = sceneManagerKun.sceneKuns[i];
+                    if (sceneKun != null)
+                    {
+                        var gameObjectKun = GetGameObjectKunInSceneKun(instanceID, sceneKun);
+                        if (gameObjectKun != null)
+                        {
+                            return gameObjectKun;
+                        }
+                    }
                 }
             }
-
             return null;
         }
 
@@ -326,12 +331,22 @@ namespace Utj.UnityChoseKun
 
         GameObjectKun GetGameObjectKunInSceneKun(int instanceID,SceneKun sceneKun)
         {
-            return sceneKun.gameObjectKuns.Where((g) => g.instanceID == instanceID).FirstOrDefault();
+            if (sceneKun != null && sceneKun.gameObjectKuns != null)
+            {
+                return sceneKun.gameObjectKuns.Where((g) => g.instanceID == instanceID).FirstOrDefault();
+            }
+            return null;
         }
 
 
         void MoveTreeViewItem(TreeViewItem treeViewItem,TreeViewItem parent,int insertIndex)
         {
+            // Sceneは移動付加
+            if(treeViewItem.depth <= 0)
+            {
+                return;
+            }
+
 
             // 親が同じな場合は
             if (treeViewItem.parent == parent)
