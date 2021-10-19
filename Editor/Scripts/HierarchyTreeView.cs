@@ -283,7 +283,7 @@ namespace Utj.UnityChoseKun
         void MoveGameObjectKun(TreeViewItem treeViewItem, TreeViewItem parent)
         {
             var gameObjectKun = GetGameObjectKunInSceneManagerKun(treeViewItem.id);
-            if (parent != null)
+            if (parent != null　&& parent.depth > 0)
             {
                 var parentKun = GetGameObjectKunInSceneManagerKun(parent.id);
                 if (parentKun == null)
@@ -300,6 +300,14 @@ namespace Utj.UnityChoseKun
                 gameObjectKun.transformKun.parentInstanceID = 0;
             }
 
+            // Scene間の移動が発生した場合、Scene側にも変更処理が必要
+            var sceneTreeViewItem = GetParentRecursive(treeViewItem, 0);
+            var sceneKun = sceneManagerKun.sceneKuns[sceneTreeViewItem.id];            
+            if(gameObjectKun.transformKun.sceneHn != sceneKun.handle)
+            {
+                sceneManagerKun.MoveGameObjectToScene(gameObjectKun, sceneKun);
+            }
+            
             gameObjectKun.transformKun.dirty = true;
             gameObjectKun.dirty = true;
             UnityChoseKunEditor.SendMessage<GameObjectKun>(UnityChoseKun.MessageID.GameObjectPush, gameObjectKun);
@@ -340,8 +348,8 @@ namespace Utj.UnityChoseKun
 
 
         void MoveTreeViewItem(TreeViewItem treeViewItem,TreeViewItem parent,int insertIndex)
-        {
-            // Sceneは移動付加
+        {            
+            // Sceneは移動出来ない
             if(treeViewItem.depth <= 0)
             {
                 return;
@@ -390,6 +398,23 @@ namespace Utj.UnityChoseKun
                 }
             }
         }
-    
+
+
+        /// <summary>
+        /// depthに一致する親を再帰的に探す
+        /// </summary>
+        /// <param name="treeViewItem"></param>
+        /// <param name="depth"></param>
+        /// <returns></returns>
+        TreeViewItem GetParentRecursive(TreeViewItem treeViewItem,int depth)
+        {
+            if(treeViewItem.depth == depth)
+            {
+                return treeViewItem;
+            }
+            return GetParentRecursive(treeViewItem.parent, depth);
+        }
+
+
     }
 }

@@ -112,5 +112,48 @@ namespace Utj.UnityChoseKun
         {
             return base.GetHashCode();
         }
+
+
+        public SceneKun GetSceneKunAt(int index)
+        {
+            return sceneKuns[index];
+        }
+
+
+        public SceneKun GetSceneKunHn(int handle)
+        {
+            for(var i = 0; i < sceneKuns.Length; i++)
+            {
+                if(sceneKuns[i].handle == handle)
+                {
+                    return sceneKuns[i];
+                }
+            }
+            return null;
+        }
+
+
+        public void MoveGameObjectToScene(GameObjectKun gameObjectKun,SceneKun sceneKun)
+        {            
+            // RootGameObjectの場合、元のSceneから削除する
+            for (var i = 0; i < sceneKuns.Length; i++)
+            {
+                var list = new List<GameObjectKun>(sceneKuns[i].gameObjectKuns);
+                if (list.Contains(gameObjectKun))
+                {
+                    list.Remove(gameObjectKun);
+                    sceneKuns[i].gameObjectKuns = list.ToArray();
+                    break;
+                }                
+            }
+
+            // 移動先のSceneへ追加
+            {
+                var list = new List<GameObjectKun>(sceneKun.gameObjectKuns);
+                list.Add(gameObjectKun);
+                sceneKun.gameObjectKuns = list.ToArray();
+                gameObjectKun.transformKun.sceneHn = sceneKun.handle;
+            }
+        }
     }
 }

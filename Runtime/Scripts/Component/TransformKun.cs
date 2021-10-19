@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 
 namespace Utj.UnityChoseKun
@@ -16,7 +17,7 @@ namespace Utj.UnityChoseKun
         [SerializeField] protected Vector3Kun m_localRotation;
         [SerializeField] protected int m_parentInstanceID;
         [SerializeField] int m_childCount;
-
+        [SerializeField] int m_sceneHn;
 
         public Vector3 localPosition {
             get{return m_localPosition.GetVector3();}
@@ -47,6 +48,12 @@ namespace Utj.UnityChoseKun
             set{m_childCount = value;}
         }
 
+        public int sceneHn
+        {
+            get { return m_sceneHn; }
+            set { m_sceneHn = value; }
+        }
+
 
         /// <summary>
         /// コンストラクタ
@@ -72,6 +79,7 @@ namespace Utj.UnityChoseKun
                 if(transform.parent != null){
                     parentInstanceID = transform.parent.GetInstanceID();
                 }
+                sceneHn = transform.gameObject.scene.handle;
             }
         }
 
@@ -87,9 +95,27 @@ namespace Utj.UnityChoseKun
                 var transform = component as Transform;
                 if(transform!=null){
                     //Debug.Log("Transform WriteBack" + localPosition + localRotation + localScale);                    
-
-
-                    transform.parent = GetTransform(parentInstanceID);
+                    //Debug.Log("parentInstanceID " + parentInstanceID);
+                    if (parentInstanceID == 0)
+                    {
+                        transform.parent = null;
+                        if (transform.gameObject.scene.handle != sceneHn)
+                        {
+                            for (var i = 0; i < SceneManager.sceneCount; i++)
+                            {
+                                var scene = SceneManager.GetSceneAt(i);
+                                if (scene.handle == sceneHn)
+                                {
+                                    SceneManager.MoveGameObjectToScene(transform.gameObject, scene);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        transform.parent = GetTransform(parentInstanceID);
+                    }
                     transform.localPosition = localPosition;
                     transform.localScale = localScale;
                     transform.localRotation = Quaternion.Euler(new Vector3(localRotation.x, localRotation.y, localRotation.z));
@@ -106,10 +132,8 @@ namespace Utj.UnityChoseKun
         /// <param name="instanceID"></param>
         /// <returns></returns>
         public Transform GetTransform(int instanceID)
-        {
+        {            
             var transform = Transform.FindObjectsOfType<Transform>().FirstOrDefault(q => q.GetInstanceID() == instanceID);
-
-
             return transform;
         }
 
@@ -127,6 +151,7 @@ namespace Utj.UnityChoseKun
             SerializerKun.Serialize<Vector3Kun>(binaryWriter, m_localRotation);                        
             binaryWriter.Write(m_parentInstanceID);
             binaryWriter.Write(m_childCount);
+            binaryWriter.Write(m_sceneHn);
         }
 
 
@@ -143,6 +168,7 @@ namespace Utj.UnityChoseKun
             m_localRotation = SerializerKun.DesirializeObject<Vector3Kun>(binaryReader);                        
             m_parentInstanceID = binaryReader.ReadInt32();
             m_childCount = binaryReader.ReadInt32();
+            m_sceneHn = binaryReader.ReadInt32();
         }
 
 
