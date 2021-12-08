@@ -13,8 +13,9 @@
     public class SceneKun : ISerializerKun
     {
         public string name;
+        public int mHandle;
         public int rootCount;
-        public GameObjectKun [] mGameObjectKuns;     
+        public GameObjectKun [] mGameObjectKuns;
         
         
         /// <summary>
@@ -36,6 +37,11 @@
             }
         }
 
+        public int handle
+        {
+            get { return mHandle; }
+        }
+
 
         /// <summary>
         /// 
@@ -54,6 +60,7 @@
         public SceneKun(Scene scene):this()
         {
             this.name = scene.name;
+            this.mHandle = scene.handle;
             this.rootCount = scene.rootCount;
             var  list =  new List<GameObjectKun>();                        
             foreach (var obj in scene.GetRootGameObjects())
@@ -71,6 +78,7 @@
         public virtual void Serialize(BinaryWriter binaryWriter)
         {
             binaryWriter.Write(name);
+            binaryWriter.Write(mHandle);
             binaryWriter.Write(rootCount);
             if(mGameObjectKuns == null)
             {
@@ -94,6 +102,7 @@
         public virtual void Deserialize(BinaryReader binaryReader)
         {
             name = binaryReader.ReadString();
+            mHandle = binaryReader.ReadInt32();
             rootCount = binaryReader.ReadInt32();
             var len = binaryReader.ReadInt32();
             if(len != -1)
@@ -140,6 +149,10 @@
             {
                 return false;
             }
+            if (this.handle != other.handle)
+            {
+                return false;
+            }
             if (!int.Equals(rootCount, other.rootCount))
             {
                 return false;
@@ -174,6 +187,12 @@
         public override int GetHashCode()
         {
             return base.GetHashCode();
+        }
+
+
+        public GameObjectKun[] GetRootGameObjects()
+        {
+            return mGameObjectKuns;
         }
 
 

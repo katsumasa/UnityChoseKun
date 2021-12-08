@@ -255,17 +255,10 @@ namespace Utj.UnityChoseKun{
         [SerializeField] int m_passCount;
         [SerializeField] int m_renderQueue;
         [SerializeField] MaterialGlobalIlluminationFlags m_globalIlluminationFlags;
-        [SerializeField] ColorKun m_color;
         [SerializeField] ShaderKun m_shader;
         [SerializeField] string[] m_shaderKeywords;
         [SerializeField] Property[] m_propertys;
 
-
-        public Color color
-        {
-            get { return m_color.GetColor(); }
-            set { m_color = new ColorKun(value); }
-        }
 
 
         public bool doubleSidedGI
@@ -366,10 +359,11 @@ namespace Utj.UnityChoseKun{
             if (material)
             {
                 name = material.name;
-                color = material.color;
+#if false
                 doubleSidedGI = material.doubleSidedGI;
-                enableInstancing = material.enableInstancing;
                 globalIlluminationFlags = material.globalIlluminationFlags;
+#endif
+                enableInstancing = material.enableInstancing;
                 passCount = material.passCount;
                 renderQueue = material.renderQueue;
                 shaderKeywords = material.shaderKeywords;
@@ -435,7 +429,7 @@ namespace Utj.UnityChoseKun{
                         }
                     }
 #endif
-                }
+                                    }
                 shaderKeywords = material.shaderKeywords;
             }
         }
@@ -453,7 +447,6 @@ namespace Utj.UnityChoseKun{
                     material.renderQueue = renderQueue;
                     material.shaderKeywords = shaderKeywords;
 #if false
-                    material.color = color;
                     material.doubleSidedGI = doubleSidedGI;
                     material.globalIlluminationFlags = globalIlluminationFlags;
 #endif
@@ -533,7 +526,6 @@ namespace Utj.UnityChoseKun{
             binaryWriter.Write(m_passCount);
             binaryWriter.Write(m_renderQueue);
             binaryWriter.Write((int)m_globalIlluminationFlags);
-            SerializerKun.Serialize<ColorKun>(binaryWriter, m_color);
             SerializerKun.Serialize<ShaderKun>(binaryWriter, m_shader);
             SerializerKun.Serialize(binaryWriter, m_shaderKeywords);
             SerializerKun.Serialize<Property>(binaryWriter, m_propertys);                        
@@ -549,7 +541,6 @@ namespace Utj.UnityChoseKun{
             m_passCount = binaryReader.ReadInt32();
             m_renderQueue = binaryReader.ReadInt32();
             m_globalIlluminationFlags = (MaterialGlobalIlluminationFlags)binaryReader.ReadInt32();
-            m_color = SerializerKun.DesirializeObject<ColorKun>(binaryReader);
             m_shader = SerializerKun.DesirializeObject<ShaderKun>(binaryReader);
             m_shaderKeywords = SerializerKun.DesirializeStrings(binaryReader);
             m_propertys = SerializerKun.DesirializeObjects<Property>(binaryReader);            
@@ -566,10 +557,6 @@ namespace Utj.UnityChoseKun{
         {
             var other = obj as MaterialKun;
             if(other == null)
-            {
-                return false;
-            }
-            if (m_color != null && !m_color.Equals(other.m_color))
             {
                 return false;
             }

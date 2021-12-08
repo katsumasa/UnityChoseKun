@@ -103,21 +103,24 @@ namespace Utj.UnityChoseKun
             }
         }
        
-
-        public SceneKun sceneKun {
-            set {                
-                hierarchyTreeView.sceneKun = value;
+        public SceneManagerKun sceneManagerKun
+        {
+            set
+            {
+                hierarchyTreeView.sceneManagerKun = value;
             }
 
             get
             {
-                if(hierarchyTreeView.sceneKun == null)
+                if(hierarchyTreeView.sceneManagerKun == null)
                 {
-                    hierarchyTreeView.sceneKun = new SceneKun();
+                    hierarchyTreeView.sceneManagerKun = new SceneManagerKun(false);
                 }
-                return hierarchyTreeView.sceneKun;
+                return hierarchyTreeView.sceneManagerKun;
             }
         }
+
+        
 
         public int lastClickedID {
             get {

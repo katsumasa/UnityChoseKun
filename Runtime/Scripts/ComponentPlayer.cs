@@ -1,5 +1,7 @@
 ﻿using System.IO;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 
 
 namespace Utj.UnityChoseKun
@@ -14,10 +16,8 @@ namespace Utj.UnityChoseKun
         /// </summary>
         /// <param name="binaryReader"></param>
         public void OnMessageEventPull(BinaryReader binaryReader)
-        {                            
-            var scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
-            var sceneKun = new SceneKun(scene);
-            UnityChoseKunPlayer.SendMessage<SceneKun>(UnityChoseKun.MessageID.GameObjectPull,sceneKun);            
+        {            
+            UnityChoseKunPlayer.SendMessage<SceneManagerKun>(UnityChoseKun.MessageID.GameObjectPull, new SceneManagerKun(true));
         }
 
 
@@ -28,15 +28,21 @@ namespace Utj.UnityChoseKun
         public void OnMessageEventPush(BinaryReader binaryReader)
         {
             var gameObjectKun = new GameObjectKun();
-            gameObjectKun.Deserialize(binaryReader);            
-            foreach (var obj in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+            gameObjectKun.Deserialize(binaryReader);
+            for (var i = 0; i < SceneManager.sceneCount; i++)
             {
-                var go = FindGameObjectInChildren(obj,gameObjectKun.instanceID);
-                if(go != null){                    
-                    gameObjectKun.WriteBack(go);
-                    return;
+                var scene = SceneManager.GetSceneAt(i);
+                foreach(var obj in scene.GetRootGameObjects())
+                {
+                    var go = FindGameObjectInChildren(obj, gameObjectKun.instanceID);
+                    if (go != null)
+                    {
+                        gameObjectKun.WriteBack(go);
+                        return;
+                    }
                 }
             }
+
         }
 
         
