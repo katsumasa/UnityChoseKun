@@ -34,8 +34,8 @@
         [SerializeField] public float fieldOfView;
         [SerializeField] public bool usePhysicalProperties;
         // 物理カメラの設定
-        [SerializeField] public float focalLength;
-        [SerializeField] public int sensorType;
+        [SerializeField] public float focalLength;        
+        [SerializeField] public Vector2Kun sensorSize;
         [SerializeField] private Vector2Kun m_lensShift;
         [SerializeField] public Camera.GateFitMode gateFit;
         // Clipping Plane
@@ -127,11 +127,11 @@
                 cullingMask = camera.cullingMask;
                 orthographic = camera.orthographic;
                 orthographicSize = camera.orthographicSize;
-                fieldOfView = camera.fieldOfView;
+                fieldOfView = camera.fieldOfView;                
                 usePhysicalProperties = camera.usePhysicalProperties;
-                focalLength = camera.focalLength;
-
-                sensorType = System.Array.IndexOf(k_ApertureFormatValues, new Vector2((float)System.Math.Round(camera.sensorSize.x, 3), (float)System.Math.Round(camera.sensorSize.y, 3)));
+                
+                focalLength = camera.focalLength;                
+                sensorSize = new Vector2Kun(camera.sensorSize);
                 lensShift = camera.lensShift;
                 gateFit = camera.gateFit;
 
@@ -166,7 +166,7 @@
                     if (usePhysicalProperties)
                     {
                         camera.focalLength = focalLength;
-                        camera.sensorSize = k_ApertureFormatValues[sensorType];
+                        camera.sensorSize = sensorSize.GetVector2();
                         camera.lensShift = lensShift;
                         camera.gateFit = gateFit;
                     }
@@ -196,8 +196,7 @@
             binaryWriter.Write(orthographicSize);
             binaryWriter.Write(fieldOfView);
             binaryWriter.Write(usePhysicalProperties);
-            binaryWriter.Write(focalLength);
-            binaryWriter.Write(sensorType);                        
+            binaryWriter.Write(focalLength);            
             binaryWriter.Write((Int32)gateFit);
             binaryWriter.Write(nearClipPlane);
             binaryWriter.Write(farClipPlane);                                    
@@ -208,6 +207,7 @@
             binaryWriter.Write(allowMSAA);
             binaryWriter.Write(allowDynamicResolution);
             binaryWriter.Write(targetEye);
+            SerializerKun.Serialize<Vector2Kun>(binaryWriter, sensorSize);
             SerializerKun.Serialize<ColorKun>(binaryWriter, m_backgroundColor);
             SerializerKun.Serialize<Vector2Kun>(binaryWriter, m_lensShift);
             SerializerKun.Serialize<RectKun>(binaryWriter, m_rect);
@@ -223,8 +223,7 @@
             orthographicSize = binaryReader.ReadSingle();
             fieldOfView = binaryReader.ReadSingle();
             usePhysicalProperties = binaryReader.ReadBoolean();
-            focalLength = binaryReader.ReadSingle();
-            sensorType = binaryReader.ReadInt32();                                    
+            focalLength = binaryReader.ReadSingle();            
             gateFit = (Camera.GateFitMode)binaryReader.ReadInt32();
             nearClipPlane = binaryReader.ReadSingle();
             farClipPlane = binaryReader.ReadSingle();                                    
@@ -235,6 +234,7 @@
             allowMSAA = binaryReader.ReadBoolean();
             allowDynamicResolution = binaryReader.ReadBoolean();
             targetEye = binaryReader.ReadInt32();
+            sensorSize = SerializerKun.DesirializeObject<Vector2Kun>(binaryReader);
             m_backgroundColor = SerializerKun.DesirializeObject<ColorKun>(binaryReader);
             m_lensShift = SerializerKun.DesirializeObject<Vector2Kun>(binaryReader);
             m_rect = SerializerKun.DesirializeObject<RectKun>(binaryReader);
@@ -280,7 +280,7 @@
             {
                 return false;
             }
-            if (sensorType.Equals(other.sensorType) == false)
+            if(sensorSize.Equals(other.sensorSize) == false)            
             {
                 return false;
             }
