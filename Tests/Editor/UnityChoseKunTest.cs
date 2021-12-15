@@ -5,9 +5,11 @@ using Utj.UnityChoseKun;
 using UnityEngine;
 
 
+
 public class UnityChoseKunTest
 {
-    static readonly string mTestSceneName = "Assets/Scenes/Character Setup.unity";
+    static readonly string mTestSceneName = "Assets/Scenes/SampleScene.unity";
+    //static readonly string mTestSceneName = "Assets/Scenes/Character Setup.unity";
     //static readonly string mTestSceneName = "Assets/Scenes/Main.unity";
 
     [Test]
@@ -349,7 +351,23 @@ public class UnityChoseKunTest
         UnityEngine.Assertions.Assert.AreEqual(componentKun1, componentKun2);        
     }
 
-    
+
+    [Test]
+    public void UniversalAdditionalCameraDataKunTest()
+    {
+#if false
+        var scene = UnityEditor.SceneManagement.EditorSceneManager.OpenScene(mTestSceneName);
+        var array = GetComponentAllInScene<UnityEngine.Rendering.Universal.UniversalAdditionalCameraData>();
+
+        var o = new UniversalAdditionalCameraDataKun(array[0]);
+        var clone = new UniversalAdditionalCameraDataKun();
+        SerializerKunTest<UniversalAdditionalCameraDataKun>(o, clone);
+
+        o.WriteBack(array[0]);
+#endif
+    }
+
+
     public void SerializerKunTest<T>(T objectKun, T cloneKun) where T : ISerializerKun
     {
         var memory = new MemoryStream();

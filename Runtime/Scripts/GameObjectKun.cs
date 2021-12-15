@@ -110,8 +110,7 @@
             var i = 0;
             foreach (var component in components){                
                 componentKunTypes[i] = ComponentKun.GetComponentKunType(component);                
-                var systemType = ComponentKun.GetComponetKunSyetemType(componentKunTypes[i]);
-                componentKuns[i] = System.Activator.CreateInstance(systemType, new object[] { component }) as ComponentKun;
+                componentKuns[i] = ComponentKun.Instantiate(componentKunTypes[i], component);
                 componentKuns[i].gameObjectKun = this;
                 i++;                
             }                        
