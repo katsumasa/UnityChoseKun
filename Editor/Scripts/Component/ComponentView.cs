@@ -39,6 +39,7 @@
 
             {ComponentKun.ComponentKunType.Canvas,                  typeof(CanvasView) },
 
+            {ComponentKun.ComponentKunType.UniversalAdditionalCameraData,typeof(UniversalAdditionalCameraDataView) },
             {ComponentKun.ComponentKunType.MonoBehaviour,           typeof(MonoBehaviourView)},
             {ComponentKun.ComponentKunType.Behaviour,               typeof(BehaviourView)},
             {ComponentKun.ComponentKunType.Component,               typeof(ComponentView)},
