@@ -65,9 +65,11 @@ namespace Utj.UnityChoseKun
         }
 
 
-        public SpriteRendererKun(SpriteRenderer spriteRenderer) : base(spriteRenderer)
+        public SpriteRendererKun(Component component) : base(component)
         {
             componentKunType = ComponentKunType.SpriteRenderer;
+            var spriteRenderer = component as SpriteRenderer;
+
             if (spriteRenderer != null)
             {
                 sprite = new SpriteKun(spriteRenderer.sprite);
