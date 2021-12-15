@@ -1,4 +1,5 @@
 ﻿namespace Utj.UnityChoseKun{
+    using System;
     using System.Collections;
     using System.Collections.Generic;
     using System.IO;
@@ -8,7 +9,7 @@
 
     public class CameraView : BehaviourView
     {
-        private static class Styles
+        public static class Styles
         {
             public static readonly Texture2D ComponentIcon = (Texture2D)EditorGUIUtility.Load("d_Camera Icon");
             public static GUIContent cameraFoldout = new GUIContent("", (Texture2D)EditorGUIUtility.Load("d_Camera Icon"));
@@ -44,6 +45,16 @@
         }
 
 
+        static bool m_IsEnableOnGUI = true;
+
+        public static bool isEnableOnGUI
+        {
+            get => m_IsEnableOnGUI;
+            set => m_IsEnableOnGUI = value;
+        }
+
+
+
         /// <summary>
         /// コンストラクタ
         /// </summary>
@@ -51,18 +62,19 @@
         {
             componentIcon = Styles.ComponentIcon;
             foldout = true;
+            m_IsEnableOnGUI = true;
         }
 
 
 
-        enum ProjectionType { Orthographic, Perspective }
+        internal enum ProjectionType { Orthographic, Perspective }
 
             
           
 
         public static IEnumerable<string> ApertureFormatNames => k_ApertureFormatNames;
 
-        private static readonly string[] k_ApertureFormatNames =
+        public static readonly string[] k_ApertureFormatNames =
         {
             "8mm",
             "Super 8mm",
@@ -79,7 +91,7 @@
 
         public static IEnumerable<Vector2> ApertureFormatValues => k_ApertureFormatValues;
 
-        private static readonly Vector2[] k_ApertureFormatValues =
+        public static readonly Vector2[] k_ApertureFormatValues =
         {
             new Vector2(4.8f, 3.5f) , // 8mm
             new Vector2(5.79f, 4.01f) , // Super 8mm
@@ -134,8 +146,27 @@
             EditorGUIUtility.TrTextContent("None (Main Display)"),
         };
         private static readonly int[] kTargetEyeValues = { (int)StereoTargetEyeMask.Both, (int)StereoTargetEyeMask.Left, (int)StereoTargetEyeMask.Right, (int)StereoTargetEyeMask.None };
-            
-            
+
+
+        Vector2 mSensorSize;
+
+        Vector2 sensorSize
+        {
+            get
+            {
+                if (mSensorSize == null)
+                {
+                    mSensorSize = new Vector2();
+                }
+                return mSensorSize;
+            }
+
+            set
+            {
+                mSensorSize = value;
+            }
+        }
+
 
 
 
@@ -186,11 +217,36 @@
                 using (new EditorGUI.IndentLevelScope())
                 {
                     cameraKun.focalLength = EditorGUILayout.FloatField(Styles.focalLength, cameraKun.focalLength);
-                    cameraKun.sensorType = EditorGUILayout.Popup(Styles.cameraType, cameraKun.sensorType, k_ApertureFormatNames);
-                        
+
+
+                    EditorGUI.BeginChangeCheck();
+                    var oldFilmGateIndex = Array.IndexOf(CameraView.k_ApertureFormatValues, new Vector2((float)Math.Round(cameraKun.sensorSize.x, 3), (float)Math.Round(cameraKun.sensorSize.y, 3)));
+                    oldFilmGateIndex = (oldFilmGateIndex == -1) ? CameraView.k_ApertureFormatValues.Length - 1 : oldFilmGateIndex;
+                    var newFilmGateIndex = EditorGUILayout.Popup(Styles.cameraType, oldFilmGateIndex, k_ApertureFormatNames);
+                    if (EditorGUI.EndChangeCheck())
+                    {
+                        if (newFilmGateIndex == CameraView.k_ApertureFormatValues.Length - 1)
+                        {
+                            cameraKun.sensorSize = new Vector2Kun(sensorSize);
+                        }
+                        else
+                        {
+                            cameraKun.sensorSize = new Vector2Kun(CameraView.k_ApertureFormatValues[newFilmGateIndex]);
+                        }
+                    }
+                    sensorSize = cameraKun.sensorSize.GetVector2();
+
+                    EditorGUI.BeginChangeCheck();
+                    sensorSize = EditorGUILayout.Vector2Field(Styles.sensorSize, sensorSize);
+                    if (EditorGUI.EndChangeCheck())
+                    {
+                        cameraKun.sensorSize = new Vector2Kun(sensorSize);
+                    }
+
+
                     cameraKun.lensShift = EditorGUILayout.Vector2Field(Styles.lensShift, cameraKun.lensShift);
                     cameraKun.gateFit = (Camera.GateFitMode)EditorGUILayout.EnumPopup(Styles.gateFit, cameraKun.gateFit);
-;                    }
+;               }
             }                               
         }
 
@@ -302,6 +358,11 @@
 
         public override bool OnGUI()                
         {
+            if (m_IsEnableOnGUI == false)
+            {
+                return false;
+            }
+
             if (base.OnGUI()){
             
                 EditorGUI.BeginChangeCheck();
