@@ -38,6 +38,12 @@ namespace Utj.UnityChoseKun
             {
                 mScrollPos = EditorGUILayout.BeginScrollView(mScrollPos);
                 EditorGUI.BeginChangeCheck();
+
+
+                DrawRenderPipelineAsset(qualitySettingsKun.renderPipeline);
+
+
+
                 EditorGUILayout.LabelField("Rendering");
                 qualitySettingsKun.pixelLightCount = EditorGUILayout.IntField("Pixel Light Count", qualitySettingsKun.pixelLightCount);
                 qualitySettingsKun.anisotropicFiltering = (AnisotropicFiltering)EditorGUILayout.EnumPopup("Anisotropic Textures", qualitySettingsKun.anisotropicFiltering);
@@ -103,6 +109,22 @@ namespace Utj.UnityChoseKun
             }                     
         }
 
+
+
+        void DrawRenderPipelineAsset(RenderPipelineAssetKun renderPipelineAssetKun)
+        {
+            EditorGUILayout.LabelField("Scriptable Render Pipeline Settings");
+            if(renderPipelineAssetKun == null)
+            {
+                EditorGUILayout.LabelField("None");
+            }
+            else
+            {
+                EditorGUILayout.LabelField(renderPipelineAssetKun.name);
+            }
+
+            EditorGUILayout.Space(5);
+        }
 
         public void OnMessageEvent(BinaryReader binaryReader)
         {

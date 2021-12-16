@@ -9,6 +9,7 @@ namespace Utj.UnityChoseKun
     [System.Serializable]
     public class QualitySettingsKun : ISerializerKun
     {
+        [SerializeField] public RenderPipelineAssetKun renderPipeline;
         [SerializeField] public ColorSpace activeColorSpace;
         [SerializeField] public AnisotropicFiltering anisotropicFiltering;
         [SerializeField] public int antiAliasing;
@@ -73,6 +74,18 @@ namespace Utj.UnityChoseKun
             isDirty = false;
             if (isSet)
             {
+#if UNITY_2019_1_OR_NEWER
+                if (QualitySettings.renderPipeline)
+                {
+                    renderPipeline = new RenderPipelineAssetKun(QualitySettings.renderPipeline);
+                }
+                else
+                {
+                    renderPipeline = null;
+                }
+#else
+                renderPipeline = null;
+#endif
                 activeColorSpace = QualitySettings.activeColorSpace;
                 anisotropicFiltering = QualitySettings.anisotropicFiltering;
                 antiAliasing = QualitySettings.antiAliasing;
@@ -122,6 +135,9 @@ namespace Utj.UnityChoseKun
         {
             if (isDirty)
             {
+#if UNITY_2019_1_OR_NEWER
+                renderPipeline.WriteBack(QualitySettings.renderPipeline);
+#endif
                 QualitySettings.anisotropicFiltering = anisotropicFiltering;
                 QualitySettings.antiAliasing = antiAliasing;
                 QualitySettings.asyncUploadBufferSize= asyncUploadBufferSize;
@@ -167,6 +183,8 @@ namespace Utj.UnityChoseKun
         /// <param name="binaryWriter"></param>
         public virtual void Serialize(BinaryWriter binaryWriter)
         {
+
+            SerializerKun.Serialize<RenderPipelineAssetKun>(binaryWriter, renderPipeline);
             binaryWriter.Write((int)activeColorSpace);
             binaryWriter.Write((int)anisotropicFiltering);
             binaryWriter.Write(antiAliasing);
@@ -215,6 +233,7 @@ namespace Utj.UnityChoseKun
         /// <param name="binaryReader"></param>
         public virtual void Deserialize(BinaryReader binaryReader)
         {
+            renderPipeline =  SerializerKun.DesirializeObject<RenderPipelineAssetKun>(binaryReader);
             activeColorSpace =  (ColorSpace)binaryReader.ReadInt32();
             anisotropicFiltering = (AnisotropicFiltering)binaryReader.ReadInt32();
             antiAliasing = binaryReader.ReadInt32();
