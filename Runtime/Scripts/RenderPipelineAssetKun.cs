@@ -7,8 +7,9 @@ using UnityEngine.Rendering;
 
 namespace Utj.UnityChoseKun
 {
-    public class RenderPipelineAssetKun : ISerializerKun
+    public class RenderPipelineAssetKun : ScriptableObjectKun
     {
+        
 
         [SerializeField] public string[] renderingLayerMaskNames;
 
@@ -52,7 +53,7 @@ namespace Utj.UnityChoseKun
         }
 
 
-        public RenderPipelineAssetKun(RenderPipelineAsset renderPipelineAsset)
+        public RenderPipelineAssetKun(RenderPipelineAsset renderPipelineAsset):base(renderPipelineAsset)
         {
             if (renderPipelineAsset)
             {
@@ -77,13 +78,15 @@ namespace Utj.UnityChoseKun
             }
         }
 
-        public void WriteBack()
-        {            
+        public void WriteBack(RenderPipelineAsset renderPipelineAsset)
+        {
+            base.WriteBack(renderPipelineAsset);
         }
 
 
-        public void Deserialize(BinaryReader binaryReader)
+        public override void Deserialize(BinaryReader binaryReader)
         {
+            base.Deserialize(binaryReader);
             renderingLayerMaskNames = SerializerKun.DesirializeStrings(binaryReader);
             defaultMaterial = SerializerKun.DesirializeObject<MaterialKun>(binaryReader);
             autodeskInteractiveShader = SerializerKun.DesirializeObject<ShaderKun>(binaryReader);
@@ -105,8 +108,9 @@ namespace Utj.UnityChoseKun
         }
     
 
-        public void Serialize(BinaryWriter binaryWriter)
+        public override void Serialize(BinaryWriter binaryWriter)
         {
+            base.Serialize(binaryWriter);
             SerializerKun.Serialize(binaryWriter, renderingLayerMaskNames);
             SerializerKun.Serialize<MaterialKun>(binaryWriter,defaultMaterial);
             SerializerKun.Serialize<ShaderKun>(binaryWriter,autodeskInteractiveShader);
