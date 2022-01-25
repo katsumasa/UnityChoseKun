@@ -1,5 +1,7 @@
 ﻿using System.IO;
+using System.Reflection;
 using UnityEngine;
+using Utj.UnityChoseKun.URP;
 
 namespace Utj.UnityChoseKun
 {
@@ -9,7 +11,22 @@ namespace Utj.UnityChoseKun
     [System.Serializable]
     public class QualitySettingsKun : ISerializerKun
     {
+#if UNITY_2019_1_OR_NEWER
+        public enum RenderPipelineType
+        {
+            NONE,
+            RP,
+            URP,
+            HDRP,
+        }
+#endif
+
+
+#if UNITY_2019_1_OR_NEWER
+        [SerializeField] public RenderPipelineType renderPipelineType;
         [SerializeField] public RenderPipelineAssetKun renderPipeline;
+#endif
+
         [SerializeField] public ColorSpace activeColorSpace;
         [SerializeField] public AnisotropicFiltering anisotropicFiltering;
         [SerializeField] public int antiAliasing;
@@ -34,8 +51,8 @@ namespace Utj.UnityChoseKun
         [SerializeField] public ShadowmaskMode shadowmaskMode;
         [SerializeField] public float shadowNearPlaneOffset;
         [SerializeField] public ShadowProjection shadowProjection;
-        [SerializeField] public ShadowResolution shadowResolution;
-        [SerializeField] public ShadowQuality shadows;
+        [SerializeField] public UnityEngine.ShadowResolution shadowResolution;
+        [SerializeField] public UnityEngine.ShadowQuality shadows;
 #if UNITY_2019_1_OR_NEWER
         [SerializeField] public SkinWeights skinWeights;
 #endif
@@ -72,19 +89,27 @@ namespace Utj.UnityChoseKun
         public QualitySettingsKun(bool isSet) : base()
         {
             isDirty = false;
+#if UNITY_2019_1_OR_NEWER            
+            renderPipelineType = RenderPipelineType.NONE;
+            renderPipeline = null;
+#endif
             if (isSet)
             {
 #if UNITY_2019_1_OR_NEWER
                 if (QualitySettings.renderPipeline)
                 {
-                    renderPipeline = new RenderPipelineAssetKun(QualitySettings.renderPipeline);
-                }
-                else
-                {
-                    renderPipeline = null;
-                }
-#else
-                renderPipeline = null;
+                    var type = QualitySettings.renderPipeline.GetType();
+                    if (type != null && type.Name == "UniversalRenderPipelineAsset")
+                    {
+                        renderPipelineType = RenderPipelineType.URP;
+                        renderPipeline = new UniversalRenderPipelineAssetKun(QualitySettings.renderPipeline);
+                    }
+                    else
+                    {
+                        renderPipelineType = RenderPipelineType.RP;
+                        renderPipeline = new RenderPipelineAssetKun(QualitySettings.renderPipeline);
+                    }
+                }                
 #endif
                 activeColorSpace = QualitySettings.activeColorSpace;
                 anisotropicFiltering = QualitySettings.anisotropicFiltering;
@@ -135,8 +160,8 @@ namespace Utj.UnityChoseKun
         {
             if (isDirty)
             {
-#if UNITY_2019_1_OR_NEWER
-                renderPipeline.WriteBack(QualitySettings.renderPipeline);
+#if UNITY_2019_1_OR_NEWER                
+                renderPipeline.WriteBack(QualitySettings.renderPipeline);                                        
 #endif
                 QualitySettings.anisotropicFiltering = anisotropicFiltering;
                 QualitySettings.antiAliasing = antiAliasing;
@@ -183,8 +208,18 @@ namespace Utj.UnityChoseKun
         /// <param name="binaryWriter"></param>
         public virtual void Serialize(BinaryWriter binaryWriter)
         {
-
-            SerializerKun.Serialize<RenderPipelineAssetKun>(binaryWriter, renderPipeline);
+#if UNITY_2019_1_OR_NEWER
+            binaryWriter.Write((int)renderPipelineType);
+            switch(renderPipelineType)
+            {
+                case RenderPipelineType.RP:
+                    SerializerKun.Serialize<RenderPipelineAssetKun>(binaryWriter, renderPipeline);
+                    break;
+                case RenderPipelineType.URP:
+                    SerializerKun.Serialize<UniversalRenderPipelineAssetKun>(binaryWriter,(UniversalRenderPipelineAssetKun)renderPipeline);
+                    break;
+            }            
+#endif
             binaryWriter.Write((int)activeColorSpace);
             binaryWriter.Write((int)anisotropicFiltering);
             binaryWriter.Write(antiAliasing);
@@ -233,7 +268,18 @@ namespace Utj.UnityChoseKun
         /// <param name="binaryReader"></param>
         public virtual void Deserialize(BinaryReader binaryReader)
         {
-            renderPipeline =  SerializerKun.DesirializeObject<RenderPipelineAssetKun>(binaryReader);
+#if UNITY_2019_1_OR_NEWER
+            renderPipelineType = (RenderPipelineType)binaryReader.ReadInt32();            
+            switch (renderPipelineType)
+            {
+                case RenderPipelineType.RP:
+                    renderPipeline = SerializerKun.DesirializeObject<RenderPipelineAssetKun>(binaryReader);
+                    break;
+                case RenderPipelineType.URP:
+                    renderPipeline = SerializerKun.DesirializeObject<URP.UniversalRenderPipelineAssetKun>(binaryReader);                    
+                    break;
+            }
+#endif            
             activeColorSpace =  (ColorSpace)binaryReader.ReadInt32();
             anisotropicFiltering = (AnisotropicFiltering)binaryReader.ReadInt32();
             antiAliasing = binaryReader.ReadInt32();
@@ -257,9 +303,9 @@ namespace Utj.UnityChoseKun
             shadowDistance = binaryReader.ReadSingle();
             shadowmaskMode = (ShadowmaskMode)binaryReader.ReadInt32();
             shadowNearPlaneOffset = binaryReader.ReadSingle();
-            shadowProjection = (ShadowProjection)binaryReader.ReadInt32();
-            shadowResolution = (ShadowResolution)binaryReader.ReadInt32();
-            shadows = (ShadowQuality)binaryReader.ReadInt32();
+            shadowProjection = (UnityEngine.ShadowProjection)binaryReader.ReadInt32();
+            shadowResolution = (UnityEngine.ShadowResolution)binaryReader.ReadInt32();
+            shadows = (UnityEngine.ShadowQuality)binaryReader.ReadInt32();
 #if UNITY_2019_1_OR_NEWER
             skinWeights = (SkinWeights)binaryReader.ReadInt32();
 #endif
@@ -275,5 +321,187 @@ namespace Utj.UnityChoseKun
             isDirty = binaryReader.ReadBoolean();            
         }
 
+        public override bool Equals(object obj)
+        {        
+            
+            var clone = obj as QualitySettingsKun;
+            if(clone == null)
+            {
+                return false;
+            }
+
+#if UNITY_2019_1_OR_NEWER
+           if(renderPipelineType.Equals(clone.renderPipelineType) == false)
+            {
+                return false;
+            }
+            if(renderPipeline.Equals(clone.renderPipeline) == false)
+            {
+                return false;
+            }
+
+#endif
+            if(activeColorSpace.Equals(clone.activeColorSpace)  == false)
+            {
+                return false;
+            }
+            if(anisotropicFiltering.Equals(clone.anisotropicFiltering) == false)
+            {
+                return false;
+            }
+            if(antiAliasing.Equals(clone.antiAliasing) == false)
+            {
+                return false;
+            }
+            if(asyncUploadBufferSize.Equals(clone.asyncUploadBufferSize) == false)
+            {
+                return false;
+            }
+            if(asyncUploadPersistentBuffer.Equals(clone.asyncUploadPersistentBuffer) == false)
+            {
+                return false;
+            }
+            if(asyncUploadTimeSlice.Equals(clone.asyncUploadTimeSlice) == false)
+            {
+                return false;
+            }
+            if(billboardsFaceCameraPosition.Equals(clone.billboardsFaceCameraPosition) == false)
+            {
+                return false;
+            }
+            if(desiredColorSpace.Equals(clone.desiredColorSpace) == false)
+            {
+                return false;
+            }
+            if(lodBias.Equals(clone.lodBias) == false)
+            {
+                return false;
+            }
+            if(masterTextureLimit.Equals(clone.masterTextureLimit) == false)
+            {
+                return false;
+            }
+            if(maximumLODLevel.Equals(clone.maximumLODLevel) == false)
+            {
+                return false;
+            }
+            if(maxQueuedFrames.Equals(clone.maxQueuedFrames) == false)
+            {
+                return false;
+            }
+            if(names.Length != clone.names.Length)
+            {
+                return false;
+            }
+            for(var i = 0; i < names.Length; i++)
+            {
+                if(names[i] != clone.names[i])
+                {
+                    return false;
+                }
+            }
+            
+            if(particleRaycastBudget.Equals(clone.particleRaycastBudget) == false)
+            {
+                return false;
+            }
+            if (pixelLightCount.Equals(clone.pixelLightCount) == false)
+            {
+                return false;
+            }
+            if(realtimeReflectionProbes.Equals(clone.realtimeReflectionProbes) == false)
+            {
+                return false;
+            }            
+            if(resolutionScalingFixedDPIFactor.Equals(clone.resolutionScalingFixedDPIFactor) == false)
+            {
+                return false;
+            }
+            if(shadowCascade2Split.Equals(clone.shadowCascade2Split) == false)
+            {
+                return false;
+            }
+            if(mShadowCascade4Split.Equals(clone.mShadowCascade4Split) == false)
+            {
+                return false;
+            }
+            if(shadowCascades.Equals(clone.shadowCascades) == false)
+            {
+                return false;
+            }
+            if(shadowDistance.Equals(clone.shadowDistance) == false)
+            {
+                return false;
+            }
+            if(shadowmaskMode.Equals(clone.shadowmaskMode) == false)
+            {
+                return false;
+            }
+            if(shadowNearPlaneOffset.Equals(clone.shadowNearPlaneOffset) == false)
+            {
+                return false;
+            }
+            if(shadowProjection.Equals(clone.shadowProjection) == false)
+            {
+                return false;
+            }
+            if(shadowResolution.Equals(clone.shadowResolution) == false)
+            {
+                return false;
+            }
+            if(shadows.Equals(clone.shadows) == false)
+            {
+                return false;
+            }
+#if UNITY_2019_1_OR_NEWER
+            if(skinWeights.Equals(clone.skinWeights) == false)
+            {
+                return false;
+            }
+#endif
+            if(softParticles.Equals(clone.softParticles) == false)
+            {
+                return false;
+            }
+            if(softVegetation.Equals(clone.softVegetation) == false)
+            {
+                return false;
+            }
+            if(streamingMipmapsActive.Equals(clone.streamingMipmapsActive) == false)
+            {
+                return false;
+            }
+            if(streamingMipmapsAddAllCameras.Equals(clone.streamingMipmapsAddAllCameras) == false)
+            {
+                return false;
+            }
+            if(streamingMipmapsMaxFileIORequests.Equals(clone.streamingMipmapsMaxFileIORequests) == false)
+            {
+                return false;
+            }
+            if(streamingMipmapsMaxLevelReduction.Equals(clone.streamingMipmapsMaxLevelReduction) == false)
+            {
+                return false;
+            }
+            if(streamingMipmapsMemoryBudget.Equals(clone.streamingMipmapsMemoryBudget) == false)
+            {
+                return false;
+            }
+            if(streamingMipmapsRenderersPerFrame.Equals(clone.streamingMipmapsRenderersPerFrame) == false)
+            {
+                return false;
+            }
+            if(vSyncCount.Equals(clone.vSyncCount) == false)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
     }
 }

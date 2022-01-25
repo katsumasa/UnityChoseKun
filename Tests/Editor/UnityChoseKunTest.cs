@@ -3,7 +3,9 @@ using System.IO;
 using System.Collections.Generic;
 using Utj.UnityChoseKun;
 using UnityEngine;
-
+using UnityEditor;
+using UnityEngine.Rendering;
+using Utj.UnityChoseKun.URP;
 
 
 public class UnityChoseKunTest
@@ -365,6 +367,37 @@ public class UnityChoseKunTest
 
         o.WriteBack(array[0]);
 #endif
+    }
+
+
+    [Test]
+    public void UniversalRenderPipelineAssetKunTest()
+    {
+        var guids = AssetDatabase.FindAssets("t:RenderPipelineAsset");
+        foreach (var guid in guids) {
+            var path = AssetDatabase.GUIDToAssetPath(guid);
+            var renderPipelineAsset = AssetDatabase.LoadAssetAtPath<RenderPipelineAsset>(path);
+            var universalRenderPipelineAssetKun = new UniversalRenderPipelineAssetKun(renderPipelineAsset);
+            SerializerKunTest<UniversalRenderPipelineAssetKun>(universalRenderPipelineAssetKun,new UniversalRenderPipelineAssetKun());
+        }
+
+        {
+            var renderPipeline = QualitySettings.renderPipeline;
+            var type = renderPipeline.GetType();
+            if(type.Name == "UniversalRenderPipelineAsset")
+            {
+                var universalRenderPipelineAssetKun = new UniversalRenderPipelineAssetKun(renderPipeline);
+                SerializerKunTest<UniversalRenderPipelineAssetKun>(universalRenderPipelineAssetKun, new UniversalRenderPipelineAssetKun());
+            }
+ 
+        }
+        
+    }
+
+    [Test]
+    public void QualitySettingsKunTest()
+    {
+        SerializerKunTest<QualitySettingsKun>(new QualitySettingsKun(true), new QualitySettingsKun());
     }
 
 
