@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.Rendering;
-
-
+//
+// Katsumasa.Kimura
+//
 namespace Utj.UnityChoseKun
 {
-    public class RenderPipelineAssetKun : ScriptableObjectKun
-    {
-        
 
+    /// <summary>
+    /// Class <c>RenderPipelineAssetKun</c>
+    /// </summary>
+    public class RenderPipelineAssetKun : ScriptableObjectKun
+    {        
         [SerializeField] public string[] renderingLayerMaskNames;
 
         [SerializeField] public MaterialKun defaultMaterial;
@@ -78,7 +81,7 @@ namespace Utj.UnityChoseKun
             }
         }
 
-        public void WriteBack(RenderPipelineAsset renderPipelineAsset)
+        public virtual void WriteBack(RenderPipelineAsset renderPipelineAsset)
         {
             base.WriteBack(renderPipelineAsset);
         }
@@ -129,6 +132,112 @@ namespace Utj.UnityChoseKun
             SerializerKun.Serialize<ShaderKun>(binaryWriter,defaultShader);
             SerializerKun.Serialize<ShaderKun>(binaryWriter, defaultSpeedTree7Shader);
             SerializerKun.Serialize<ShaderKun>(binaryWriter,defaultSpeedTree8Shader);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if(obj == null)
+            {
+                return false;
+            }
+            if(base.Equals(obj) == false)
+            {
+                return false;
+            }
+            var clone = obj as RenderPipelineAssetKun;
+            if(clone == null)
+            {
+                return false;
+            }
+
+            if(renderingLayerMaskNames.Length != clone.renderingLayerMaskNames.Length)
+            {
+                return false;
+            }
+            for (var i = 0; i < renderingLayerMaskNames.Length; i++)
+            {
+                if(renderingLayerMaskNames[i] != clone.renderingLayerMaskNames[i])
+                {
+                    return false;
+                }
+            }
+
+            
+            if (defaultMaterial.Equals(clone.defaultMaterial) == false)
+            {
+                return false;
+            }           
+            if(autodeskInteractiveShader.Equals(clone.autodeskInteractiveShader) == false)
+            {
+                return false;
+            }
+            if(autodeskInteractiveTransparentShader.Equals(clone.autodeskInteractiveTransparentShader)==false)
+            {
+                return false;
+            }
+            if(autodeskInteractiveMaskedShader.Equals(clone.autodeskInteractiveMaskedShader) == false)
+            {
+                return false;
+            }
+            if(terrainDetailLitShader.Equals(clone.terrainDetailLitShader) == false)
+            {
+                return false;
+            }
+            if(terrainDetailGrassShader.Equals(clone.terrainDetailGrassShader) == false)            
+            {
+                return false;
+            }
+            if(terrainDetailGrassBillboardShader.Equals(clone.terrainDetailGrassBillboardShader) == false)
+            {
+                return false;
+            }
+            if(defaultParticleMaterial.Equals(clone.defaultParticleMaterial) == false)
+            {
+                return false;
+            }
+            if(defaultLineMaterial.Equals(clone.defaultLineMaterial) == false)
+            {
+                return false;
+            }
+            if(defaultTerrainMaterial.Equals(clone.defaultTerrainMaterial) == false)
+            {
+                return false;
+            }
+            if(defaultUIMaterial.Equals(clone.defaultUIMaterial) == false)
+            {
+                return false;
+            }
+            if(defaultUIOverdrawMaterial.Equals(clone.defaultUIOverdrawMaterial) == false)
+            {
+                return false;
+            }
+            if(defaultUIETC1SupportedMaterial.Equals(clone.defaultUIETC1SupportedMaterial) == false)
+            {
+                return false;
+            }
+            if(default2DMaterial.Equals(clone.default2DMaterial) == false)
+            {
+                return false;
+            }
+            if(defaultShader.Equals(clone.defaultShader) == false)
+            {
+                return false;
+            }            
+            if(defaultSpeedTree7Shader.Equals(clone.defaultSpeedTree7Shader) == false)
+            {
+                return false;
+            }
+            if(defaultSpeedTree8Shader.Equals(clone.defaultSpeedTree8Shader) == false)
+            {
+                return false;
+            }
+            return true;
+        }
+
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
     }
 }
