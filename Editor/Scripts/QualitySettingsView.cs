@@ -116,14 +116,15 @@ namespace Utj.UnityChoseKun
                 qualitySettingsKun.asyncUploadBufferSize = EditorGUILayout.IntSlider("Async Upload Buffer Size", qualitySettingsKun.asyncUploadBufferSize, 2, 512);
                 qualitySettingsKun.asyncUploadPersistentBuffer = EditorGUILayout.Toggle("Async Upload Persistent Buffer", qualitySettingsKun.asyncUploadPersistentBuffer);
 
-                if (EditorGUI.EndChangeCheck()|| qualitySettingsKun.renderPipeline.dirty)
+#if UNITY_2019_1_OR_NEWER
+                if (EditorGUI.EndChangeCheck()|| (qualitySettingsKun.renderPipeline != null && qualitySettingsKun.renderPipeline.dirty))
                 {
                     qualitySettingsKun.isDirty = true;
                     UnityChoseKunEditor.SendMessage<QualitySettingsKun>(UnityChoseKun.MessageID.QualitySettingsPush, qualitySettingsKun);
                     qualitySettingsKun.isDirty = false;
                     qualitySettingsKun.renderPipeline.dirty = false;
-
                 }
+#endif
                 EditorGUILayout.EndScrollView();
             }
             
