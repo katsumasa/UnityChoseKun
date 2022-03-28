@@ -142,6 +142,357 @@ namespace Utj.UnityChoseKun.URP
     /// </summary>
     public class UniversalRenderPipelineAssetKun : RenderPipelineAssetKun
     {
+        public ScriptableRendererDataKun[] rendererDataList
+        {
+            get
+            {
+                return m_RendererDataList;
+            }
+        }
+
+        public int defaultRendererIndex
+        {
+            get
+            {
+                return m_DefaultRendererIndex;
+            }
+        }
+
+        public bool supportsCameraDepthTexture
+        {
+            get { return m_RequireDepthTexture; }
+            set { m_RequireDepthTexture = value; }
+        }
+
+        public bool supportsCameraOpaqueTexture
+        {
+            get { return m_RequireOpaqueTexture; }
+            set { m_RequireOpaqueTexture = value; }
+        }
+
+        public Downsampling opaqueDownsampling
+        {
+            get { return m_OpaqueDownsampling; }
+        }
+
+        public bool supportsTerrainHoles
+        {
+            get { return m_SupportsTerrainHoles; }
+        }
+
+        /// <summary>
+        /// Returns the active store action optimization value.
+        /// </summary>
+        /// <returns>Returns the active store action optimization value.</returns>
+        public StoreActionsOptimization storeActionsOptimization
+        {
+            get { return m_StoreActionsOptimization; }
+            set { m_StoreActionsOptimization = value; }
+        }
+
+        public bool supportsHDR
+        {
+            get { return m_SupportsHDR; }
+            set { m_SupportsHDR = value; }
+        }
+
+        public int msaaSampleCount
+        {
+            get { return (int)m_MSAA; }
+            set { m_MSAA = (MsaaQuality)value; }
+        }
+
+        public float renderScale
+        {
+            get { return m_RenderScale; }
+            set { m_RenderScale = ValidateRenderScale(value); }
+        }
+
+        public LightRenderingMode mainLightRenderingMode
+        {
+            get { return m_MainLightRenderingMode; }
+            internal set { m_MainLightRenderingMode = value; }
+        }
+
+        public bool supportsMainLightShadows
+        {
+            get { return m_MainLightShadowsSupported; }
+            internal set { m_MainLightShadowsSupported = value; }
+        }
+
+        public int mainLightShadowmapResolution
+        {
+            get { return (int)m_MainLightShadowmapResolution; }
+            internal set { m_MainLightShadowmapResolution = (ShadowResolution)value; }
+        }
+
+        public LightRenderingMode additionalLightsRenderingMode
+        {
+            get { return m_AdditionalLightsRenderingMode; }
+            internal set { m_AdditionalLightsRenderingMode = value; }
+        }
+
+        public int maxAdditionalLightsCount
+        {
+            get { return m_AdditionalLightsPerObjectLimit; }
+            set { m_AdditionalLightsPerObjectLimit = ValidatePerObjectLights(value); }
+        }
+
+        public bool supportsAdditionalLightShadows
+        {
+            get { return m_AdditionalLightShadowsSupported; }
+            internal set { m_AdditionalLightShadowsSupported = value; }
+        }
+
+        public int additionalLightsShadowmapResolution
+        {
+            get { return (int)m_AdditionalLightsShadowmapResolution; }
+            internal set { m_AdditionalLightsShadowmapResolution = (ShadowResolution)value; }
+        }
+
+        /// <summary>
+        /// Returns the additional light shadow resolution defined for tier "Low" in the UniversalRenderPipeline asset.
+        /// </summary>
+        public int additionalLightsShadowResolutionTierLow
+        {
+            get { return (int)m_AdditionalLightsShadowResolutionTierLow; }
+            internal set { additionalLightsShadowResolutionTierLow = value; }
+        }
+
+        /// <summary>
+        /// Returns the additional light shadow resolution defined for tier "Medium" in the UniversalRenderPipeline asset.
+        /// </summary>
+        public int additionalLightsShadowResolutionTierMedium
+        {
+            get { return (int)m_AdditionalLightsShadowResolutionTierMedium; }
+            internal set { m_AdditionalLightsShadowResolutionTierMedium = value; }
+        }
+
+        /// <summary>
+        /// Returns the additional light shadow resolution defined for tier "High" in the UniversalRenderPipeline asset.
+        /// </summary>
+        public int additionalLightsShadowResolutionTierHigh
+        {
+            get { return (int)m_AdditionalLightsShadowResolutionTierHigh; }
+            internal set { additionalLightsShadowResolutionTierHigh = value; }
+        }
+
+
+        public bool reflectionProbeBlending
+        {
+            get { return m_ReflectionProbeBlending; }
+            internal set { m_ReflectionProbeBlending = value; }
+        }
+
+        public bool reflectionProbeBoxProjection
+        {
+            get { return m_ReflectionProbeBoxProjection; }
+            internal set { m_ReflectionProbeBoxProjection = value; }
+        }
+
+        /// <summary>
+        /// Controls the maximum distance at which shadows are visible.
+        /// </summary>
+        public float shadowDistance
+        {
+            get { return m_ShadowDistance; }
+            set { m_ShadowDistance = Mathf.Max(0.0f, value); }
+        }
+
+        /// <summary>
+        /// Returns the number of shadow cascades.
+        /// </summary>
+        public int shadowCascadeCount
+        {
+            get { return m_ShadowCascadeCount; }
+            set
+            {
+                if (value < k_ShadowCascadeMinCount || value > k_ShadowCascadeMaxCount)
+                {
+                    throw new ArgumentException($"Value ({value}) needs to be between {k_ShadowCascadeMinCount} and {k_ShadowCascadeMaxCount}.");
+                }
+                m_ShadowCascadeCount = value;
+            }
+        }
+
+        /// <summary>
+        /// Returns the split value.
+        /// </summary>
+        /// <returns>Returns a Float with the split value.</returns>
+        public float cascade2Split
+        {
+            get { return m_Cascade2Split; }
+            internal set { m_Cascade2Split = value; }
+        }
+
+        /// <summary>
+        /// Returns the split values.
+        /// </summary>
+        /// <returns>Returns a Vector2 with the split values.</returns>
+        public Vector2Kun cascade3Split
+        {
+            get { return m_Cascade3Split; }
+            internal set { m_Cascade3Split = value; }
+        }
+
+        /// <summary>
+        /// Returns the split values.
+        /// </summary>
+        /// <returns>Returns a Vector3 with the split values.</returns>
+        public Vector3Kun cascade4Split
+        {
+            get { return m_Cascade4Split; }
+            internal set { m_Cascade4Split = value; }
+        }
+
+        /// <summary>
+        /// Last cascade fade distance in percentage.
+        /// </summary>
+        public float cascadeBorder
+        {
+            get { return m_CascadeBorder; }
+            set { m_CascadeBorder = value; }
+        }
+
+        /// <summary>
+        /// The Shadow Depth Bias, controls the offset of the lit pixels.
+        /// </summary>
+        public float shadowDepthBias
+        {
+            get { return m_ShadowDepthBias; }
+            set { m_ShadowDepthBias = ValidateShadowBias(value); }
+        }
+
+        /// <summary>
+        /// Controls the distance at which the shadow casting surfaces are shrunk along the surface normal.
+        /// </summary>
+        public float shadowNormalBias
+        {
+            get { return m_ShadowNormalBias; }
+            set { m_ShadowNormalBias = ValidateShadowBias(value); }
+        }
+
+        /// <summary>
+        /// Supports Soft Shadows controls the Soft Shadows.
+        /// </summary>
+        public bool supportsSoftShadows
+        {
+            get { return m_SoftShadowsSupported; }
+            internal set { m_SoftShadowsSupported = value; }
+        }
+
+        public bool supportsDynamicBatching
+        {
+            get { return m_SupportsDynamicBatching; }
+            set { m_SupportsDynamicBatching = value; }
+        }
+
+        public bool supportsMixedLighting
+        {
+            get { return m_MixedLightingSupported; }
+        }
+
+        /// <summary>
+        /// Returns true if the Render Pipeline Asset supports light layers, false otherwise.
+        /// </summary>
+        public bool supportsLightLayers
+        {
+            get { return m_SupportsLightLayers; }
+        }
+
+        public ShaderVariantLogLevel shaderVariantLogLevel
+        {
+            get { return m_ShaderVariantLogLevel; }
+            set { m_ShaderVariantLogLevel = value; }
+        }
+
+        /// <summary>
+        /// Returns the selected update mode for volumes.
+        /// </summary>
+        public VolumeFrameworkUpdateMode volumeFrameworkUpdateMode => m_VolumeFrameworkUpdateMode;
+
+        [Obsolete("PipelineDebugLevel is deprecated. Calling debugLevel is not necessary.", false)]
+        public PipelineDebugLevel debugLevel
+        {
+            get => PipelineDebugLevel.Disabled;
+        }
+
+        public bool useSRPBatcher
+        {
+            get { return m_UseSRPBatcher; }
+            set { m_UseSRPBatcher = value; }
+        }
+
+        public ColorGradingMode colorGradingMode
+        {
+            get { return m_ColorGradingMode; }
+            set { m_ColorGradingMode = value; }
+        }
+
+        public int colorGradingLutSize
+        {
+            get { return m_ColorGradingLutSize; }
+            set { m_ColorGradingLutSize = Mathf.Clamp(value, k_MinLutSize, k_MaxLutSize); }
+        }
+
+        /// <summary>
+        /// Returns true if fast approximation functions are used when converting between the sRGB and Linear color spaces, false otherwise.
+        /// </summary>
+        public bool useFastSRGBLinearConversion
+        {
+            get { return m_UseFastSRGBLinearConversion; }
+        }
+
+        /// <summary>
+        /// Set to true to allow Adaptive performance to modify graphics quality settings during runtime.
+        /// Only applicable when Adaptive performance package is available.
+        /// </summary>
+        public bool useAdaptivePerformance
+        {
+            get { return m_UseAdaptivePerformance; }
+            set { m_UseAdaptivePerformance = value; }
+        }
+
+        /// <summary>
+        /// Set to true to enable a conservative method for calculating the size and position of the minimal enclosing sphere around the frustum cascade corner points for shadow culling.
+        /// </summary>
+        public bool conservativeEnclosingSphere
+        {
+            get { return m_ConservativeEnclosingSphere; }
+            set { m_ConservativeEnclosingSphere = value; }
+        }
+
+        /// <summary>
+        /// Set the number of iterations to reduce the cascade culling enlcosing sphere to be closer to the absolute minimun enclosing sphere, but will also require more CPU computation for increasing values.
+        /// This parameter is used only when conservativeEnclosingSphere is set to true. Default value is 64.
+        /// </summary>
+        public int numIterationsEnclosingSphere
+        {
+            get { return m_NumIterationsEnclosingSphere; }
+            set { m_NumIterationsEnclosingSphere = value; }
+        }
+
+
+        public LightCookieResolution additionalLightsCookieResolution
+        {
+            get
+            {
+                return m_AdditionalLightsCookieResolution;
+            } 
+        }
+        
+        public LightCookieFormat additionalLightsCookieFormat
+        {
+            get
+            {
+                return m_AdditionalLightsCookieFormat;
+            }
+        }
+
+
+
+
+
         // Default values set when a new UniversalRenderPipeline asset is created
         [SerializeField] int k_AssetVersion = 9;
         [SerializeField] int k_AssetPreviousVersion = 9;
@@ -234,8 +585,8 @@ namespace Utj.UnityChoseKun.URP
         public const int k_MinLutSize = 16;
         public const int k_MaxLutSize = 65;
 
-        internal const int k_ShadowCascadeMinCount = 1;
-        internal const int k_ShadowCascadeMaxCount = 4;
+        public static readonly int k_ShadowCascadeMinCount = 1;
+        public static readonly int k_ShadowCascadeMaxCount = 4;
 
         public static readonly int AdditionalLightsDefaultShadowResolutionTierLow = 256;
         public static readonly int AdditionalLightsDefaultShadowResolutionTierMedium = 512;
@@ -262,333 +613,465 @@ namespace Utj.UnityChoseKun.URP
                 FieldInfo fieldInfo;
 
                 fieldInfo = t.GetField("k_AssetVersion", BindingFlags.Instance | BindingFlags.NonPublic);
-                k_AssetVersion = (int)fieldInfo.GetValue(renderPipelineAsset);
+                if (fieldInfo != null)
+                {
+                    k_AssetVersion = (int)fieldInfo.GetValue(renderPipelineAsset);
+                }
 
                 fieldInfo = t.GetField("k_AssetPreviousVersion", BindingFlags.Instance | BindingFlags.NonPublic);
-                k_AssetPreviousVersion = (int)fieldInfo.GetValue(renderPipelineAsset);
-
+                if (fieldInfo != null)
+                {
+                    k_AssetPreviousVersion = (int)fieldInfo.GetValue(renderPipelineAsset);
+                }
+                
                 fieldInfo = t.GetField("m_RendererType", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_RendererType = (RendererType)fieldInfo.GetValue(renderPipelineAsset);
+                if (fieldInfo != null)
+                {
+                    m_RendererType = (RendererType)fieldInfo.GetValue(renderPipelineAsset);
+                }
 
                 fieldInfo = t.GetField("m_RendererData", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_RendererData = new ScriptableRendererDataKun((ScriptableObject)fieldInfo.GetValue(renderPipelineAsset));
-
-                fieldInfo = t.GetField("m_RendererDataList", BindingFlags.Instance | BindingFlags.NonPublic);
-                var scriptableObjects = (ScriptableObject[])(fieldInfo.GetValue(renderPipelineAsset));
-                m_RendererDataList = new ScriptableRendererDataKun[scriptableObjects.Length];
-                for(var i = 0; i < scriptableObjects.Length; i++)
+                if (fieldInfo != null)
                 {
-                    m_RendererDataList[i] = new ScriptableRendererDataKun(scriptableObjects[i]);
+                    m_RendererData = new ScriptableRendererDataKun((ScriptableObject)fieldInfo.GetValue(renderPipelineAsset));
+                }
+                
+                fieldInfo = t.GetField("m_RendererDataList", BindingFlags.Instance | BindingFlags.NonPublic);
+                if (fieldInfo != null)
+                {
+                    var scriptableObjects = (ScriptableObject[])(fieldInfo.GetValue(renderPipelineAsset));
+                    m_RendererDataList = new ScriptableRendererDataKun[scriptableObjects.Length];
+                    for (var i = 0; i < scriptableObjects.Length; i++)
+                    {
+                        m_RendererDataList[i] = new ScriptableRendererDataKun(scriptableObjects[i]);
+                    }
                 }
 
                 fieldInfo = t.GetField("m_DefaultRendererIndex", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_DefaultRendererIndex =(int)fieldInfo.GetValue(renderPipelineAsset);
+                if (fieldInfo != null)
+                {
+                    m_DefaultRendererIndex = (int)fieldInfo.GetValue(renderPipelineAsset);
+                }
 
                 fieldInfo = t.GetField("m_RequireDepthTexture", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_RequireDepthTexture = (bool)fieldInfo.GetValue(renderPipelineAsset);
+                if (fieldInfo != null)
+                {
+                    m_RequireDepthTexture = (bool)fieldInfo.GetValue(renderPipelineAsset);
+                }
 
 
                 fieldInfo = t.GetField("m_RequireOpaqueTexture", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_RequireOpaqueTexture = (bool)fieldInfo.GetValue(renderPipelineAsset);
+                if (fieldInfo != null)
+                {
+                    m_RequireOpaqueTexture = (bool)fieldInfo.GetValue(renderPipelineAsset);
+                }
 
                 fieldInfo = t.GetField("m_OpaqueDownsampling", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_OpaqueDownsampling = (Downsampling)fieldInfo.GetValue(renderPipelineAsset);
-
+                if (fieldInfo != null)
+                {
+                    m_OpaqueDownsampling = (Downsampling)fieldInfo.GetValue(renderPipelineAsset);
+                }
+                
                 fieldInfo = t.GetField("m_SupportsTerrainHoles", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_SupportsTerrainHoles = (bool)fieldInfo.GetValue(renderPipelineAsset);
+                if (fieldInfo != null)
+                {
+                    m_SupportsTerrainHoles = (bool)fieldInfo.GetValue(renderPipelineAsset);
+                }
 
                 fieldInfo = t.GetField("m_StoreActionsOptimization", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_StoreActionsOptimization = (StoreActionsOptimization)fieldInfo.GetValue(renderPipelineAsset);
+                if (fieldInfo != null)
+                {
+                    m_StoreActionsOptimization = (StoreActionsOptimization)fieldInfo.GetValue(renderPipelineAsset);
+                }
 
                 // Quality settings
                 fieldInfo = t.GetField("m_SupportsHDR", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_SupportsHDR = (bool)fieldInfo.GetValue(renderPipelineAsset);
+                if (fieldInfo != null)
+                {
+                    m_SupportsHDR = (bool)fieldInfo.GetValue(renderPipelineAsset);
+                }
 
                 fieldInfo = t.GetField("m_MSAA", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_MSAA = (MsaaQuality)fieldInfo.GetValue(renderPipelineAsset);
+                if (fieldInfo != null)
+                {
+                    m_MSAA = (MsaaQuality)fieldInfo.GetValue(renderPipelineAsset);
+                }
 
                 fieldInfo = t.GetField("m_RenderScale", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_RenderScale = (float)fieldInfo.GetValue(renderPipelineAsset);
+                if (fieldInfo != null)
+                {
+                    m_RenderScale = (float)fieldInfo.GetValue(renderPipelineAsset);
+                }
 
                 fieldInfo  = t.GetField("m_MainLightRenderingMode", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_MainLightRenderingMode = (LightRenderingMode)fieldInfo.GetValue(renderPipelineAsset);
+                if (fieldInfo != null)
+                {
+                    m_MainLightRenderingMode = (LightRenderingMode)fieldInfo.GetValue(renderPipelineAsset);
+                }
 
                 fieldInfo = t.GetField("m_MainLightShadowsSupported", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_MainLightShadowsSupported = (bool)fieldInfo.GetValue(renderPipelineAsset);
+                if (fieldInfo != null)
+                {
+                    m_MainLightShadowsSupported = (bool)fieldInfo.GetValue(renderPipelineAsset);
+                }
 
                 fieldInfo  = t.GetField("m_MainLightShadowmapResolution", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_MainLightShadowmapResolution = (ShadowResolution)fieldInfo.GetValue(renderPipelineAsset);
+                if (fieldInfo != null)
+                {
+                    m_MainLightShadowmapResolution = (ShadowResolution)fieldInfo.GetValue(renderPipelineAsset);
+                }
 
                 fieldInfo = t.GetField("m_AdditionalLightsPerObjectLimit", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_AdditionalLightsPerObjectLimit = (int)fieldInfo.GetValue(renderPipelineAsset);
+                if (fieldInfo != null)
+                {
+                    m_AdditionalLightsPerObjectLimit = (int)fieldInfo.GetValue(renderPipelineAsset);
+                }
 
                 fieldInfo = t.GetField("m_AdditionalLightShadowsSupported", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_AdditionalLightShadowsSupported = (bool)fieldInfo.GetValue(renderPipelineAsset);
+                if (fieldInfo != null)
+                {
+                    m_AdditionalLightShadowsSupported = (bool)fieldInfo.GetValue(renderPipelineAsset);
+                }
 
                 fieldInfo = t.GetField("m_AdditionalLightsShadowmapResolution", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_AdditionalLightsShadowmapResolution = (ShadowResolution)fieldInfo.GetValue(renderPipelineAsset);
+                if (fieldInfo != null)
+                {
+                    m_AdditionalLightsShadowmapResolution = (ShadowResolution)fieldInfo.GetValue(renderPipelineAsset);
+                }
 
                 fieldInfo = t.GetField("m_AdditionalLightsShadowResolutionTierLow", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_AdditionalLightsShadowResolutionTierLow = (int)fieldInfo.GetValue(renderPipelineAsset);
+                if (fieldInfo != null)
+                {
+                    m_AdditionalLightsShadowResolutionTierLow = (int)fieldInfo.GetValue(renderPipelineAsset);
+                }
 
                 fieldInfo = t.GetField("m_AdditionalLightsShadowResolutionTierMedium", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_AdditionalLightsShadowResolutionTierMedium = (int)fieldInfo.GetValue(renderPipelineAsset);
+                if (fieldInfo != null)
+                {
+                    m_AdditionalLightsShadowResolutionTierMedium = (int)fieldInfo.GetValue(renderPipelineAsset);
+                }
 
                 fieldInfo = t.GetField("m_AdditionalLightsShadowResolutionTierHigh", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_AdditionalLightsShadowResolutionTierHigh = (int)fieldInfo.GetValue(renderPipelineAsset);
-
+                if (fieldInfo != null)
+                {
+                    m_AdditionalLightsShadowResolutionTierHigh = (int)fieldInfo.GetValue(renderPipelineAsset);
+                }
                 fieldInfo = t.GetField("m_ReflectionProbeBlending", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_ReflectionProbeBlending = (bool)fieldInfo.GetValue(renderPipelineAsset);
+                if (fieldInfo != null)
+                {
+                    m_ReflectionProbeBlending = (bool)fieldInfo.GetValue(renderPipelineAsset);
+                }
 
                 fieldInfo = t.GetField("m_ReflectionProbeBoxProjection", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_ReflectionProbeBoxProjection = (bool)fieldInfo.GetValue(renderPipelineAsset);
+                if (fieldInfo != null)
+                {
+                    m_ReflectionProbeBoxProjection = (bool)fieldInfo.GetValue(renderPipelineAsset);
+                }
 
                 fieldInfo = t.GetField("m_ShadowDistance", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_ShadowDistance = (float)fieldInfo.GetValue(renderPipelineAsset);
+                if (fieldInfo != null)
+                {
+                    m_ShadowDistance = (float)fieldInfo.GetValue(renderPipelineAsset);
+                }
 
                 fieldInfo = t.GetField("m_ShadowCascadeCount", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_ShadowCascadeCount = (int)fieldInfo.GetValue(renderPipelineAsset);
+                if (fieldInfo != null)
+                {
+                    m_ShadowCascadeCount = (int)fieldInfo.GetValue(renderPipelineAsset);
+                }
 
                 fieldInfo = t.GetField("m_Cascade2Split", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_Cascade2Split = (float)fieldInfo.GetValue(renderPipelineAsset);
+                if (fieldInfo != null)
+                {
+                    m_Cascade2Split = (float)fieldInfo.GetValue(renderPipelineAsset);
+                }
 
                 fieldInfo = t.GetField("m_Cascade3Split", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_Cascade3Split = new Vector2Kun((Vector2)fieldInfo.GetValue(renderPipelineAsset));
+                if (fieldInfo != null)
+                {
+                    m_Cascade3Split = new Vector2Kun((Vector2)fieldInfo.GetValue(renderPipelineAsset));
+                }
 
                 fieldInfo = t.GetField("m_Cascade4Split", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_Cascade4Split = new Vector3Kun((Vector3)fieldInfo.GetValue(renderPipelineAsset));
+                if (fieldInfo != null)
+                {
+                    m_Cascade4Split = new Vector3Kun((Vector3)fieldInfo.GetValue(renderPipelineAsset));
+                }
 
                 fieldInfo = t.GetField("m_CascadeBorder", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_CascadeBorder = (float)fieldInfo.GetValue(renderPipelineAsset);
+                if (fieldInfo != null)
+                {
+                    m_CascadeBorder = (float)fieldInfo.GetValue(renderPipelineAsset);
+                }
 
                 fieldInfo = t.GetField("m_ShadowDepthBias", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_ShadowDepthBias = (float)fieldInfo.GetValue(renderPipelineAsset);
+                if (fieldInfo != null)
+                {
+                    m_ShadowDepthBias = (float)fieldInfo.GetValue(renderPipelineAsset);
+                }
 
                 fieldInfo = t.GetField("m_ShadowNormalBias", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_ShadowNormalBias = (float)fieldInfo.GetValue(renderPipelineAsset);
-
+                if (fieldInfo != null)
+                {
+                    m_ShadowNormalBias = (float)fieldInfo.GetValue(renderPipelineAsset);
+                }
+                
                 fieldInfo = t.GetField("m_SoftShadowsSupported", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_SoftShadowsSupported = (bool)fieldInfo.GetValue(renderPipelineAsset);
+                if (fieldInfo != null)
+                {
+                    m_SoftShadowsSupported = (bool)fieldInfo.GetValue(renderPipelineAsset);
+                }
+                
 
                 fieldInfo = t.GetField("m_ConservativeEnclosingSphere", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_ConservativeEnclosingSphere = (bool)fieldInfo.GetValue(renderPipelineAsset);
+                if (fieldInfo != null)
+                {
+                    m_ConservativeEnclosingSphere = (bool)fieldInfo.GetValue(renderPipelineAsset);
+                }
 
                 fieldInfo = t.GetField("m_NumIterationsEnclosingSphere", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_NumIterationsEnclosingSphere = (int)fieldInfo.GetValue(renderPipelineAsset);
+                if (fieldInfo != null)
+                {
+                    m_NumIterationsEnclosingSphere = (int)fieldInfo.GetValue(renderPipelineAsset);
+                }
 
                 fieldInfo = t.GetField("m_AdditionalLightsCookieResolution", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_AdditionalLightsCookieResolution = (LightCookieResolution)fieldInfo.GetValue(renderPipelineAsset);
+                if (fieldInfo != null)
+                {
+                    m_AdditionalLightsCookieResolution = (LightCookieResolution)fieldInfo.GetValue(renderPipelineAsset);
+                }
 
                 fieldInfo = t.GetField("m_AdditionalLightsCookieFormat", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_AdditionalLightsCookieFormat = (LightCookieFormat)fieldInfo.GetValue(renderPipelineAsset);
+                if (fieldInfo != null)
+                {
+                    m_AdditionalLightsCookieFormat = (LightCookieFormat)fieldInfo.GetValue(renderPipelineAsset);
+                }
 
                 fieldInfo = t.GetField("m_UseSRPBatcher", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_UseSRPBatcher = (bool)fieldInfo.GetValue(renderPipelineAsset);
-
+                if (fieldInfo != null)
+                {
+                    m_UseSRPBatcher = (bool)fieldInfo.GetValue(renderPipelineAsset);
+                }
+                
                 fieldInfo = t.GetField("m_SupportsDynamicBatching", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_SupportsDynamicBatching = (bool)fieldInfo.GetValue(renderPipelineAsset);
+                if (fieldInfo != null)
+                {
+                    m_SupportsDynamicBatching = (bool)fieldInfo.GetValue(renderPipelineAsset);
+                }
 
                 fieldInfo = t.GetField("m_MixedLightingSupported", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_MixedLightingSupported = (bool)fieldInfo.GetValue(renderPipelineAsset);
+                if (fieldInfo != null)
+                {
+                    m_MixedLightingSupported = (bool)fieldInfo.GetValue(renderPipelineAsset);
+                }
 
                 fieldInfo = t.GetField("m_SupportsLightLayers", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_SupportsLightLayers = (bool)fieldInfo.GetValue(renderPipelineAsset);
+                if (fieldInfo != null)
+                {
+                    m_SupportsLightLayers = (bool)fieldInfo.GetValue(renderPipelineAsset);
+                }
 
                 fieldInfo = t.GetField("m_UseAdaptivePerformance", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_UseAdaptivePerformance = (bool)fieldInfo.GetValue(renderPipelineAsset);
-
+                if (fieldInfo != null)
+                {
+                    m_UseAdaptivePerformance = (bool)fieldInfo.GetValue(renderPipelineAsset);
+                }
+                                
                 fieldInfo = t.GetField("m_ColorGradingMode", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_ColorGradingMode = (ColorGradingMode)fieldInfo.GetValue(renderPipelineAsset);
+                if (fieldInfo != null)
+                {
+                    m_ColorGradingMode = (ColorGradingMode)fieldInfo.GetValue(renderPipelineAsset);
+                }
 
                 fieldInfo = t.GetField("m_ColorGradingLutSize", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_ColorGradingLutSize = (int)fieldInfo.GetValue(renderPipelineAsset);
+                if (fieldInfo != null)
+                {
+                    m_ColorGradingLutSize = (int)fieldInfo.GetValue(renderPipelineAsset);
+                }
 
                 fieldInfo = t.GetField("m_UseFastSRGBLinearConversion", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_UseFastSRGBLinearConversion = (bool)fieldInfo.GetValue(renderPipelineAsset);
+                if (fieldInfo != null)
+                {
+                    m_UseFastSRGBLinearConversion = (bool)fieldInfo.GetValue(renderPipelineAsset);
+                }
 
                 fieldInfo = t.GetField("m_ShadowType", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_ShadowType = (ShadowQuality)fieldInfo.GetValue(renderPipelineAsset);
+                if (fieldInfo != null)
+                {
+                    m_ShadowType = (ShadowQuality)fieldInfo.GetValue(renderPipelineAsset);
+                }
 
                 fieldInfo = t.GetField("m_LocalShadowsSupported", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_LocalShadowsSupported = (bool)fieldInfo.GetValue(renderPipelineAsset);
-
+                if (fieldInfo != null)
+                {
+                    m_LocalShadowsSupported = (bool)fieldInfo.GetValue(renderPipelineAsset);
+                }
+                
                 fieldInfo = t.GetField("m_LocalShadowsAtlasResolution", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_LocalShadowsAtlasResolution = (ShadowResolution)fieldInfo.GetValue(renderPipelineAsset);
+                if (fieldInfo != null)
+                {
+                    m_LocalShadowsAtlasResolution = (ShadowResolution)fieldInfo.GetValue(renderPipelineAsset);
+                }
 
                 fieldInfo = t.GetField("m_MaxPixelLights", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_MaxPixelLights = (int)fieldInfo.GetValue(renderPipelineAsset);
+                if (fieldInfo != null)
+                {
+                    m_MaxPixelLights = (int)fieldInfo.GetValue(renderPipelineAsset);
+                }
 
                 fieldInfo = t.GetField("m_ShadowAtlasResolution", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_ShadowAtlasResolution = (ShadowResolution)fieldInfo.GetValue(renderPipelineAsset);
+                if (fieldInfo != null)
+                {
+                    m_ShadowAtlasResolution = (ShadowResolution)fieldInfo.GetValue(renderPipelineAsset);
+                }
 
                 fieldInfo = t.GetField("m_ShadowAtlasResolution", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_ShadowAtlasResolution = (ShadowResolution)fieldInfo.GetValue(renderPipelineAsset);
+                if (fieldInfo != null)
+                {
+                    m_ShadowAtlasResolution = (ShadowResolution)fieldInfo.GetValue(renderPipelineAsset);
+                }
 
                 fieldInfo = t.GetField("m_ShaderVariantLogLevel", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_ShaderVariantLogLevel = (ShaderVariantLogLevel)fieldInfo.GetValue(renderPipelineAsset);
+                if (fieldInfo != null)
+                {
+                    m_ShaderVariantLogLevel = (ShaderVariantLogLevel)fieldInfo.GetValue(renderPipelineAsset);
+                }
 
                 fieldInfo = t.GetField("m_VolumeFrameworkUpdateMode", BindingFlags.Instance | BindingFlags.NonPublic);
-                m_VolumeFrameworkUpdateMode = (VolumeFrameworkUpdateMode)fieldInfo.GetValue(renderPipelineAsset);
+                if (fieldInfo != null)
+                {
+                    m_VolumeFrameworkUpdateMode = (VolumeFrameworkUpdateMode)fieldInfo.GetValue(renderPipelineAsset);
+                }
             }
         }
 
 
         public override void WriteBack(RenderPipelineAsset renderPipelineAsset)
         {
+            // SetValueを行う際に引数の型をリフレクション側に合わせる必要があるが、System.Convert.ChangeTypeで例外がスローされる。
+            // C#ワカラン
+            
+
+
+            if (!dirty)
+            {
+                return;
+            }
+            dirty = false;
             base.WriteBack(renderPipelineAsset);
 
             var t = renderPipelineAsset.GetType();
             FieldInfo fieldInfo;
+            PropertyInfo propertyInfo;
 
-            fieldInfo = t.GetField("m_RendererType", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_RendererType);
-
-            fieldInfo = t.GetField("m_DefaultRendererIndex", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_DefaultRendererIndex);
-
+            // Rendering
             fieldInfo = t.GetField("m_RequireDepthTexture", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_RequireDepthTexture);
+            if (fieldInfo != null)
+            {
+                fieldInfo.SetValue(renderPipelineAsset, m_RequireDepthTexture);
+            }
 
             fieldInfo = t.GetField("m_RequireOpaqueTexture", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_RequireOpaqueTexture);
+            if (fieldInfo != null)
+            {
+                fieldInfo.SetValue(renderPipelineAsset, m_RequireOpaqueTexture);
+            }
 
-            fieldInfo = t.GetField("m_OpaqueDownsampling", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_OpaqueDownsampling);
-
-            fieldInfo = t.GetField("m_SupportsTerrainHoles", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_SupportsTerrainHoles);
-
-            fieldInfo = t.GetField("m_StoreActionsOptimization", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_StoreActionsOptimization);
-
+                        
+            
+            // Quality
             fieldInfo = t.GetField("m_SupportsHDR", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_SupportsHDR);
-
-            fieldInfo = t.GetField("m_MSAA", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_MSAA);
-
+            if (fieldInfo != null)
+            {
+                fieldInfo.SetValue(renderPipelineAsset, m_SupportsHDR);
+            }
+#if false
+            fieldInfo = t.GetField("m_MSAA", BindingFlags.Instance | BindingFlags.NonPublic);            
+            if (fieldInfo != null)
+            {
+                fieldInfo.SetValue(renderPipelineAsset, m_MSAA);
+            }
+#else
+            propertyInfo = t.GetProperty("msaaSampleCount");
+            if (propertyInfo != null)
+            {
+                propertyInfo.SetValue(renderPipelineAsset, (int)m_MSAA);
+            }
+#endif
             fieldInfo = t.GetField("m_RenderScale", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_RenderScale);
-
-            fieldInfo = t.GetField("m_MainLightRenderingMode", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_MainLightRenderingMode);
-
-            fieldInfo = t.GetField("m_MainLightShadowsSupported", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_MainLightShadowsSupported);
-
-            fieldInfo = t.GetField("m_MainLightShadowmapResolution", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_MainLightShadowmapResolution);
-
-            fieldInfo = t.GetField("m_AdditionalLightsRenderingMode", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_AdditionalLightsRenderingMode);
-
+            if (fieldInfo != null)
+            {
+                fieldInfo.SetValue(renderPipelineAsset, m_RenderScale);
+            }
+                                               
             fieldInfo = t.GetField("m_AdditionalLightsPerObjectLimit", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_AdditionalLightsPerObjectLimit);
+            if (fieldInfo != null)
+            {
+                fieldInfo.SetValue(renderPipelineAsset, m_AdditionalLightsPerObjectLimit);
+            }
 
-            fieldInfo = t.GetField("m_AdditionalLightShadowsSupported", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_AdditionalLightShadowsSupported);
-
-            fieldInfo = t.GetField("m_AdditionalLightsShadowmapResolution", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_AdditionalLightsShadowmapResolution);
-
-            fieldInfo = t.GetField("m_AdditionalLightsShadowResolutionTierLow", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_AdditionalLightsShadowResolutionTierLow);
-
-            fieldInfo = t.GetField("m_AdditionalLightsShadowResolutionTierMedium", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_AdditionalLightsShadowResolutionTierMedium);
-
-            fieldInfo = t.GetField("m_AdditionalLightsShadowResolutionTierHigh", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_AdditionalLightsShadowResolutionTierHigh);
-
-            fieldInfo = t.GetField("m_ReflectionProbeBlending", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_ReflectionProbeBlending);
-
-            fieldInfo = t.GetField("m_ReflectionProbeBoxProjection", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_ReflectionProbeBoxProjection);
-
+            // Shadows
             fieldInfo = t.GetField("m_ShadowDistance", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_ShadowDistance);
+            if (fieldInfo != null)
+            {
+                fieldInfo.SetValue(renderPipelineAsset, m_ShadowDistance);
+            }
 
             fieldInfo = t.GetField("m_ShadowCascadeCount", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_ShadowCascadeCount);
+            if (fieldInfo != null)
+            {
+                fieldInfo.SetValue(renderPipelineAsset, m_ShadowCascadeCount);
+            }
 
-            fieldInfo = t.GetField("m_Cascade2Split", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_Cascade2Split);
-
-            fieldInfo = t.GetField("m_Cascade3Split", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_Cascade3Split.GetVector2());
-
-            fieldInfo = t.GetField("m_Cascade4Split", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_Cascade4Split.GetVector3());
 
             fieldInfo = t.GetField("m_CascadeBorder", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_CascadeBorder);
+            if (fieldInfo != null)
+            {
+                fieldInfo.SetValue(renderPipelineAsset, m_CascadeBorder);
+            }
 
             fieldInfo = t.GetField("m_ShadowDepthBias", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_ShadowDepthBias);
+            if (fieldInfo != null)
+            {
+                fieldInfo.SetValue(renderPipelineAsset, m_ShadowDepthBias);
+            }
 
             fieldInfo = t.GetField("m_ShadowNormalBias", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_ShadowNormalBias);
-
-            fieldInfo = t.GetField("m_SoftShadowsSupported", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_SoftShadowsSupported);
-
-            fieldInfo = t.GetField("m_ConservativeEnclosingSphere", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_ConservativeEnclosingSphere);
-
-            fieldInfo = t.GetField("m_NumIterationsEnclosingSphere", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_NumIterationsEnclosingSphere);
-
-            fieldInfo = t.GetField("m_AdditionalLightsCookieResolution", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_AdditionalLightsCookieResolution);
-
-            fieldInfo = t.GetField("m_AdditionalLightsCookieFormat", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_AdditionalLightsCookieFormat);
-
-            fieldInfo = t.GetField("m_UseSRPBatcher", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_UseSRPBatcher);
-
-            fieldInfo = t.GetField("m_SupportsDynamicBatching", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_SupportsDynamicBatching);
-
-            fieldInfo = t.GetField("m_MixedLightingSupported", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_MixedLightingSupported);
-
-            fieldInfo = t.GetField("m_SupportsLightLayers", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_SupportsLightLayers);
+            if (fieldInfo != null)
+            {
+                fieldInfo.SetValue(renderPipelineAsset, m_ShadowNormalBias);
+            }            
 
             fieldInfo = t.GetField("m_UseAdaptivePerformance", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_UseAdaptivePerformance);
+            if (fieldInfo != null)
+            {
+                fieldInfo.SetValue(renderPipelineAsset, m_UseAdaptivePerformance);
+            }
 
             fieldInfo = t.GetField("m_ColorGradingMode", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_ColorGradingMode);
+            if (fieldInfo != null)
+            {                
+                //fieldInfo.SetValue(renderPipelineAsset, Convert.ChangeType(m_ColorGradingMode, fieldInfo.FieldType));                
+            }
 
             fieldInfo = t.GetField("m_ColorGradingLutSize", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_ColorGradingLutSize);
-
-            fieldInfo = t.GetField("m_UseFastSRGBLinearConversion", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_UseFastSRGBLinearConversion);
-
-            fieldInfo = t.GetField("m_ShadowType", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_ShadowType);
-
-            fieldInfo = t.GetField("m_LocalShadowsSupported", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_LocalShadowsSupported);
-
-            fieldInfo = t.GetField("m_LocalShadowsSupported", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_LocalShadowsSupported);
-
-            fieldInfo = t.GetField("m_MaxPixelLights", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_MaxPixelLights);
-
-            fieldInfo = t.GetField("m_ShadowAtlasResolution", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_ShadowAtlasResolution);
+            if (fieldInfo != null)
+            {
+                fieldInfo.SetValue(renderPipelineAsset, m_ColorGradingLutSize);
+            }
+                       
 
             fieldInfo = t.GetField("m_ShaderVariantLogLevel", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_ShaderVariantLogLevel);
+            if (fieldInfo != null)
+            {
+                //fieldInfo.SetValue(renderPipelineAsset, m_ShaderVariantLogLevel);
+            }
 
             fieldInfo = t.GetField("m_VolumeFrameworkUpdateMode", BindingFlags.Instance | BindingFlags.NonPublic);
-            fieldInfo.SetValue(renderPipelineAsset, m_VolumeFrameworkUpdateMode);
+            if (fieldInfo != null)
+            {
+                //fieldInfo.SetValue(renderPipelineAsset, m_VolumeFrameworkUpdateMode);
+            }
         }
 
 
@@ -978,6 +1461,21 @@ namespace Utj.UnityChoseKun.URP
         public override int GetHashCode()
         {
             return base.GetHashCode();
+        }
+
+        float ValidateShadowBias(float value)
+        {
+            return Mathf.Max(0.0f, Mathf.Min(value, 10));
+        }
+
+        int ValidatePerObjectLights(int value)
+        {
+            return System.Math.Max(0, System.Math.Min(value, 10));
+        }
+
+        float ValidateRenderScale(float value)
+        {
+            return Mathf.Max(0.1f, Mathf.Min(value, 2f));
         }
     }
 }

@@ -38,13 +38,20 @@ namespace Utj.UnityChoseKun
             {
                 mScrollPos = EditorGUILayout.BeginScrollView(mScrollPos);
                 EditorGUI.BeginChangeCheck();
+                EditorGUILayout.LabelField("Rendering", EditorStyles.boldLabel);
+#if UNITY_2019_1_OR_NEWER
+                if (qualitySettingsKun.renderPipelineType == QualitySettingsKun.RenderPipelineType.URP)
+                {
+                    URP.UniversalRenderPipelineAssetView.Inspector.Draw(qualitySettingsKun.renderPipeline as URP.UniversalRenderPipelineAssetKun);
+                } 
+                else if(qualitySettingsKun.renderPipelineType == QualitySettingsKun.RenderPipelineType.RP)
+                {
+                    DrawRenderPipelineAsset(qualitySettingsKun.renderPipeline);
+                }                
+#endif
 
 
-                DrawRenderPipelineAsset(qualitySettingsKun.renderPipeline);
-
-
-
-                EditorGUILayout.LabelField("Rendering");
+                
                 qualitySettingsKun.pixelLightCount = EditorGUILayout.IntField("Pixel Light Count", qualitySettingsKun.pixelLightCount);
                 qualitySettingsKun.anisotropicFiltering = (AnisotropicFiltering)EditorGUILayout.EnumPopup("Anisotropic Textures", qualitySettingsKun.anisotropicFiltering);
                 qualitySettingsKun.antiAliasing = EditorGUILayout.IntPopup("Anti Aliasing", qualitySettingsKun.antiAliasing, Styles.AntiAliasingLabels, Styles.AntiAliasingValuess);
@@ -57,6 +64,7 @@ namespace Utj.UnityChoseKun
                 qualitySettingsKun.resolutionScalingFixedDPIFactor = EditorGUILayout.Slider("Resolution Scaling Fixed DPI Factor", qualitySettingsKun.resolutionScalingFixedDPIFactor, 0.001f, 5.0f, GUILayout.ExpandWidth(true));
                 EditorGUILayout.Space();
 
+                EditorGUILayout.LabelField("Textures", EditorStyles.boldLabel);
                 qualitySettingsKun.streamingMipmapsActive = EditorGUILayout.Toggle("Texture Streaming", qualitySettingsKun.streamingMipmapsActive);
                 if (qualitySettingsKun.streamingMipmapsActive)
                 {
@@ -71,14 +79,29 @@ namespace Utj.UnityChoseKun
                 }
 
                 GUILayout.Space(10);
+                EditorGUILayout.LabelField("Particles", EditorStyles.boldLabel);
+                qualitySettingsKun.particleRaycastBudget = EditorGUILayout.IntField("Particle Raycast Budget", qualitySettingsKun.particleRaycastBudget);
+
+
+                GUILayout.Space(10);
+                EditorGUILayout.LabelField("Terrain", EditorStyles.boldLabel);
+
+                GUILayout.Space(10);
                 GUILayout.Label("Shadows", EditorStyles.boldLabel);
                 qualitySettingsKun.shadowmaskMode = (ShadowmaskMode)EditorGUILayout.EnumPopup("Shadowmask Mode", qualitySettingsKun.shadowmaskMode);
-                qualitySettingsKun.shadows = (ShadowQuality)EditorGUILayout.EnumPopup("Shadows", qualitySettingsKun.shadows);
-                qualitySettingsKun.shadowResolution = (ShadowResolution)EditorGUILayout.EnumPopup("Shadow Resolution", qualitySettingsKun.shadowResolution);
-                qualitySettingsKun.shadowProjection = (ShadowProjection)EditorGUILayout.EnumPopup("Shadow Projection", qualitySettingsKun.shadowProjection);
-                qualitySettingsKun.shadowDistance = EditorGUILayout.FloatField("Shadow Distance", qualitySettingsKun.shadowDistance);
-                qualitySettingsKun.shadowNearPlaneOffset = EditorGUILayout.FloatField("Shadow Near Plane Offset", qualitySettingsKun.shadowNearPlaneOffset);
-                qualitySettingsKun.shadowCascades = EditorGUILayout.IntPopup("Shadow Cascades", qualitySettingsKun.shadowCascades, Styles.ShadowCascadeLabels, Styles.ShadowCascadeValues);
+
+#if UNITY_2019_1_OR_NEWER
+                if (qualitySettingsKun.renderPipelineType != QualitySettingsKun.RenderPipelineType.URP)
+#endif
+                {
+                    qualitySettingsKun.shadows = (ShadowQuality)EditorGUILayout.EnumPopup("Shadows", qualitySettingsKun.shadows);
+                    qualitySettingsKun.shadowResolution = (ShadowResolution)EditorGUILayout.EnumPopup("Shadow Resolution", qualitySettingsKun.shadowResolution);
+                    qualitySettingsKun.shadowProjection = (ShadowProjection)EditorGUILayout.EnumPopup("Shadow Projection", qualitySettingsKun.shadowProjection);
+                    qualitySettingsKun.shadowDistance = EditorGUILayout.FloatField("Shadow Distance", qualitySettingsKun.shadowDistance);
+                    qualitySettingsKun.shadowNearPlaneOffset = EditorGUILayout.FloatField("Shadow Near Plane Offset", qualitySettingsKun.shadowNearPlaneOffset);
+                    qualitySettingsKun.shadowCascades = EditorGUILayout.IntPopup("Shadow Cascades", qualitySettingsKun.shadowCascades, Styles.ShadowCascadeLabels, Styles.ShadowCascadeValues);
+                }
+
 
                 GUILayout.Space(10);
                 GUILayout.Label("Other", EditorStyles.boldLabel);
@@ -88,16 +111,17 @@ namespace Utj.UnityChoseKun
                 qualitySettingsKun.vSyncCount = EditorGUILayout.IntPopup("VSync Count", qualitySettingsKun.vSyncCount, Styles.VSyncCountLabels, Styles.VSyncCountValues);
                 qualitySettingsKun.lodBias = EditorGUILayout.FloatField("LOD Bias", qualitySettingsKun.lodBias);
                 qualitySettingsKun.maximumLODLevel = EditorGUILayout.IntField("Maximum LOD Level", qualitySettingsKun.maximumLODLevel);
-                qualitySettingsKun.particleRaycastBudget = EditorGUILayout.IntField("Particle Raycast Budget", qualitySettingsKun.particleRaycastBudget);
+                
                 qualitySettingsKun.asyncUploadTimeSlice = EditorGUILayout.IntSlider("Async Upload Time Slice", qualitySettingsKun.asyncUploadTimeSlice, 1, 33);
                 qualitySettingsKun.asyncUploadBufferSize = EditorGUILayout.IntSlider("Async Upload Buffer Size", qualitySettingsKun.asyncUploadBufferSize, 2, 512);
                 qualitySettingsKun.asyncUploadPersistentBuffer = EditorGUILayout.Toggle("Async Upload Persistent Buffer", qualitySettingsKun.asyncUploadPersistentBuffer);
 
-                if (EditorGUI.EndChangeCheck())
+                if (EditorGUI.EndChangeCheck()|| qualitySettingsKun.renderPipeline.dirty)
                 {
                     qualitySettingsKun.isDirty = true;
                     UnityChoseKunEditor.SendMessage<QualitySettingsKun>(UnityChoseKun.MessageID.QualitySettingsPush, qualitySettingsKun);
                     qualitySettingsKun.isDirty = false;
+                    qualitySettingsKun.renderPipeline.dirty = false;
 
                 }
                 EditorGUILayout.EndScrollView();
