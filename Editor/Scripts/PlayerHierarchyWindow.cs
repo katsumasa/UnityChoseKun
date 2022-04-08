@@ -168,7 +168,9 @@ namespace Utj.UnityChoseKun
                 //if(GraphicsSettingsKun.instance == null)
                 {
                     UnityChoseKunEditor.SendMessage<GraphicsSettingsKun>(UnityChoseKun.MessageID.GraphicsSettingsPull, null);
+#if UNITY_2021_2_OR_NEWER
                     UnityChoseKunEditor.SendMessage<UniversalRenderPipelineGlobalSettingsKun>(UnityChoseKun.MessageID.UniversalRenderPipelineGlobalSettingsPull,null);
+#endif
                     UnityChoseKunEditor.SendMessage<UniversalRenderPipelineKun>(UnityChoseKun.MessageID.UniversalRenderPipelinePull, null);
                 }
                 
