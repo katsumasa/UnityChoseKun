@@ -98,71 +98,71 @@ namespace Utj.UnityChoseKun.Engine.Rendering.Universal
         public bool orthographic
         {
             get => m_Orthographic;
-            set => m_Orthographic = value;
+            set { m_Orthographic = value; dirty = true; }
         }
 
         public float fieldOfView
         {
             get => m_FieldOfView;
-            set => m_FieldOfView = value;
+            set { m_FieldOfView = value; dirty = true; }
         }
 
         public float nearClipPlane
         {
             get => m_NearClipPlane;
-            set => m_NearClipPlane = value;
+            set { m_NearClipPlane = value; dirty = true; }
         }
 
         public float farClipPlane
         {
             get => m_FarClipPlane;
-            set => m_FarClipPlane = value;
+            set { m_FarClipPlane = value; dirty = true; }
         }
         public bool usePhysicalProperties
         {
             get => m_UsePhysicalProperties;
-            set => m_UsePhysicalProperties = value;
+            set { m_UsePhysicalProperties = value; dirty = true; }
         }
         
         public Vector2Kun sensorSize
         {
             get => m_SensorSize;
-            set => m_SensorSize = value;
+            set { m_SensorSize = value; dirty = true; }
         }
         public float focalLength
         {
             get => m_FocalLength;
-            set => m_FocalLength = value;
+            set { m_FocalLength = value; dirty = true; }
         }
         
         public Vector2Kun lensShift
         {
             get => m_LensShift;
-            set => m_LensShift = value;
+            set { m_LensShift = value; dirty = true; }
         }
         
         public Camera.GateFitMode gateFit
         {
             get => m_GateFit;
-            set => m_GateFit = value;
+            set { m_GateFit = value; dirty = true; }
         }
 
         public float depth
         {
             get => m_Depth;
-            set => m_Depth = value;
+            set { m_Depth = value; dirty = true; }
         }
 
         public int cullingMask
         {
             get => m_CullingMask;
-            set => m_CullingMask = value;
+            set { m_CullingMask = value; dirty = true; }
         }
 
         public bool useOcclusionCulling
         {
             get => m_UseOcclusionCulling;
-            set => m_UseOcclusionCulling = value;
+            set { m_UseOcclusionCulling = value; dirty = true; }
         }
 
         // UniversalRenderPipelineAsset‚Ìƒf[ƒ^
@@ -173,25 +173,25 @@ namespace Utj.UnityChoseKun.Engine.Rendering.Universal
         public bool renderShadows
         {
             get => m_RenderShadows;
-            set => m_RenderShadows = value;
+            set { m_RenderShadows = value; dirty = true; }
         }
 
         public CameraOverrideOption requiresDepthTextureOption
         {
             get => m_RequiresDepthTextureOption;
-            set => m_RequiresDepthTextureOption = value;
+            set { m_RequiresDepthTextureOption = value; dirty = true; }
         }
 
         public CameraOverrideOption requiresColorOption
         {
             get => m_RequiresOpaqueTextureOption;
-            set => m_RequiresOpaqueTextureOption = value;
+            set { m_RequiresOpaqueTextureOption = value; dirty = true; }
         }
 
         public CameraRenderType renderType
         {
             get => m_CameraType;
-            set => m_CameraType = value;
+            set { m_CameraType = value; dirty = true; }
         }
 
         public CameraKun[] cameraStack
@@ -217,19 +217,19 @@ namespace Utj.UnityChoseKun.Engine.Rendering.Universal
         public LayerMask volumeLayerMask
         {
             get => m_VolumeLayerMask;
-            set => m_VolumeLayerMask = value;
+            set { m_VolumeLayerMask = value; dirty = true; }
         }
 
         public TransformKun volumeTrigger
         {
             get => m_VolumeTrigger;
-            set => m_VolumeTrigger = value;
+            set { m_VolumeTrigger = value; dirty = true; }
         }
 
         internal VolumeFrameworkUpdateMode volumeFrameworkUpdateMode
         {
             get => m_VolumeFrameworkUpdateModeOption;
-            set => m_VolumeFrameworkUpdateModeOption = value;
+            set { m_VolumeFrameworkUpdateModeOption = value; dirty = true; }
         }
 
         //public bool requiresVolumeFrameworkUpdate
@@ -252,51 +252,44 @@ namespace Utj.UnityChoseKun.Engine.Rendering.Universal
         public bool renderPostProcessing 
         { 
             get => m_RenderPostProcessing;
-            set => m_RenderPostProcessing = value;
+            set { m_RenderPostProcessing = value; dirty = true; }
         }
 
         public AntialiasingMode antialiasingMode
         {
             get => m_Antialiasing;
-            set => m_Antialiasing = value;
+            set { m_Antialiasing = value; dirty = true; }
         }
 
         public AntialiasingQuality antialiasingQuality
         {
             get => m_AntialiasingQuality;
-            set => m_AntialiasingQuality = value;
+            set { m_AntialiasingQuality = value; dirty = true; }
         }
 
         
         public bool stopNaN
         {
             get => m_StopNaN;
-            set => m_StopNaN = value;
+            set { m_StopNaN = value; dirty = true; }
         }
 
         public bool dithering
         {
             get => m_Dithering;
-            set => m_Dithering = value;
+            set { m_Dithering = value; dirty = true; }
         }
 
         public bool allowXRRendering
         {
             get => m_AllowXRRendering;
-            set => m_AllowXRRendering = value;
+            set { m_AllowXRRendering = value; dirty = true; }
         }
-
-
-
-
-
-
-
 
         public int rendererIndex
         {
             get => m_RendererIndex;
-            set => m_RendererIndex = value;
+            set { m_RendererIndex = value; dirty = true; }
         }
 
         public string[] renderers

@@ -101,15 +101,20 @@ namespace Utj.UnityChoseKun
                 CameraView.isEnableOnGUI = false;
             }
 
+
             public void DrawContents()
-            {
-                EditorGUI.BeginChangeCheck();
+            {                
                 using (new EditorGUI.IndentLevelScope())
                 {
-
-                    universalAdditionalCameraDataKun.renderType = (UniversalAdditionalCameraDataKun.CameraRenderType)EditorGUILayout.EnumPopup(Styles.RenderType, universalAdditionalCameraDataKun.renderType);
+                    EditorGUI.BeginChangeCheck();
+                    var renderType = (UniversalAdditionalCameraDataKun.CameraRenderType)EditorGUILayout.EnumPopup(Styles.RenderType, universalAdditionalCameraDataKun.renderType);
+                    if (EditorGUI.EndChangeCheck())
+                    {
+                        universalAdditionalCameraDataKun.renderType = renderType;
+                    }
 
                     projectionFoldOut = EditorGUILayout.Foldout(projectionFoldOut, Styles.projectionSettingsHeaderContent);
+                                        
                     using (new EditorGUI.IndentLevelScope())
                     {
                         if (projectionFoldOut)
@@ -132,10 +137,6 @@ namespace Utj.UnityChoseKun
                         }
                     }
                 }
-                if (EditorGUI.EndChangeCheck())
-                {
-                    universalAdditionalCameraDataKun.dirty = true;
-                }
             }
 
 
@@ -154,19 +155,44 @@ namespace Utj.UnityChoseKun
                 CameraView.ProjectionType projectionType = universalAdditionalCameraDataKun.orthographic ? CameraView.ProjectionType.Orthographic : CameraView.ProjectionType.Perspective;
                 projectionType = (CameraView.ProjectionType)EditorGUILayout.EnumPopup(CameraView.Styles.projection, projectionType);
                 universalAdditionalCameraDataKun.orthographic = (projectionType == CameraView.ProjectionType.Orthographic);
-                universalAdditionalCameraDataKun.fieldOfView = EditorGUILayout.Slider(CameraView.Styles.fieldOfView, universalAdditionalCameraDataKun.fieldOfView, 0.00001f, 179f);
+
+                EditorGUI.BeginChangeCheck();
+                var fieldOfView = EditorGUILayout.Slider(CameraView.Styles.fieldOfView, universalAdditionalCameraDataKun.fieldOfView, 0.00001f, 179f);
+                if(EditorGUI.EndChangeCheck())
+                {
+                    universalAdditionalCameraDataKun.fieldOfView = fieldOfView;
+                }
 
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField("Clipping Planes");
                 EditorGUILayout.BeginVertical();
-                universalAdditionalCameraDataKun.nearClipPlane = EditorGUILayout.FloatField("Near", universalAdditionalCameraDataKun.nearClipPlane);
-                universalAdditionalCameraDataKun.farClipPlane = EditorGUILayout.FloatField("Fear", universalAdditionalCameraDataKun.farClipPlane);
+                
+                EditorGUI.BeginChangeCheck();
+                var nearClipPlane = EditorGUILayout.FloatField("Near", universalAdditionalCameraDataKun.nearClipPlane);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    universalAdditionalCameraDataKun.nearClipPlane = nearClipPlane;
+                }
+
+                EditorGUI.BeginChangeCheck();
+                var farClipPlane = EditorGUILayout.FloatField("Fear", universalAdditionalCameraDataKun.farClipPlane);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    universalAdditionalCameraDataKun.farClipPlane = farClipPlane;
+                }
+                
                 EditorGUILayout.EndVertical();
                 EditorGUILayout.EndHorizontal();
 
                 if (projectionType == CameraView.ProjectionType.Perspective)
                 {
-                    universalAdditionalCameraDataKun.usePhysicalProperties = EditorGUILayout.Toggle(CameraView.Styles.physicalCamera, universalAdditionalCameraDataKun.usePhysicalProperties);
+                    EditorGUI.BeginChangeCheck();
+                    var usePhysicalProperties = EditorGUILayout.Toggle(CameraView.Styles.physicalCamera, universalAdditionalCameraDataKun.usePhysicalProperties);
+                    if (EditorGUI.EndChangeCheck())
+                    {
+                        universalAdditionalCameraDataKun.usePhysicalProperties = usePhysicalProperties;
+                    }
+
                     if (universalAdditionalCameraDataKun.usePhysicalProperties)
                     {
 
@@ -202,16 +228,31 @@ namespace Utj.UnityChoseKun
                                 universalAdditionalCameraDataKun.sensorSize = new Vector2Kun(sensorSize);
                             }
 
-                            universalAdditionalCameraDataKun.gateFit = (Camera.GateFitMode)EditorGUILayout.EnumPopup(CameraView.Styles.gateFit, universalAdditionalCameraDataKun.gateFit);
+                            EditorGUI.BeginChangeCheck();
+                            var gateFit = (Camera.GateFitMode)EditorGUILayout.EnumPopup(CameraView.Styles.gateFit, universalAdditionalCameraDataKun.gateFit);
+                            if (EditorGUI.EndChangeCheck())
+                            {
+                                universalAdditionalCameraDataKun.gateFit = gateFit;
+                            }
                         }
 
                         EditorGUILayout.LabelField(Styles.lens);
                         using (new EditorGUI.IndentLevelScope())
                         {
-                            universalAdditionalCameraDataKun.focalLength = EditorGUILayout.FloatField(CameraView.Styles.focalLength, universalAdditionalCameraDataKun.focalLength);
+                            EditorGUI.BeginChangeCheck();
+                            var focalLength = EditorGUILayout.FloatField(CameraView.Styles.focalLength, universalAdditionalCameraDataKun.focalLength);
+                            if (EditorGUI.EndChangeCheck())
+                            {
+                                universalAdditionalCameraDataKun.focalLength = focalLength;
+                            }
+                            
                             var v2 = universalAdditionalCameraDataKun.lensShift.GetVector2();
+                            EditorGUI.BeginChangeCheck();
                             v2 = EditorGUILayout.Vector2Field(CameraView.Styles.lensShift, v2);
-                            universalAdditionalCameraDataKun.lensShift = new Vector2Kun(v2);
+                            if (EditorGUI.EndChangeCheck())
+                            {
+                                universalAdditionalCameraDataKun.lensShift = new Vector2Kun(v2);
+                            }
                         }
                     }
                 }
@@ -221,29 +262,103 @@ namespace Utj.UnityChoseKun
             void DrawRendering()
             {
                 EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField(Styles.rendererType);
-                universalAdditionalCameraDataKun.rendererIndex = EditorGUILayout.IntPopup(universalAdditionalCameraDataKun.rendererIndex, universalAdditionalCameraDataKun.renderers, universalAdditionalCameraDataKun.rendererIndexList);
+                {
+                    EditorGUILayout.LabelField(Styles.rendererType);
+                    EditorGUI.BeginChangeCheck();
+                    var rendererIndex = EditorGUILayout.IntPopup(universalAdditionalCameraDataKun.rendererIndex, universalAdditionalCameraDataKun.renderers, universalAdditionalCameraDataKun.rendererIndexList);
+                    if (EditorGUI.EndChangeCheck())
+                    {
+                        universalAdditionalCameraDataKun.rendererIndex = rendererIndex;
+                    }
+                }
                 EditorGUILayout.EndHorizontal();
 
-                universalAdditionalCameraDataKun.renderPostProcessing = EditorGUILayout.Toggle(Styles.renderPostProcessing, universalAdditionalCameraDataKun.renderPostProcessing);
-                universalAdditionalCameraDataKun.antialiasingMode = (UniversalAdditionalCameraDataKun.AntialiasingMode)EditorGUILayout.EnumPopup(Styles.antialiasing, universalAdditionalCameraDataKun.antialiasingMode);
-                universalAdditionalCameraDataKun.stopNaN = EditorGUILayout.Toggle("Stop Nans", universalAdditionalCameraDataKun.stopNaN);
-                universalAdditionalCameraDataKun.dithering = EditorGUILayout.Toggle("Dithering", universalAdditionalCameraDataKun.dithering);
-                universalAdditionalCameraDataKun.renderShadows = EditorGUILayout.Toggle(Styles.renderingShadows, universalAdditionalCameraDataKun.renderShadows);
-                universalAdditionalCameraDataKun.depth = (int)EditorGUILayout.IntSlider("Priority", (int)universalAdditionalCameraDataKun.depth, -100, 100);
+                {
+                    EditorGUI.BeginChangeCheck();
+                    var renderPostProcessing = EditorGUILayout.Toggle(Styles.renderPostProcessing, universalAdditionalCameraDataKun.renderPostProcessing);
+                    if (EditorGUI.EndChangeCheck())
+                    {
+                        universalAdditionalCameraDataKun.renderPostProcessing = renderPostProcessing;
+                    }
+                }
+
+                {
+                    EditorGUI.BeginChangeCheck();
+                    var antialiasingMode = (UniversalAdditionalCameraDataKun.AntialiasingMode)EditorGUILayout.EnumPopup(Styles.antialiasing, universalAdditionalCameraDataKun.antialiasingMode);
+                    if (EditorGUI.EndChangeCheck())
+                    {
+                        universalAdditionalCameraDataKun.antialiasingMode = antialiasingMode;
+                    }
+                }
+
+                {
+                    EditorGUI.BeginChangeCheck();
+                    var stopNaN = EditorGUILayout.Toggle("Stop Nans", universalAdditionalCameraDataKun.stopNaN);
+                    if (EditorGUI.EndChangeCheck())
+                    {
+                        universalAdditionalCameraDataKun.stopNaN = stopNaN;
+                    }
+                }
+
+                {
+                    EditorGUI.BeginChangeCheck();
+                    var dithering = EditorGUILayout.Toggle("Dithering", universalAdditionalCameraDataKun.dithering);
+                    if (EditorGUI.EndChangeCheck())
+                    {
+                        universalAdditionalCameraDataKun.dithering = dithering;
+                    }
+                }
+
+                {
+                    EditorGUI.BeginChangeCheck();
+                    var renderShadows = EditorGUILayout.Toggle(Styles.renderingShadows, universalAdditionalCameraDataKun.renderShadows);
+                    if (EditorGUI.EndChangeCheck())
+                        universalAdditionalCameraDataKun.renderShadows = renderShadows;
+                }
+
+                {
+                    EditorGUI.BeginChangeCheck();
+                    var depth = (int)EditorGUILayout.IntSlider("Priority", (int)universalAdditionalCameraDataKun.depth, -100, 100);
+                    if (EditorGUI.EndChangeCheck())
+                        universalAdditionalCameraDataKun.depth = depth;
+                }
+
 
                 EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField(Styles.requireOpaqueTexture);
-                universalAdditionalCameraDataKun.requiresColorOption = (UniversalAdditionalCameraDataKun.CameraOverrideOption)EditorGUILayout.EnumPopup(universalAdditionalCameraDataKun.requiresColorOption);
+                {
+                    EditorGUILayout.LabelField(Styles.requireOpaqueTexture);
+                    EditorGUI.BeginChangeCheck();
+                    var requiresColorOption = (UniversalAdditionalCameraDataKun.CameraOverrideOption)EditorGUILayout.EnumPopup(universalAdditionalCameraDataKun.requiresColorOption);
+                    if (EditorGUI.EndChangeCheck())
+                        universalAdditionalCameraDataKun.requiresColorOption = requiresColorOption;
+                }   
                 EditorGUILayout.EndHorizontal();
 
                 EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField(Styles.requireDepthTexture);
-                universalAdditionalCameraDataKun.requiresDepthTextureOption = (UniversalAdditionalCameraDataKun.CameraOverrideOption)EditorGUILayout.EnumPopup(universalAdditionalCameraDataKun.requiresDepthTextureOption);
+                {
+                    EditorGUILayout.LabelField(Styles.requireDepthTexture);
+                    EditorGUI.BeginChangeCheck();
+                    var requiresDepthTextureOption = (UniversalAdditionalCameraDataKun.CameraOverrideOption)EditorGUILayout.EnumPopup(universalAdditionalCameraDataKun.requiresDepthTextureOption);
+                    if (EditorGUI.EndChangeCheck())
+                        universalAdditionalCameraDataKun.requiresDepthTextureOption = requiresDepthTextureOption;
+                }
                 EditorGUILayout.EndHorizontal();
 
-                universalAdditionalCameraDataKun.cullingMask = LayerMaskField("Culling Mask", universalAdditionalCameraDataKun.cullingMask).value;
-                universalAdditionalCameraDataKun.useOcclusionCulling = EditorGUILayout.Toggle("Occlusion Culling", universalAdditionalCameraDataKun.useOcclusionCulling);
+                {
+                    EditorGUI.BeginChangeCheck();
+                    var cullingMask = LayerMaskField("Culling Mask", universalAdditionalCameraDataKun.cullingMask).value;
+                    if (EditorGUI.EndChangeCheck())
+                    {
+                        universalAdditionalCameraDataKun.cullingMask = cullingMask;
+                    }
+                }
+
+                {
+                    EditorGUI.BeginChangeCheck();
+                    var useOcclusionCulling = EditorGUILayout.Toggle("Occlusion Culling", universalAdditionalCameraDataKun.useOcclusionCulling);
+                    if (EditorGUI.EndChangeCheck())
+                        universalAdditionalCameraDataKun.useOcclusionCulling = useOcclusionCulling;
+                }
             }
 
 

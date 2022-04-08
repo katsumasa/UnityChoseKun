@@ -187,12 +187,11 @@ namespace Utj.UnityChoseKun
                 foldout = EditorGUILayout.Foldout(foldout, Styles.cameraFoldout);
 
                 EditorGUI.BeginChangeCheck();
-                cameraKun.enabled = EditorGUILayout.ToggleLeft("Camera", cameraKun.enabled);
+                var enabled = EditorGUILayout.ToggleLeft("Camera", cameraKun.enabled);
                 if (EditorGUI.EndChangeCheck())
                 {
-                    cameraKun.dirty = true;
+                    cameraKun.enabled = enabled;
                 }
-
                 GUILayout.FlexibleSpace();
                 EditorGUILayout.EndHorizontal();
                 GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(1));
@@ -202,33 +201,69 @@ namespace Utj.UnityChoseKun
 
             public void DrawClearFlags()
             {
-                cameraKun.clearFlags = (CameraClearFlags)EditorGUILayout.EnumPopup(Styles.clearFlags, cameraKun.clearFlags);
+                EditorGUI.BeginChangeCheck();
+                var clearFlags = (CameraClearFlags)EditorGUILayout.EnumPopup(Styles.clearFlags, cameraKun.clearFlags);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    cameraKun.clearFlags = clearFlags;
+                }
             }
 
             public void DrawBackgroundColor()
             {
-                cameraKun.backgroundColor = EditorGUILayout.ColorField(Styles.background, cameraKun.backgroundColor);
+                EditorGUI.BeginChangeCheck();
+                var backgroundColor = EditorGUILayout.ColorField(Styles.background, cameraKun.backgroundColor);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    cameraKun.backgroundColor = backgroundColor;
+                }
             }
 
             public void DrawCullingMask()
             {
                 LayerMask layerMask = cameraKun.cullingMask;
-                cameraKun.cullingMask = LayerMaskField("Culling Mask", layerMask).value;
+                EditorGUI.BeginChangeCheck();
+                var cullingMask = LayerMaskField("Culling Mask", layerMask).value;
+                if (EditorGUI.EndChangeCheck())
+                {
+                    cameraKun.cullingMask = cullingMask;
+                }
             }
 
             public void DrawProjection()
             {
                 ProjectionType projectionType = cameraKun.orthographic ? ProjectionType.Orthographic : ProjectionType.Perspective;
+                EditorGUI.BeginChangeCheck();
                 projectionType = (ProjectionType)EditorGUILayout.EnumPopup(Styles.projection, projectionType);
-                cameraKun.orthographic = (projectionType == ProjectionType.Orthographic);
-                cameraKun.fieldOfView = EditorGUILayout.Slider(Styles.fieldOfView, cameraKun.fieldOfView, 0.00001f, 179f);
-                cameraKun.usePhysicalProperties = EditorGUILayout.Toggle(Styles.physicalCamera, cameraKun.usePhysicalProperties);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    cameraKun.orthographic = (projectionType == ProjectionType.Orthographic);
+                }
+
+                EditorGUI.BeginChangeCheck();
+                var fieldOfView = EditorGUILayout.Slider(Styles.fieldOfView, cameraKun.fieldOfView, 0.00001f, 179f);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    cameraKun.fieldOfView = fieldOfView;
+                }
+
+                EditorGUI.BeginChangeCheck();
+                var usePhysicalProperties = EditorGUILayout.Toggle(Styles.physicalCamera, cameraKun.usePhysicalProperties);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    cameraKun.usePhysicalProperties = usePhysicalProperties;
+                }
+
                 if (cameraKun.usePhysicalProperties)
                 {
                     using (new EditorGUI.IndentLevelScope())
                     {
-                        cameraKun.focalLength = EditorGUILayout.FloatField(Styles.focalLength, cameraKun.focalLength);
-
+                        EditorGUI.BeginChangeCheck();
+                        var focalLength = EditorGUILayout.FloatField(Styles.focalLength, cameraKun.focalLength);
+                        if (EditorGUI.EndChangeCheck())
+                        {
+                            cameraKun.focalLength = focalLength;
+                        }
 
                         EditorGUI.BeginChangeCheck();
                         var oldFilmGateIndex = Array.IndexOf(CameraView.k_ApertureFormatValues, new Vector2((float)Math.Round(cameraKun.sensorSize.x, 3), (float)Math.Round(cameraKun.sensorSize.y, 3)));
@@ -238,26 +273,35 @@ namespace Utj.UnityChoseKun
                         {
                             if (newFilmGateIndex == CameraView.k_ApertureFormatValues.Length - 1)
                             {
-                                cameraKun.sensorSize = new Vector2Kun(sensorSize);
+                                cameraKun.sensorSize = sensorSize;
                             }
                             else
                             {
-                                cameraKun.sensorSize = new Vector2Kun(CameraView.k_ApertureFormatValues[newFilmGateIndex]);
+                                cameraKun.sensorSize = CameraView.k_ApertureFormatValues[newFilmGateIndex];
                             }
                         }
-                        sensorSize = cameraKun.sensorSize.GetVector2();
+                        sensorSize = cameraKun.sensorSize;
 
                         EditorGUI.BeginChangeCheck();
                         sensorSize = EditorGUILayout.Vector2Field(Styles.sensorSize, sensorSize);
                         if (EditorGUI.EndChangeCheck())
                         {
-                            cameraKun.sensorSize = new Vector2Kun(sensorSize);
+                            cameraKun.sensorSize = sensorSize;
                         }
 
+                        EditorGUI.BeginChangeCheck();
+                        var lensShift = EditorGUILayout.Vector2Field(Styles.lensShift, cameraKun.lensShift);
+                        if (EditorGUI.EndChangeCheck())
+                        {
+                            cameraKun.lensShift = lensShift;
+                        }
 
-                        cameraKun.lensShift = EditorGUILayout.Vector2Field(Styles.lensShift, cameraKun.lensShift);
-                        cameraKun.gateFit = (Camera.GateFitMode)EditorGUILayout.EnumPopup(Styles.gateFit, cameraKun.gateFit);
-                        ;
+                        EditorGUI.BeginChangeCheck();
+                        var gateFit = (Camera.GateFitMode)EditorGUILayout.EnumPopup(Styles.gateFit, cameraKun.gateFit);
+                        if (EditorGUI.EndChangeCheck())
+                        {
+                            cameraKun.gateFit = gateFit;
+                        }
                     }
                 }
             }
@@ -266,56 +310,98 @@ namespace Utj.UnityChoseKun
             public void DrawClippingPlanes()
             {
                 EditorGUILayout.LabelField("Clipping Planes");
-                cameraKun.nearClipPlane = EditorGUILayout.FloatField("Near", cameraKun.nearClipPlane);
-                cameraKun.farClipPlane = EditorGUILayout.FloatField("Fear", cameraKun.farClipPlane);
+                EditorGUI.BeginChangeCheck();
+                var nearClipPlane = EditorGUILayout.FloatField("Near", cameraKun.nearClipPlane);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    cameraKun.nearClipPlane = nearClipPlane;
+                }
+
+                EditorGUI.BeginChangeCheck();
+                var farClipPlane = EditorGUILayout.FloatField("Fear", cameraKun.farClipPlane);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    cameraKun.farClipPlane = farClipPlane;
+                }
             }
 
 
             public void DrawNormalizedViewPort()
             {
-                cameraKun.rect = EditorGUILayout.RectField("Viewport Rect", cameraKun.rect);
+                EditorGUI.BeginChangeCheck();
+                var rect = EditorGUILayout.RectField("Viewport Rect", cameraKun.rect);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    cameraKun.rect = rect;
+                }
             }
 
             public void DrawDepth()
             {
-                cameraKun.depth = EditorGUILayout.FloatField("Depth", cameraKun.depth);
+                EditorGUI.BeginChangeCheck();
+                var depth = EditorGUILayout.FloatField("Depth", cameraKun.depth);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    cameraKun.depth = depth;
+                }
             }
 
             public void DrawRenderingPath()
             {
-                cameraKun.renderingPath = EditorGUILayout.IntPopup(Styles.renderingPath, cameraKun.renderingPath, kCameraRenderPaths, kCameraRenderPathValues);
+                EditorGUI.BeginChangeCheck();
+                var renderingPath = EditorGUILayout.IntPopup(Styles.renderingPath, cameraKun.renderingPath, kCameraRenderPaths, kCameraRenderPathValues);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    cameraKun.renderingPath = renderingPath;
+                }
             }
 
 
             public void DrawOcclusionCulling()
             {
-                cameraKun.useOcclusionCulling = EditorGUILayout.Toggle(Styles.allowOcclusionCulling, cameraKun.useOcclusionCulling);
+                EditorGUI.BeginChangeCheck();
+                var useOcclusionCulling = EditorGUILayout.Toggle(Styles.allowOcclusionCulling, cameraKun.useOcclusionCulling);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    cameraKun.useOcclusionCulling = useOcclusionCulling;
+                }
             }
 
             public void DrawHDR()
             {
                 int value = cameraKun.allowHDR ? 1 : 0;
+                EditorGUI.BeginChangeCheck();
                 value = EditorGUILayout.IntPopup(Styles.allowHDR, value, kCameraHDRNames, kCameraHDRValues);
-                cameraKun.allowHDR = value == 1 ? true : false;
+                if (EditorGUI.EndChangeCheck())
+                {
+                    cameraKun.allowHDR = value == 1 ? true : false;
+                }
             }
-
 
             public void DrawMSAA()
             {
                 int value = cameraKun.allowMSAA ? 1 : 0;
+                EditorGUI.BeginChangeCheck();
                 value = EditorGUILayout.IntPopup(Styles.allowMSAA, value, kCameraHDRNames, kCameraHDRValues);
-                cameraKun.allowMSAA = value == 1 ? true : false;
+                if (EditorGUI.EndChangeCheck())
+                    cameraKun.allowMSAA = value == 1 ? true : false;
             }
 
             public void DrawDynamicResolution()
             {
-                cameraKun.allowDynamicResolution = EditorGUILayout.Toggle(Styles.allowDynamicResolution, cameraKun.allowDynamicResolution);
+                EditorGUI.BeginChangeCheck();
+                var allowDynamicResolution = EditorGUILayout.Toggle(Styles.allowDynamicResolution, cameraKun.allowDynamicResolution);
+                if (EditorGUI.EndChangeCheck())
+                    cameraKun.allowDynamicResolution = allowDynamicResolution;
             }
 
 
             public void DrawTargetEye()
             {
-                cameraKun.targetEye = EditorGUILayout.IntPopup(new GUIContent("Target Eye"), cameraKun.targetEye, kTargetEyes, kTargetEyeValues);
+                EditorGUI.BeginChangeCheck();
+                var targetEye = EditorGUILayout.IntPopup(new GUIContent("Target Eye"), cameraKun.targetEye, kTargetEyes, kTargetEyeValues);
+                if (EditorGUI.EndChangeCheck())
+                    cameraKun.targetEye = targetEye;
             }
 
 
@@ -396,8 +482,7 @@ namespace Utj.UnityChoseKun
 
 
             void DrawCameraContents()
-            {
-                EditorGUI.BeginChangeCheck();
+            {             
                 using (new EditorGUI.IndentLevelScope())
                 {
                     DrawClearFlags();
@@ -413,11 +498,7 @@ namespace Utj.UnityChoseKun
                     DrawMSAA();
                     DrawDynamicResolution();
                     DrawTargetEye();
-                }
-                if (EditorGUI.EndChangeCheck())
-                {
-                    cameraKun.dirty = true;
-                }
+                }             
             }
 
         }
