@@ -68,13 +68,24 @@ namespace Utj.UnityChoseKun
                 {
                     get
                     {
+                        if(instance.mCurrentRenderPipelineIdx == -1)
+                        {
+                            return null;
+                        }
                         return instance.mAllConfiguredRenderPipelines[instance.mCurrentRenderPipelineIdx];
                     }
                 }
                 
                 public static RenderPipelineAssetKun defaultRenderPipeline
                 {
-                    get { return instance.mAllConfiguredRenderPipelines[instance.mDefaultRenderPipelineIdx]; }
+                    get 
+                    {
+                        if(instance.mDefaultRenderPipelineIdx == -1)
+                        {
+                            return null;
+                        }
+                        return instance.mAllConfiguredRenderPipelines[instance.mDefaultRenderPipelineIdx]; 
+                    }
                 }
 
                 RenderPipelineAssetType mRenderPipelineAssetType;
@@ -87,7 +98,7 @@ namespace Utj.UnityChoseKun
                 {
                     get{return defaultRenderPipeline;}
                 }
-
+#if UNITY_2020_2_OR_NEWER
                 uint mDefaultRenderingLayerMask;
                 public static uint defaultRenderingLayerMask
                 {
@@ -99,7 +110,9 @@ namespace Utj.UnityChoseKun
                         instance.dirty = true;
                     }
                 }
+#endif
 
+#if UNITY_2020_3_OR_NEWER
                 bool mDisableBuiltinCustomRenderTextureUpdate;
                 public static bool disableBuiltinCustomRenderTextureUpdate
                 {
@@ -111,15 +124,7 @@ namespace Utj.UnityChoseKun
                     }
                 }
 
-                VideoShadersIncludeMode mVideoShadersIncludeMode;
-                public static VideoShadersIncludeMode videoShadersIncludeMode
-                {
-                    get
-                    {
-                        return instance.mVideoShadersIncludeMode;
-                    }
-                }
-
+#endif
                 bool mLogWhenShaderIsCompiled;
                 public static bool logWhenShaderIsCompiled
                 {
@@ -143,6 +148,16 @@ namespace Utj.UnityChoseKun
                 }
 #endif
 
+#if UNITY_2020_1_OR_NEWER
+                VideoShadersIncludeMode mVideoShadersIncludeMode;
+                public static VideoShadersIncludeMode videoShadersIncludeMode
+                {
+                    get
+                    {
+                        return instance.mVideoShadersIncludeMode;
+                    }
+                }
+#endif
 
                 bool mLightsUseColorTemperature;
                 public static bool lightsUseColorTemperature
@@ -217,6 +232,9 @@ namespace Utj.UnityChoseKun
                     if (isSet)
                     {
 #if UNITY_2019_1_OR_NEWER
+                        mCurrentRenderPipelineIdx = -1;
+                        mDefaultRenderPipelineIdx = -1;
+
                         if (GraphicsSettings.renderPipelineAsset == null)
                         {
                             mRenderPipelineAssetType = RenderPipelineAssetType.NONE;
@@ -234,7 +252,7 @@ namespace Utj.UnityChoseKun
                                 mRenderPipelineAssetType = RenderPipelineAssetType.HDRP;
                             }
 
-                            var len = GraphicsSettings.allConfiguredRenderPipelines.Length;
+                            var len = GraphicsSettings.allConfiguredRenderPipelines.Length;                            
                             mAllConfiguredRenderPipelines = new UniversalRenderPipelineAssetKun[len];
                             for (var i = 0; i < len; i++)
                             {
@@ -257,12 +275,24 @@ namespace Utj.UnityChoseKun
                             
                             
                         }
-                        mDefaultRenderingLayerMask = GraphicsSettings.defaultRenderingLayerMask;
-                        mDisableBuiltinCustomRenderTextureUpdate = GraphicsSettings.disableBuiltinCustomRenderTextureUpdate;
+                        
+                        
                         mLogWhenShaderIsCompiled = GraphicsSettings.logWhenShaderIsCompiled;
                         mRealtimeDirectRectangularAreaLights = GraphicsSettings.realtimeDirectRectangularAreaLights;
+
+#endif
+
+#if UNITY_2020_1_OR_NEWER
                         mVideoShadersIncludeMode = GraphicsSettings.videoShadersIncludeMode;
-#endif                                                
+#endif
+
+#if UNITY_2020_2_OR_NEWER
+                        mDefaultRenderingLayerMask = GraphicsSettings.defaultRenderingLayerMask;
+#endif
+
+#if UNITY_2020_3_OR_NEWER
+                        mDisableBuiltinCustomRenderTextureUpdate = GraphicsSettings.disableBuiltinCustomRenderTextureUpdate;
+#endif
                         mLightsUseColorTemperature = GraphicsSettings.lightsUseColorTemperature;
                         mLightsUseLinearIntensity = GraphicsSettings.lightsUseLinearIntensity;                                                
                         mTransparencySortAxis = new Vector3Kun(GraphicsSettings.transparencySortAxis);
@@ -300,14 +330,23 @@ namespace Utj.UnityChoseKun
                     }
                     mCurrentRenderPipelineIdx = binaryReader.ReadInt32();
                     mDefaultRenderPipelineIdx = binaryReader.ReadInt32();
-                    mDefaultRenderingLayerMask = binaryReader.ReadUInt32();
-                    mDisableBuiltinCustomRenderTextureUpdate = binaryReader.ReadBoolean();
+
+                    
                     mLogWhenShaderIsCompiled = binaryReader.ReadBoolean();
                     mRealtimeDirectRectangularAreaLights = binaryReader.ReadBoolean();
+#endif
+
+#if UNITY_2020_1_OR_NEWER
                     mVideoShadersIncludeMode = (VideoShadersIncludeMode)binaryReader.ReadInt32();
+#endif
 
-#endif                    
+#if UNITY_2020_1_OR_NEWER
+                    mDefaultRenderingLayerMask = binaryReader.ReadUInt32();
+#endif
 
+#if UNITY_2020_3_OR_NEWER
+                    mDisableBuiltinCustomRenderTextureUpdate = binaryReader.ReadBoolean();
+#endif
                     mLightsUseColorTemperature = binaryReader.ReadBoolean();
                     mLightsUseLinearIntensity = binaryReader.ReadBoolean();
                     mTransparencySortAxis = SerializerKun.DesirializeObject<Vector3Kun>(binaryReader);
@@ -345,12 +384,25 @@ namespace Utj.UnityChoseKun
                     }
                     binaryWriter.Write(mCurrentRenderPipelineIdx);
                     binaryWriter.Write(mDefaultRenderPipelineIdx);
-                    binaryWriter.Write(mDefaultRenderingLayerMask);
-                    binaryWriter.Write(mDisableBuiltinCustomRenderTextureUpdate);
+                    
+                    
                     binaryWriter.Write(mLogWhenShaderIsCompiled);
                     binaryWriter.Write(mRealtimeDirectRectangularAreaLights);
+
+#endif
+
+#if UNITY_2020_1_OR_NEWER
                     binaryWriter.Write((int)mVideoShadersIncludeMode);
 #endif
+
+#if UNITY_2020_2_OR_NEWER
+                    binaryWriter.Write(mDefaultRenderingLayerMask);
+#endif
+
+#if UNITY_2020_3_OR_NEWER
+                    binaryWriter.Write(mDisableBuiltinCustomRenderTextureUpdate);
+#endif
+
                     binaryWriter.Write(mLightsUseColorTemperature);
                     binaryWriter.Write(mLightsUseLinearIntensity);                                        
                     SerializerKun.Serialize<Vector3Kun>(binaryWriter, mTransparencySortAxis);
@@ -366,11 +418,17 @@ namespace Utj.UnityChoseKun
                     {
                         return;
                     }
-#if UNITY_2019_1_OR_NEWER
-                    GraphicsSettings.defaultRenderingLayerMask = mDefaultRenderingLayerMask;
-                    GraphicsSettings.disableBuiltinCustomRenderTextureUpdate = mDisableBuiltinCustomRenderTextureUpdate;
+#if UNITY_2019_1_OR_NEWER                                        
                     GraphicsSettings.logWhenShaderIsCompiled = mLogWhenShaderIsCompiled;
                     GraphicsSettings.realtimeDirectRectangularAreaLights = mRealtimeDirectRectangularAreaLights;
+#endif
+
+#if UNITY_2020_2_OR_NEWER
+                    GraphicsSettings.defaultRenderingLayerMask = mDefaultRenderingLayerMask;
+#endif
+
+#if UNITY_2020_3_OR_NEWER
+                    GraphicsSettings.disableBuiltinCustomRenderTextureUpdate = mDisableBuiltinCustomRenderTextureUpdate;
 #endif
                     GraphicsSettings.lightsUseColorTemperature = mLightsUseColorTemperature;
                     GraphicsSettings.lightsUseLinearIntensity = mLightsUseLinearIntensity;                                        

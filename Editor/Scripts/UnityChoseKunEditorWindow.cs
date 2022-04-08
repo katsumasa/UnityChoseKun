@@ -368,7 +368,7 @@ namespace Utj.UnityChoseKun.Editor
                 {"UnityEngine.QualitySettings", qualitySettingsView.OnGUI },                                
                 {"UnityEngine.Rendering.GraphicsSettings",GraphicsSettingsView.instance.OnGUI },
                 {"UnityEngine.Rendering.OnDemandRendering",onDemandRenderingView.OnGUI },
-#if UNITY_2019_1_OR_NEWER
+#if UNITY_2021_2_OR_NEWER
                 {"UnityEngine.Rendering.Universal.UniversalRenderPipelineGlobalSettings",UniversalRenderPipelineGlobalSettingsView.instance.OnGUI},
 #endif
                 {"UnityEngine.ScalableBufferManager", scalableBufferManagerView.OnGUI},
@@ -402,6 +402,9 @@ namespace Utj.UnityChoseKun.Editor
                 {UnityChoseKun.MessageID.GraphicsSettingsPull,Engine.Rendering.GraphicsSettingsKun.OnMessageEvent },
 #if UNITY_2019_1_OR_NEWER                
                 {UnityChoseKun.MessageID.UniversalRenderPipelinePull,Engine.Rendering.Universal.UniversalRenderPipelineKun.OnMessageEvent },
+#endif
+
+#if UNITY_2021_2_OR_NEWER
                 {UnityChoseKun.MessageID.UniversalRenderPipelineGlobalSettingsPull,UniversalRenderPipelineGlobalSettingsView.instance.OnMessageEvent},
 #endif
             };

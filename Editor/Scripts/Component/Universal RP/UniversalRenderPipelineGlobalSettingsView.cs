@@ -1,9 +1,9 @@
+#if UNITY_2021_2_OR_NEWER
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEditor;
-
 namespace Utj.UnityChoseKun
 {
     using Engine.Rendering.Universal;
@@ -67,3 +67,4 @@ namespace Utj.UnityChoseKun
         }
     }
 }
+#endif

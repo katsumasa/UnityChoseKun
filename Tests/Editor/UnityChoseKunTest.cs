@@ -453,6 +453,7 @@ public class UnityChoseKunTest
     }
 #endif
 
+#if UNITY_2021_2_OR_NEWER
     [Test]
     public void UniversalRenderPipelineGlobalSettingsKunTest()
     {
@@ -488,6 +489,7 @@ public class UnityChoseKunTest
         var renderPipelineGlobalSettings = prop.GetValue(null) as RenderPipelineGlobalSettings;
         var universalRenderPipelineGlobalSettingsKun = new UniversalRenderPipelineGlobalSettingsKun(renderPipelineGlobalSettings);
     }
+#endif
 
 
     public void SerializerKunTest<T>(T objectKun, T cloneKun) where T : ISerializerKun

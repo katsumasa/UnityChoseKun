@@ -9,6 +9,7 @@ namespace Utj.UnityChoseKun.Engine.Rendering
 {
     namespace Universal
     {
+#if UNITY_2021_2_OR_NEWER
 
         public class UniversalRenderPipelineGlobalSettingsKun : RenderPipelineGlobalSettingsKun
         {
@@ -153,5 +154,6 @@ namespace Utj.UnityChoseKun.Engine.Rendering
 
             }
         }
+#endif
     }
 }

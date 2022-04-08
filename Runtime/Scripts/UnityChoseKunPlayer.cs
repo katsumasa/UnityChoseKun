@@ -177,8 +177,10 @@ namespace Utj.UnityChoseKun.Engine
                     {UnityChoseKun.MessageID.GraphicsSettingsPush,GraphicsSettingsPlayer.OnMessageEventPush },
                     {UnityChoseKun.MessageID.UniversalRenderPipelinePull,UniversalRenderPipelinePlayer.OnMessageEventPull},
                     {UnityChoseKun.MessageID.UniversalRenderPipelinePush,UniversalRenderPipelinePlayer.OnMessageEventPush},
+#if UNITY_2021_2_OR_NEWER
                     {UnityChoseKun.MessageID.UniversalRenderPipelineGlobalSettingsPull,UniversalRenderPipelineGlobalSettingsPlayer.OnMessageEventPull},
                     {UnityChoseKun.MessageID.UniversalRenderPipelineGlobalSettingsPush,UniversalRenderPipelineGlobalSettingsPlayer.OnMessageEventPush},
+#endif
             };
 
 

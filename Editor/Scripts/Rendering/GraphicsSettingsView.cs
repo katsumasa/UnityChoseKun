@@ -71,7 +71,7 @@ namespace Utj.UnityChoseKun
                         EditorGUILayout.LabelField($"CurrentRenderPipeline {GraphicsSettingsKun.currentRenderPipelineIdx}:{GraphicsSettingsKun.allConfiguredRenderPipelines[GraphicsSettingsKun.currentRenderPipelineIdx].name}");
                         EditorGUILayout.LabelField($"DefaultRenderPipeline {GraphicsSettingsKun.defaultRenderPipelineIdx}:{GraphicsSettingsKun.allConfiguredRenderPipelines[GraphicsSettingsKun.defaultRenderPipelineIdx].name}");
 
-
+#if UNITY_2020_3_OR_NEWER
                         EditorGUI.BeginChangeCheck();
                         var disableBuiltinCustomRenderTextureUpdate = GraphicsSettingsKun.disableBuiltinCustomRenderTextureUpdate;
                         disableBuiltinCustomRenderTextureUpdate = EditorGUILayout.ToggleLeft(Styles.disableBuiltinCustomRenderTextureUpdate, disableBuiltinCustomRenderTextureUpdate);
@@ -79,6 +79,7 @@ namespace Utj.UnityChoseKun
                         {
                             GraphicsSettingsKun.disableBuiltinCustomRenderTextureUpdate = disableBuiltinCustomRenderTextureUpdate;
                         }
+#endif
 
                         EditorGUI.BeginChangeCheck();
                         var logWhenShaderIsCompiled = GraphicsSettingsKun.logWhenShaderIsCompiled;
@@ -96,17 +97,19 @@ namespace Utj.UnityChoseKun
                             GraphicsSettingsKun.realtimeDirectRectangularAreaLights = realtimeDirectRectangularAreaLights;
                         }
 
+#if UNITY_2020_1_OR_NEWER
                         EditorGUILayout.BeginHorizontal();
                         EditorGUILayout.LabelField("VideoShadersIncludeMode");
                         var videoShadersIncludeMode = GraphicsSettingsKun.videoShadersIncludeMode;
                         videoShadersIncludeMode = (UnityEngine.Rendering.VideoShadersIncludeMode)EditorGUILayout.EnumPopup(videoShadersIncludeMode);
                         EditorGUILayout.EndHorizontal();
+#endif
                     }
 
                     EditorGUILayout.Space(10);
 #endif
 
-                    EditorGUI.BeginChangeCheck();
+                        EditorGUI.BeginChangeCheck();
                     var lightsUseColorTemperature = GraphicsSettingsKun.lightsUseColorTemperature;
                     lightsUseColorTemperature = EditorGUILayout.ToggleLeft(Styles.lightsUseColorTemperature, lightsUseColorTemperature, GUILayout.ExpandWidth(true));
                     if (EditorGUI.EndChangeCheck())

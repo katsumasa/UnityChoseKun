@@ -551,7 +551,7 @@ namespace Utj.UnityChoseKun
 #if UNITY_2020_1_OR_NEWER
                 if (Lightmapping.lightingSettings.lightmapper == UnityEngine.LightingSettings.Lightmapper.Enlighten && lightKun.type == LightType.Disc)
 #else
-                    if (LightmapEditorSettings.lightmapper == LightmapEditorSettings.Lightmapper.Enlighten && lightKun.lightType == LightType.Disc)
+                if (LightmapEditorSettings.lightmapper == LightmapEditorSettings.Lightmapper.Enlighten && lightKun.type == LightType.Disc)
 #endif
                     EditorGUILayout.HelpBox(StylesEx.noDiscLightInEnlighten.text, MessageType.Warning);
 
