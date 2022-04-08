@@ -38,13 +38,17 @@ UnityChoseKunは再ビルドを行うこと無く、UnityEditor上で開発機�
   - Unity2019.4.11f1
   - Unity2020.2.2f1
   - Unity2020.3.18f1
-  - Unity2021.1.0a8
+  - Unity2021.2.15f1
 - プラットフォーム
   - Android
     - Pixel3XL
     - Pixel4XL
   - iOS
     - iPhone 6S
+
+Universal RPに関しては下記の組み合わせで動作確認を行っています。
+
+- Unity2021.2.15f1 + Universal RP 12.1.5
 
 ## 対応しているClassについて
 
