@@ -1,7 +1,7 @@
 ﻿using System.IO;
 
 
-namespace Utj.UnityChoseKun
+namespace Utj.UnityChoseKun.Engine
 {
     /// <summary>
     /// 

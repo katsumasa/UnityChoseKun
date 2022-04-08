@@ -7,125 +7,126 @@ using UnityEditor;
 
 namespace Utj.UnityChoseKun
 {
+    using Engine;
+    using Engine.Rendering.Universal;
 
-    public class UniversalAdditionalCameraDataView : BehaviourView
+
+    namespace Editor.Rendering.Universal
     {
-        private static class Styles
+        public class UniversalAdditionalCameraDataView : BehaviourView
         {
-            public static readonly Texture2D ComponentIcon = (Texture2D)EditorGUIUtility.Load("d_Camera Icon");
-
-
-            public static readonly GUIContent RenderType = new GUIContent("Render Type");
-            public static GUIContent projectionSettingsHeaderContent { get; } = EditorGUIUtility.TrTextContent("Projection");
-            public static readonly GUIContent projectionContent = EditorGUIUtility.TrTextContent("Projection", "How the Camera renders perspective.\n\nChoose Perspective to render objects with perspective.\n\nChoose Orthographic to render objects uniformly, with no sense of perspective.");
-            public static readonly GUIContent FOVAxisModeContent = EditorGUIUtility.TrTextContent("Field of View Axis", "The axis the Camera's view angle is measured along.");
-            public static readonly GUIContent cameraBody = EditorGUIUtility.TrTextContent("Camera Body");
-            public static readonly GUIContent sensorType = EditorGUIUtility.TrTextContent("Sensor Type", "Common sensor sizes. Choose an item to set Sensor Size, or edit Sensor Size for your custom settings.");
-            public static readonly GUIContent sensorSize = EditorGUIUtility.TrTextContent("Sensor Size", "The size of the camera sensor in millimeters.");
-            public static readonly GUIContent lens = EditorGUIUtility.TrTextContent("Lens");
-
-            public static readonly GUIContent header = EditorGUIUtility.TrTextContent("Rendering", "These settings control for the specific rendering features for this camera.");
-            public static readonly GUIContent rendererType = EditorGUIUtility.TrTextContent("Renderer", "The series of operations that translates code into visuals. These have different capabilities and performance characteristics.");
-            public static readonly GUIContent renderPostProcessing = EditorGUIUtility.TrTextContent("Post Processing", "Enable this to make this camera render post-processing effects.");
-            public static readonly GUIContent antialiasing = EditorGUIUtility.TrTextContent("Anti-aliasing", "The method the camera uses to smooth jagged edges.");
-            public static readonly GUIContent renderingShadows = EditorGUIUtility.TrTextContent("Render Shadows", "Makes this camera render shadows.");
-            public static readonly GUIContent requireDepthTexture = EditorGUIUtility.TrTextContent("Depth Texture", "If this is enabled, the camera builds a screen-space depth texture. Note that generating the texture incurs a performance cost.");
-            public static readonly GUIContent requireOpaqueTexture = EditorGUIUtility.TrTextContent("Opaque Texture", "If this is enabled, the camera copies the rendered view so it can be accessed at a later stage in the pipeline.");
-
-        }
-
-
-
-        public UniversalAdditionalCameraDataKun universalAdditionalCameraDataKun
-        {
-            get { return behaviourKun as UniversalAdditionalCameraDataKun; }
-            set { behaviourKun = value; }
-        }
-
-
-        public CameraKun mBaseCameraKun;
-
-        public CameraKun baseCameraKun
-        {
-            get
+            private static class Styles
             {
-                if (mBaseCameraKun == null)
+                public static readonly Texture2D ComponentIcon = (Texture2D)EditorGUIUtility.Load("d_Camera Icon");
+
+
+                public static readonly GUIContent RenderType = new GUIContent("Render Type");
+                public static GUIContent projectionSettingsHeaderContent { get; } = EditorGUIUtility.TrTextContent("Projection");
+                public static readonly GUIContent projectionContent = EditorGUIUtility.TrTextContent("Projection", "How the Camera renders perspective.\n\nChoose Perspective to render objects with perspective.\n\nChoose Orthographic to render objects uniformly, with no sense of perspective.");
+                public static readonly GUIContent FOVAxisModeContent = EditorGUIUtility.TrTextContent("Field of View Axis", "The axis the Camera's view angle is measured along.");
+                public static readonly GUIContent cameraBody = EditorGUIUtility.TrTextContent("Camera Body");
+                public static readonly GUIContent sensorType = EditorGUIUtility.TrTextContent("Sensor Type", "Common sensor sizes. Choose an item to set Sensor Size, or edit Sensor Size for your custom settings.");
+                public static readonly GUIContent sensorSize = EditorGUIUtility.TrTextContent("Sensor Size", "The size of the camera sensor in millimeters.");
+                public static readonly GUIContent lens = EditorGUIUtility.TrTextContent("Lens");
+
+                public static readonly GUIContent header = EditorGUIUtility.TrTextContent("Rendering", "These settings control for the specific rendering features for this camera.");
+                public static readonly GUIContent rendererType = EditorGUIUtility.TrTextContent("Renderer", "The series of operations that translates code into visuals. These have different capabilities and performance characteristics.");
+                public static readonly GUIContent renderPostProcessing = EditorGUIUtility.TrTextContent("Post Processing", "Enable this to make this camera render post-processing effects.");
+                public static readonly GUIContent antialiasing = EditorGUIUtility.TrTextContent("Anti-aliasing", "The method the camera uses to smooth jagged edges.");
+                public static readonly GUIContent renderingShadows = EditorGUIUtility.TrTextContent("Render Shadows", "Makes this camera render shadows.");
+                public static readonly GUIContent requireDepthTexture = EditorGUIUtility.TrTextContent("Depth Texture", "If this is enabled, the camera builds a screen-space depth texture. Note that generating the texture incurs a performance cost.");
+                public static readonly GUIContent requireOpaqueTexture = EditorGUIUtility.TrTextContent("Opaque Texture", "If this is enabled, the camera copies the rendered view so it can be accessed at a later stage in the pipeline.");
+
+            }
+
+
+
+            public UniversalAdditionalCameraDataKun universalAdditionalCameraDataKun
+            {
+                get { return behaviourKun as UniversalAdditionalCameraDataKun; }
+                set { behaviourKun = value; }
+            }
+
+
+            public CameraKun mBaseCameraKun;
+
+            public CameraKun baseCameraKun
+            {
+                get
                 {
-                    for (var i = 0; i < componentKun.gameObjectKun.componentKunTypes.Length; i++)
+                    if (mBaseCameraKun == null)
                     {
-                        if (componentKun.gameObjectKun.componentKunTypes[i] == ComponentKun.ComponentKunType.Camera)
+                        for (var i = 0; i < componentKun.gameObjectKun.componentKunTypes.Length; i++)
                         {
-                            mBaseCameraKun = componentKun.gameObjectKun.componentKuns[i] as CameraKun;
-                            break;
+                            if (componentKun.gameObjectKun.componentKunTypes[i] == ComponentKun.ComponentKunType.Camera)
+                            {
+                                mBaseCameraKun = componentKun.gameObjectKun.componentKuns[i] as CameraKun;
+                                break;
+                            }
                         }
                     }
+                    return mBaseCameraKun;
                 }
-                return mBaseCameraKun;
             }
-        }
 
 
-        Vector2 mCustomSensorSize;
+            Vector2 mCustomSensorSize;
 
-        Vector2 customSensorSize
-        {
-            get
+            Vector2 customSensorSize
             {
-                if (mCustomSensorSize == null)
+                get
                 {
-                    mCustomSensorSize = new Vector2();
+                    if (mCustomSensorSize == null)
+                    {
+                        mCustomSensorSize = new Vector2();
+                    }
+                    return mCustomSensorSize;
                 }
-                return mCustomSensorSize;
+
+                set
+                {
+                    mCustomSensorSize = value;
+                }
             }
 
-            set
+            public bool projectionFoldOut;
+            public bool renderingFoldOut;
+            public bool stackFoldOut;
+
+            public UniversalAdditionalCameraDataView() : base()
             {
-                mCustomSensorSize = value;
+                componentIcon = Styles.ComponentIcon;
+                projectionFoldOut = true;
+                renderingFoldOut = true;
+                CameraView.isEnableOnGUI = false;
             }
-        }
 
-        public bool projectionFoldOut;
-        public bool renderingFoldOut;
-        public bool stackFoldOut;
-
-        public UniversalAdditionalCameraDataView() : base()
-        {
-            componentIcon = Styles.ComponentIcon;
-            projectionFoldOut = true;
-            renderingFoldOut = true;
-            CameraView.isEnableOnGUI = false;
-        }
-
-
-        public override bool OnGUI()
-        {
-            if (base.OnGUI())
+            public void DrawContents()
             {
-
                 EditorGUI.BeginChangeCheck();
                 using (new EditorGUI.IndentLevelScope())
                 {
 
-                    universalAdditionalCameraDataKun.renderType = (UniversalAdditionalCameraDataKun.CameraRenderType)EditorGUILayout.EnumPopup(Styles.RenderType,universalAdditionalCameraDataKun.renderType);
+                    universalAdditionalCameraDataKun.renderType = (UniversalAdditionalCameraDataKun.CameraRenderType)EditorGUILayout.EnumPopup(Styles.RenderType, universalAdditionalCameraDataKun.renderType);
 
-                    projectionFoldOut = EditorGUILayout.Foldout(projectionFoldOut,Styles.projectionSettingsHeaderContent);                                        
+                    projectionFoldOut = EditorGUILayout.Foldout(projectionFoldOut, Styles.projectionSettingsHeaderContent);
                     using (new EditorGUI.IndentLevelScope())
                     {
-                        if(projectionFoldOut)
+                        if (projectionFoldOut)
                             DrawProjection();
                     }
 
-                    renderingFoldOut = EditorGUILayout.Foldout(renderingFoldOut,Styles.header);
+                    renderingFoldOut = EditorGUILayout.Foldout(renderingFoldOut, Styles.header);
                     using (new EditorGUI.IndentLevelScope())
                     {
-                        if(renderingFoldOut)
+                        if (renderingFoldOut)
                             DrawRendering();
                     }
 
-                    stackFoldOut = EditorGUILayout.Foldout(stackFoldOut,"Stack");
+                    stackFoldOut = EditorGUILayout.Foldout(stackFoldOut, "Stack");
                     using (new EditorGUI.IndentLevelScope())
                     {
-                        if(stackFoldOut)
+                        if (stackFoldOut)
                         {
                             DrawStack();
                         }
@@ -136,150 +137,159 @@ namespace Utj.UnityChoseKun
                     universalAdditionalCameraDataKun.dirty = true;
                 }
             }
-            return true;
-        }
 
 
-        void DrawProjection()
-        {
-            CameraView.ProjectionType projectionType = universalAdditionalCameraDataKun.orthographic ? CameraView.ProjectionType.Orthographic : CameraView.ProjectionType.Perspective;
-            projectionType = (CameraView.ProjectionType)EditorGUILayout.EnumPopup(CameraView.Styles.projection, projectionType);
-            universalAdditionalCameraDataKun.orthographic = (projectionType == CameraView.ProjectionType.Orthographic);
-            universalAdditionalCameraDataKun.fieldOfView = EditorGUILayout.Slider(CameraView.Styles.fieldOfView, universalAdditionalCameraDataKun.fieldOfView, 0.00001f, 179f);
-
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Clipping Planes");
-            EditorGUILayout.BeginVertical();
-            universalAdditionalCameraDataKun.nearClipPlane = EditorGUILayout.FloatField("Near", universalAdditionalCameraDataKun.nearClipPlane);
-            universalAdditionalCameraDataKun.farClipPlane = EditorGUILayout.FloatField("Fear", universalAdditionalCameraDataKun.farClipPlane);
-            EditorGUILayout.EndVertical();
-            EditorGUILayout.EndHorizontal();
-
-            if (projectionType == CameraView.ProjectionType.Perspective)
+            public override bool OnGUI()
             {
-                universalAdditionalCameraDataKun.usePhysicalProperties = EditorGUILayout.Toggle(CameraView.Styles.physicalCamera, universalAdditionalCameraDataKun.usePhysicalProperties);
-                if (universalAdditionalCameraDataKun.usePhysicalProperties)
+                if (base.OnGUI())
                 {
+                    
+                }
+                return true;
+            }
 
-                    EditorGUILayout.LabelField(Styles.cameraBody);
 
-                    using (new EditorGUI.IndentLevelScope())
+            void DrawProjection()
+            {
+                CameraView.ProjectionType projectionType = universalAdditionalCameraDataKun.orthographic ? CameraView.ProjectionType.Orthographic : CameraView.ProjectionType.Perspective;
+                projectionType = (CameraView.ProjectionType)EditorGUILayout.EnumPopup(CameraView.Styles.projection, projectionType);
+                universalAdditionalCameraDataKun.orthographic = (projectionType == CameraView.ProjectionType.Orthographic);
+                universalAdditionalCameraDataKun.fieldOfView = EditorGUILayout.Slider(CameraView.Styles.fieldOfView, universalAdditionalCameraDataKun.fieldOfView, 0.00001f, 179f);
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField("Clipping Planes");
+                EditorGUILayout.BeginVertical();
+                universalAdditionalCameraDataKun.nearClipPlane = EditorGUILayout.FloatField("Near", universalAdditionalCameraDataKun.nearClipPlane);
+                universalAdditionalCameraDataKun.farClipPlane = EditorGUILayout.FloatField("Fear", universalAdditionalCameraDataKun.farClipPlane);
+                EditorGUILayout.EndVertical();
+                EditorGUILayout.EndHorizontal();
+
+                if (projectionType == CameraView.ProjectionType.Perspective)
+                {
+                    universalAdditionalCameraDataKun.usePhysicalProperties = EditorGUILayout.Toggle(CameraView.Styles.physicalCamera, universalAdditionalCameraDataKun.usePhysicalProperties);
+                    if (universalAdditionalCameraDataKun.usePhysicalProperties)
                     {
-                        EditorGUI.BeginChangeCheck();
-                        var oldFilmGateIndex = Array.IndexOf(CameraView.k_ApertureFormatValues, new Vector2((float)Math.Round(universalAdditionalCameraDataKun.sensorSize.x, 3), (float)Math.Round(universalAdditionalCameraDataKun.sensorSize.y, 3)));
-                        oldFilmGateIndex = (oldFilmGateIndex == -1) ? CameraView.k_ApertureFormatNames.Length - 1 : oldFilmGateIndex;
 
+                        EditorGUILayout.LabelField(Styles.cameraBody);
 
-                        var newFilmGateIndex = EditorGUILayout.Popup(Styles.sensorType, oldFilmGateIndex, CameraView.k_ApertureFormatNames);
-                        if (EditorGUI.EndChangeCheck())
+                        using (new EditorGUI.IndentLevelScope())
                         {
-                            if (newFilmGateIndex == CameraView.k_ApertureFormatNames.Length - 1)
+                            EditorGUI.BeginChangeCheck();
+                            var oldFilmGateIndex = Array.IndexOf(CameraView.k_ApertureFormatValues, new Vector2((float)Math.Round(universalAdditionalCameraDataKun.sensorSize.x, 3), (float)Math.Round(universalAdditionalCameraDataKun.sensorSize.y, 3)));
+                            oldFilmGateIndex = (oldFilmGateIndex == -1) ? CameraView.k_ApertureFormatNames.Length - 1 : oldFilmGateIndex;
+
+
+                            var newFilmGateIndex = EditorGUILayout.Popup(Styles.sensorType, oldFilmGateIndex, CameraView.k_ApertureFormatNames);
+                            if (EditorGUI.EndChangeCheck())
                             {
-                                universalAdditionalCameraDataKun.sensorSize = new Vector2Kun(customSensorSize);
+                                if (newFilmGateIndex == CameraView.k_ApertureFormatNames.Length - 1)
+                                {
+                                    universalAdditionalCameraDataKun.sensorSize = new Vector2Kun(customSensorSize);
+                                }
+                                else
+                                {
+                                    universalAdditionalCameraDataKun.sensorSize = new Vector2Kun(CameraView.k_ApertureFormatValues[newFilmGateIndex]);
+                                }
                             }
-                            else
+
+                            var sensorSize = universalAdditionalCameraDataKun.sensorSize.GetVector2();
+
+                            EditorGUI.BeginChangeCheck();
+                            sensorSize = EditorGUILayout.Vector2Field(Styles.sensorSize, sensorSize);
+                            if (EditorGUI.EndChangeCheck())
                             {
-                                universalAdditionalCameraDataKun.sensorSize = new Vector2Kun(CameraView.k_ApertureFormatValues[newFilmGateIndex]);
+                                customSensorSize = sensorSize;
+                                universalAdditionalCameraDataKun.sensorSize = new Vector2Kun(sensorSize);
                             }
+
+                            universalAdditionalCameraDataKun.gateFit = (Camera.GateFitMode)EditorGUILayout.EnumPopup(CameraView.Styles.gateFit, universalAdditionalCameraDataKun.gateFit);
                         }
 
-                        var sensorSize = universalAdditionalCameraDataKun.sensorSize.GetVector2();
-
-                        EditorGUI.BeginChangeCheck();
-                        sensorSize = EditorGUILayout.Vector2Field(Styles.sensorSize, sensorSize);
-                        if (EditorGUI.EndChangeCheck())
+                        EditorGUILayout.LabelField(Styles.lens);
+                        using (new EditorGUI.IndentLevelScope())
                         {
-                            customSensorSize = sensorSize;
-                            universalAdditionalCameraDataKun.sensorSize = new Vector2Kun(sensorSize);
+                            universalAdditionalCameraDataKun.focalLength = EditorGUILayout.FloatField(CameraView.Styles.focalLength, universalAdditionalCameraDataKun.focalLength);
+                            var v2 = universalAdditionalCameraDataKun.lensShift.GetVector2();
+                            v2 = EditorGUILayout.Vector2Field(CameraView.Styles.lensShift, v2);
+                            universalAdditionalCameraDataKun.lensShift = new Vector2Kun(v2);
                         }
-
-                        universalAdditionalCameraDataKun.gateFit = (Camera.GateFitMode)EditorGUILayout.EnumPopup(CameraView.Styles.gateFit, universalAdditionalCameraDataKun.gateFit);
-                    }
-
-                    EditorGUILayout.LabelField(Styles.lens);
-                    using (new EditorGUI.IndentLevelScope())
-                    {
-                        universalAdditionalCameraDataKun.focalLength = EditorGUILayout.FloatField(CameraView.Styles.focalLength, universalAdditionalCameraDataKun.focalLength);
-                        var v2 = universalAdditionalCameraDataKun.lensShift.GetVector2();
-                        v2 = EditorGUILayout.Vector2Field(CameraView.Styles.lensShift, v2);
-                        universalAdditionalCameraDataKun.lensShift  = new Vector2Kun(v2);
                     }
                 }
             }
-        }
 
 
-        void DrawRendering()
-        {            
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField(Styles.rendererType);
-            universalAdditionalCameraDataKun.rendererIndex = EditorGUILayout.IntPopup(universalAdditionalCameraDataKun.rendererIndex, universalAdditionalCameraDataKun.renderers,universalAdditionalCameraDataKun.rendererIndexList);
-            EditorGUILayout.EndHorizontal();
-
-            universalAdditionalCameraDataKun.renderPostProcessing = EditorGUILayout.Toggle(Styles.renderPostProcessing, universalAdditionalCameraDataKun.renderPostProcessing);
-            universalAdditionalCameraDataKun.antialiasingMode = (UniversalAdditionalCameraDataKun.AntialiasingMode)EditorGUILayout.EnumPopup(Styles.antialiasing, universalAdditionalCameraDataKun.antialiasingMode);
-            universalAdditionalCameraDataKun.stopNaN = EditorGUILayout.Toggle("Stop Nans", universalAdditionalCameraDataKun.stopNaN);
-            universalAdditionalCameraDataKun.dithering = EditorGUILayout.Toggle("Dithering", universalAdditionalCameraDataKun.dithering);
-            universalAdditionalCameraDataKun.renderShadows = EditorGUILayout.Toggle(Styles.renderingShadows, universalAdditionalCameraDataKun.renderShadows);
-            universalAdditionalCameraDataKun.depth = (int)EditorGUILayout.IntSlider("Priority",(int)universalAdditionalCameraDataKun.depth,-100,100);
-            
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField(Styles.requireOpaqueTexture);
-            universalAdditionalCameraDataKun.requiresColorOption = (UniversalAdditionalCameraDataKun.CameraOverrideOption)EditorGUILayout.EnumPopup(universalAdditionalCameraDataKun.requiresColorOption);
-            EditorGUILayout.EndHorizontal();
-
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField(Styles.requireDepthTexture);
-            universalAdditionalCameraDataKun.requiresDepthTextureOption = (UniversalAdditionalCameraDataKun.CameraOverrideOption)EditorGUILayout.EnumPopup(universalAdditionalCameraDataKun.requiresDepthTextureOption);
-            EditorGUILayout.EndHorizontal();
-
-            universalAdditionalCameraDataKun.cullingMask = LayerMaskField("Culling Mask", universalAdditionalCameraDataKun.cullingMask).value;
-            universalAdditionalCameraDataKun.useOcclusionCulling = EditorGUILayout.Toggle("Occlusion Culling", universalAdditionalCameraDataKun.useOcclusionCulling);
-        }
-
-
-        void DrawStack()
-        {
-            EditorGUILayout.LabelField("Cameras");
-            for(var i = 0; i < universalAdditionalCameraDataKun.cameraStack.Length; i++)
+            void DrawRendering()
             {
-                EditorGUILayout.LabelField(universalAdditionalCameraDataKun.cameraStack[i].name);
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.rendererType);
+                universalAdditionalCameraDataKun.rendererIndex = EditorGUILayout.IntPopup(universalAdditionalCameraDataKun.rendererIndex, universalAdditionalCameraDataKun.renderers, universalAdditionalCameraDataKun.rendererIndexList);
+                EditorGUILayout.EndHorizontal();
+
+                universalAdditionalCameraDataKun.renderPostProcessing = EditorGUILayout.Toggle(Styles.renderPostProcessing, universalAdditionalCameraDataKun.renderPostProcessing);
+                universalAdditionalCameraDataKun.antialiasingMode = (UniversalAdditionalCameraDataKun.AntialiasingMode)EditorGUILayout.EnumPopup(Styles.antialiasing, universalAdditionalCameraDataKun.antialiasingMode);
+                universalAdditionalCameraDataKun.stopNaN = EditorGUILayout.Toggle("Stop Nans", universalAdditionalCameraDataKun.stopNaN);
+                universalAdditionalCameraDataKun.dithering = EditorGUILayout.Toggle("Dithering", universalAdditionalCameraDataKun.dithering);
+                universalAdditionalCameraDataKun.renderShadows = EditorGUILayout.Toggle(Styles.renderingShadows, universalAdditionalCameraDataKun.renderShadows);
+                universalAdditionalCameraDataKun.depth = (int)EditorGUILayout.IntSlider("Priority", (int)universalAdditionalCameraDataKun.depth, -100, 100);
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.requireOpaqueTexture);
+                universalAdditionalCameraDataKun.requiresColorOption = (UniversalAdditionalCameraDataKun.CameraOverrideOption)EditorGUILayout.EnumPopup(universalAdditionalCameraDataKun.requiresColorOption);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.requireDepthTexture);
+                universalAdditionalCameraDataKun.requiresDepthTextureOption = (UniversalAdditionalCameraDataKun.CameraOverrideOption)EditorGUILayout.EnumPopup(universalAdditionalCameraDataKun.requiresDepthTextureOption);
+                EditorGUILayout.EndHorizontal();
+
+                universalAdditionalCameraDataKun.cullingMask = LayerMaskField("Culling Mask", universalAdditionalCameraDataKun.cullingMask).value;
+                universalAdditionalCameraDataKun.useOcclusionCulling = EditorGUILayout.Toggle("Occlusion Culling", universalAdditionalCameraDataKun.useOcclusionCulling);
             }
-        }
 
 
-        public LayerMask LayerMaskField(string label, LayerMask layerMask)
-        {
-            List<string> layers = new List<string>();
-            List<int> layerNumbers = new List<int>();
-
-            for (var i = 0; i < 32; ++i)
+            void DrawStack()
             {
-                string layerName = LayerMask.LayerToName(i);
-                if (!string.IsNullOrEmpty(layerName))
+                EditorGUILayout.LabelField("Cameras");
+                for (var i = 0; i < universalAdditionalCameraDataKun.cameraStack.Length; i++)
                 {
-                    layers.Add(layerName);
-                    layerNumbers.Add(i);
+                    EditorGUILayout.LabelField(universalAdditionalCameraDataKun.cameraStack[i].name);
                 }
             }
 
-            int maskWithoutEmpty = 0;
-            for (var i = 0; i < layerNumbers.Count; ++i)
-            {
-                if (0 < ((1 << layerNumbers[i]) & layerMask.value))
-                    maskWithoutEmpty |= 1 << i;
-            }
 
-            maskWithoutEmpty = EditorGUILayout.MaskField(label, maskWithoutEmpty, layers.ToArray());
-            int mask = 0;
-            for (var i = 0; i < layerNumbers.Count; ++i)
+            public LayerMask LayerMaskField(string label, LayerMask layerMask)
             {
-                if (0 < (maskWithoutEmpty & (1 << i)))
-                    mask |= 1 << layerNumbers[i];
-            }
-            layerMask.value = mask;
+                List<string> layers = new List<string>();
+                List<int> layerNumbers = new List<int>();
 
-            return layerMask;
+                for (var i = 0; i < 32; ++i)
+                {
+                    string layerName = LayerMask.LayerToName(i);
+                    if (!string.IsNullOrEmpty(layerName))
+                    {
+                        layers.Add(layerName);
+                        layerNumbers.Add(i);
+                    }
+                }
+
+                int maskWithoutEmpty = 0;
+                for (var i = 0; i < layerNumbers.Count; ++i)
+                {
+                    if (0 < ((1 << layerNumbers[i]) & layerMask.value))
+                        maskWithoutEmpty |= 1 << i;
+                }
+
+                maskWithoutEmpty = EditorGUILayout.MaskField(label, maskWithoutEmpty, layers.ToArray());
+                int mask = 0;
+                for (var i = 0; i < layerNumbers.Count; ++i)
+                {
+                    if (0 < (maskWithoutEmpty & (1 << i)))
+                        mask |= 1 << layerNumbers[i];
+                }
+                layerMask.value = mask;
+
+                return layerMask;
+            }
         }
     }
 }

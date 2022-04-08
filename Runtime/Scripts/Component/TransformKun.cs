@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 
-namespace Utj.UnityChoseKun
+namespace Utj.UnityChoseKun.Engine
 {           
     /// <summary>
     /// Transformをシリアライズ・デシリアライズする為のClass

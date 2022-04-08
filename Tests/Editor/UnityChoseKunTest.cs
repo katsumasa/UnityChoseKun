@@ -5,8 +5,9 @@ using Utj.UnityChoseKun;
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.Rendering;
-using Utj.UnityChoseKun.URP;
-
+using Utj.UnityChoseKun.Engine;
+using Utj.UnityChoseKun.Engine.Rendering;
+using Utj.UnityChoseKun.Engine.Rendering.Universal;
 
 public class UnityChoseKunTest
 {
@@ -388,6 +389,8 @@ public class UnityChoseKunTest
             {
                 var universalRenderPipelineAssetKun = new UniversalRenderPipelineAssetKun(renderPipeline);
                 SerializerKunTest<UniversalRenderPipelineAssetKun>(universalRenderPipelineAssetKun, new UniversalRenderPipelineAssetKun());
+                universalRenderPipelineAssetKun.dirty = true;
+                universalRenderPipelineAssetKun.WriteBack(renderPipeline);
             }
  
         }
@@ -398,6 +401,92 @@ public class UnityChoseKunTest
     public void QualitySettingsKunTest()
     {
         SerializerKunTest<QualitySettingsKun>(new QualitySettingsKun(true), new QualitySettingsKun());
+    }
+
+
+    [Test]
+    public void GraphicsSettingsKunTest()
+    {
+        SerializerKunTest<GraphicsSettingsKun>(new GraphicsSettingsKun(true),new GraphicsSettingsKun());
+    }
+#if false
+    [Test]
+    public void UniversalAdditionalLightDataKunTest()
+    {
+        var scene = UnityEditor.SceneManagement.EditorSceneManager.OpenScene(mTestSceneName);
+        var array = GetComponentAllInScene<UnityEngine.Rendering.Universal.UniversalAdditionalLightData>();
+        var o = new UniversalAdditionalLightDataKun(array[0]);
+        var clone = new UniversalAdditionalLightDataKun();
+        SerializerKunTest<UniversalAdditionalLightDataKun>(o, clone);
+        o.dirty = true;
+        o.WriteBack(array[0]);
+    }
+#endif
+    [Test]
+    public void SystemInfoKunTest()
+    {     
+        SerializerKunTest<SystemInfoKun>(new SystemInfoKun(true), new SystemInfoKun());
+    }
+
+    [Test]
+    public void RenderPipelineKunTest()
+    {
+        new RenderPipelineKun();
+    }
+
+#if false
+    [Test]
+    public void UniversalRenderPipelineKunTest()
+    {
+        var t = typeof(UnityEngine.Rendering.Universal.UniversalRenderPipeline);
+
+
+        var assembly = System.Reflection.Assembly.Load("Unity.RenderPipelines.Universal.Runtime");
+
+        var t2 = assembly.GetType("UnityEngine.Rendering.Universal.UniversalRenderPipeline");
+        
+        var prop = t.GetProperties();
+        var fields1 = t.GetFields(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+        var fields2 = t.GetFields(System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+
+        new UniversalRenderPipelineKun();
+    }
+#endif
+
+    [Test]
+    public void UniversalRenderPipelineGlobalSettingsKunTest()
+    {
+        //var type = GraphicsSettings.defaultRenderPipeline.GetType();
+        //Debug.Log(type.FullName);
+
+        if (GraphicsSettings.defaultRenderPipeline == null)
+        {
+            return;
+        }
+
+        var type = GraphicsSettings.defaultRenderPipeline.GetType();
+        if (type.FullName != "UnityEngine.Rendering.Universal.UniversalRenderPipelineAsset")
+        {
+            return;
+        }
+
+        var assembly = System.Reflection.Assembly.Load("Unity.RenderPipelines.Universal.Runtime");
+        if (assembly == null)
+        {
+            return;
+        }
+        type = assembly.GetType("UnityEngine.Rendering.Universal.UniversalRenderPipelineGlobalSettings");
+        if (type == null)
+        {
+            return;
+        }
+        var prop = type.GetProperty("instance");
+        if (prop == null)
+        {
+            return;
+        }
+        var renderPipelineGlobalSettings = prop.GetValue(null) as RenderPipelineGlobalSettings;
+        var universalRenderPipelineGlobalSettingsKun = new UniversalRenderPipelineGlobalSettingsKun(renderPipelineGlobalSettings);
     }
 
 

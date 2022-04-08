@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 
-namespace Utj.UnityChoseKun
+namespace Utj.UnityChoseKun.Engine
 {
     /// <summary>
     /// HierarchyPlayerで使用するMessageデータ

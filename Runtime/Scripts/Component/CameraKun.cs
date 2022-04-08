@@ -1,10 +1,11 @@
-﻿namespace  Utj.UnityChoseKun {
-    using System;
-    using System.IO;
-    using System.Collections.Generic;
-    using UnityEngine;
+﻿using System;
+using System.IO;
+using System.Collections.Generic;
+using UnityEngine;
 
 
+namespace  Utj.UnityChoseKun.Engine
+{
     // <summary>
     // CameraをPlayer/Editorの両方でシリアライズ/デシリアライズする為のClass
     // </summary>

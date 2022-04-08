@@ -11,16 +11,15 @@
 //#define SERIALIZATION_JSON
 
 
+using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using UnityEngine;
+
+
 namespace Utj.UnityChoseKun
 {
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Reflection;
-    using System.Runtime.InteropServices;
-    using System.IO;
-    using System.Runtime.Serialization.Formatters.Binary;
-    using UnityEngine;   
-    using System;
+
 
     /// <summary>
     /// UnityChoseKunの共通パケット
@@ -65,6 +64,12 @@ namespace Utj.UnityChoseKun
             SystemInfoPull,
             SpritePull,
             SortingLayerPull,
+            GraphicsSettingsPull,
+            GraphicsSettingsPush,
+            UniversalRenderPipelinePull,
+            UniversalRenderPipelinePush,
+            UniversalRenderPipelineGlobalSettingsPull,
+            UniversalRenderPipelineGlobalSettingsPush,
         }
 
 

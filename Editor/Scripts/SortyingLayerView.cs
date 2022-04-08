@@ -1,40 +1,43 @@
 ﻿using System.IO;
-using System.Text;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+
 namespace Utj.UnityChoseKun
 {
+    using Engine;
 
-    [System.Serializable]
-    public class SortingLayerView
+
+    namespace Editor
     {
-        public void OnGUI()
+        [System.Serializable]
+        public class SortingLayerView
         {
-            if(SortingLayerKun.layers != null)
+            public void OnGUI()
             {
-                foreach(var layer in SortingLayerKun.layers)
+                if (SortingLayerKun.layers != null)
                 {
-                    EditorGUILayout.BeginHorizontal();
-                    EditorGUILayout.LabelField("Layer  " + layer.id);
-                    EditorGUILayout.TextField(layer.name);
-                    EditorGUILayout.EndHorizontal();
+                    foreach (var layer in SortingLayerKun.layers)
+                    {
+                        EditorGUILayout.BeginHorizontal();
+                        EditorGUILayout.LabelField("Layer  " + layer.id);
+                        EditorGUILayout.TextField(layer.name);
+                        EditorGUILayout.EndHorizontal();
+                    }
+                }
+                if (GUILayout.Button("Pull"))
+                {
+                    var packet = new SortingLayerPacket();
+                    UnityChoseKunEditor.SendMessage<SortingLayerPacket>(UnityChoseKun.MessageID.SortingLayerPull, packet);
                 }
             }
-            if (GUILayout.Button("Pull"))
+
+            public void OnMessageEvent(BinaryReader binaryReader)
             {
                 var packet = new SortingLayerPacket();
-                UnityChoseKunEditor.SendMessage<SortingLayerPacket>(UnityChoseKun.MessageID.SortingLayerPull, packet);
+                packet.Deserialize(binaryReader);
+                SortingLayerKun.layers = packet.layers;
             }
-        }
-
-        public void OnMessageEvent(BinaryReader binaryReader)
-        {
-            var packet = new SortingLayerPacket();
-            packet.Deserialize(binaryReader);
-            SortingLayerKun.layers = packet.layers;
         }
     }
 }

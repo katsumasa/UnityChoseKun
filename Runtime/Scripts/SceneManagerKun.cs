@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Utj.UnityChoseKun
-{
 
+namespace Utj.UnityChoseKun.Engine
+{
     [System.Serializable]
     public class SceneManagerKun : ISerializerKun
     {

@@ -6,70 +6,74 @@ using UnityEditor;
 
 namespace Utj.UnityChoseKun
 {
-    /// <summary>
-    /// CapuselCplliderを描画する為のClass
-    /// </summary>
-    public class CapsuleColliderView : ColliderView
+    using Engine;
+
+
+    namespace Editor
     {
-        private static class Styles
+        /// <summary>
+        /// CapuselCplliderを描画する為のClass
+        /// </summary>
+        public class CapsuleColliderView : ColliderView
         {
-            public static readonly Texture2D ComponentIcon = (Texture2D)EditorGUIUtility.Load("d_CapsuleCollider Icon");
-            
-
-            public static readonly GUIContent[] AxixContents =
+            private static class Styles
             {
-                new GUIContent("X-Axis"),
-                new GUIContent("Y-Axis"),
-                new GUIContent("Z-Axis"),
-            };
-        }
-
-
-        CapsuleColliderKun capsuleColliderKun
-        {
-            get { return componentKun as CapsuleColliderKun; }
-            set { componentKun = value; }
-        }
-        
-        
-
-        public CapsuleColliderView():base()
-        {
-
-            componentIcon = Styles.ComponentIcon;
-        }
-
-
-        public override bool OnGUI()
-        {            
-            if(DrawHeader())
-            {
-                EditorGUI.BeginChangeCheck();
-                using (new EditorGUI.IndentLevelScope())
+                public static readonly Texture2D ComponentIcon = (Texture2D)EditorGUIUtility.Load("d_CapsuleCollider Icon");
+                public static readonly GUIContent[] AxixContents =
                 {
-                    colliderKun.isTrigger = EditorGUILayout.Toggle("Is Trigger", colliderKun.isTrigger);
-                    EditorGUILayout.LabelField("Material", colliderKun.material);
-                    
-                    EditorGUILayout.BeginHorizontal();
-                    EditorGUILayout.PrefixLabel("Center");
-                    colliderKun.boundsKun.center = EditorGUILayout.Vector3Field("", colliderKun.boundsKun.center);
-                    EditorGUILayout.EndHorizontal();
-
-                    capsuleColliderKun.radius = EditorGUILayout.FloatField("Radius", capsuleColliderKun.radius);
-                    capsuleColliderKun.height = EditorGUILayout.FloatField("Height", capsuleColliderKun.height);
-
-                    capsuleColliderKun.direction = EditorGUILayout.Popup(capsuleColliderKun.direction, Styles.AxixContents);
-
-                }
-                if (EditorGUI.EndChangeCheck())
-                {
-                    colliderKun.dirty = true;
-                }
+                    new GUIContent("X-Axis"),
+                    new GUIContent("Y-Axis"),
+                    new GUIContent("Z-Axis"),
+                };
             }
-            
 
-            return true;
+
+            CapsuleColliderKun capsuleColliderKun
+            {
+                get { return componentKun as CapsuleColliderKun; }
+                set { componentKun = value; }
+            }
+
+
+
+            public CapsuleColliderView() : base()
+            {
+
+                componentIcon = Styles.ComponentIcon;
+            }
+
+
+            public override bool OnGUI()
+            {
+                if (DrawHeader())
+                {
+                    EditorGUI.BeginChangeCheck();
+                    using (new EditorGUI.IndentLevelScope())
+                    {
+                        colliderKun.isTrigger = EditorGUILayout.Toggle("Is Trigger", colliderKun.isTrigger);
+                        EditorGUILayout.LabelField("Material", colliderKun.material);
+
+                        EditorGUILayout.BeginHorizontal();
+                        EditorGUILayout.PrefixLabel("Center");
+                        colliderKun.boundsKun.center = EditorGUILayout.Vector3Field("", colliderKun.boundsKun.center);
+                        EditorGUILayout.EndHorizontal();
+
+                        capsuleColliderKun.radius = EditorGUILayout.FloatField("Radius", capsuleColliderKun.radius);
+                        capsuleColliderKun.height = EditorGUILayout.FloatField("Height", capsuleColliderKun.height);
+
+                        capsuleColliderKun.direction = EditorGUILayout.Popup(capsuleColliderKun.direction, Styles.AxixContents);
+
+                    }
+                    if (EditorGUI.EndChangeCheck())
+                    {
+                        colliderKun.dirty = true;
+                    }
+                }
+
+
+                return true;
+            }
+
         }
-
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using UnityEngine;
 
-namespace Utj.UnityChoseKun
+namespace Utj.UnityChoseKun.Engine
 {
     /// <summary>
     /// Colliderオブジェクトをシリアライズ/デシリアライズする為のクラス

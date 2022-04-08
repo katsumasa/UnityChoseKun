@@ -7,7 +7,7 @@ using UnityEngine.Rendering;
 
 // Katsumasa.Kimura
 
-namespace Utj.UnityChoseKun.URP
+namespace Utj.UnityChoseKun.Engine.Rendering.Universal
 {
     public enum ShadowQuality
     {
@@ -275,6 +275,21 @@ namespace Utj.UnityChoseKun.URP
         {
             get { return (int)m_AdditionalLightsShadowResolutionTierHigh; }
             internal set { additionalLightsShadowResolutionTierHigh = value; }
+        }
+
+
+        public int GetAdditionalLightsShadowResolution(int additionalLightsShadowResolutionTier)
+        {
+            if (additionalLightsShadowResolutionTier <= UniversalAdditionalLightDataKun.AdditionalLightsShadowResolutionTierLow /* 0 */)
+                return additionalLightsShadowResolutionTierLow;
+
+            if (additionalLightsShadowResolutionTier == UniversalAdditionalLightDataKun.AdditionalLightsShadowResolutionTierMedium /* 1 */)
+                return additionalLightsShadowResolutionTierMedium;
+
+            if (additionalLightsShadowResolutionTier >= UniversalAdditionalLightDataKun.AdditionalLightsShadowResolutionTierHigh /* 2 */)
+                return additionalLightsShadowResolutionTierHigh;
+
+            return additionalLightsShadowResolutionTierMedium;
         }
 
 
@@ -962,7 +977,7 @@ namespace Utj.UnityChoseKun.URP
 
             var t = renderPipelineAsset.GetType();
             FieldInfo fieldInfo;
-            PropertyInfo propertyInfo;
+            
 
             // Rendering
             fieldInfo = t.GetField("m_RequireDepthTexture", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -975,9 +990,7 @@ namespace Utj.UnityChoseKun.URP
             if (fieldInfo != null)
             {
                 fieldInfo.SetValue(renderPipelineAsset, m_RequireOpaqueTexture);
-            }
-
-                        
+            }                        
             
             // Quality
             fieldInfo = t.GetField("m_SupportsHDR", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -985,19 +998,13 @@ namespace Utj.UnityChoseKun.URP
             {
                 fieldInfo.SetValue(renderPipelineAsset, m_SupportsHDR);
             }
-#if false
+
             fieldInfo = t.GetField("m_MSAA", BindingFlags.Instance | BindingFlags.NonPublic);            
             if (fieldInfo != null)
             {
-                fieldInfo.SetValue(renderPipelineAsset, m_MSAA);
+                fieldInfo.SetValue(renderPipelineAsset, (int)m_MSAA);
             }
-#else
-            propertyInfo = t.GetProperty("msaaSampleCount");
-            if (propertyInfo != null)
-            {
-                propertyInfo.SetValue(renderPipelineAsset, (int)m_MSAA);
-            }
-#endif
+
             fieldInfo = t.GetField("m_RenderScale", BindingFlags.Instance | BindingFlags.NonPublic);
             if (fieldInfo != null)
             {
@@ -1051,7 +1058,7 @@ namespace Utj.UnityChoseKun.URP
             fieldInfo = t.GetField("m_ColorGradingMode", BindingFlags.Instance | BindingFlags.NonPublic);
             if (fieldInfo != null)
             {                
-                //fieldInfo.SetValue(renderPipelineAsset, Convert.ChangeType(m_ColorGradingMode, fieldInfo.FieldType));                
+                fieldInfo.SetValue(renderPipelineAsset, (int)m_ColorGradingMode);                
             }
 
             fieldInfo = t.GetField("m_ColorGradingLutSize", BindingFlags.Instance | BindingFlags.NonPublic);
@@ -1064,13 +1071,13 @@ namespace Utj.UnityChoseKun.URP
             fieldInfo = t.GetField("m_ShaderVariantLogLevel", BindingFlags.Instance | BindingFlags.NonPublic);
             if (fieldInfo != null)
             {
-                //fieldInfo.SetValue(renderPipelineAsset, m_ShaderVariantLogLevel);
+                fieldInfo.SetValue(renderPipelineAsset, (int)m_ShaderVariantLogLevel);
             }
 
             fieldInfo = t.GetField("m_VolumeFrameworkUpdateMode", BindingFlags.Instance | BindingFlags.NonPublic);
             if (fieldInfo != null)
             {
-                //fieldInfo.SetValue(renderPipelineAsset, m_VolumeFrameworkUpdateMode);
+                fieldInfo.SetValue(renderPipelineAsset, (int)m_VolumeFrameworkUpdateMode);
             }
         }
 

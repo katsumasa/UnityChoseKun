@@ -4,7 +4,7 @@ using UnityEngine;
 
 // Katsumasa.Kimura
 
-namespace Utj.UnityChoseKun.URP
+namespace Utj.UnityChoseKun.Engine.Rendering.Universal
 {
     /// <summary>
     /// Class <c>ScriptableRendererDataKun</c> <c>ScriptableRendererData</c>‚ð‚â‚èŽæ‚è‚·‚éˆ×‚ÌClass

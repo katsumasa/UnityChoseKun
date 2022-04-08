@@ -1,12 +1,13 @@
-﻿namespace Utj.UnityChoseKun
-{
-    using System.IO;
-    using System.Runtime.InteropServices;
-    using System.Runtime.Serialization.Formatters.Binary;
-    using UnityEngine;
-    using System;
-    using System.Collections.Generic;
+﻿using System.IO;
+using System.Runtime.InteropServices;
+using System.Runtime.Serialization.Formatters.Binary;
+using UnityEngine;
+using System;
+using System.Collections.Generic;
 
+
+namespace Utj.UnityChoseKun.Engine
+{
     /// <summary>
     /// GameObjectをSerialize/Deserializeする為のClass
     /// </summary>

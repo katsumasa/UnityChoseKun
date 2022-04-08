@@ -1,32 +1,33 @@
-﻿namespace Utj.UnityChoseKun
-{
-    using System.IO;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using UnityEngine;
-    using UnityEditor;
-    using UnityEngine.Profiling;
+﻿using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+using UnityEditor;
+using UnityEngine.Profiling;
 #if UNITY_2018_1_OR_NEWER
-    using UnityEngine.Networking.PlayerConnection;
+using UnityEngine.Networking.PlayerConnection;
 
 #if UNITY_2020_1_OR_NEWER
-    using ConnectionUtility = UnityEditor.Networking.PlayerConnection.PlayerConnectionGUIUtility;
-    using ConnectionGUILayout = UnityEditor.Networking.PlayerConnection.PlayerConnectionGUILayout;
+using ConnectionUtility = UnityEditor.Networking.PlayerConnection.PlayerConnectionGUIUtility;
+using ConnectionGUILayout = UnityEditor.Networking.PlayerConnection.PlayerConnectionGUILayout;
 #else
     using ConnectionUtility = UnityEditor.Experimental.Networking.PlayerConnection.EditorGUIUtility;
     using ConnectionGUILayout = UnityEditor.Experimental.Networking.PlayerConnection.EditorGUILayout;
     using UnityEngine.Experimental.Networking.PlayerConnection;
 #endif
 
-    using UnityEditor.Networking.PlayerConnection;
-    using System;
-    using System.Text;
-    using System.Reflection;
-    using System.Runtime.InteropServices;
+using UnityEditor.Networking.PlayerConnection;
+using System;
+using System.Text;
+using System.Reflection;
+using System.Runtime.InteropServices;
 #endif
 
-   
+
+namespace Utj.UnityChoseKun.Editor
+{
+    using Utj.UnityChoseKun.Editor.Rendering;
+    using Utj.UnityChoseKun.Editor.Rendering.Universal;
 
     /// <summary>
     /// UnityChoseKunのEditorWindow
@@ -58,6 +59,8 @@
         [SerializeField] SystemInfoView m_systemInfoView;        
         [SerializeField] SpritesView m_spritesView;
         [SerializeField] SortingLayerView m_sortingLayerView;
+        
+
 
         IConnectionState                                    m_attachProfilerState;
         Dictionary<UnityChoseKun.MessageID, OnMessageFunc>  onMessageFuncDict;
@@ -119,7 +122,7 @@
         TexturesView texturesView{
             get{if(m_texturesView == null){m_texturesView = new TexturesView();}return m_texturesView;}            
         }
-        
+
         SpritesView spritesView
         {
             get
@@ -227,6 +230,10 @@
                 return m_scalableBufferManagerView;
             }
         }
+
+        
+        
+
 
 
         [MenuItem("Window/UTJ/UnityChoseKun/Player Inspector")]
@@ -355,25 +362,28 @@
             onGUILayoutFuncDict = new Dictionary<string, Action>()
             {
                 {"Inspector",   inspectorView.OnGUI},
-                {"Component",   objectCounterView.OnGUI },
-                {"Texture",     texturesView.OnGUI},
-                {"Shader",      shaderView.OnGUI},
-                {"Sprite", spritesView.OnGUI},
-                {"SortingLayer",sortingLayerView.OnGUI },
-                {"Screen",      screenView.OnGUI },
-                {"Time",        timeView.OnGUI},
-                {"Application", applicationView.OnGUI},
-                {"Android",     androidView.OnGUI},
-                {"Quality", qualitySettingsView.OnGUI },
-                {"OnDemandRendering",onDemandRenderingView.OnGUI },
-                {"ScalableBuffer", scalableBufferManagerView.OnGUI},
-                {"SystemInfo" ,systemInfoView.OnGUI},
-
+                {"UnityEngine.Application", applicationView.OnGUI},
+                {"UnityEngine.Android.Permission",     androidView.OnGUI},
+                {"UnityEngine.Component",   objectCounterView.OnGUI },
+                {"UnityEngine.QualitySettings", qualitySettingsView.OnGUI },                                
+                {"UnityEngine.Rendering.GraphicsSettings",GraphicsSettingsView.instance.OnGUI },
+                {"UnityEngine.Rendering.OnDemandRendering",onDemandRenderingView.OnGUI },
+#if UNITY_2019_1_OR_NEWER
+                {"UnityEngine.Rendering.Universal.UniversalRenderPipelineGlobalSettings",UniversalRenderPipelineGlobalSettingsView.instance.OnGUI},
+#endif
+                {"UnityEngine.ScalableBufferManager", scalableBufferManagerView.OnGUI},
+                {"UnityEngine.Screen",      screenView.OnGUI },
+                {"UnityEngine.Shader",      shaderView.OnGUI},
+                {"UnityEngine.SortingLayer",sortingLayerView.OnGUI },
+                {"UnityEngine.Sprite", spritesView.OnGUI},
+                {"UnityEngine.SystemInfo" ,systemInfoView.OnGUI},
+                {"UnityEngine.Texture",     texturesView.OnGUI},
+                {"UnityEngine.Time",        timeView.OnGUI},
 
 
                 // 機能をここに追加していく                                              
             };
-                        
+
             onMessageFuncDict = new Dictionary<UnityChoseKun.MessageID, OnMessageFunc>()
             {
                 {UnityChoseKun.MessageID.ScreenPull,        screenView.OnMessageEvent},
@@ -389,7 +399,11 @@
                 {UnityChoseKun.MessageID.SystemInfoPull,systemInfoView.OnMessageEvent },
                 {UnityChoseKun.MessageID.SpritePull,spritesView.OnMessageEvent },
                 {UnityChoseKun.MessageID.SortingLayerPull,sortingLayerView.OnMessageEvent },
-                // 機能をここに追加していく                                              
+                {UnityChoseKun.MessageID.GraphicsSettingsPull,Engine.Rendering.GraphicsSettingsKun.OnMessageEvent },
+#if UNITY_2019_1_OR_NEWER                
+                {UnityChoseKun.MessageID.UniversalRenderPipelinePull,Engine.Rendering.Universal.UniversalRenderPipelineKun.OnMessageEvent },
+                {UnityChoseKun.MessageID.UniversalRenderPipelineGlobalSettingsPull,UniversalRenderPipelineGlobalSettingsView.instance.OnMessageEvent},
+#endif
             };
             
         }

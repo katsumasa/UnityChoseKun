@@ -1,13 +1,11 @@
-namespace Utj.UnityChoseKun
-{
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Reflection;
-    using UnityEngine;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using UnityEngine;
 
-    
+
+namespace Utj.UnityChoseKun.Engine.Rendering.Universal
+{        
     [System.Serializable]
     public class UniversalAdditionalCameraDataKun : BehaviourKun
     {

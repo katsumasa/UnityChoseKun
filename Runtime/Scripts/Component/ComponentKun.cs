@@ -1,10 +1,14 @@
-﻿namespace  Utj.UnityChoseKun 
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Runtime.InteropServices;
+using UnityEngine;
+
+
+namespace  Utj.UnityChoseKun.Engine
 {
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Runtime.InteropServices;
-    using UnityEngine;
+    using Utj.UnityChoseKun.Engine.Rendering.Universal;
+
 
     /// <summary>
     ///  ComponentをSerialize/Deserializeする為のClass
@@ -47,7 +51,7 @@
             Canvas,
 
             UniversalAdditionalCameraData,
-
+            UniversalAdditionalLightData,
 
             MissingMono,    // Component == null
             MonoBehaviour,
@@ -102,7 +106,11 @@
             if (string.Compare(t.Name, "UniversalAdditionalCameraData") == 0)
             {
                 return ComponentKunType.UniversalAdditionalCameraData;
-            }            
+            }
+            if(string.Compare(t.Name, "UniversalAdditionalLightData") == 0)
+            {
+                return ComponentKunType.UniversalAdditionalLightData;
+            }
             // ==========================
 
             if (component is MonoBehaviour){return ComponentKunType.MonoBehaviour;}
@@ -220,6 +228,10 @@
                         return new UniversalAdditionalCameraDataKun(component);
                     }
 
+                case ComponentKunType.UniversalAdditionalLightData:
+                    {
+                        return new UniversalAdditionalLightDataKun(component);
+                    }
                 default:
                     {
                         return new BehaviourKun();

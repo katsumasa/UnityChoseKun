@@ -1,12 +1,17 @@
-﻿namespace  Utj.UnityChoseKun
-{   
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Runtime.Serialization.Formatters.Binary;
-    using UnityEngine;
-    using UnityEditor;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using UnityEngine;
+using UnityEditor;
 
+
+
+namespace  Utj.UnityChoseKun.Editor
+{
+    using Utj.UnityChoseKun.Editor.Rendering.Universal;
+    using Utj.UnityChoseKun.Engine;
+    
 
     /// <summary>
     /// Componentの表示を行う基底クラス 
@@ -39,10 +44,11 @@
 
             {ComponentKun.ComponentKunType.Canvas,                  typeof(CanvasView) },
 
-            {ComponentKun.ComponentKunType.UniversalAdditionalCameraData,typeof(UniversalAdditionalCameraDataView) },
-            {ComponentKun.ComponentKunType.MonoBehaviour,           typeof(MonoBehaviourView)},
-            {ComponentKun.ComponentKunType.Behaviour,               typeof(BehaviourView)},
-            {ComponentKun.ComponentKunType.Component,               typeof(ComponentView)},
+            {ComponentKun.ComponentKunType.UniversalAdditionalCameraData,   typeof(UniversalAdditionalCameraDataView) },
+            {ComponentKun.ComponentKunType.UniversalAdditionalLightData,    typeof(UniversalAdditionalLightDataView)},
+            {ComponentKun.ComponentKunType.MonoBehaviour,                   typeof(MonoBehaviourView)},
+            {ComponentKun.ComponentKunType.Behaviour,                       typeof(BehaviourView)},
+            {ComponentKun.ComponentKunType.Component,                       typeof(ComponentView)},
             
             {ComponentKun.ComponentKunType.MissingMono,            typeof(MissingMonoView) },
 

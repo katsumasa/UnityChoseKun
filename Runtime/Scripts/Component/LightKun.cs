@@ -1,329 +1,653 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using UnityEngine;
-namespace  Utj.UnityChoseKun 
-{    
-    /// <summary>
-    /// LightをSerialize/Desrializeする為のClass
-    /// Programed by Katsumasa.Kimura
-    /// </summary>
-    [System.Serializable]
-    public class LightKun : BehaviourKun
+
+
+namespace Utj.UnityChoseKun
+{
+    namespace Engine
     {
-#if UNITY_2019_1_OR_NEWER
-        [SerializeField] public LightShape lightShape;
-        [SerializeField] public float colorTemperature ;
-        [SerializeField] public bool useColorTemperature ;
-        [SerializeField] public int renderingLayerMask ;
-#endif
-        [SerializeField] public LightType lightType;
-        [SerializeField] public float range;
-        [SerializeField] public float spotAngle;
-        [SerializeField] public float innerSpotAngle;
-        [SerializeField] public float cookieSize;
-        [SerializeField] public ColorKun m_colorKun ;
-        [SerializeField] public float intensity;
-        [SerializeField] public float bounceIntensity ;
-        [SerializeField] public string cookie;
-        [SerializeField] public LightShadows shadowsType;
-        [SerializeField] public float shadowsStrength;
-        [SerializeField] public UnityEngine.Rendering.LightShadowResolution  shadowsResolution;
-        [SerializeField] public float shadowsBias;
-        [SerializeField] public float shadowsNormalBias ;
-        [SerializeField] public float shadowsNearPlane ;
-        [SerializeField] public bool halo;
-        [SerializeField] public string flare;
-        [SerializeField] public LightRenderMode renderMode ;
-        [SerializeField] public int cullingMask ;
-
-
-        public Color color
+        [System.Serializable]
+        public class LightBakingOutputKun : ISerializerKun
         {
-            get { return m_colorKun.GetColor(); }
-            set { m_colorKun = new ColorKun(value); }
-        }
+            bool m_dirty;
+            bool m_isBaked;
 
 
-        public LightKun() : this(null){}        
-
-
-        public LightKun(Component component) : base(component)
-        {                     
-            componentKunType = BehaviourKun.ComponentKunType.Light;
-            cookie = "";
-            flare = "";
-            m_colorKun = new ColorKun();
-            var light = component as Light;
-            if(light){       
-
-#if UNITY_2019_1_OR_NEWER
-                lightShape = light.shape;
-                useColorTemperature = light.useColorTemperature;
-                colorTemperature = light.colorTemperature;
-                renderingLayerMask = light.renderingLayerMask;
-#endif
-                enabled = light.enabled;
-                lightType = light.type;                            
-                range = light.range;
-                spotAngle = light.spotAngle;
-                innerSpotAngle = light.spotAngle;
-                cookieSize = light.cookieSize;
-                if(light.cookie != null){
-                    cookie = light.cookie.name;
-                }else{
-                    cookie = "";
-                }
-                if(light.flare != null){
-                    flare = light.flare.name;
-                }else{
-                    flare = "";
-                }
-                color = light.color;
-                intensity = light.intensity;
-                bounceIntensity = light.bounceIntensity;
-                                
-                shadowsType = light.shadows;
-                shadowsStrength = light.shadowStrength;
-                shadowsBias = light.shadowBias;
-                shadowsNormalBias = light.shadowNormalBias;
-                shadowsNormalBias = light.shadowNormalBias;
-                // halo
-                renderMode = light.renderMode;
-                cullingMask =light.cullingMask;                                        
+            public bool isBaked
+            {
+                get { return m_isBaked; }
+                set { m_isBaked = value; m_dirty = true; }
             }
+
+            LightmapBakeType m_lightmapBakeType;
+
+            public LightmapBakeType lightmapBakeType
+            {
+                get { return m_lightmapBakeType; }
+                set { m_lightmapBakeType = value; m_dirty = true; }
+            }
+
+            MixedLightingMode m_mixedLightingMode;
+
+            public MixedLightingMode mixedLightingMode
+            {
+                get { return m_mixedLightingMode; }
+                set { m_mixedLightingMode = value; m_dirty = true; }
+            }
+
+            int m_occlusionMaskChannel;
+
+            public int occlusionMaskChannel
+            {
+                get { return m_occlusionMaskChannel; }
+                set { m_occlusionMaskChannel = value; m_dirty = true; }
+            }
+
+            int m_probeOcclusionLightIndex;
+
+            public int probeOcclusionLightIndex
+            {
+                get { return m_probeOcclusionLightIndex; }
+                set { m_probeOcclusionLightIndex = value; }
+            }
+
+            public void Deserialize(BinaryReader binaryReader)
+            {
+                m_dirty = binaryReader.ReadBoolean();
+                m_isBaked = binaryReader.ReadBoolean();
+                m_lightmapBakeType = (LightmapBakeType)binaryReader.ReadInt32();
+                m_mixedLightingMode = (MixedLightingMode)binaryReader.ReadInt32();
+                m_occlusionMaskChannel = binaryReader.ReadInt32();
+                m_probeOcclusionLightIndex = binaryReader.ReadInt32();
+
+            }
+
+            public void Serialize(BinaryWriter binaryWriter)
+            {
+                binaryWriter.Write(m_dirty);
+                binaryWriter.Write(m_isBaked);
+                binaryWriter.Write((int)m_lightmapBakeType);
+                binaryWriter.Write((int)m_mixedLightingMode);
+                binaryWriter.Write(m_occlusionMaskChannel);
+                binaryWriter.Write(m_probeOcclusionLightIndex);
+            }
+
+            public LightBakingOutputKun()
+            {
+                m_dirty = false;
+            }
+
+
+            public LightBakingOutputKun(LightBakingOutput lightBakingOutput)
+            {
+                m_dirty = false;
+                m_isBaked = lightBakingOutput.isBaked;
+                m_lightmapBakeType = lightBakingOutput.lightmapBakeType;
+                m_mixedLightingMode = lightBakingOutput.mixedLightingMode;
+                m_occlusionMaskChannel = lightBakingOutput.occlusionMaskChannel;
+                m_probeOcclusionLightIndex = lightBakingOutput.probeOcclusionLightIndex;
+            }
+
+            public void WriteBack(LightBakingOutput lightBakingOutput)
+            {
+                lightBakingOutput.isBaked = m_isBaked;
+                lightBakingOutput.lightmapBakeType = m_lightmapBakeType;
+                lightBakingOutput.mixedLightingMode = m_mixedLightingMode;
+                lightBakingOutput.occlusionMaskChannel = m_occlusionMaskChannel;
+                lightBakingOutput.probeOcclusionLightIndex = m_probeOcclusionLightIndex;
+                m_dirty = false;
+            }
+
+            public override bool Equals(object obj)
+            {
+                var other = obj as LightBakingOutputKun;
+                if (other == null)
+                {
+                    return false;
+                }
+                if (m_isBaked != other.m_isBaked)
+                {
+                    return false;
+                }
+                if (m_lightmapBakeType != other.m_lightmapBakeType)
+                {
+                    return false;
+                }
+                if (m_mixedLightingMode != other.m_mixedLightingMode)
+                {
+                    return false;
+                }
+                if (m_occlusionMaskChannel != other.m_occlusionMaskChannel)
+                {
+                    return false;
+                }
+                if (m_probeOcclusionLightIndex != other.m_probeOcclusionLightIndex)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+
+            public override int GetHashCode()
+            {
+                return base.GetHashCode();
+            }
+
         }
 
 
-        public override bool WriteBack(Component component)
+        /// <summary>
+        /// LightをSerialize/Desrializeする為のClass
+        /// Programed by Katsumasa.Kimura
+        /// </summary>
+        [System.Serializable]
+        public class LightKun : BehaviourKun
         {
-            //Debug.Log("WriteBack");
-            if(base.WriteBack(component)){                
+            
+            int mCommandBufferCount;
+            float[] mLayerShadowCullDistances;
+            LightShadowCasterMode mLightShadowCasterMode;
+            int mShadowCustomResolution;
+#if UNITY_2019_1_OR_NEWER
+            LightShape mLightShape;
+            float mColorTemperature;
+            bool mUseColorTemperature;
+            int mRenderingLayerMask;
+#endif
+            LightType mType;
+            float mRange;
+            float mSpotAngle;
+            float mInnerSpotAngle;
+            float mCookieSize;
+            ColorKun mColor;
+            float mIntensity;
+            float mBounceIntensity;
+            TextureKun mCookie;
+            LightShadows mShadows;
+            float mShadowsStrength;
+            UnityEngine.Rendering.LightShadowResolution mShadowsResolution;
+            float mShadowsBias;
+            float mShadowsNearPlane;
+            bool mHalo;
+            string mFlare;
+            int mCullingMask;
+            LightBakingOutputKun mBakingOutput;
+            LightRenderMode mRenderMode;
+
+
+
+
+            public int commandBufferCount
+            {
+                get { return mCommandBufferCount; }
+            }
+
+            public float[] layerShadowCullDistances
+            {
+                get { return mLayerShadowCullDistances; }
+                set { mLayerShadowCullDistances = value; dirty = true; }
+            }
+
+            public LightShadowCasterMode lightShadowCasterMode
+            {
+                get { return mLightShadowCasterMode; }
+                set { mLightShadowCasterMode = value;  dirty = true; }
+            }
+
+            public int shadowCustomResolution
+            {
+                get { return mShadowCustomResolution; }
+                set { mShadowCustomResolution = value; dirty = true; }
+            }
+
+
+#if UNITY_2019_1_OR_NEWER
+            public LightShape lightShape
+            {
+                get { return mLightShape; }
+                set { mLightShape = value; dirty = true; }
+            }
+            public float colorTemperature
+            {
+                get { return mColorTemperature; }
+                set { mColorTemperature = value; dirty = true; }
+            }
+            public bool useColorTemperature
+            {
+                get { return mUseColorTemperature; }
+                set { mUseColorTemperature = value; dirty = true; }
+            }
+            public int renderingLayerMask
+            {
+                get { return renderingLayerMask; }
+                set { renderingLayerMask = value; dirty = true; }
+            }
+#endif
+            public LightType type
+            {
+                get { return mType; }
+                set { mType = value; dirty = true; }
+            }
+            public float range
+            {
+                get { return mRange; }
+                set { mRange = value; dirty = true; }
+            }
+            public float spotAngle
+            {
+                get { return mSpotAngle; }
+                set { mSpotAngle = value; dirty = true; }
+            }
+            public float innerSpotAngle
+            {
+                get { return mInnerSpotAngle; }
+                set { mInnerSpotAngle = value; dirty = true; }
+            }
+            public float cookieSize
+            {
+                get { return mCookieSize; }
+                set { mCookieSize = value;  dirty = true; }
+            }
+            
+            public float intensity
+            {
+                get { return mIntensity; }
+                set { mIntensity = value; dirty = true; }
+            }
+            public float bounceIntensity
+            {
+                get { return mBounceIntensity; }
+                set { mBounceIntensity = value; dirty = true; }
+            }
+            public TextureKun cookie
+            {
+                get { return mCookie; }
+                set { mCookie = value; dirty = true; }
+            }
+            public LightShadows shadows
+            {
+                get { return mShadows; }
+                set { mShadows = value; dirty = true; }
+            }
+
+            public float shadowsStrength
+            {
+                get { return mShadowsStrength; }
+                set { mShadowsStrength = value; dirty = true; }
+            }
+            public UnityEngine.Rendering.LightShadowResolution shadowsResolution
+            {
+                get { return mShadowsResolution; }
+                set { mShadowsResolution = value; dirty = true; }
+            }
+            public float shadowsBias
+            {
+                get { return mShadowsBias; }
+                set { mShadowsBias = value; dirty = true; }
+            }
+            public float shadowsNearPlane
+            {
+                get { return mShadowsNearPlane; }
+                set { mShadowsNearPlane = value; dirty = true; }
+            }
+            public bool halo
+            {
+                get { return mHalo; }
+                set { mHalo = value; dirty = true; }
+            }
+            public string flare
+            {
+                get { return mFlare; }
+                set { mFlare = value; dirty = true; }
+            }
+            public int cullingMask
+            {
+                get { return mCullingMask; }
+                set { mCullingMask = value; }
+            }
+            public LightBakingOutputKun bakingOutput
+            {
+                get { return mBakingOutput; }
+                set { mBakingOutput = value; dirty = true; }
+            }
+            public LightRenderMode renderMode
+            {
+                get { return mRenderMode; }
+                set { mRenderMode = value; }
+            }
+
+
+            public Color color
+            {
+                get { return mColor.GetColor(); }
+                set { mColor = new ColorKun(value); }
+            }
+
+
+            public LightKun() : this(null) { }
+
+
+            public LightKun(Component component) : base(component)
+            {
+                componentKunType = BehaviourKun.ComponentKunType.Light;                
+                mFlare = "";
+                mColor = new ColorKun();                
+                mBakingOutput = new LightBakingOutputKun();
+                
                 var light = component as Light;
-                if(light != null){
+                if (light)
+                {
+                    enabled = light.enabled;
 
-                    #if UNITY_2019_1_OR_NEWER
-                    light.shape = lightShape;
-                    light.renderingLayerMask = renderingLayerMask;
-                    light.colorTemperature = colorTemperature;
-                    light.useColorTemperature = useColorTemperature;
-                    #endif
-
-                    light.enabled = enabled;
-                    light.type = lightType;                    
-                    light.range = range;
-                    light.spotAngle = spotAngle;
-                    light.spotAngle = innerSpotAngle;
-                    cookieSize = light.cookieSize;
-
-                    // ToDo::cookie と flare            
-                    light.color = color;
-                    light.intensity = intensity;
-                    light.bounceIntensity = bounceIntensity;
                     
-                    light.shadows = shadowsType;
-                    light.shadowStrength = shadowsStrength;
-                    light.shadowBias = shadowsBias;
-                    light.shadowNormalBias = shadowsNormalBias;
+                    mCommandBufferCount = light.commandBufferCount;
+                    mLayerShadowCullDistances = light.layerShadowCullDistances;
+                    mLightShadowCasterMode = light.lightShadowCasterMode;
+                    mShadowCustomResolution = light.shadowCustomResolution;
+
+#if UNITY_2019_1_OR_NEWER
+                    mLightShape = light.shape;
+                    mUseColorTemperature = light.useColorTemperature;
+                    mColorTemperature = light.colorTemperature;
+                    mRenderingLayerMask = light.renderingLayerMask;
+#endif
+
+                    mType = light.type;
+                    mRange = light.range;
+                    mSpotAngle = light.spotAngle;
+                    mInnerSpotAngle = light.innerSpotAngle;
+                    mCookieSize = light.cookieSize;
+                    if (light.cookie != null)
+                    {
+                        mCookie = new TextureKun(light.cookie);
+                    }                    
+                    mColor = new ColorKun(light.color);
+                    mIntensity = light.intensity;
+                    mBounceIntensity = light.bounceIntensity;                    
+                    mShadows = light.shadows;
+                    mShadowsStrength = light.shadowStrength;
+                    mShadowsResolution = light.shadowResolution;
+                    mShadowsBias = light.shadowBias;
+                    mShadowsNearPlane = light.shadowNearPlane;
                     
-                    //ToDo::halo
-                    light.renderMode = renderMode;
-                    light.cullingMask = cullingMask;
+                    
+                    if (light.flare != null)
+                    {
+                        mFlare = light.flare.name;
+                    }
+                    else
+                    {
+                        mFlare = "";
+                    }
+                    mCullingMask = light.cullingMask;                    
+                    mBakingOutput = new LightBakingOutputKun(light.bakingOutput);
+                    mRenderMode = light.renderMode;
+                }
+            }
+
+
+            public override bool WriteBack(Component component)
+            {
+                //Debug.Log("WriteBack");
+                if (base.WriteBack(component))
+                {
+                    var light = component as Light;
+                    if (light != null)
+                    {                        
+                        light.layerShadowCullDistances = mLayerShadowCullDistances;
+                        light.lightShadowCasterMode = mLightShadowCasterMode;
+                        light.shadowCustomResolution = mShadowCustomResolution;
+#if UNITY_2019_1_OR_NEWER
+                        light.shape = mLightShape;
+                        light.renderingLayerMask = mRenderingLayerMask;
+                        light.colorTemperature = mColorTemperature;
+                        light.useColorTemperature = mUseColorTemperature;
+#endif
+
+                        light.enabled = enabled;
+                        light.type = mType;
+                        light.range = mRange;
+                        light.spotAngle = mSpotAngle;
+                        light.innerSpotAngle = mInnerSpotAngle;
+
+
+                        var newTexture = TextureKun.GetCache(instanceID) as Texture;
+                        if(newTexture != null && light.cookie != newTexture)
+                        {
+                            light.cookie = newTexture;
+                        }
+                        light.cookieSize = mCookieSize;
+
+                        // ToDo::cookie と flare            
+                        light.color = mColor.GetColor();
+                        light.intensity = mIntensity;
+                        light.bounceIntensity = mBounceIntensity;
+
+                        light.shadows = mShadows;
+                        light.shadowStrength = mShadowsStrength;
+                        light.shadowBias = mShadowsBias;
+                        light.shadowNearPlane = mShadowsNearPlane;
+                        
+                        //ToDo::halo
+                        light.cullingMask = mCullingMask;
+                        light.renderMode = mRenderMode;
+                        bakingOutput.WriteBack(light.bakingOutput);
+                    }
+                    return true;
+                }
+                return false;
+            }
+
+
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="binaryWriter"></param>
+            public override void Serialize(BinaryWriter binaryWriter)
+            {
+                base.Serialize(binaryWriter);
+
+                binaryWriter.Write(mCommandBufferCount);
+                SerializerKun.Serialize(binaryWriter, mLayerShadowCullDistances);
+                binaryWriter.Write((int)mLightShadowCasterMode);
+                binaryWriter.Write(mShadowCustomResolution);
+#if UNITY_2019_1_OR_NEWER
+                binaryWriter.Write((int)mLightShape);
+                binaryWriter.Write(mColorTemperature);
+                binaryWriter.Write(mUseColorTemperature);
+                binaryWriter.Write(mRenderingLayerMask);
+#endif
+                binaryWriter.Write((int)mType);
+                binaryWriter.Write(mRange);
+                binaryWriter.Write(mSpotAngle);
+                binaryWriter.Write(mInnerSpotAngle);
+                binaryWriter.Write(mCookieSize);
+
+                SerializerKun.Serialize<ColorKun>(binaryWriter, mColor);
+
+                binaryWriter.Write(mIntensity);
+                binaryWriter.Write(mBounceIntensity);
+                SerializerKun.Serialize<TextureKun>(binaryWriter, mCookie);                
+                
+                binaryWriter.Write((int)mShadows);
+                binaryWriter.Write(mShadowsStrength);
+                binaryWriter.Write((int)mShadowsResolution);
+                binaryWriter.Write(mShadowsBias);                
+                binaryWriter.Write(mShadowsNearPlane);
+                binaryWriter.Write(mHalo);
+                binaryWriter.Write(mFlare);
+                binaryWriter.Write(mCullingMask);
+                binaryWriter.Write((int)mRenderMode);
+                SerializerKun.Serialize<LightBakingOutputKun>(binaryWriter, mBakingOutput);
+            }
+
+
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="binaryReader"></param>
+            public override void Deserialize(BinaryReader binaryReader)
+            {
+                base.Deserialize(binaryReader);
+
+                mCommandBufferCount = binaryReader.ReadInt32();
+                mLayerShadowCullDistances = SerializerKun.DesirializeSingles(binaryReader);
+                mLightShadowCasterMode = (LightShadowCasterMode)binaryReader.ReadInt32();
+                mShadowCustomResolution = binaryReader.ReadInt32();
+#if UNITY_2019_1_OR_NEWER
+                mLightShape = (LightShape)binaryReader.ReadInt32();
+                mColorTemperature = binaryReader.ReadSingle();
+                mUseColorTemperature = binaryReader.ReadBoolean();
+                mRenderingLayerMask = binaryReader.ReadInt32();
+#endif
+                mType = (LightType)binaryReader.ReadInt32();
+                mRange = binaryReader.ReadSingle();
+                mSpotAngle = binaryReader.ReadSingle();
+                mInnerSpotAngle = binaryReader.ReadSingle();
+                mCookieSize = binaryReader.ReadSingle();
+                mColor = SerializerKun.DesirializeObject<ColorKun>(binaryReader);
+                mIntensity = binaryReader.ReadSingle();
+                mBounceIntensity = binaryReader.ReadSingle();
+                mCookie = SerializerKun.DesirializeObject<TextureKun>(binaryReader);
+
+                mShadows = (LightShadows)binaryReader.ReadInt32();
+                mShadowsStrength = binaryReader.ReadSingle();
+                mShadowsResolution = (UnityEngine.Rendering.LightShadowResolution)binaryReader.ReadInt32();
+                mShadowsBias = binaryReader.ReadSingle();
+                mShadowsNearPlane = binaryReader.ReadSingle();
+                mHalo = binaryReader.ReadBoolean();
+                mFlare = binaryReader.ReadString();                
+                mCullingMask = binaryReader.ReadInt32();
+                mRenderMode = (LightRenderMode)binaryReader.ReadInt32();
+                mBakingOutput = SerializerKun.DesirializeObject<LightBakingOutputKun>(binaryReader);
+            }
+
+
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="other"></param>
+            /// <returns></returns>
+            public override bool Equals(object other)
+            {
+                var otherKun = other as LightKun;
+                if (otherKun == null)
+                {
+                    return false;
+                }
+
+                if (mLightShadowCasterMode.Equals(otherKun.mLightShadowCasterMode) == false)
+                {
+                    return false;
+                }
+                if (mShadowCustomResolution.Equals(otherKun.mShadowCustomResolution) == false)
+                {
+                    return false;
+                }
+#if UNITY_2019_1_OR_NEWER
+                if (mLightShape != otherKun.mLightShape)
+                {
+                    return false;
+                }
+                if (mColorTemperature.Equals(otherKun.mColorTemperature) == false)
+                {
+                    return false;
+                }
+                if (mUseColorTemperature.Equals(otherKun.mUseColorTemperature) == false)
+                {
+                    return false;
+                }
+                if (mRenderingLayerMask.Equals(otherKun.mRenderingLayerMask) == false)
+                {
+                    return false;
+                }
+#endif
+                if (mType.Equals(otherKun.mType) == false)
+                {
+                    return false;
+                }
+                if (mRange.Equals(otherKun.mRange) == false)
+                {
+                    return false;
+                }
+                if (mSpotAngle.Equals(otherKun.mSpotAngle) == false)
+                {
+                    return false;
+                }
+                if (mInnerSpotAngle.Equals(otherKun.mInnerSpotAngle) == false)
+                {
+                    return false;
+                }
+                if (mCookieSize.Equals(otherKun.mCookieSize) == false)
+                {
+                    return false;
+                }
+                if (!ColorKun.Equals(mColor, otherKun.mColor))
+                {
+                    return false;
+                }
+                if (mIntensity.Equals(otherKun.mIntensity) == false)
+                {
+                    return false;
+                }
+                if (mBounceIntensity.Equals(otherKun.mBounceIntensity) == false)
+                {
+                    return false;
+                }
+                if (mCookie.Equals(otherKun.mCookie) == false)
+                {
+                    return false;
+                }
+                if (mShadows.Equals(otherKun.mShadows) == false)
+                {
+                    return false;
+                }
+                if (mShadowsStrength.Equals(otherKun.mShadowsStrength) == false)
+                {
+                    return false;
+                }
+                if (mShadowsResolution.Equals(otherKun.mShadowsResolution) == false)
+                {
+                    return false;
+                }
+                if (mShadowsBias.Equals(otherKun.mShadowsBias) == false)
+                {
+                    return false;
+                }                
+                if (mShadowsNearPlane.Equals(otherKun.mShadowsNearPlane) == false)
+                {
+                    return false;
+                }
+                if (mHalo.Equals(otherKun.mHalo) == false)
+                {
+                    return false;
+                }
+                if (mFlare.Equals(otherKun.mFlare) == false)
+                {
+                    return false;
+                }
+                if (mCullingMask.Equals(otherKun.mCullingMask) == false)
+                {
+                    return false;
+                }
+                
+                if (mBakingOutput.Equals(otherKun.mBakingOutput) == false)
+                {
+                    return false;
+                }
+                if(mRenderMode.Equals(otherKun.mRenderMode) == false)
+                {
+                    return false;
                 }
                 return true;
             }
-            return false;
-        }
 
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="binaryWriter"></param>
-        public override void Serialize(BinaryWriter binaryWriter)
-        {
-            base.Serialize(binaryWriter);
-#if UNITY_2019_1_OR_NEWER
-            binaryWriter.Write((int)lightShape);
-            binaryWriter.Write(colorTemperature);
-            binaryWriter.Write(useColorTemperature);
-            binaryWriter.Write(renderingLayerMask);
-#endif
-            binaryWriter.Write((int)lightType);
-            binaryWriter.Write(range);
-            binaryWriter.Write(spotAngle);
-            binaryWriter.Write(innerSpotAngle);
-            binaryWriter.Write(cookieSize);
-
-            SerializerKun.Serialize<ColorKun>(binaryWriter, m_colorKun);
-            
-            binaryWriter.Write(intensity);
-            binaryWriter.Write(bounceIntensity);
-            binaryWriter.Write(cookie);
-            binaryWriter.Write((int)shadowsType);
-            binaryWriter.Write(shadowsStrength);
-            binaryWriter.Write((int)shadowsResolution);
-            binaryWriter.Write(shadowsBias);
-            binaryWriter.Write(shadowsNormalBias);
-            binaryWriter.Write(shadowsNearPlane);
-            binaryWriter.Write(halo);
-            binaryWriter.Write(flare);
-            binaryWriter.Write((int)renderMode);
-            binaryWriter.Write(cullingMask);
-        }
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="binaryReader"></param>
-        public override void Deserialize(BinaryReader binaryReader)
-        {
-            base.Deserialize(binaryReader);
-#if UNITY_2019_1_OR_NEWER
-            lightShape = (LightShape)binaryReader.ReadInt32();
-            colorTemperature = binaryReader.ReadSingle();
-            useColorTemperature = binaryReader.ReadBoolean();
-            renderingLayerMask =  binaryReader.ReadInt32();
-#endif
-            lightType = (LightType)binaryReader.ReadInt32();
-            range = binaryReader.ReadSingle();
-            spotAngle = binaryReader.ReadSingle();
-            innerSpotAngle = binaryReader.ReadSingle();
-            cookieSize = binaryReader.ReadSingle();
-            m_colorKun = SerializerKun.DesirializeObject<ColorKun>(binaryReader);            
-            intensity = binaryReader.ReadSingle();
-            bounceIntensity = binaryReader.ReadSingle();
-            cookie = binaryReader.ReadString();
-            shadowsType = (LightShadows)binaryReader.ReadInt32();
-            shadowsStrength = binaryReader.ReadSingle();
-            shadowsResolution = (UnityEngine.Rendering.LightShadowResolution)binaryReader.ReadInt32();
-            shadowsBias = binaryReader.ReadSingle();
-            shadowsNormalBias = binaryReader.ReadSingle();
-            shadowsNearPlane = binaryReader.ReadSingle();
-            halo = binaryReader.ReadBoolean();
-            flare = binaryReader.ReadString();
-            renderMode = (LightRenderMode)binaryReader.ReadInt32();
-            cullingMask = binaryReader.ReadInt32();
-        }
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        public override bool Equals(object other)
-        {
-            var otherKun = other as LightKun;
-            if(otherKun == null)
+            public override int GetHashCode()
             {
-                return false;
+                return base.GetHashCode();
             }
-#if UNITY_2019_1_OR_NEWER
-            if (lightShape != otherKun.lightShape)
-            {
-                return false;
-            }
-            if(colorTemperature.Equals(otherKun.colorTemperature) == false)
-            {
-                return false;
-            }
-            if(useColorTemperature.Equals(otherKun.useColorTemperature) == false)
-            {
-                return false;
-            }
-            if (renderingLayerMask.Equals(otherKun.renderingLayerMask) == false)
-            {
-                return false;
-            }
-#endif
-            if (lightType.Equals(otherKun.lightType) == false)
-            {
-                return false;
-            }
-            if (range.Equals(otherKun.range) == false)
-            {
-                return false;
-            }
-            if (spotAngle.Equals(otherKun.spotAngle) == false)
-            {
-                return false;
-            }
-            if (innerSpotAngle.Equals(otherKun.innerSpotAngle) == false)
-            {
-                return false;
-            }
-            if (cookieSize.Equals(otherKun.cookieSize) == false)
-            {
-                return false;
-            }
-
-
-            if (!ColorKun.Equals(m_colorKun, otherKun.m_colorKun))
-            {                        
-                return false;
-            }
-
-            if (intensity.Equals(otherKun.intensity) == false)
-            {
-                return false;
-            }
-            if (bounceIntensity.Equals(otherKun.bounceIntensity) == false)
-            {
-                return false;
-            }
-            if (cookie.Equals(otherKun.cookie) == false)
-            {
-                return false;
-            }
-            if (shadowsType.Equals(otherKun.shadowsType) == false)
-            {
-                return false;
-            }
-            if (shadowsStrength.Equals(otherKun.shadowsStrength) == false)
-            {
-                return false;
-            }
-            if (shadowsResolution.Equals(otherKun.shadowsResolution) == false)
-            {
-                return false;
-            }
-            if (shadowsBias.Equals(otherKun.shadowsBias) == false)
-            {
-                return false;
-            }
-            if (shadowsNormalBias.Equals(otherKun.shadowsNormalBias) == false)
-            {
-                return false;
-            }
-            if (shadowsNearPlane.Equals(otherKun.shadowsNearPlane) == false)
-            {
-                return false;
-            }
-            if (halo.Equals(otherKun.halo) == false)
-            {
-                return false;
-            }
-            if (flare.Equals(otherKun.flare) == false)
-            {
-                return false;
-            }
-            if (renderMode.Equals(otherKun.renderMode) == false)
-            {
-                return false;
-            }
-            if (cullingMask.Equals(otherKun.cullingMask) == false)
-            {
-                return false;
-            }
-            return true;
-        }
-
-
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
         }
     }
 }

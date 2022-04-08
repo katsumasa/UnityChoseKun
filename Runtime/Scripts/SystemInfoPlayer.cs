@@ -1,8 +1,12 @@
+using System.IO;
 
-namespace Utj.UnityChoseKun
+
+namespace Utj.UnityChoseKun.Engine
 {
-    using System.IO;
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class SystemInfoPlayer : BasePlayer
     {
         public void OnMessageEventPull(BinaryReader binaryReader)

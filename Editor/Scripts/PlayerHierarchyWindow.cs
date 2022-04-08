@@ -1,12 +1,7 @@
 ﻿//#define ENABLE_PROFILER_STATES
 
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEditor;
-using UnityEngine.UI;
-using UnityEngine.Profiling;
 #if UNITY_2018_1_OR_NEWER
 using UnityEngine.Networking.PlayerConnection;
 #if UNITY_2020_1_OR_NEWER
@@ -38,228 +33,257 @@ using UnityEditor.IMGUI.Controls;
 
 
 namespace Utj.UnityChoseKun
-{        
-    /// <summary>
-    /// Hierarchyを表示する為のClass
-    /// </summary>
-    [System.Serializable]
-    public class PlayerHierarchyWindow : EditorWindow
+{
+    using Engine;
+    using Engine.Rendering;
+    using Engine.Rendering.Universal;
+
+
+    namespace Editor
     {
-        public static class Styles
-        {                                
-            public static readonly GUIContent TitleContent      = new GUIContent("Player Hierarchy", (Texture2D)EditorGUIUtility.Load("d_UnityEditor.SceneHierarchyWindow"));
+        /// <summary>
+        /// Hierarchyを表示する為のClass
+        /// </summary>
+        [System.Serializable]
+        public class PlayerHierarchyWindow : EditorWindow
+        {
+            public static class Styles
+            {
+                public static readonly GUIContent TitleContent = new GUIContent("Player Hierarchy", (Texture2D)EditorGUIUtility.Load("d_UnityEditor.SceneHierarchyWindow"));
 #if UNITY_2019_1_OR_NEWER
-            public static readonly GUIContent NetworkMessages   = new GUIContent("Reload",(Texture2D)EditorGUIUtility.Load("d_Profiler.NetworkMessages@2x"),"Hierarchyの情報を取得");
+                public static readonly GUIContent NetworkMessages = new GUIContent("Reload", (Texture2D)EditorGUIUtility.Load("d_Profiler.NetworkMessages@2x"), "Hierarchyの情報を取得");
 #else
             public static readonly GUIContent NetworkMessages = new GUIContent("Reload","Hierarchyの情報を取得");
 #endif
-            public static readonly GUIContent Rename            = new GUIContent("Rename");
-            public static readonly GUIContent Duplicate         = new GUIContent("Duplicate");
-            public static readonly GUIContent Delete            = new GUIContent("Delete");
-            public static readonly GUIContent CreateEmpty       = new GUIContent("CreateEmpty");
-        }
+                public static readonly GUIContent Rename = new GUIContent("Rename");
+                public static readonly GUIContent Duplicate = new GUIContent("Duplicate");
+                public static readonly GUIContent Delete = new GUIContent("Delete");
+                public static readonly GUIContent CreateEmpty = new GUIContent("CreateEmpty");
+            }
 
 
-        //
-        // delegateの宣言
-        //
-        delegate void Task();
-        delegate void OnMessageFunc(string json);
-        
-        
-        [SerializeField] SearchField                            m_searchField;          
-        [SerializeField] TreeViewState                          m_treeViewState;
-        HierarchyTreeView                                       m_hierarchyTreeView;
-        [SerializeField] HierarchyTreeView.SelectionChangedCB   m_selectionChangedCB;
-        
+            //
+            // delegateの宣言
+            //
+            delegate void Task();
+            delegate void OnMessageFunc(string json);
+
+
+            [SerializeField] SearchField m_searchField;
+            [SerializeField] TreeViewState m_treeViewState;
+            HierarchyTreeView m_hierarchyTreeView;
+            [SerializeField] HierarchyTreeView.SelectionChangedCB m_selectionChangedCB;
+
 
 #if ENABLE_PROFILER_STATES
         IConnectionState m_attachProfilerState;
 #endif
 
-        TreeViewState treeViewState {
-            get{if(m_treeViewState == null){m_treeViewState = new TreeViewState();}return m_treeViewState;}
-            set {m_treeViewState = value;}
-        }
-
-
-        HierarchyTreeView hierarchyTreeView{
-            get {
-                if(m_hierarchyTreeView == null){
-                    m_hierarchyTreeView = new HierarchyTreeView(treeViewState);
-                }                
-                return m_hierarchyTreeView;
-            }
-
-            set {m_hierarchyTreeView = value;}
-        }
-
-        
-        public HierarchyTreeView.SelectionChangedCB selectionChangedCB{
-            private get {return m_selectionChangedCB;}
-            set {
-                m_selectionChangedCB = value;
-                hierarchyTreeView.selectionChangeCB = value;
-            }
-        }
-       
-        public SceneManagerKun sceneManagerKun
-        {
-            set
+            TreeViewState treeViewState
             {
-                hierarchyTreeView.sceneManagerKun = value;
+                get { if (m_treeViewState == null) { m_treeViewState = new TreeViewState(); } return m_treeViewState; }
+                set { m_treeViewState = value; }
             }
 
-            get
+
+            HierarchyTreeView hierarchyTreeView
             {
-                if(hierarchyTreeView.sceneManagerKun == null)
+                get
                 {
-                    hierarchyTreeView.sceneManagerKun = new SceneManagerKun(false);
+                    if (m_hierarchyTreeView == null)
+                    {
+                        m_hierarchyTreeView = new HierarchyTreeView(treeViewState);
+                    }
+                    return m_hierarchyTreeView;
                 }
-                return hierarchyTreeView.sceneManagerKun;
+
+                set { m_hierarchyTreeView = value; }
             }
-        }
 
-        
 
-        public int lastClickedID {
-            get {
-                if(treeViewState == null){
-                    return -1;
+            public HierarchyTreeView.SelectionChangedCB selectionChangedCB
+            {
+                private get { return m_selectionChangedCB; }
+                set
+                {
+                    m_selectionChangedCB = value;
+                    hierarchyTreeView.selectionChangeCB = value;
                 }
-                return treeViewState.lastClickedID;
             }
-        }                
 
+            public SceneManagerKun sceneManagerKun
+            {
+                set
+                {
+                    hierarchyTreeView.sceneManagerKun = value;
+                }
 
-        // 関数の定義
-
-        /// <summary>
-        /// EditorWindowの生成
-        /// </summary>
-        [MenuItem("Window/UTJ/UnityChoseKun/Player Hierarchy")]
-        public static void Create()
-        {            
-            var window = (PlayerHierarchyWindow)EditorWindow.GetWindow(typeof(PlayerHierarchyWindow));                        
-            window.titleContent = Styles.TitleContent;
-            window.wantsMouseMove = true;
-            window.autoRepaintOnSceneChange = true;
-            window.Show();
-            window.OnEnable();                            
-        }
-
-
-        /// <summary>
-        /// 表示内容のリロード
-        /// </summary>
-        public void Reload()
-        {
-            if(hierarchyTreeView != null){
-                hierarchyTreeView.selectionChangeCB = selectionChangedCB;                
-                hierarchyTreeView.Reload();
+                get
+                {
+                    if (hierarchyTreeView.sceneManagerKun == null)
+                    {
+                        hierarchyTreeView.sceneManagerKun = new SceneManagerKun(false);
+                    }
+                    return hierarchyTreeView.sceneManagerKun;
+                }
             }
-            Repaint();
-        }
 
 
-        private void OnEnable() 
-        {
-            this.titleContent = Styles.TitleContent;
-            this.wantsMouseMove = true;
-            this.autoRepaintOnSceneChange = true;
+
+            public int lastClickedID
+            {
+                get
+                {
+                    if (treeViewState == null)
+                    {
+                        return -1;
+                    }
+                    return treeViewState.lastClickedID;
+                }
+            }
+
+
+            // 関数の定義
+
+            /// <summary>
+            /// EditorWindowの生成
+            /// </summary>
+            [MenuItem("Window/UTJ/UnityChoseKun/Player Hierarchy")]
+            public static void Create()
+            {
+                var window = (PlayerHierarchyWindow)EditorWindow.GetWindow(typeof(PlayerHierarchyWindow));
+                window.titleContent = Styles.TitleContent;
+                window.wantsMouseMove = true;
+                window.autoRepaintOnSceneChange = true;
+                window.Show();
+                window.OnEnable();
+            }
+
+
+            /// <summary>
+            /// 表示内容のリロード
+            /// </summary>
+            public void Reload()
+            {
+                //if(GraphicsSettingsKun.instance == null)
+                {
+                    UnityChoseKunEditor.SendMessage<GraphicsSettingsKun>(UnityChoseKun.MessageID.GraphicsSettingsPull, null);
+                    UnityChoseKunEditor.SendMessage<UniversalRenderPipelineGlobalSettingsKun>(UnityChoseKun.MessageID.UniversalRenderPipelineGlobalSettingsPull,null);
+                    UnityChoseKunEditor.SendMessage<UniversalRenderPipelineKun>(UnityChoseKun.MessageID.UniversalRenderPipelinePull, null);
+                }
+                
+
+                if (hierarchyTreeView != null)
+                {
+                    hierarchyTreeView.selectionChangeCB = selectionChangedCB;
+                    hierarchyTreeView.Reload();
+                }
+                Repaint();
+            }
+
+
+            private void OnEnable()
+            {
+                this.titleContent = Styles.TitleContent;
+                this.wantsMouseMove = true;
+                this.autoRepaintOnSceneChange = true;
 
 
 #if ENABLE_PROFILER_STATES
             m_attachProfilerState = ConnectionUtility.GetAttachToPlayerState(this);
 #endif
 
-            if (m_treeViewState == null){
-                m_treeViewState = new TreeViewState();
+                if (m_treeViewState == null)
+                {
+                    m_treeViewState = new TreeViewState();
+                }
+                m_hierarchyTreeView = new HierarchyTreeView(m_treeViewState);
+
+
+                Reload();
+                if (m_searchField == null)
+                {
+                    m_searchField = new SearchField();
+                    m_searchField.downOrUpArrowKeyPressed += hierarchyTreeView.SetFocusAndEnsureSelectedItem;
+                }
             }
-            m_hierarchyTreeView = new HierarchyTreeView(m_treeViewState);
-            
-
-            Reload();
-            if(m_searchField == null){
-                m_searchField = new SearchField();
-                m_searchField.downOrUpArrowKeyPressed += hierarchyTreeView.SetFocusAndEnsureSelectedItem;
-            }            
-        }
 
 
-        private void OnDisable()
-        {
+            private void OnDisable()
+            {
 #if ENABLE_PROFILER_STATES
             m_attachProfilerState.Dispose();
 #endif
-        }        
+            }
 
 
-        private void OnDestroy()
-        {
-        }
-
-
-        private void OnGUI() {
-
-            var evt= Event.current;
-            if(evt.type == EventType.ContextClick)
+            private void OnDestroy()
             {
-                // MouseがWindow無いに入っていればMenuを表示する
-                var window = (PlayerHierarchyWindow)EditorWindow.GetWindow(typeof(PlayerHierarchyWindow));
+            }
+
+
+            private void OnGUI()
+            {
+
+                var evt = Event.current;
+                if (evt.type == EventType.ContextClick)
+                {
+                    // MouseがWindow無いに入っていればMenuを表示する
+                    var window = (PlayerHierarchyWindow)EditorWindow.GetWindow(typeof(PlayerHierarchyWindow));
 #if UNITY_2019_1_OR_NEWER
-                if (window.rootVisualElement.localBound.Contains(evt.mousePosition))
+                    if (window.rootVisualElement.localBound.Contains(evt.mousePosition))
 #else
                 
                 if (this.GetRootVisualContainer().localBound.Contains(evt.mousePosition))
 #endif
-                {
-                    var menu = new GenericMenu();
-                    menu.AddDisabledItem(Styles.Rename);
-                    menu.AddItem(Styles.Duplicate,false, DuplicateCB, lastClickedID);
-                    menu.AddItem(Styles.Delete,false,DeleteCB,lastClickedID);
-                    menu.AddItem(Styles.CreateEmpty,false,CreateEmptyCB,lastClickedID);
-                    menu.AddItem(new GUIContent("3D Object/Cube"),false,CreateCubeCB, lastClickedID);
-                    menu.AddItem(new GUIContent("3D Object/Sphere"),false,CreateSphereCB,lastClickedID);
-                    menu.AddItem(new GUIContent("3D Object/Capsule"),false,CreateCapsuleCB,lastClickedID);
-                    menu.AddItem(new GUIContent("3D Object/Clyinder"),false,CreateCylinderCB,lastClickedID);
-                    menu.AddItem(new GUIContent("3D Object/Plane"),false,CreatePlaneCB,lastClickedID);
-                    menu.AddDisabledItem(new GUIContent("3D Object/Quad"));
-                    menu.AddDisabledItem(new GUIContent("3D Object/Text-TextMeshPro"));
-                    menu.AddDisabledItem(new GUIContent("3D Object/Ragdoll"));
-                    menu.AddDisabledItem(new GUIContent("3D Object/Terrain"));
-                    menu.AddDisabledItem(new GUIContent("3D Object/Tree"));
-                    menu.AddDisabledItem(new GUIContent("3D Object/WindZone"));
-                    
-                    menu.AddItem(new GUIContent("2D Object/Sprite"),false,CreateSpriteCB,lastClickedID);
-                    menu.AddDisabledItem(new GUIContent("2D Object/Sprite Mask"));
-                    menu.AddDisabledItem(new GUIContent("2D Object/Tilemap"));
-                    menu.AddDisabledItem(new GUIContent("2D Object/Hexagonal Point Top Tilemap"));
-                    menu.AddDisabledItem(new GUIContent("2D Object/Hexagonal Flat Top Tilemap"));
-                    menu.AddDisabledItem(new GUIContent("2D Object/Isometric Tilemap"));
-                    menu.AddDisabledItem(new GUIContent("2D Object/Isometric Z As Y Tilemap"));
+                    {
+                        var menu = new GenericMenu();
+                        menu.AddDisabledItem(Styles.Rename);
+                        menu.AddItem(Styles.Duplicate, false, DuplicateCB, lastClickedID);
+                        menu.AddItem(Styles.Delete, false, DeleteCB, lastClickedID);
+                        menu.AddItem(Styles.CreateEmpty, false, CreateEmptyCB, lastClickedID);
+                        menu.AddItem(new GUIContent("3D Object/Cube"), false, CreateCubeCB, lastClickedID);
+                        menu.AddItem(new GUIContent("3D Object/Sphere"), false, CreateSphereCB, lastClickedID);
+                        menu.AddItem(new GUIContent("3D Object/Capsule"), false, CreateCapsuleCB, lastClickedID);
+                        menu.AddItem(new GUIContent("3D Object/Clyinder"), false, CreateCylinderCB, lastClickedID);
+                        menu.AddItem(new GUIContent("3D Object/Plane"), false, CreatePlaneCB, lastClickedID);
+                        menu.AddDisabledItem(new GUIContent("3D Object/Quad"));
+                        menu.AddDisabledItem(new GUIContent("3D Object/Text-TextMeshPro"));
+                        menu.AddDisabledItem(new GUIContent("3D Object/Ragdoll"));
+                        menu.AddDisabledItem(new GUIContent("3D Object/Terrain"));
+                        menu.AddDisabledItem(new GUIContent("3D Object/Tree"));
+                        menu.AddDisabledItem(new GUIContent("3D Object/WindZone"));
 
-                    menu.AddItem(new GUIContent("Effect/Particle System"),false,CreateParticleSystem, lastClickedID);                    
-                    menu.AddDisabledItem(new GUIContent("Effect/Particle System ForceField"));
-                    menu.AddDisabledItem(new GUIContent("Effect/Trail"));
-                    menu.AddDisabledItem(new GUIContent("Effect/Line"));
+                        menu.AddItem(new GUIContent("2D Object/Sprite"), false, CreateSpriteCB, lastClickedID);
+                        menu.AddDisabledItem(new GUIContent("2D Object/Sprite Mask"));
+                        menu.AddDisabledItem(new GUIContent("2D Object/Tilemap"));
+                        menu.AddDisabledItem(new GUIContent("2D Object/Hexagonal Point Top Tilemap"));
+                        menu.AddDisabledItem(new GUIContent("2D Object/Hexagonal Flat Top Tilemap"));
+                        menu.AddDisabledItem(new GUIContent("2D Object/Isometric Tilemap"));
+                        menu.AddDisabledItem(new GUIContent("2D Object/Isometric Z As Y Tilemap"));
 
-                    menu.ShowAsContext();
-                    evt.Use();
+                        menu.AddItem(new GUIContent("Effect/Particle System"), false, CreateParticleSystem, lastClickedID);
+                        menu.AddDisabledItem(new GUIContent("Effect/Particle System ForceField"));
+                        menu.AddDisabledItem(new GUIContent("Effect/Trail"));
+                        menu.AddDisabledItem(new GUIContent("Effect/Line"));
+
+                        menu.ShowAsContext();
+                        evt.Use();
+                    }
                 }
-            }
 
 
-            using (new EditorGUILayout.HorizontalScope(EditorStyles.toolbar)) {                                
-                var contents = new GUIContent(Styles.NetworkMessages);
-                var v2 = EditorStyles.label.CalcSize(contents);
-                if (GUILayout.Button(contents, EditorStyles.toolbarButton,GUILayout.Width(v2.x+8)))
+                using (new EditorGUILayout.HorizontalScope(EditorStyles.toolbar))
                 {
-                    // ChoseKunWindowを開く
-                    EditorWindow.GetWindow(typeof(UnityChoseKunEditorWindow));
-                    UnityChoseKunEditor.SendMessage(UnityChoseKun.MessageID.GameObjectPull);
-                }
-                EditorGUILayout.Space();
+                    var contents = new GUIContent(Styles.NetworkMessages);
+                    var v2 = EditorStyles.label.CalcSize(contents);
+                    if (GUILayout.Button(contents, EditorStyles.toolbarButton, GUILayout.Width(v2.x + 8)))
+                    {
+                        // ChoseKunWindowを開く
+                        EditorWindow.GetWindow(typeof(UnityChoseKunEditorWindow));
+                        UnityChoseKunEditor.SendMessage(UnityChoseKun.MessageID.GameObjectPull);
+                    }
+                    EditorGUILayout.Space();
 
 #if ENABLE_PROFILER_STATES
                 contents = new GUIContent("Connect To");
@@ -285,8 +309,8 @@ namespace Utj.UnityChoseKun
                 }
 #endif
 
-                hierarchyTreeView.searchString = m_searchField.OnToolbarGUI(hierarchyTreeView.searchString);   
-            }
+                    hierarchyTreeView.searchString = m_searchField.OnToolbarGUI(hierarchyTreeView.searchString);
+                }
 
 #if ENABLE_PROFILER_STATES
             var playerCount = EditorConnection.instance.ConnectedPlayers.Count;
@@ -300,10 +324,10 @@ namespace Utj.UnityChoseKun
             EditorGUILayout.HelpBox(builder.ToString(), MessageType.Info);
 #endif
 
-            var rect = EditorGUILayout.GetControlRect(false,position.height - 16); 
-            hierarchyTreeView.OnGUI(rect);            
-        }
-        
+                var rect = EditorGUILayout.GetControlRect(false, position.height - 16);
+                hierarchyTreeView.OnGUI(rect);
+            }
+
 #if ENABLE_PROFILER_STATES
         /// <summary>
         /// 接続先選択用GUI
@@ -327,117 +351,118 @@ namespace Utj.UnityChoseKun
         }
 #endif
 
-        private void CreateObjectCommon(HierarchyMessage.MessageID messageID,int instanceID)
-        {
-            // ChoseKunWindowを開く
-            EditorWindow.GetWindow(typeof(UnityChoseKunEditorWindow));
+            private void CreateObjectCommon(HierarchyMessage.MessageID messageID, int instanceID)
+            {
+                // ChoseKunWindowを開く
+                EditorWindow.GetWindow(typeof(UnityChoseKunEditorWindow));
 
-            var message = new HierarchyMessage();
-            message.messageID = messageID;
-            message.baseID = instanceID ;
-            UnityChoseKunEditor.SendMessage<HierarchyMessage>(UnityChoseKun.MessageID.HierarchyPush, message);
-        }
-
-
-        /// <summary>
-        /// Duplicate
-        /// </summary>
-        /// <param name="obj"></param>
-        private void DuplicateCB(object obj)
-        {
-            CreateObjectCommon(HierarchyMessage.MessageID.Duplicate,(int)obj);
-        }
+                var message = new HierarchyMessage();
+                message.messageID = messageID;
+                message.baseID = instanceID;
+                UnityChoseKunEditor.SendMessage<HierarchyMessage>(UnityChoseKun.MessageID.HierarchyPush, message);
+            }
 
 
-        /// <summary>
-        /// Delete
-        /// </summary>
-        /// <param name="obj"></param>
-        private void DeleteCB(object obj)
-        {
-
-            CreateObjectCommon(HierarchyMessage.MessageID.Delete, (int)obj);
-        }
-
-
-        /// <summary>
-        /// Create
-        /// </summary>
-        /// <param name="obj"></param>
-        private void CreateEmptyCB(object obj)
-        {
-            CreateObjectCommon(HierarchyMessage.MessageID.CreateEmpty, (int)obj);
-        }
+            /// <summary>
+            /// Duplicate
+            /// </summary>
+            /// <param name="obj"></param>
+            private void DuplicateCB(object obj)
+            {
+                CreateObjectCommon(HierarchyMessage.MessageID.Duplicate, (int)obj);
+            }
 
 
-        private void CreateParticleSystem(object obj)
-        {
-            CreateClassCommon(typeof(ParticleSystem),(int)obj);
-        }
+            /// <summary>
+            /// Delete
+            /// </summary>
+            /// <param name="obj"></param>
+            private void DeleteCB(object obj)
+            {
+
+                CreateObjectCommon(HierarchyMessage.MessageID.Delete, (int)obj);
+            }
 
 
-        private void CreateClassCommon(System.Type type,int instanceID)
-        {
-            var message = new HierarchyMessage();
-            message.messageID = HierarchyMessage.MessageID.CreateClass;
-            message.baseID = instanceID;
-            message.type = type;
-            UnityChoseKunEditor.SendMessage<HierarchyMessage>(UnityChoseKun.MessageID.HierarchyPush, message);
-        }
+            /// <summary>
+            /// Create
+            /// </summary>
+            /// <param name="obj"></param>
+            private void CreateEmptyCB(object obj)
+            {
+                CreateObjectCommon(HierarchyMessage.MessageID.CreateEmpty, (int)obj);
+            }
 
 
-        /// <summary>
-        /// Create Primitiveの共通関数
-        /// </summary>
-        /// <param name="messageID"></param>
-        /// <param name="instanceID"></param>
-        /// <param name="primitiveType"></param>
-        private void CreatePrimitiveCommon(HierarchyMessage.MessageID messageID,int instanceID,PrimitiveType primitiveType)
-        {
-            // ChoseKunWindowを開く
-            EditorWindow.GetWindow(typeof(UnityChoseKunEditorWindow));
+            private void CreateParticleSystem(object obj)
+            {
+                CreateClassCommon(typeof(ParticleSystem), (int)obj);
+            }
 
 
-            var message = new HierarchyMessage();
-            message.messageID = HierarchyMessage.MessageID.CreatePrimitive;
-            message.baseID = instanceID;
-            message.primitiveType = primitiveType;
-            UnityChoseKunEditor.SendMessage<HierarchyMessage>(UnityChoseKun.MessageID.HierarchyPush, message);
-        }
+            private void CreateClassCommon(System.Type type, int instanceID)
+            {
+                var message = new HierarchyMessage();
+                message.messageID = HierarchyMessage.MessageID.CreateClass;
+                message.baseID = instanceID;
+                message.type = type;
+                UnityChoseKunEditor.SendMessage<HierarchyMessage>(UnityChoseKun.MessageID.HierarchyPush, message);
+            }
 
 
-        private void CreateCubeCB(object obj)
-        {
-            CreatePrimitiveCommon(HierarchyMessage.MessageID.CreatePrimitive, (int)obj,PrimitiveType.Cube);
-        }
+            /// <summary>
+            /// Create Primitiveの共通関数
+            /// </summary>
+            /// <param name="messageID"></param>
+            /// <param name="instanceID"></param>
+            /// <param name="primitiveType"></param>
+            private void CreatePrimitiveCommon(HierarchyMessage.MessageID messageID, int instanceID, PrimitiveType primitiveType)
+            {
+                // ChoseKunWindowを開く
+                EditorWindow.GetWindow(typeof(UnityChoseKunEditorWindow));
 
 
-        private void CreatePlaneCB(object obj)
-        {
-            CreatePrimitiveCommon(HierarchyMessage.MessageID.CreatePrimitive, (int)obj, PrimitiveType.Plane);            
-        }
+                var message = new HierarchyMessage();
+                message.messageID = HierarchyMessage.MessageID.CreatePrimitive;
+                message.baseID = instanceID;
+                message.primitiveType = primitiveType;
+                UnityChoseKunEditor.SendMessage<HierarchyMessage>(UnityChoseKun.MessageID.HierarchyPush, message);
+            }
 
 
-        private void CreateSphereCB(object obj)
-        {
-            CreatePrimitiveCommon(HierarchyMessage.MessageID.CreatePrimitive, (int)obj, PrimitiveType.Sphere);
-        }
+            private void CreateCubeCB(object obj)
+            {
+                CreatePrimitiveCommon(HierarchyMessage.MessageID.CreatePrimitive, (int)obj, PrimitiveType.Cube);
+            }
 
 
-        private void CreateCapsuleCB(object obj)
-        {
-            CreatePrimitiveCommon(HierarchyMessage.MessageID.CreatePrimitive, (int)obj, PrimitiveType.Capsule);
-        }
+            private void CreatePlaneCB(object obj)
+            {
+                CreatePrimitiveCommon(HierarchyMessage.MessageID.CreatePrimitive, (int)obj, PrimitiveType.Plane);
+            }
 
 
-        private void CreateCylinderCB(object obj)
-        {
-            CreatePrimitiveCommon(HierarchyMessage.MessageID.CreatePrimitive, (int)obj, PrimitiveType.Cylinder);
-        }
+            private void CreateSphereCB(object obj)
+            {
+                CreatePrimitiveCommon(HierarchyMessage.MessageID.CreatePrimitive, (int)obj, PrimitiveType.Sphere);
+            }
 
-        private void CreateSpriteCB(object obj)
-        {
-            CreateClassCommon(typeof(SpriteRenderer), (int)obj);
+
+            private void CreateCapsuleCB(object obj)
+            {
+                CreatePrimitiveCommon(HierarchyMessage.MessageID.CreatePrimitive, (int)obj, PrimitiveType.Capsule);
+            }
+
+
+            private void CreateCylinderCB(object obj)
+            {
+                CreatePrimitiveCommon(HierarchyMessage.MessageID.CreatePrimitive, (int)obj, PrimitiveType.Cylinder);
+            }
+
+            private void CreateSpriteCB(object obj)
+            {
+                CreateClassCommon(typeof(SpriteRenderer), (int)obj);
+            }
         }
     }
 }

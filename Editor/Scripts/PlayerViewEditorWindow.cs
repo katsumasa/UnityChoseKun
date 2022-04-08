@@ -1,25 +1,25 @@
-﻿namespace Utj.UnityChoseKun
-{
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Runtime.Serialization.Formatters.Binary;
-    using System.IO;
-    using UnityEngine;
-    using UnityEditor;
-    using UnityEditor.Networking.PlayerConnection;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
+using UnityEngine;
+using UnityEditor;
+using UnityEditor.Networking.PlayerConnection;
 #if UNITY_2020_1_OR_NEWER
-    using UnityEngine.Networking.PlayerConnection;
-    using PlayerConnectionUtility = UnityEditor.Networking.PlayerConnection.PlayerConnectionGUIUtility;
-    using PlayerConnectionGUILayout = UnityEditor.Networking.PlayerConnection.PlayerConnectionGUILayout;
+using UnityEngine.Networking.PlayerConnection;
+using PlayerConnectionUtility = UnityEditor.Networking.PlayerConnection.PlayerConnectionGUIUtility;
+using PlayerConnectionGUILayout = UnityEditor.Networking.PlayerConnection.PlayerConnectionGUILayout;
 #else
     using UnityEngine.Experimental.Networking.PlayerConnection;
     using PlayerConnectionUtility = UnityEditor.Experimental.Networking.PlayerConnection.EditorGUIUtility;
     using PlayerConnectionGUILayout = UnityEditor.Experimental.Networking.PlayerConnection.EditorGUILayout;
 #endif
-    using System.Security.AccessControl;    
-    using System;
+using System.Security.AccessControl;
+using System;
 
 
+namespace Utj.UnityChoseKun.Editor
+{
     // UnityPlayerViewerKunのEditorEditor側の処理
     // Katsumasa Kimura
 

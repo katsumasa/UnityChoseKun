@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace Utj.UnityChoseKun{
+namespace Utj.UnityChoseKun.Engine
+{
 
     // <summary>
     // ShaderKunの配列を送る為の構造体

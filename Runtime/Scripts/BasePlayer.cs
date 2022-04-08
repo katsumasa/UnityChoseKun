@@ -8,7 +8,6 @@
 
     public class BasePlayer
     {
-    
 
     }
 }

@@ -115,6 +115,7 @@ namespace Utj.UnityChoseKun {
         {
             var texture = obj as Texture;
             if(texture){
+                m_name = $"{texture.name}({m_name})";
 #if UNITY_2019_1_OR_NEWER
                 graphicsFormat = texture.graphicsFormat;
                 mipmapCount = texture.mipmapCount;

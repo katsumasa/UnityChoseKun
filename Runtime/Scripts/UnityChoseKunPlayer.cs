@@ -1,17 +1,19 @@
 ﻿
-namespace Utj.UnityChoseKun
-{    
-    using System.Collections.Generic;
-    using UnityEngine;
-    using UnityEngine.Events;
-    using UnityEngine.Networking.PlayerConnection;
-    using UnityEngine.SceneManagement;
-    using System;
-    using System.Text;
-    using System.IO;
-    using System.Reflection;
-    using System.Runtime.InteropServices;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.Networking.PlayerConnection;
+using UnityEngine.SceneManagement;
+using System;
+using System.Text;
+using System.IO;
+using System.Reflection;
+using System.Runtime.InteropServices;
 
+
+namespace Utj.UnityChoseKun.Engine
+{
+    using Rendering.Universal;
 
     /// <summary>
     /// UnityChoseKunのPlayer側Class
@@ -171,8 +173,12 @@ namespace Utj.UnityChoseKun
                     {UnityChoseKun.MessageID.SystemInfoPull,systemInfoPlayer.OnMessageEventPull},
                     {UnityChoseKun.MessageID.SpritePull,spritePlayer.OnMessageEventPull},
                     {UnityChoseKun.MessageID.SortingLayerPull, sortingLayerPlayer.OnMessageEventPull},
-
-
+                    {UnityChoseKun.MessageID.GraphicsSettingsPull,GraphicsSettingsPlayer.OnMessageEventPull },
+                    {UnityChoseKun.MessageID.GraphicsSettingsPush,GraphicsSettingsPlayer.OnMessageEventPush },
+                    {UnityChoseKun.MessageID.UniversalRenderPipelinePull,UniversalRenderPipelinePlayer.OnMessageEventPull},
+                    {UnityChoseKun.MessageID.UniversalRenderPipelinePush,UniversalRenderPipelinePlayer.OnMessageEventPush},
+                    {UnityChoseKun.MessageID.UniversalRenderPipelineGlobalSettingsPull,UniversalRenderPipelineGlobalSettingsPlayer.OnMessageEventPull},
+                    {UnityChoseKun.MessageID.UniversalRenderPipelineGlobalSettingsPush,UniversalRenderPipelineGlobalSettingsPlayer.OnMessageEventPush},
             };
 
 

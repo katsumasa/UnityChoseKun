@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-namespace Utj.UnityChoseKun {
+namespace Utj.UnityChoseKun.Engine
+{
     // <summary> Rendererをシリアライズする為のClass </summary>
     [System.Serializable]
     public class RendererKun : ComponentKun

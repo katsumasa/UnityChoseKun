@@ -6,54 +6,57 @@ using UnityEditor;
 
 namespace Utj.UnityChoseKun
 {
-    public class MissingMonoView : ComponentView
+    namespace Editor
     {
-        private static class Styles
+        public class MissingMonoView : ComponentView
         {
-            public static readonly Texture2D ComponentIcon = (Texture2D)EditorGUIUtility.Load("d_DefaultAsset Icon");
-        }
-
-
-        public MissingMonoView() : base()
-        {
-            
-            mComponentIcon = Styles.ComponentIcon;
-            foldout = true;            
-        }
-
-
-        public override bool OnGUI()
-        {
-            GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));
-            EditorGUILayout.BeginHorizontal();
-            var iconContent = new GUIContent(mComponentIcon);
-            foldout = EditorGUILayout.Foldout(foldout, iconContent);
-
-            EditorGUI.BeginChangeCheck();
-            var rect = EditorGUILayout.GetControlRect();
-            var content = new GUIContent("Script");
-            EditorGUI.LabelField(new Rect(rect.x - 8, rect.y, rect.width, rect.height), content);
-            //EditorGUILayout.LabelField(content);
-
-            if (EditorGUI.EndChangeCheck())
+            private static class Styles
             {
-                componentKun.dirty = true;
+                public static readonly Texture2D ComponentIcon = (Texture2D)EditorGUIUtility.Load("d_DefaultAsset Icon");
             }
-            GUILayout.FlexibleSpace();
-            EditorGUILayout.EndHorizontal();
-            GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));
 
-            if (foldout)
+
+            public MissingMonoView() : base()
             {
-                using (new EditorGUI.IndentLevelScope())
+
+                mComponentIcon = Styles.ComponentIcon;
+                foldout = true;
+            }
+
+
+            public override bool OnGUI()
+            {
+                GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));
+                EditorGUILayout.BeginHorizontal();
+                var iconContent = new GUIContent(mComponentIcon);
+                foldout = EditorGUILayout.Foldout(foldout, iconContent);
+
+                EditorGUI.BeginChangeCheck();
+                var rect = EditorGUILayout.GetControlRect();
+                var content = new GUIContent("Script");
+                EditorGUI.LabelField(new Rect(rect.x - 8, rect.y, rect.width, rect.height), content);
+                //EditorGUILayout.LabelField(content);
+
+                if (EditorGUI.EndChangeCheck())
                 {
-                    EditorGUILayout.BeginHorizontal();
-                    EditorGUILayout.LabelField("Script");
-                    EditorGUILayout.TextField("Missing(Mono Script)");
-                    EditorGUILayout.EndHorizontal();
+                    componentKun.dirty = true;
                 }
+                GUILayout.FlexibleSpace();
+                EditorGUILayout.EndHorizontal();
+                GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));
+
+                if (foldout)
+                {
+                    using (new EditorGUI.IndentLevelScope())
+                    {
+                        EditorGUILayout.BeginHorizontal();
+                        EditorGUILayout.LabelField("Script");
+                        EditorGUILayout.TextField("Missing(Mono Script)");
+                        EditorGUILayout.EndHorizontal();
+                    }
+                }
+                return foldout;
             }
-            return foldout;
         }
     }
 }
