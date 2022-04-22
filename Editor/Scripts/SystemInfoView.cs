@@ -36,6 +36,9 @@ namespace Utj.UnityChoseKun
                 public static readonly GUIContent HasDynamicUniformArrayIndexingInFragmentShaders = new GUIContent("hasDynamicUniformArrayIndexingInFragmentShaders", "Returns true when the GPU has native support for indexing uniform arrays in fragment shaders without restrictions.");
                 public static readonly GUIContent HasHiddenSurfaceRemovalOnGPU = new GUIContent("hasHiddenSurfaceRemovalOnGPU", "True if the GPU supports hidden surface removal.");
                 public static readonly GUIContent HasMipMaxLevel = new GUIContent("hasMipMaxLevel", "Returns true if the GPU supports partial mipmap chains");
+#if UNITY_2020_1_OR_NEWER                
+                public static readonly GUIContent HdrDisplaySupportFlags = new GUIContent("hdrDisplaySupportFlags", "Returns a bitwise combination of HDRDisplaySupportFlags describing the support for HDR displays on the system.");
+#endif
                 public static readonly GUIContent MaxComputeBufferInputsCompute = new GUIContent("maxComputeBufferInputsCompute", "Determines how many compute buffers Unity supports simultaneously in a compute shader for reading.");
                 public static readonly GUIContent MaxComputeBufferInputsDomain = new GUIContent("maxComputeBufferInputsDomain", "Determines how many compute buffers Unity supports simultaneously in a domain shader for reading.");
                 public static readonly GUIContent MaxComputeBufferInputsFragment = new GUIContent("maxComputeBufferInputsFragment", "Determines how many compute buffers Unity supports simultaneously in a fragment shader for reading. ");
@@ -218,8 +221,18 @@ namespace Utj.UnityChoseKun
                 EditorGUILayout.Toggle(SystemInfoKun.hasHiddenSurfaceRemovalOnGPU);
                 EditorGUILayout.EndHorizontal();
 
-                EditorGUILayout.Toggle(Styles.HasMipMaxLevel, SystemInfoKun.hasMipMaxLevel);
-                
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.HasMipMaxLevel);
+                EditorGUILayout.Toggle(SystemInfoKun.hasMipMaxLevel);
+                EditorGUILayout.EndHorizontal();
+
+#if UNITY_2020_1_OR_NEWER
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.HdrDisplaySupportFlags);
+                EditorGUILayout.EnumFlagsField(SystemInfoKun.hdrDisplaySupportFlags);
+                EditorGUILayout.EndHorizontal();
+#endif
+
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField(Styles.MaxComputeBufferInputsCompute);
                 EditorGUILayout.IntField(SystemInfoKun.maxComputeBufferInputsCompute);

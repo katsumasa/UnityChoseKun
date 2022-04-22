@@ -25,6 +25,11 @@ namespace Utj.UnityChoseKun.Engine
 
         float m_batteryLevel;
         BatteryStatus m_batteryStatus;
+#if UNITY_2020_1_OR_NEWER
+        int m_constantBufferOffsetAlignment;
+#else
+        bool m_minConstantBufferOffsetAlignment;
+#endif
         UnityEngine.Rendering.CopyTextureSupport m_copyTextureSupport;
         string m_deviceModel;
         string m_deviceName;
@@ -45,6 +50,9 @@ namespace Utj.UnityChoseKun.Engine
         bool m_hasDynamicUniformArrayIndexingInFragmentShaders;
         bool m_hasHiddenSurfaceRemovalOnGPU;
         bool m_hasMipMaxLevel;
+#if UNITY_2020_1_OR_NEWER
+        HDRDisplaySupportFlags m_hdrDisplaySupportFlags;
+#endif
         int m_maxComputeBufferInputsCompute;
         int m_maxComputeBufferInputsDomain;
         int m_maxComputeBufferInputsFragment;
@@ -57,11 +65,7 @@ namespace Utj.UnityChoseKun.Engine
         int m_maxComputeWorkGroupSizeZ;
         int m_maxCubemapSize;
         int m_maxTextureSize;
-#if UNITY_2020_1_OR_NEWER
-        int m_constantBufferOffsetAlignment;
-#else
-        bool m_minConstantBufferOffsetAlignment;
-#endif
+
         NPOTSupport m_npotSupport;
         string m_operatingSystem;
         OperatingSystemFamily m_operatingSystemFamily;
@@ -206,6 +210,13 @@ namespace Utj.UnityChoseKun.Engine
         {
             get { return instance.m_hasMipMaxLevel; }
         }
+
+#if UNITY_2020_1_OR_NEWER
+        public static HDRDisplaySupportFlags hdrDisplaySupportFlags
+        {
+            get { return instance.m_hdrDisplaySupportFlags; }
+        }
+#endif
 
         public static int maxComputeBufferInputsCompute
         {
@@ -517,6 +528,9 @@ namespace Utj.UnityChoseKun.Engine
                 m_hasDynamicUniformArrayIndexingInFragmentShaders = SystemInfo.hasDynamicUniformArrayIndexingInFragmentShaders;
                 m_hasHiddenSurfaceRemovalOnGPU = SystemInfo.hasHiddenSurfaceRemovalOnGPU;
                 m_hasMipMaxLevel = SystemInfo.hasMipMaxLevel;
+#if UNITY_2020_1_OR_NEWER
+                m_hdrDisplaySupportFlags = SystemInfo.hdrDisplaySupportFlags;
+#endif
                 m_maxComputeBufferInputsCompute = SystemInfo.maxComputeBufferInputsCompute;
                 m_maxComputeBufferInputsDomain = SystemInfo.maxComputeBufferInputsDomain;
                 m_maxComputeBufferInputsFragment = SystemInfo.maxComputeBufferInputsFragment;
@@ -613,6 +627,9 @@ namespace Utj.UnityChoseKun.Engine
             binaryWriter.Write(m_hasDynamicUniformArrayIndexingInFragmentShaders);
             binaryWriter.Write(m_hasHiddenSurfaceRemovalOnGPU);
             binaryWriter.Write(m_hasMipMaxLevel);
+#if UNITY_2020_1_OR_NEWER
+            binaryWriter.Write((int)m_hdrDisplaySupportFlags);
+#endif
             binaryWriter.Write(m_maxComputeBufferInputsCompute);
             binaryWriter.Write(m_maxComputeBufferInputsDomain);
             binaryWriter.Write(m_maxComputeBufferInputsFragment);
@@ -696,6 +713,9 @@ namespace Utj.UnityChoseKun.Engine
             m_hasDynamicUniformArrayIndexingInFragmentShaders = binaryReader.ReadBoolean();
             m_hasHiddenSurfaceRemovalOnGPU = binaryReader.ReadBoolean();
             m_hasMipMaxLevel = binaryReader.ReadBoolean();
+#if UNITY_2020_1_OR_NEWER
+            m_hdrDisplaySupportFlags = (HDRDisplaySupportFlags)binaryReader.ReadInt32();
+#endif
             m_maxComputeBufferInputsCompute = binaryReader.ReadInt32();
             m_maxComputeBufferInputsDomain = binaryReader.ReadInt32();
             m_maxComputeBufferInputsFragment = binaryReader.ReadInt32();
@@ -852,6 +872,13 @@ namespace Utj.UnityChoseKun.Engine
             { 
                 return false;
             }
+#if UNITY_2020_1_OR_NEWER
+            if(m_hdrDisplaySupportFlags != other.m_hdrDisplaySupportFlags)
+            {
+                return false;
+            }
+#endif
+
             if(m_maxComputeBufferInputsCompute != other.m_maxComputeBufferInputsCompute)
             {
                 return false;
