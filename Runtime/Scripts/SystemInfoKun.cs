@@ -321,7 +321,7 @@ namespace Utj.UnityChoseKun.Engine
 
         public static int processorFrequency
         {
-            get { return instance.m_processorCount; }
+            get { return instance.m_processorFrequency; }
         }
 
         public static string processorType
