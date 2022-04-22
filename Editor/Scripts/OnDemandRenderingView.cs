@@ -31,12 +31,26 @@ namespace Utj.UnityChoseKun
             }
         }
 
-
         Vector2 scrollPos
         {
             get;
             set;
         }
+
+
+        static OnDemandRenderingView mInstance;
+        public static OnDemandRenderingView instance
+        {
+            get
+            {
+                if(mInstance == null)
+                {
+                    mInstance = new OnDemandRenderingView();
+                }
+                return mInstance;
+            }
+        }
+
 
         // メンバー関数の定義
 

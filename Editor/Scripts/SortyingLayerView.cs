@@ -13,6 +13,21 @@ namespace Utj.UnityChoseKun
         [System.Serializable]
         public class SortingLayerView
         {
+
+            static SortingLayerView mInstance;
+            public static SortingLayerView instance
+            {
+                get
+                {
+                    if(mInstance == null)
+                    {
+                        mInstance = new SortingLayerView();
+                    }
+                    return mInstance;
+                }
+            }
+
+
             public void OnGUI()
             {
                 if (SortingLayerKun.layers != null)

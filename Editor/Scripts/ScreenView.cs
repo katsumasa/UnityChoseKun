@@ -19,6 +19,19 @@ namespace Utj.UnityChoseKun
             bool isDone = false;
 
 
+            static ScreenView mInstance;
+            public static ScreenView instance
+            {
+                get { 
+                    if(mInstance == null)
+                    {
+                        mInstance = new ScreenView();
+                    }
+                    return mInstance;
+                }
+            }
+
+
             ScreenKun screenKun
             {
                 get { if (m_screenKun == null) { m_screenKun = new ScreenKun(); } return m_screenKun; }

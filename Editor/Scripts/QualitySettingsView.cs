@@ -30,11 +30,23 @@ namespace Utj.UnityChoseKun
             }
 
 
-            
+            UniversalRenderPipelineAssetView mUniversalRenderPipelineAssetView;            
             [SerializeField] Vector2 mScrollPos;
-            static bool mIsInit;
-
-            UniversalRenderPipelineAssetView mUniversalRenderPipelineAssetView;
+            
+            
+            static bool mIsInit;           
+            static QualitySettingsView mInstance;
+            public static QualitySettingsView instance
+            {
+                get
+                {
+                    if(mInstance == null)
+                    {
+                        mInstance = new QualitySettingsView();                             
+                    }
+                    return mInstance;
+                }
+            }
 
 
             public void OnGUI()

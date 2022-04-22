@@ -34,6 +34,20 @@ namespace Utj.UnityChoseKun
             }
 
 
+            static ObjectCounterView mInstance;
+
+            public static ObjectCounterView instance
+            {
+                get
+                {
+                    if(mInstance == null)
+                    {
+                        mInstance = new ObjectCounterView();
+                    }
+                    return mInstance;
+                }
+            }
+
             public void OnGUI()
             {
                 EditorGUILayout.LabelField("Number of Components in a Scene");

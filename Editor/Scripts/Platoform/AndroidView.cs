@@ -37,6 +37,19 @@ namespace Utj.UnityChoseKun
         bool isDone = false;
 
 
+        static AndroidView mInstance;
+        public static AndroidView instance
+        {
+            get
+            {
+                if(mInstance == null)
+                {
+                    mInstance = new AndroidView();
+                }
+                return mInstance;
+            }
+        }
+
 
         public void OnGUI()
         {

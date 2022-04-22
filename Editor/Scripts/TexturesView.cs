@@ -118,7 +118,20 @@ namespace Utj.UnityChoseKun
 
             TextureView[] m_textureViews;
             Vector2 m_scrollPos;
-            
+
+
+            static TexturesView mInstance;
+            public static TexturesView instance
+            {
+                get
+                {
+                    if(mInstance == null)
+                    {
+                        mInstance = new TexturesView();
+                    }
+                    return mInstance;
+                }
+            }
 
 
             public static TextureKun[] textureKuns

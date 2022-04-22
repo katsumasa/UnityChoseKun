@@ -104,91 +104,394 @@ namespace Utj.UnityChoseKun
             [SerializeField] Vector2 mScrollPos;
 
 
-
+            static SystemInfoView mInstance;
+            public static SystemInfoView instance
+            {
+                get
+                {
+                    if(mInstance == null)
+                    {
+                        mInstance = new SystemInfoView();
+                    }
+                    return mInstance;
+                }
+            }
 
 
 
             public void OnGUI()
             {
                 mScrollPos = EditorGUILayout.BeginScrollView(mScrollPos);
-                EditorGUILayout.FloatField(Styles.BatteryLevel, SystemInfoKun.batteryLevel);
-                EditorGUILayout.EnumPopup(Styles.BatteryStatus, SystemInfoKun.batteryStatus);
-                EditorGUILayout.EnumPopup(Styles.CopyTextureSupport, SystemInfoKun.copyTextureSupport);
-                EditorGUILayout.TextField(Styles.DeviceModel, SystemInfoKun.deviceModel);
-                EditorGUILayout.TextField(Styles.DeviceName, SystemInfoKun.deviceName);
-                EditorGUILayout.EnumPopup(Styles.DeviceType, SystemInfoKun.deviceType);
-                EditorGUILayout.TextField(Styles.DeviceUniqueIdentifier, SystemInfoKun.deviceUniqueIdentifier);
-                EditorGUILayout.IntField(Styles.GraphicsDeviceID, SystemInfoKun.graphicsDeviceID);
-                EditorGUILayout.TextField(Styles.DeviceName, SystemInfoKun.deviceName);
-                EditorGUILayout.EnumPopup(Styles.GraphicsDeviceType, SystemInfoKun.graphicsDeviceType);
-                EditorGUILayout.TextField(Styles.GraphicsDeviceVendor, SystemInfoKun.graphicsDeviceVendor);
-                EditorGUILayout.IntField(Styles.GraphicsDeviceVendorID, SystemInfoKun.graphicsDeviceVendorID);
-                EditorGUILayout.TextField(Styles.GraphicsDeviceVersion, SystemInfoKun.graphicsDeviceVersion);
-                EditorGUILayout.IntField(Styles.GraphicsMemorySize, SystemInfoKun.graphicsMemorySize);
-                EditorGUILayout.Toggle(Styles.GraphicsMultiThreaded, SystemInfoKun.graphicsMultiThreaded);
-                EditorGUILayout.IntField(Styles.GraphicsShaderLevel, SystemInfoKun.graphicsShaderLevel);
-                EditorGUILayout.Toggle(Styles.GraphicsUVStartsAtTop, SystemInfoKun.graphicsUVStartsAtTop);
-                EditorGUILayout.Toggle(Styles.HasDynamicUniformArrayIndexingInFragmentShaders, SystemInfoKun.hasDynamicUniformArrayIndexingInFragmentShaders);
-                EditorGUILayout.Toggle(Styles.HasHiddenSurfaceRemovalOnGPU, SystemInfoKun.hasHiddenSurfaceRemovalOnGPU);
-                EditorGUILayout.Toggle(Styles.HasMipMaxLevel, SystemInfoKun.hasMipMaxLevel);
-                EditorGUILayout.IntField(Styles.MaxComputeBufferInputsCompute, SystemInfoKun.maxComputeBufferInputsCompute);
-                EditorGUILayout.IntField(Styles.MaxComputeBufferInputsDomain, SystemInfoKun.maxComputeBufferInputsDomain);
-                EditorGUILayout.IntField(Styles.MaxComputeBufferInputsFragment, SystemInfoKun.maxComputeBufferInputsFragment);
-                EditorGUILayout.IntField(Styles.MaxComputeBufferInputsGeometry, SystemInfoKun.maxComputeBufferInputsGeometry);
-                EditorGUILayout.IntField(Styles.MaxComputeBufferInputsHull, SystemInfoKun.maxComputeBufferInputsHull);
-                EditorGUILayout.IntField(Styles.MaxComputeBufferInputsVertex, SystemInfoKun.maxComputeBufferInputsVertex);
-                EditorGUILayout.IntField(Styles.MaxComputeWorkGroupSize, SystemInfoKun.maxComputeWorkGroupSize);
-                EditorGUILayout.IntField(Styles.MaxComputeWorkGroupSizeX, SystemInfoKun.maxComputeWorkGroupSizeX);
-                EditorGUILayout.IntField(Styles.MaxComputeWorkGroupSizeY, SystemInfoKun.maxComputeWorkGroupSizeY);
-                EditorGUILayout.IntField(Styles.MaxComputeWorkGroupSizeZ, SystemInfoKun.maxComputeWorkGroupSizeZ);
-                EditorGUILayout.IntField(Styles.MaxCubemapSize, SystemInfoKun.maxCubemapSize);
-                EditorGUILayout.IntField(Styles.MaxTextureSize, SystemInfoKun.maxTextureSize);
-#if UNITY_2020_1_OR_NEWER
-                EditorGUILayout.IntField(Styles.MaxTextureSize, SystemInfoKun.constantBufferOffsetAlignment);
-#else
-            EditorGUILayout.Toggle(Styles.MinConstantBufferOffsetAlignment, SystemInfoKun.minConstantBufferOffsetAlignment);
-#endif
 
-                EditorGUILayout.EnumPopup(Styles.NpotSupport, SystemInfoKun.npotSupport);
-                EditorGUILayout.TextField(Styles.OperatingSystem, SystemInfoKun.operatingSystem);
-                EditorGUILayout.EnumPopup(Styles.OperatingSystemFamily, SystemInfoKun.operatingSystemFamily);
-                EditorGUILayout.IntField(Styles.ProcessorCount, SystemInfoKun.processorCount);
-                EditorGUILayout.IntField(Styles.ProcessorFrequency, SystemInfoKun.processorFrequency);
-                EditorGUILayout.TextField(Styles.ProcessorType, SystemInfoKun.processorType);
-                EditorGUILayout.EnumPopup(Styles.RenderingThreadingMode, SystemInfoKun.renderingThreadingMode);
-                EditorGUILayout.IntField(Styles.SupportedRandomWriteTargetCount, SystemInfoKun.supportedRandomWriteTargetCount);
-                EditorGUILayout.IntField(Styles.SupportedRenderTargetCount, SystemInfoKun.supportedRenderTargetCount);
-                EditorGUILayout.Toggle(Styles.Supports2DArrayTextures, SystemInfoKun.supports2DArrayTextures);
-                EditorGUILayout.Toggle(Styles.Supports32bitsIndexBuffer, SystemInfoKun.supports32bitsIndexBuffer);
-                EditorGUILayout.Toggle(Styles.Supports3DRenderTextures, SystemInfoKun.supports3DRenderTextures);
-                EditorGUILayout.Toggle(Styles.Supports3DTextures, SystemInfoKun.supports3DTextures);
-                EditorGUILayout.Toggle(Styles.SupportsAccelerometer, SystemInfoKun.supportsAccelerometer);
-                EditorGUILayout.Toggle(Styles.SupportsAsyncCompute, SystemInfoKun.supportsAsyncCompute);
-                EditorGUILayout.Toggle(Styles.SupportsAsyncGPUReadback, SystemInfoKun.supportsAsyncGPUReadback);
-                EditorGUILayout.Toggle(Styles.SupportsAudio, SystemInfoKun.supportsAudio);
-                EditorGUILayout.Toggle(Styles.SupportsComputeShaders, SystemInfoKun.supportsComputeShaders);
-                EditorGUILayout.Toggle(Styles.SupportsCubemapArrayTextures, SystemInfoKun.supportsCubemapArrayTextures);
-                EditorGUILayout.Toggle(Styles.SupportsGeometryShaders, SystemInfoKun.supportsGeometryShaders);
-                EditorGUILayout.Toggle(Styles.SupportsGraphicsFence, SystemInfoKun.supportsGraphicsFence);
-                EditorGUILayout.Toggle(Styles.SupportsGyroscope, SystemInfoKun.supportsGyroscope);
-                EditorGUILayout.Toggle(Styles.SupportsHardwareQuadTopology, SystemInfoKun.supportsHardwareQuadTopology);
-                EditorGUILayout.Toggle(Styles.SupportsInstancing, SystemInfoKun.supportsInstancing);
-                EditorGUILayout.Toggle(Styles.SupportsLocationService, SystemInfoKun.supportsLocationService);
-                EditorGUILayout.Toggle(Styles.SupportsMipStreaming, SystemInfoKun.supportsMipStreaming);
-                EditorGUILayout.Toggle(Styles.SupportsMotionVectors, SystemInfoKun.supportsMotionVectors);
-                EditorGUILayout.Toggle(Styles.SupportsMultisampleAutoResolve, SystemInfoKun.supportsMultisampleAutoResolve);
-                EditorGUILayout.IntField(Styles.SupportsMultisampledTextures, SystemInfoKun.supportsMultisampledTextures);
-                EditorGUILayout.Toggle(Styles.SupportsRawShadowDepthSampling, SystemInfoKun.supportsRawShadowDepthSampling);
-                EditorGUILayout.Toggle(Styles.SupportsRayTracing, SystemInfoKun.supportsRayTracing);
-                EditorGUILayout.Toggle(Styles.SupportsSeparatedRenderTargetsBlend, SystemInfoKun.supportsSeparatedRenderTargetsBlend);
-                EditorGUILayout.Toggle(Styles.SupportsSetConstantBuffer, SystemInfoKun.supportsSetConstantBuffer);
-                EditorGUILayout.Toggle(Styles.SupportsSparseTextures, SystemInfoKun.supportsSparseTextures);
-                EditorGUILayout.Toggle(Styles.SupportsTessellationShaders, SystemInfoKun.supportsTessellationShaders);
-                EditorGUILayout.IntField(Styles.SupportsTextureWrapMirrorOnce, SystemInfoKun.supportsTextureWrapMirrorOnce);
-                EditorGUILayout.IntField(Styles.SystemMemorySize, SystemInfoKun.systemMemorySize);
-                EditorGUILayout.TextField(Styles.UnsupportedIdentifier, SystemInfoKun.unsupportedIdentifier);
-                EditorGUILayout.Toggle(Styles.UsesLoadStoreActions, SystemInfoKun.usesLoadStoreActions);
-                EditorGUILayout.Toggle(Styles.UsesReversedZBuffer, SystemInfoKun.usesReversedZBuffer);
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.BatteryLevel);
+                EditorGUILayout.FloatField(SystemInfoKun.batteryLevel);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.BatteryStatus);
+                EditorGUILayout.EnumPopup(SystemInfoKun.batteryStatus);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.CopyTextureSupport);
+                EditorGUILayout.EnumPopup(SystemInfoKun.copyTextureSupport);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.DeviceModel);
+                EditorGUILayout.TextField( SystemInfoKun.deviceModel);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.DeviceName);
+                EditorGUILayout.TextField(SystemInfoKun.deviceName);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.DeviceType);
+                EditorGUILayout.EnumPopup(SystemInfoKun.deviceType);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.DeviceUniqueIdentifier);
+                EditorGUILayout.TextField(SystemInfoKun.deviceUniqueIdentifier);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.GraphicsDeviceID);
+                EditorGUILayout.IntField(SystemInfoKun.graphicsDeviceID);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.DeviceName);
+                EditorGUILayout.TextField(SystemInfoKun.deviceName);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.GraphicsDeviceType);
+                EditorGUILayout.EnumPopup(SystemInfoKun.graphicsDeviceType);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.GraphicsDeviceVendor);
+                EditorGUILayout.TextField(SystemInfoKun.graphicsDeviceVendor);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.GraphicsDeviceVendorID);
+                EditorGUILayout.IntField(SystemInfoKun.graphicsDeviceVendorID);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.GraphicsDeviceVersion);
+                EditorGUILayout.TextField(SystemInfoKun.graphicsDeviceVersion);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.GraphicsMemorySize);
+                EditorGUILayout.IntField(SystemInfoKun.graphicsMemorySize);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.GraphicsMultiThreaded);
+                EditorGUILayout.Toggle(SystemInfoKun.graphicsMultiThreaded);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.GraphicsShaderLevel);
+                EditorGUILayout.IntField(SystemInfoKun.graphicsShaderLevel);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.GraphicsUVStartsAtTop);
+                EditorGUILayout.Toggle(SystemInfoKun.graphicsUVStartsAtTop);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.HasDynamicUniformArrayIndexingInFragmentShaders);
+                EditorGUILayout.Toggle(SystemInfoKun.hasDynamicUniformArrayIndexingInFragmentShaders);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.HasHiddenSurfaceRemovalOnGPU);
+                EditorGUILayout.Toggle(SystemInfoKun.hasHiddenSurfaceRemovalOnGPU);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.Toggle(Styles.HasMipMaxLevel, SystemInfoKun.hasMipMaxLevel);
+                
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.MaxComputeBufferInputsCompute);
+                EditorGUILayout.IntField(SystemInfoKun.maxComputeBufferInputsCompute);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.MaxComputeBufferInputsDomain);
+                EditorGUILayout.IntField(SystemInfoKun.maxComputeBufferInputsDomain);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.MaxComputeBufferInputsFragment);
+                EditorGUILayout.IntField(SystemInfoKun.maxComputeBufferInputsFragment);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.MaxComputeBufferInputsGeometry);
+                EditorGUILayout.IntField(SystemInfoKun.maxComputeBufferInputsGeometry);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.MaxComputeBufferInputsHull);
+                EditorGUILayout.IntField(SystemInfoKun.maxComputeBufferInputsHull);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.MaxComputeBufferInputsVertex);
+                EditorGUILayout.IntField(SystemInfoKun.maxComputeBufferInputsVertex);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.MaxComputeWorkGroupSize);
+                EditorGUILayout.IntField(SystemInfoKun.maxComputeWorkGroupSize);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.MaxComputeWorkGroupSizeX);
+                EditorGUILayout.IntField(SystemInfoKun.maxComputeWorkGroupSizeX);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.MaxComputeWorkGroupSizeY);
+                EditorGUILayout.IntField(SystemInfoKun.maxComputeWorkGroupSizeY);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.MaxComputeWorkGroupSizeZ);
+                EditorGUILayout.IntField(SystemInfoKun.maxComputeWorkGroupSizeZ);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.MaxCubemapSize);
+                EditorGUILayout.IntField(SystemInfoKun.maxCubemapSize);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.MaxTextureSize);
+                EditorGUILayout.IntField(SystemInfoKun.maxTextureSize);
+                EditorGUILayout.EndHorizontal();
+#if UNITY_2020_1_OR_NEWER
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.ConstantBufferOffsetAlignment);
+                EditorGUILayout.IntField(SystemInfoKun.constantBufferOffsetAlignment);
+                EditorGUILayout.EndHorizontal();
+#else
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.MinConstantBufferOffsetAlignment);
+                EditorGUILayout.Toggle(SystemInfoKun.minConstantBufferOffsetAlignment,GUILayout.ExpandWidth(true));
+                EditorGUILayout.EndHorizontal();
+#endif
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.NpotSupport);
+                EditorGUILayout.EnumPopup( SystemInfoKun.npotSupport);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.OperatingSystem);
+                EditorGUILayout.TextField( SystemInfoKun.operatingSystem);
+                EditorGUILayout.EndHorizontal();
+
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.OperatingSystemFamily);
+                EditorGUILayout.EnumPopup( SystemInfoKun.operatingSystemFamily);
+                EditorGUILayout.EndHorizontal();
+
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.ProcessorCount);
+                EditorGUILayout.IntField(SystemInfoKun.processorCount);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.ProcessorFrequency);
+                EditorGUILayout.IntField(SystemInfoKun.processorFrequency);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.ProcessorType);
+                EditorGUILayout.TextField(SystemInfoKun.processorType);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.RenderingThreadingMode);
+                EditorGUILayout.EnumPopup(SystemInfoKun.renderingThreadingMode);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.SupportedRandomWriteTargetCount);
+                EditorGUILayout.IntField(SystemInfoKun.supportedRandomWriteTargetCount);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.SupportedRenderTargetCount);
+                EditorGUILayout.IntField(SystemInfoKun.supportedRenderTargetCount);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.Supports2DArrayTextures);
+                EditorGUILayout.Toggle(SystemInfoKun.supports2DArrayTextures);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.Supports32bitsIndexBuffer);
+                EditorGUILayout.Toggle(SystemInfoKun.supports32bitsIndexBuffer);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.Supports3DRenderTextures);
+                EditorGUILayout.Toggle(SystemInfoKun.supports3DRenderTextures);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.Supports3DTextures);
+                EditorGUILayout.Toggle(SystemInfoKun.supports3DTextures);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.SupportsAccelerometer);
+                EditorGUILayout.Toggle(SystemInfoKun.supportsAccelerometer);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.SupportsAsyncCompute);
+                EditorGUILayout.Toggle(SystemInfoKun.supportsAsyncCompute);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.SupportsAsyncGPUReadback);
+                EditorGUILayout.Toggle(SystemInfoKun.supportsAsyncGPUReadback);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.SupportsAudio);
+                EditorGUILayout.Toggle(SystemInfoKun.supportsAudio);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.SupportsComputeShaders);
+                EditorGUILayout.Toggle(SystemInfoKun.supportsComputeShaders);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.SupportsCubemapArrayTextures);
+                EditorGUILayout.Toggle(SystemInfoKun.supportsCubemapArrayTextures);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.SupportsGeometryShaders);
+                EditorGUILayout.Toggle(SystemInfoKun.supportsGeometryShaders);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.SupportsGraphicsFence);
+                EditorGUILayout.Toggle(SystemInfoKun.supportsGraphicsFence);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.SupportsGyroscope);
+                EditorGUILayout.Toggle(SystemInfoKun.supportsGyroscope);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.SupportsHardwareQuadTopology);
+                EditorGUILayout.Toggle(SystemInfoKun.supportsHardwareQuadTopology);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.SupportsInstancing);
+                EditorGUILayout.Toggle(SystemInfoKun.supportsInstancing);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.SupportsLocationService);
+                EditorGUILayout.Toggle( SystemInfoKun.supportsLocationService);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.SupportsMipStreaming);
+                EditorGUILayout.Toggle(SystemInfoKun.supportsMipStreaming);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.SupportsMotionVectors);
+                EditorGUILayout.Toggle(SystemInfoKun.supportsMotionVectors);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.SupportsMultisampleAutoResolve);
+                EditorGUILayout.Toggle(SystemInfoKun.supportsMultisampleAutoResolve);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.SupportsMultisampledTextures);
+                EditorGUILayout.IntField(SystemInfoKun.supportsMultisampledTextures);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.SupportsRawShadowDepthSampling);
+                EditorGUILayout.Toggle( SystemInfoKun.supportsRawShadowDepthSampling);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.SupportsRayTracing);
+                EditorGUILayout.Toggle(SystemInfoKun.supportsRayTracing);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.SupportsSeparatedRenderTargetsBlend);
+                EditorGUILayout.Toggle(SystemInfoKun.supportsSeparatedRenderTargetsBlend);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.SupportsSetConstantBuffer);
+                EditorGUILayout.Toggle( SystemInfoKun.supportsSetConstantBuffer);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.SupportsSparseTextures);
+                EditorGUILayout.Toggle(SystemInfoKun.supportsSparseTextures);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.SupportsTessellationShaders);
+                EditorGUILayout.Toggle(SystemInfoKun.supportsTessellationShaders);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.SupportsTextureWrapMirrorOnce);
+                EditorGUILayout.IntField(SystemInfoKun.supportsTextureWrapMirrorOnce);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.SystemMemorySize);
+                EditorGUILayout.IntField(SystemInfoKun.systemMemorySize);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.UnsupportedIdentifier);
+                EditorGUILayout.TextField(SystemInfoKun.unsupportedIdentifier);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.UsesLoadStoreActions);
+                EditorGUILayout.Toggle( SystemInfoKun.usesLoadStoreActions);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.UsesReversedZBuffer);
+                EditorGUILayout.Toggle(SystemInfoKun.usesReversedZBuffer);
+                EditorGUILayout.EndHorizontal();
+
                 EditorGUILayout.EndScrollView();
 
 

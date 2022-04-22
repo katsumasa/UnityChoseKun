@@ -38,6 +38,22 @@ namespace Utj.UnityChoseKun
         }
 
 
+
+        static ScalableBufferManagerView mInstance;
+
+        public static ScalableBufferManagerView instance
+        {
+            get
+            {
+                if(mInstance == null)
+                {
+                    mInstance = new ScalableBufferManagerView();
+                }
+                return mInstance;
+            }
+        }
+
+
         public void OnGUI()
         {
             scrollPos = EditorGUILayout.BeginScrollView(scrollPos);

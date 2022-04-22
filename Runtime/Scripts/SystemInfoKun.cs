@@ -13,7 +13,7 @@ namespace Utj.UnityChoseKun.Engine
         public static SystemInfoKun instance
         {
             get { 
-                if(mInstance != null)
+                if(mInstance == null)
                 {
                     mInstance = new SystemInfoKun();
                 }
@@ -109,383 +109,383 @@ namespace Utj.UnityChoseKun.Engine
 
         public static float batteryLevel
         {
-            get { return mInstance.m_batteryLevel; }
+            get { return instance.m_batteryLevel; }
         }
         
         public static BatteryStatus batteryStatus
         {
-            get { return mInstance.m_batteryStatus; }
+            get { return instance.m_batteryStatus; }
         }
 
         public static UnityEngine.Rendering.CopyTextureSupport copyTextureSupport
         {
-            get { return mInstance.m_copyTextureSupport; }
+            get { return instance.m_copyTextureSupport; }
         }
 
         public static string deviceModel
         {
-            get { return mInstance.m_deviceModel; }
+            get { return instance.m_deviceModel; }
         }
 
         public static string deviceName
         {
-            get { return mInstance.m_deviceName; }
+            get { return instance.m_deviceName; }
         }
 
         public static DeviceType deviceType
         {
-            get { return mInstance.m_deviceType; }
+            get { return instance.m_deviceType; }
         }
 
         public static string deviceUniqueIdentifier
         {
-            get { return mInstance.m_deviceUniqueIdentifier; }
+            get { return instance.m_deviceUniqueIdentifier; }
         }
 
         public static int graphicsDeviceID
         {
-            get { return mInstance.m_graphicsDeviceID; }
+            get { return instance.m_graphicsDeviceID; }
         }
 
         public static string graphicsDeviceName
         {
-            get { return mInstance.m_graphicsDeviceName; }
+            get { return instance.m_graphicsDeviceName; }
         }
 
         public static UnityEngine.Rendering.GraphicsDeviceType graphicsDeviceType
         {
-            get { return mInstance.m_graphicsDeviceType; }
+            get { return instance.m_graphicsDeviceType; }
         }
 
         public static string graphicsDeviceVendor
         {
-            get { return mInstance.m_graphicsDeviceVendor; }
+            get { return instance.m_graphicsDeviceVendor; }
         }
 
         public static int graphicsDeviceVendorID
         {
-            get { return mInstance.m_graphicsDeviceVendorID; }
+            get { return instance.m_graphicsDeviceVendorID; }
         }
 
         public static string graphicsDeviceVersion
         {
-            get { return mInstance.m_graphicsDeviceVersion; }
+            get { return instance.m_graphicsDeviceVersion; }
         }
 
         public static int graphicsMemorySize
         {
-            get { return mInstance.m_graphicsMemorySize; }
+            get { return instance.m_graphicsMemorySize; }
         }
 
         public static bool graphicsMultiThreaded
         {
-            get { return mInstance.m_graphicsMultiThreaded; }
+            get { return instance.m_graphicsMultiThreaded; }
         }
         
         public static int graphicsShaderLevel
         {
-            get { return mInstance.m_graphicsShaderLevel; }
+            get { return instance.m_graphicsShaderLevel; }
         }
 
         public static bool graphicsUVStartsAtTop
         {
-            get { return mInstance.m_graphicsUVStartsAtTop; }
+            get { return instance.m_graphicsUVStartsAtTop; }
         }
 
         public static bool hasDynamicUniformArrayIndexingInFragmentShaders
         {
-            get { return mInstance.m_hasDynamicUniformArrayIndexingInFragmentShaders; }
+            get { return instance.m_hasDynamicUniformArrayIndexingInFragmentShaders; }
         }
 
         public static bool hasHiddenSurfaceRemovalOnGPU
         {
-            get { return mInstance.m_hasHiddenSurfaceRemovalOnGPU; }
+            get { return instance.m_hasHiddenSurfaceRemovalOnGPU; }
         }
 
         public static bool hasMipMaxLevel
         {
-            get { return mInstance.m_hasMipMaxLevel; }
+            get { return instance.m_hasMipMaxLevel; }
         }
 
         public static int maxComputeBufferInputsCompute
         {
-            get { return mInstance.m_maxComputeBufferInputsCompute; }
+            get { return instance.m_maxComputeBufferInputsCompute; }
         }
 
         public static int maxComputeBufferInputsDomain
         {
-            get { return mInstance.m_maxComputeBufferInputsDomain; }
+            get { return instance.m_maxComputeBufferInputsDomain; }
         }
 
         public static int maxComputeBufferInputsFragment
         {
-            get { return mInstance.m_maxComputeBufferInputsFragment; }
+            get { return instance.m_maxComputeBufferInputsFragment; }
         }
 
         public static int maxComputeBufferInputsGeometry
         {
-            get { return mInstance.m_maxComputeBufferInputsGeometry; }
+            get { return instance.m_maxComputeBufferInputsGeometry; }
         }
 
         public static int maxComputeBufferInputsHull
         {
-            get { return mInstance.m_maxComputeBufferInputsHull; }
+            get { return instance.m_maxComputeBufferInputsHull; }
         }
 
         public static int maxComputeBufferInputsVertex
         {
-            get { return mInstance.m_maxComputeBufferInputsVertex; }
+            get { return instance.m_maxComputeBufferInputsVertex; }
         }
 
         public static int maxComputeWorkGroupSize
         {
-            get { return mInstance.m_maxComputeWorkGroupSize; }
+            get { return instance.m_maxComputeWorkGroupSize; }
         }
         
         public static int maxComputeWorkGroupSizeX
         {
-            get { return mInstance.m_maxComputeWorkGroupSizeX; }
+            get { return instance.m_maxComputeWorkGroupSizeX; }
         }
 
         public static int maxComputeWorkGroupSizeY
         {
-            get { return mInstance.m_maxComputeWorkGroupSizeY; }
+            get { return instance.m_maxComputeWorkGroupSizeY; }
         }
 
         public static int maxComputeWorkGroupSizeZ
         {
-            get { return mInstance.m_maxComputeWorkGroupSizeZ; }
+            get { return instance.m_maxComputeWorkGroupSizeZ; }
         }
 
         public static int maxCubemapSize
         {
-            get { return mInstance.m_maxCubemapSize; }
+            get { return instance.m_maxCubemapSize; }
         }
 
         public static int maxTextureSize
         {
-            get { return mInstance.m_maxTextureSize; }
+            get { return instance.m_maxTextureSize; }
         }
 
 #if UNITY_2020_1_OR_NEWER
         public static int constantBufferOffsetAlignment
         {
-            get { return mInstance.m_constantBufferOffsetAlignment; }
+            get { return instance.m_constantBufferOffsetAlignment; }
         }
 #else
         public static bool minConstantBufferOffsetAlignment
         {
-            get {return mInstance.m_minConstantBufferOffsetAlignment;}
+            get {return instance.m_minConstantBufferOffsetAlignment;}
         }
 #endif
         public static NPOTSupport npotSupport
         {
-            get { return mInstance.m_npotSupport; }
+            get { return instance.m_npotSupport; }
         }
 
         public static string operatingSystem
         {
-            get { return mInstance.m_operatingSystem; }
+            get { return instance.m_operatingSystem; }
         }
 
         public static OperatingSystemFamily operatingSystemFamily
         {
-            get { return mInstance.m_operatingSystemFamily; }
+            get { return instance.m_operatingSystemFamily; }
         }
 
         public static int processorCount
         {
-            get { return mInstance.m_processorCount; }
+            get { return instance.m_processorCount; }
         }
 
         public static int processorFrequency
         {
-            get { return mInstance.m_processorCount; }
+            get { return instance.m_processorCount; }
         }
 
         public static string processorType
         {
-            get { return mInstance.m_processorType; }
+            get { return instance.m_processorType; }
         }
 
         public static UnityEngine.Rendering.RenderingThreadingMode renderingThreadingMode
         {
-            get { return mInstance.m_renderingThreadingMode; }
+            get { return instance.m_renderingThreadingMode; }
         }
 
         public static int supportedRandomWriteTargetCount
         {
-            get { return mInstance.m_supportedRandomWriteTargetCount; }
+            get { return instance.m_supportedRandomWriteTargetCount; }
         }
 
         public static int supportedRenderTargetCount
         {
-            get { return mInstance.m_supportedRenderTargetCount; }
+            get { return instance.m_supportedRenderTargetCount; }
         }
         
         public static bool supports2DArrayTextures
         {
-            get { return mInstance.m_supports2DArrayTextures; }
+            get { return instance.m_supports2DArrayTextures; }
         }
 
         public static bool supports32bitsIndexBuffer
         {
-            get { return mInstance.m_supports32bitsIndexBuffer; }
+            get { return instance.m_supports32bitsIndexBuffer; }
         }
 
         public static bool supports3DRenderTextures
         {
-            get { return mInstance.m_supports3DRenderTextures; }
+            get { return instance.m_supports3DRenderTextures; }
         }
 
         public static bool supports3DTextures
         {
-            get { return mInstance.m_supports3DTextures; }
+            get { return instance.m_supports3DTextures; }
         }
 
         public static bool supportsAccelerometer
         { 
-            get { return mInstance.m_supportsAccelerometer; }
+            get { return instance.m_supportsAccelerometer; }
         }
 
         public static bool supportsAsyncCompute
         {
-            get { return mInstance.m_supportsAsyncCompute; }
+            get { return instance.m_supportsAsyncCompute; }
         }
 
         public static bool supportsAsyncGPUReadback
         {
-            get { return mInstance.m_supportsAsyncGPUReadback; }
+            get { return instance.m_supportsAsyncGPUReadback; }
         }
 
         public static bool supportsAudio
         {
-            get { return mInstance.m_supportsAudio; }
+            get { return instance.m_supportsAudio; }
         }
 
         public static bool supportsComputeShaders
         {
-            get { return mInstance.m_supportsComputeShaders; }
+            get { return instance.m_supportsComputeShaders; }
         }
 
         public static bool supportsCubemapArrayTextures
         {
-            get { return mInstance.m_supportsCubemapArrayTextures; }
+            get { return instance.m_supportsCubemapArrayTextures; }
         }
 
         public static bool supportsGeometryShaders
         {
-            get { return mInstance.m_supportsGeometryShaders; }
+            get { return instance.m_supportsGeometryShaders; }
         }
 
         public static bool supportsGraphicsFence
         {
-            get { return mInstance.m_supportsGraphicsFence; }
+            get { return instance.m_supportsGraphicsFence; }
         }
 
         public static bool supportsGyroscope
         {
-            get { return mInstance.m_supportsGyroscope; }
+            get { return instance.m_supportsGyroscope; }
         }
 
         public static bool supportsHardwareQuadTopology
         {
-            get { return mInstance.m_supportsHardwareQuadTopology; }
+            get { return instance.m_supportsHardwareQuadTopology; }
         }
 
         public static bool supportsInstancing
         {
-            get { return mInstance.m_supportsInstancing; }
+            get { return instance.m_supportsInstancing; }
         }
 
         public static bool supportsLocationService
         {
-            get { return mInstance.m_supportsLocationService; }
+            get { return instance.m_supportsLocationService; }
         }
 
         public static bool supportsMipStreaming
         {
-            get { return mInstance.m_supportsMipStreaming; }
+            get { return instance.m_supportsMipStreaming; }
         }
 
         public static bool supportsMotionVectors
         {
-            get { return mInstance.m_supportsMotionVectors; }
+            get { return instance.m_supportsMotionVectors; }
         }
         
         public static bool supportsMultisampleAutoResolve
         {
-            get { return mInstance.m_supportsMultisampleAutoResolve; }
+            get { return instance.m_supportsMultisampleAutoResolve; }
         }
         
         public static int supportsMultisampledTextures
         {
-            get { return mInstance.m_supportsMultisampledTextures; }
+            get { return instance.m_supportsMultisampledTextures; }
         }
         
         public static bool supportsRawShadowDepthSampling
         {
-            get { return mInstance.m_supportsRawShadowDepthSampling; }
+            get { return instance.m_supportsRawShadowDepthSampling; }
         }
 
         public static bool supportsRayTracing
         {
-            get { return mInstance.m_supportsRayTracing; }
+            get { return instance.m_supportsRayTracing; }
         }
 
         public static bool supportsSeparatedRenderTargetsBlend
         {
-            get { return mInstance.m_supportsSeparatedRenderTargetsBlend; }
+            get { return instance.m_supportsSeparatedRenderTargetsBlend; }
         }
 
         public static bool supportsSetConstantBuffer
         {
-            get { return mInstance.m_supportsSetConstantBuffer; }
+            get { return instance.m_supportsSetConstantBuffer; }
         }
 
         public static bool supportsShadows
         {
-            get { return mInstance.m_supportsShadows; }
+            get { return instance.m_supportsShadows; }
         }
 
         public static bool supportsSparseTextures
         {
-            get { return mInstance.m_supportsSparseTextures; }
+            get { return instance.m_supportsSparseTextures; }
         }
         
         public static bool supportsTessellationShaders
         {
-            get { return mInstance.m_supportsTessellationShaders; }
+            get { return instance.m_supportsTessellationShaders; }
         }
 
         public static int supportsTextureWrapMirrorOnce
         {
-            get { return mInstance.m_supportsTextureWrapMirrorOnce; }
+            get { return instance.m_supportsTextureWrapMirrorOnce; }
         }
 
         public static bool supportsVibration
         {
-            get { return mInstance.m_supportsVibration; }
+            get { return instance.m_supportsVibration; }
         }
 
         public static int systemMemorySize
         {
-            get { return mInstance.m_systemMemorySize; }
+            get { return instance.m_systemMemorySize; }
         }
 
         public static string unsupportedIdentifier
         {
-            get { return mInstance.m_unsupportedIdentifier; }
+            get { return instance.m_unsupportedIdentifier; }
         }
 
         public static bool usesLoadStoreActions
         {
-            get { return mInstance.m_usesLoadStoreActions; }
+            get { return instance.m_usesLoadStoreActions; }
         }
 
         public static bool usesReversedZBuffer
         {
-            get { return mInstance.m_usesReversedZBuffer; }
+            get { return instance.m_usesReversedZBuffer; }
         }
 
 

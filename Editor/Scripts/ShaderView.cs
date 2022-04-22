@@ -39,6 +39,19 @@ namespace Utj.UnityChoseKun
                 set { m_scrollPos = value; }
             }
 
+            static ShadersView mInstance;
+            public static ShadersView instance
+            {
+                get
+                {
+                    if(mInstance == null)
+                    {
+                        mInstance = new ShadersView();
+                    }
+                    return mInstance;
+                }
+            }
+
 
             /// <summary>
             /// 

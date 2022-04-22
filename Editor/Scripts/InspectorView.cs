@@ -145,6 +145,19 @@ namespace Utj.UnityChoseKun
 
 
 
+            static InspectorView mInstance;
+            public static InspectorView instance
+            {
+                get
+                {
+                    if (mInstance == null)
+                    {
+                        mInstance = new InspectorView();
+                    }
+                    return mInstance;
+                }
+            }
+
 
             public InspectorView()
             {

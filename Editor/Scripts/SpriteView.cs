@@ -83,6 +83,20 @@ namespace Utj.UnityChoseKun
             }
         }
 
+
+        static SpritesView mInstance;
+        public static SpritesView instance
+        {
+            get
+            {
+                if(mInstance == null)
+                {
+                    mInstance = new SpritesView();
+                }
+                return mInstance;
+            }
+        }
+
         public void OnGUI()
         {
             int cnt = 0;
