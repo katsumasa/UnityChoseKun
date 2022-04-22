@@ -50,6 +50,10 @@ namespace Utj.UnityChoseKun
                 public static readonly GUIContent MaxComputeWorkGroupSizeY = new GUIContent("maxComputeWorkGroupSizeY", "The maximum number of work groups that a compute shader can use in Y dimension ");
                 public static readonly GUIContent MaxComputeWorkGroupSizeZ = new GUIContent("maxComputeWorkGroupSizeZ", "The maximum number of work groups that a compute shader can use in Z dimension ");
                 public static readonly GUIContent MaxCubemapSize = new GUIContent("maxCubemapSize", "Maximum Cubemap texture size ");
+#if UNITY_2021_2_OR_NEWER
+                public static readonly GUIContent MaxGraphicsBufferSize = new GUIContent("maxGraphicsBufferSize", "The maximum size of a graphics buffer (GraphicsBuffer, ComputeBuffer, vertex/index buffer, etc.) in bytes (Read Only).Any GPU buffer (GraphicsBuffer, ComputeBuffer or a vertex/index buffer used by a Mesh) can not be larger than this amount of bytes.");
+#endif                
+
                 public static readonly GUIContent MaxTextureSize = new GUIContent("maxTextureSize", "テクスチャの最大サイズ");
 #if UNITY_2020_1_OR_NEWER
                 public static readonly GUIContent ConstantBufferOffsetAlignment = new GUIContent("constantBufferOffsetAlignment", "Minimum buffer offset (in bytes) when binding a constant buffer using Shader.SetConstantBuffer or Material.SetConstantBuffer.");
@@ -288,10 +292,21 @@ namespace Utj.UnityChoseKun
                 EditorGUILayout.IntField(SystemInfoKun.maxCubemapSize);
                 EditorGUILayout.EndHorizontal();
 
+#if UNITY_2021_2_OR_NEWER
+                {
+                    var maxGraphicsBufferSizeMB = SystemInfoKun.maxGraphicsBufferSize / 1024 / 1024;
+                    EditorGUILayout.BeginHorizontal();
+                    EditorGUILayout.LabelField(Styles.MaxGraphicsBufferSize);
+                    EditorGUILayout.LabelField($"{maxGraphicsBufferSizeMB}[MB]");
+                    EditorGUILayout.EndHorizontal();
+                }
+#endif
+
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField(Styles.MaxTextureSize);
                 EditorGUILayout.IntField(SystemInfoKun.maxTextureSize);
                 EditorGUILayout.EndHorizontal();
+
 #if UNITY_2020_1_OR_NEWER
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField(Styles.ConstantBufferOffsetAlignment);

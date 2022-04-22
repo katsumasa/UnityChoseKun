@@ -64,6 +64,9 @@ namespace Utj.UnityChoseKun.Engine
         int m_maxComputeWorkGroupSizeY;
         int m_maxComputeWorkGroupSizeZ;
         int m_maxCubemapSize;
+#if UNITY_2021_2_OR_NEWER
+        long m_maxGraphicsBufferSize;
+#endif
         int m_maxTextureSize;
 
         NPOTSupport m_npotSupport;
@@ -272,6 +275,13 @@ namespace Utj.UnityChoseKun.Engine
         {
             get { return instance.m_maxCubemapSize; }
         }
+
+#if UNITY_2021_2_OR_NEWER
+        public static long maxGraphicsBufferSize
+        {
+            get { return instance.m_maxGraphicsBufferSize; }
+        }
+#endif
 
         public static int maxTextureSize
         {
@@ -542,6 +552,9 @@ namespace Utj.UnityChoseKun.Engine
                 m_maxComputeWorkGroupSizeY = SystemInfo.maxComputeWorkGroupSizeY;
                 m_maxComputeWorkGroupSizeZ = SystemInfo.maxComputeWorkGroupSizeX;
                 m_maxCubemapSize = SystemInfo.maxCubemapSize;
+#if UNITY_2021_2_OR_NEWER
+                m_maxGraphicsBufferSize = SystemInfo.maxGraphicsBufferSize;
+#endif
                 m_maxTextureSize = SystemInfo.maxTextureSize;
 #if UNITY_2020_1_OR_NEWER
                 m_constantBufferOffsetAlignment = SystemInfo.constantBufferOffsetAlignment;
@@ -641,6 +654,11 @@ namespace Utj.UnityChoseKun.Engine
             binaryWriter.Write(m_maxComputeWorkGroupSizeY);
             binaryWriter.Write(m_maxComputeWorkGroupSizeZ);
             binaryWriter.Write(m_maxCubemapSize);
+
+#if UNITY_2021_2_OR_NEWER
+            binaryWriter.Write(m_maxGraphicsBufferSize);
+#endif
+
             binaryWriter.Write(m_maxTextureSize);
 #if UNITY_2020_1_OR_NEWER
             binaryWriter.Write(m_constantBufferOffsetAlignment);
@@ -727,6 +745,11 @@ namespace Utj.UnityChoseKun.Engine
             m_maxComputeWorkGroupSizeY = binaryReader.ReadInt32();
             m_maxComputeWorkGroupSizeZ = binaryReader.ReadInt32();
             m_maxCubemapSize = binaryReader.ReadInt32();
+
+#if UNITY_2021_2_OR_NEWER
+            m_maxGraphicsBufferSize = binaryReader.ReadInt64();
+#endif
+
             m_maxTextureSize = binaryReader.ReadInt32();
 #if UNITY_2020_1_OR_NEWER
             m_constantBufferOffsetAlignment = binaryReader.ReadInt32();
@@ -923,7 +946,14 @@ namespace Utj.UnityChoseKun.Engine
             {
                 return false;
             }
-            if(m_maxTextureSize != other.m_maxTextureSize)
+#if UNITY_2021_2_OR_NEWER
+            if(m_maxGraphicsBufferSize != other.m_maxGraphicsBufferSize)
+            {
+                return false;
+            }
+#endif
+
+            if (m_maxTextureSize != other.m_maxTextureSize)
             {
                 return false;
             }
