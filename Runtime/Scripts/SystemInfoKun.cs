@@ -86,6 +86,9 @@ namespace Utj.UnityChoseKun.Engine
         bool m_supportsAsyncCompute;
         bool m_supportsAsyncGPUReadback;
         bool m_supportsAudio;
+#if UNITY_2020_1_OR_NEWER
+        bool m_supportsCompressed3DTextures;
+#endif
         bool m_supportsComputeShaders;
         bool m_supportsCubemapArrayTextures;
         bool m_supportsGeometryShaders;
@@ -383,6 +386,13 @@ namespace Utj.UnityChoseKun.Engine
         {
             get { return instance.m_supportsAudio; }
         }
+
+#if UNITY_2020_1_OR_NEWER
+        public static bool supportsCompressed3DTextures
+        {
+            get { return instance.m_supportsCompressed3DTextures; }
+        }
+#endif
 
         public static bool supportsComputeShaders
         {
@@ -682,6 +692,9 @@ namespace Utj.UnityChoseKun.Engine
             binaryWriter.Write(m_supportsAsyncCompute);
             binaryWriter.Write(m_supportsAsyncGPUReadback);
             binaryWriter.Write(m_supportsAudio);
+#if UNITY_2020_1_OR_NEWER
+            binaryWriter.Write(m_supportsCompressed3DTextures);
+#endif
             binaryWriter.Write(m_supportsComputeShaders);
             binaryWriter.Write(m_supportsCubemapArrayTextures);
             binaryWriter.Write(m_supportsGeometryShaders);
@@ -773,6 +786,9 @@ namespace Utj.UnityChoseKun.Engine
             m_supportsAsyncCompute = binaryReader.ReadBoolean();
             m_supportsAsyncGPUReadback = binaryReader.ReadBoolean();
             m_supportsAudio = binaryReader.ReadBoolean();
+#if UNITY_2020_1_OR_NEWER
+            m_supportsCompressed3DTextures = binaryReader.ReadBoolean();
+#endif
             m_supportsComputeShaders = binaryReader.ReadBoolean();
             m_supportsCubemapArrayTextures = binaryReader.ReadBoolean();
             m_supportsGeometryShaders = binaryReader.ReadBoolean();
@@ -1036,7 +1052,14 @@ namespace Utj.UnityChoseKun.Engine
             {
                 return false;
             }
-            if(m_supportsComputeShaders != other.m_supportsComputeShaders)
+#if UNITY_2020_1_OR_NEWER
+            if(m_supportsCompressed3DTextures != other.m_supportsCompressed3DTextures)
+            {
+                return false;
+            }
+#endif
+
+            if (m_supportsComputeShaders != other.m_supportsComputeShaders)
             {
                 return false;
             }

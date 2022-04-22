@@ -77,6 +77,9 @@ namespace Utj.UnityChoseKun
                 public static readonly GUIContent SupportsAsyncCompute = new GUIContent("supportsAsyncCompute", "Returns true when the platform supports asynchronous compute queues and false if otherwise.");
                 public static readonly GUIContent SupportsAsyncGPUReadback = new GUIContent("supportsAsyncGPUReadback", "Returns true if asynchronous readback of GPU data is available for this device and false otherwise.");
                 public static readonly GUIContent SupportsAudio = new GUIContent("supportsAudio", "Is there an Audio device available for playback?");
+#if UNITY_2020_1_OR_NEWER
+                public static readonly GUIContent SupportsCompressed3DTextures = new GUIContent("supportsCompressed3DTextures", "Are compressed formats for 3D (volume) textures supported? (Read Only).Not all graphics APIs and platforms support compressed Texture3D textures, for example Metal on macOS before 10.15 does not.");
+#endif
                 public static readonly GUIContent SupportsComputeShaders = new GUIContent("supportsComputeShaders", "Compute シェーダーがサポートされているかどうか");
                 public static readonly GUIContent SupportsCubemapArrayTextures = new GUIContent("supportsCubemapArrayTextures", "Are Cubemap Array textures supported?");
                 public static readonly GUIContent SupportsGeometryShaders = new GUIContent("supportsGeometryShaders", "Are geometry shaders supported? ");
@@ -404,6 +407,13 @@ namespace Utj.UnityChoseKun
                 EditorGUILayout.LabelField(Styles.SupportsAudio);
                 EditorGUILayout.Toggle(SystemInfoKun.supportsAudio);
                 EditorGUILayout.EndHorizontal();
+
+#if UNITY_2020_1_OR_NEWER
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.SupportsCompressed3DTextures);
+                EditorGUILayout.Toggle(SystemInfoKun.supportsCompressed3DTextures);
+                EditorGUILayout.EndHorizontal();
+#endif
 
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField(Styles.SupportsComputeShaders);
