@@ -197,8 +197,8 @@ namespace Utj.UnityChoseKun
                 EditorGUILayout.EndHorizontal();
 
                 EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField(Styles.DeviceName);
-                EditorGUILayout.TextField(SystemInfoKun.deviceName);
+                EditorGUILayout.LabelField(Styles.GraphicsDeviceName);
+                EditorGUILayout.TextField(SystemInfoKun.graphicsDeviceName);
                 EditorGUILayout.EndHorizontal();
 
                 EditorGUILayout.BeginHorizontal();
@@ -223,7 +223,7 @@ namespace Utj.UnityChoseKun
 
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField(Styles.GraphicsMemorySize);
-                EditorGUILayout.IntField(SystemInfoKun.graphicsMemorySize);
+                EditorGUILayout.LabelField($"{SystemInfoKun.graphicsMemorySize}[MB]");
                 EditorGUILayout.EndHorizontal();
 
                 EditorGUILayout.BeginHorizontal();
