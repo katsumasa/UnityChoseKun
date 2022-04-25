@@ -160,7 +160,7 @@ namespace Utj.UnityChoseKun
 
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField(Styles.CopyTextureSupport);
-                EditorGUILayout.EnumPopup(SystemInfoKun.copyTextureSupport);
+                EditorGUILayout.EnumFlagsField(SystemInfoKun.copyTextureSupport);
                 EditorGUILayout.EndHorizontal();
 
                 EditorGUILayout.BeginHorizontal();
