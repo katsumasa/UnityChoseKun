@@ -63,7 +63,7 @@ namespace Utj.UnityChoseKun
 #endif
                 public static readonly GUIContent NpotSupport = new GUIContent("npotSupport", "GPU はどのような NPOT (2の2乗でない) テクスチャのサポートを提供するか。");
                 public static readonly GUIContent OperatingSystem = new GUIContent("operatingSystem", "OS 名とバージョン");
-                public static readonly GUIContent OperatingSystemFamily = new GUIContent("OperatingSystemFamily", "Returns the operating system family the game is running on ");
+                public static readonly GUIContent OperatingSystemFamily = new GUIContent("operatingSystemFamily", "Returns the operating system family the game is running on ");
                 public static readonly GUIContent ProcessorCount = new GUIContent("processorCount", "現在のプロセッサーの数");
                 public static readonly GUIContent ProcessorFrequency = new GUIContent("processorFrequency", "MHz単位のプロセッサー周波数");
                 public static readonly GUIContent ProcessorType = new GUIContent("processorType", "プロセッサー名");
@@ -363,7 +363,7 @@ namespace Utj.UnityChoseKun
 
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField(Styles.ProcessorFrequency);
-                EditorGUILayout.IntField(SystemInfoKun.processorFrequency);
+                EditorGUILayout.LabelField($"{SystemInfoKun.processorFrequency}[MHz]");
                 EditorGUILayout.EndHorizontal();
 
                 EditorGUILayout.BeginHorizontal();
@@ -560,7 +560,7 @@ namespace Utj.UnityChoseKun
 
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField(Styles.SystemMemorySize);
-                EditorGUILayout.IntField(SystemInfoKun.systemMemorySize);
+                EditorGUILayout.LabelField($"{SystemInfoKun.systemMemorySize}[MB]");
                 EditorGUILayout.EndHorizontal();
 
                 EditorGUILayout.BeginHorizontal();
