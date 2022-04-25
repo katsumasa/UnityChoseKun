@@ -55,7 +55,7 @@ namespace Utj.UnityChoseKun
 #endif                
 
                 public static readonly GUIContent MaxTextureSize = new GUIContent("maxTextureSize", "テクスチャの最大サイズ");
-#if UNITY_2020_1_OR_NEWER
+#if UNITY_2020_3_OR_NEWER
                 public static readonly GUIContent ConstantBufferOffsetAlignment = new GUIContent("constantBufferOffsetAlignment", "Minimum buffer offset (in bytes) when binding a constant buffer using Shader.SetConstantBuffer or Material.SetConstantBuffer.");
 #else
             public static readonly GUIContent MinConstantBufferOffsetAlignment = new GUIContent("minConstantBufferOffsetAlignment", "Minimum buffer offset (in bytes) when binding a constant buffer using Shader.SetConstantBuffer or Material.SetConstantBuffer.");
@@ -325,7 +325,7 @@ namespace Utj.UnityChoseKun
                 EditorGUILayout.IntField(SystemInfoKun.maxTextureSize);
                 EditorGUILayout.EndHorizontal();
 
-#if UNITY_2020_1_OR_NEWER
+#if UNITY_2020_3_OR_NEWER
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField(Styles.ConstantBufferOffsetAlignment);
                 EditorGUILayout.IntField(SystemInfoKun.constantBufferOffsetAlignment);

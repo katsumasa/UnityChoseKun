@@ -25,7 +25,7 @@ namespace Utj.UnityChoseKun.Engine
 
         float m_batteryLevel;
         BatteryStatus m_batteryStatus;
-#if UNITY_2020_1_OR_NEWER
+#if UNITY_2020_3_OR_NEWER
         int m_constantBufferOffsetAlignment;
 #else
         bool m_minConstantBufferOffsetAlignment;
@@ -306,7 +306,7 @@ namespace Utj.UnityChoseKun.Engine
             get { return instance.m_maxTextureSize; }
         }
 
-#if UNITY_2020_1_OR_NEWER
+#if UNITY_2020_3_OR_NEWER
         public static int constantBufferOffsetAlignment
         {
             get { return instance.m_constantBufferOffsetAlignment; }
@@ -575,7 +575,7 @@ namespace Utj.UnityChoseKun.Engine
             {
                 m_batteryLevel = SystemInfo.batteryLevel;
                 m_batteryStatus = SystemInfo.batteryStatus;
-#if UNITY_2020_1_OR_NEWER
+#if UNITY_2020_3_OR_NEWER
                 m_constantBufferOffsetAlignment = SystemInfo.constantBufferOffsetAlignment;
 #else
                 m_minConstantBufferOffsetAlignment = SystemInfo.minConstantBufferOffsetAlignment;
@@ -738,7 +738,7 @@ namespace Utj.UnityChoseKun.Engine
 #endif
 
             binaryWriter.Write(m_maxTextureSize);
-#if UNITY_2020_1_OR_NEWER
+#if UNITY_2020_3_OR_NEWER
             binaryWriter.Write(m_constantBufferOffsetAlignment);
 #else
             binaryWriter.Write(m_minConstantBufferOffsetAlignment);
@@ -847,7 +847,7 @@ namespace Utj.UnityChoseKun.Engine
 #endif
 
             m_maxTextureSize = binaryReader.ReadInt32();
-#if UNITY_2020_1_OR_NEWER
+#if UNITY_2020_3_OR_NEWER
             m_constantBufferOffsetAlignment = binaryReader.ReadInt32();
 #else
             m_minConstantBufferOffsetAlignment = binaryReader.ReadBoolean();
@@ -1071,7 +1071,7 @@ namespace Utj.UnityChoseKun.Engine
             {
                 return false;
             }
-#if UNITY_2020_1_OR_NEWER
+#if UNITY_2020_3_OR_NEWER
             if(m_constantBufferOffsetAlignment != other.m_constantBufferOffsetAlignment)
             {
                 return false;
