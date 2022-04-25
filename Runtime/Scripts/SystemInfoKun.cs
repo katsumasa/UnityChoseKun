@@ -598,12 +598,15 @@ namespace Utj.UnityChoseKun.Engine
                 m_supportsAsyncCompute = SystemInfo.supportsAsyncCompute;
                 m_supportsAsyncGPUReadback = SystemInfo.supportsAsyncGPUReadback;
                 m_supportsAudio = SystemInfo.supportsAudio;
+#if UNITY_2020_1_OR_NEWER                
+                m_supportsCompressed3DTextures = SystemInfo.supportsCompressed3DTextures;
+#endif
                 m_supportsComputeShaders = SystemInfo.supportsComputeShaders;
-                m_supportsCubemapArrayTextures = SystemInfo.supportsCubemapArrayTextures;
-                m_supportsGeometryShaders = SystemInfo.supportsGeometryShaders;
 #if UNITY_2020_1_OR_NEWER
                 m_supportsConservativeRaster = SystemInfo.supportsConservativeRaster;
-#endif
+#endif                
+                m_supportsCubemapArrayTextures = SystemInfo.supportsCubemapArrayTextures;
+                m_supportsGeometryShaders = SystemInfo.supportsGeometryShaders;
                 m_supportsGraphicsFence = SystemInfo.supportsGraphicsFence;
                 m_supportsGyroscope = SystemInfo.supportsGyroscope;
                 m_supportsHardwareQuadTopology = SystemInfo.supportsHardwareQuadTopology;
