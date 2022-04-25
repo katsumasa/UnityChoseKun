@@ -97,6 +97,9 @@ namespace Utj.UnityChoseKun
                 public static readonly GUIContent SupportsMipStreaming = new GUIContent("supportsMipStreaming", "streaming of texture mip maps supported?");
                 public static readonly GUIContent SupportsMotionVectors = new GUIContent("supportsMotionVectors", "Whether motion vectors are supported on this platform.");
                 public static readonly GUIContent SupportsMultisampleAutoResolve = new GUIContent("supportsMultisampleAutoResolve", "Returns true if multisampled textures are resolved automatically");
+#if UNITY_2020_1_OR_NEWER
+                public static readonly GUIContent SupportsMultisampled2DArrayTextures = new GUIContent("supportsMultisampled2DArrayTextures", "Are multisampled texture arrays supported? (Read Only)");
+#endif
                 public static readonly GUIContent SupportsMultisampledTextures = new GUIContent("supportsMultisampledTextures", "Are multisampled textures supported?");
                 public static readonly GUIContent SupportsRawShadowDepthSampling = new GUIContent("supportsRawShadowDepthSampling", "サポートされているシャドウマップからのサンプリングは生のデプスか?");
                 public static readonly GUIContent SupportsRayTracing = new GUIContent("supportsRayTracing", "Checks if ray tracing is supported by the current configuration.");
@@ -486,6 +489,13 @@ namespace Utj.UnityChoseKun
                 EditorGUILayout.LabelField(Styles.SupportsMultisampleAutoResolve);
                 EditorGUILayout.Toggle(SystemInfoKun.supportsMultisampleAutoResolve);
                 EditorGUILayout.EndHorizontal();
+
+#if UNITY_2020_1_OR_NEWER
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.SupportsMultisampled2DArrayTextures);
+                EditorGUILayout.Toggle(SystemInfoKun.supportsMultisampled2DArrayTextures);
+                EditorGUILayout.EndHorizontal();
+#endif
 
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField(Styles.SupportsMultisampledTextures);

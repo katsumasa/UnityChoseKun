@@ -106,6 +106,9 @@ namespace Utj.UnityChoseKun.Engine
         bool m_supportsMipStreaming;
         bool m_supportsMotionVectors;
         bool m_supportsMultisampleAutoResolve;
+#if UNITY_2020_1_OR_NEWER        
+        bool m_supportsMultisampled2DArrayTextures;
+#endif
         int m_supportsMultisampledTextures;
         bool m_supportsRawShadowDepthSampling;
         bool m_supportsRayTracing;
@@ -466,7 +469,12 @@ namespace Utj.UnityChoseKun.Engine
         {
             get { return instance.m_supportsMultisampleAutoResolve; }
         }
-        
+#if UNITY_2020_1_OR_NEWER        
+        public static bool supportsMultisampled2DArrayTextures
+        {
+            get { return instance.m_supportsMultisampled2DArrayTextures; }
+        }
+#endif        
         public static int supportsMultisampledTextures
         {
             get { return instance.m_supportsMultisampledTextures; }
@@ -631,6 +639,9 @@ namespace Utj.UnityChoseKun.Engine
                 m_supportsMipStreaming = SystemInfo.supportsMipStreaming;
                 m_supportsMotionVectors = SystemInfo.supportsMotionVectors;
                 m_supportsMultisampleAutoResolve = SystemInfo.supportsMultisampleAutoResolve;
+#if UNITY_2020_1_OR_NEWER
+                m_supportsMultisampled2DArrayTextures = SystemInfo.supportsMultisampled2DArrayTextures;
+#endif
                 m_supportsMultisampledTextures = SystemInfo.supportsMultisampledTextures;
                 m_supportsRawShadowDepthSampling = SystemInfo.supportsRawShadowDepthSampling;
                 m_supportsRayTracing = SystemInfo.supportsRayTracing;
@@ -744,6 +755,9 @@ namespace Utj.UnityChoseKun.Engine
             binaryWriter.Write(m_supportsMipStreaming);
             binaryWriter.Write(m_supportsMotionVectors);
             binaryWriter.Write(m_supportsMultisampleAutoResolve);
+#if UNITY_2020_1_OR_NEWER
+            binaryWriter.Write(m_supportsMultisampled2DArrayTextures);
+#endif
             binaryWriter.Write(m_supportsMultisampledTextures);
             binaryWriter.Write(m_supportsRawShadowDepthSampling);
             binaryWriter.Write(m_supportsRayTracing);
@@ -844,6 +858,9 @@ namespace Utj.UnityChoseKun.Engine
             m_supportsMipStreaming = binaryReader.ReadBoolean();
             m_supportsMotionVectors = binaryReader.ReadBoolean();
             m_supportsMultisampleAutoResolve = binaryReader.ReadBoolean();
+#if UNITY_2020_1_OR_NEWER
+            m_supportsMultisampled2DArrayTextures = binaryReader.ReadBoolean();
+#endif
             m_supportsMultisampledTextures = binaryReader.ReadInt32();
             m_supportsRawShadowDepthSampling = binaryReader.ReadBoolean();
             m_supportsRayTracing = binaryReader.ReadBoolean();
@@ -1158,6 +1175,12 @@ namespace Utj.UnityChoseKun.Engine
             {
                 return false;
             }
+#if UNITY_2020_1_OR_NEWER
+            if(m_supportsMultisampled2DArrayTextures != other.m_supportsMultisampled2DArrayTextures)
+            {
+                return false;
+            }
+#endif
             if(m_supportsMultisampledTextures != other.m_supportsMultisampledTextures)
             {
                 return false;
