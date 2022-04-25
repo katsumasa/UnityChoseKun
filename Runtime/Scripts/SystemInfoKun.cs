@@ -540,6 +540,11 @@ namespace Utj.UnityChoseKun.Engine
             {
                 m_batteryLevel = SystemInfo.batteryLevel;
                 m_batteryStatus = SystemInfo.batteryStatus;
+#if UNITY_2020_1_OR_NEWER
+                m_constantBufferOffsetAlignment = SystemInfo.constantBufferOffsetAlignment;
+#else
+                m_minConstantBufferOffsetAlignment = SystemInfo.minConstantBufferOffsetAlignment;
+#endif
                 m_copyTextureSupport = SystemInfo.copyTextureSupport;
                 m_deviceModel = SystemInfo.deviceModel;
                 m_deviceName = SystemInfo.deviceName;
