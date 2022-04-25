@@ -106,6 +106,9 @@ namespace Utj.UnityChoseKun
 #endif
                 public static readonly GUIContent SupportsRawShadowDepthSampling = new GUIContent("supportsRawShadowDepthSampling", "サポートされているシャドウマップからのサンプリングは生のデプスか?");
                 public static readonly GUIContent SupportsRayTracing = new GUIContent("supportsRayTracing", "Checks if ray tracing is supported by the current configuration.");
+#if UNITY_2020_1_OR_NEWER
+                public static readonly GUIContent SupportsRenderTargetArrayIndexFromVertexShader = new GUIContent("supportsRenderTargetArrayIndexFromVertexShader", "Can SV_RenderTargetArrayIndex be used in a vertex shader? (Read Only)");
+#endif
                 public static readonly GUIContent SupportsSeparatedRenderTargetsBlend = new GUIContent("supportsSeparatedRenderTargetsBlend", "supportsSeparatedRenderTargetsBlend");
                 public static readonly GUIContent SupportsSetConstantBuffer = new GUIContent("supportsSetConstantBuffer", "Does the current renderer support binding constant buffers directly?");
                 public static readonly GUIContent SupportsShadows = new GUIContent("SupportsShadows", "グラフィックスカードが影をサポートしているかどうか");
@@ -521,7 +524,12 @@ namespace Utj.UnityChoseKun
                 EditorGUILayout.LabelField(Styles.SupportsRayTracing);
                 EditorGUILayout.Toggle(SystemInfoKun.supportsRayTracing);
                 EditorGUILayout.EndHorizontal();
-
+#if UNITY_2020_1_OR_NEWER
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.SupportsRenderTargetArrayIndexFromVertexShader);
+                EditorGUILayout.Toggle(SystemInfoKun.supportsRenderTargetArrayIndexFromVertexShader);
+                EditorGUILayout.EndHorizontal();
+#endif
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField(Styles.SupportsSeparatedRenderTargetsBlend);
                 EditorGUILayout.Toggle(SystemInfoKun.supportsSeparatedRenderTargetsBlend);

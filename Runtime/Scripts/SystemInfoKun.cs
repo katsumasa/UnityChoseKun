@@ -115,6 +115,9 @@ namespace Utj.UnityChoseKun.Engine
 #endif
         bool m_supportsRawShadowDepthSampling;
         bool m_supportsRayTracing;
+#if UNITY_2020_1_OR_NEWER
+        bool m_supportsRenderTargetArrayIndexFromVertexShader;
+#endif
         bool m_supportsSeparatedRenderTargetsBlend;
         bool m_supportsSetConstantBuffer;
         bool m_supportsShadows;
@@ -500,7 +503,12 @@ namespace Utj.UnityChoseKun.Engine
         {
             get { return instance.m_supportsRayTracing; }
         }
-
+#if UNITY_2020_1_OR_NEWER
+        public static bool supportsRenderTargetArrayIndexFromVertexShader
+        {
+            get { return instance.m_supportsRenderTargetArrayIndexFromVertexShader; }
+        }
+#endif
         public static bool supportsSeparatedRenderTargetsBlend
         {
             get { return instance.m_supportsSeparatedRenderTargetsBlend; }
@@ -659,6 +667,9 @@ namespace Utj.UnityChoseKun.Engine
 #endif
                 m_supportsRawShadowDepthSampling = SystemInfo.supportsRawShadowDepthSampling;
                 m_supportsRayTracing = SystemInfo.supportsRayTracing;
+#if UNITY_2020_1_OR_NEWER
+                m_supportsRenderTargetArrayIndexFromVertexShader = SystemInfo.supportsRenderTargetArrayIndexFromVertexShader;
+#endif
                 m_supportsSeparatedRenderTargetsBlend = SystemInfo.supportsSeparatedRenderTargetsBlend;
                 m_supportsSetConstantBuffer = SystemInfo.supportsSetConstantBuffer;
                 m_supportsShadows = SystemInfo.supportsShadows;
@@ -778,6 +789,9 @@ namespace Utj.UnityChoseKun.Engine
 #endif
             binaryWriter.Write(m_supportsRawShadowDepthSampling);
             binaryWriter.Write(m_supportsRayTracing);
+#if UNITY_2020_1_OR_NEWER
+            binaryWriter.Write(m_supportsRenderTargetArrayIndexFromVertexShader);
+#endif
             binaryWriter.Write(m_supportsSeparatedRenderTargetsBlend);
             binaryWriter.Write(m_supportsSetConstantBuffer);
             binaryWriter.Write(m_supportsShadows);
@@ -884,6 +898,9 @@ namespace Utj.UnityChoseKun.Engine
 #endif
             m_supportsRawShadowDepthSampling = binaryReader.ReadBoolean();
             m_supportsRayTracing = binaryReader.ReadBoolean();
+#if UNITY_2020_1_OR_NEWER
+            m_supportsRenderTargetArrayIndexFromVertexShader = binaryReader.ReadBoolean();
+#endif
             m_supportsSeparatedRenderTargetsBlend = binaryReader.ReadBoolean();
             m_supportsSetConstantBuffer = binaryReader.ReadBoolean();
             m_supportsShadows = binaryReader.ReadBoolean();
@@ -1219,7 +1236,13 @@ namespace Utj.UnityChoseKun.Engine
             {
                 return false;
             }
-            if(m_supportsSeparatedRenderTargetsBlend != other.m_supportsSeparatedRenderTargetsBlend)
+#if UNITY_2020_1_OR_NEWER
+            if(m_supportsRenderTargetArrayIndexFromVertexShader != other.m_supportsRenderTargetArrayIndexFromVertexShader)
+            {
+                return false;
+            }
+#endif
+            if (m_supportsSeparatedRenderTargetsBlend != other.m_supportsSeparatedRenderTargetsBlend)
             {
                 return false;
             }
