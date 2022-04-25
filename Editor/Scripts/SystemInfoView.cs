@@ -81,6 +81,9 @@ namespace Utj.UnityChoseKun
                 public static readonly GUIContent SupportsCompressed3DTextures = new GUIContent("supportsCompressed3DTextures", "Are compressed formats for 3D (volume) textures supported? (Read Only).Not all graphics APIs and platforms support compressed Texture3D textures, for example Metal on macOS before 10.15 does not.");
 #endif
                 public static readonly GUIContent SupportsComputeShaders = new GUIContent("supportsComputeShaders", "Compute シェーダーがサポートされているかどうか");
+#if UNITY_2020_1_OR_NEWER
+                public static readonly GUIContent SupportsConservativeRaster = new GUIContent("supportsConservativeRaster", "Is conservative rasterization supported? ");
+#endif
                 public static readonly GUIContent SupportsCubemapArrayTextures = new GUIContent("supportsCubemapArrayTextures", "Are Cubemap Array textures supported?");
                 public static readonly GUIContent SupportsGeometryShaders = new GUIContent("supportsGeometryShaders", "Are geometry shaders supported? ");
                 public static readonly GUIContent SupportsGraphicsFence = new GUIContent("supportsGraphicsFence", "Returns true when the platform supports GraphicsFences, and false if otherwise.");
@@ -420,6 +423,12 @@ namespace Utj.UnityChoseKun
                 EditorGUILayout.Toggle(SystemInfoKun.supportsComputeShaders);
                 EditorGUILayout.EndHorizontal();
 
+#if UNITY_2020_1_OR_NEWER
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.SupportsConservativeRaster);
+                EditorGUILayout.Toggle(SystemInfoKun.supportsConservativeRaster);
+                EditorGUILayout.EndHorizontal();
+#endif
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField(Styles.SupportsCubemapArrayTextures);
                 EditorGUILayout.Toggle(SystemInfoKun.supportsCubemapArrayTextures);

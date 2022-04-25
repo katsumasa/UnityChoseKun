@@ -90,6 +90,9 @@ namespace Utj.UnityChoseKun.Engine
         bool m_supportsCompressed3DTextures;
 #endif
         bool m_supportsComputeShaders;
+#if UNITY_2020_1_OR_NEWER
+        bool m_supportsConservativeRaster;
+#endif
         bool m_supportsCubemapArrayTextures;
         bool m_supportsGeometryShaders;
         bool m_supportsGraphicsFence;
@@ -399,6 +402,13 @@ namespace Utj.UnityChoseKun.Engine
             get { return instance.m_supportsComputeShaders; }
         }
 
+#if UNITY_2020_1_OR_NEWER        
+        public static bool supportsConservativeRaster
+        {
+            get { return instance.m_supportsConservativeRaster; }
+        }
+#endif
+
         public static bool supportsCubemapArrayTextures
         {
             get { return instance.m_supportsCubemapArrayTextures; }
@@ -591,6 +601,9 @@ namespace Utj.UnityChoseKun.Engine
                 m_supportsComputeShaders = SystemInfo.supportsComputeShaders;
                 m_supportsCubemapArrayTextures = SystemInfo.supportsCubemapArrayTextures;
                 m_supportsGeometryShaders = SystemInfo.supportsGeometryShaders;
+#if UNITY_2020_1_OR_NEWER
+                m_supportsConservativeRaster = SystemInfo.supportsConservativeRaster;
+#endif
                 m_supportsGraphicsFence = SystemInfo.supportsGraphicsFence;
                 m_supportsGyroscope = SystemInfo.supportsGyroscope;
                 m_supportsHardwareQuadTopology = SystemInfo.supportsHardwareQuadTopology;
@@ -696,6 +709,9 @@ namespace Utj.UnityChoseKun.Engine
             binaryWriter.Write(m_supportsCompressed3DTextures);
 #endif
             binaryWriter.Write(m_supportsComputeShaders);
+#if UNITY_2020_1_OR_NEWER
+            binaryWriter.Write(m_supportsConservativeRaster);
+#endif
             binaryWriter.Write(m_supportsCubemapArrayTextures);
             binaryWriter.Write(m_supportsGeometryShaders);
             binaryWriter.Write(m_supportsGraphicsFence);
@@ -790,6 +806,9 @@ namespace Utj.UnityChoseKun.Engine
             m_supportsCompressed3DTextures = binaryReader.ReadBoolean();
 #endif
             m_supportsComputeShaders = binaryReader.ReadBoolean();
+#if UNITY_2020_1_OR_NEWER
+            m_supportsConservativeRaster = binaryReader.ReadBoolean();
+#endif
             m_supportsCubemapArrayTextures = binaryReader.ReadBoolean();
             m_supportsGeometryShaders = binaryReader.ReadBoolean();
             m_supportsGraphicsFence = binaryReader.ReadBoolean();
@@ -1058,12 +1077,17 @@ namespace Utj.UnityChoseKun.Engine
                 return false;
             }
 #endif
-
             if (m_supportsComputeShaders != other.m_supportsComputeShaders)
             {
                 return false;
             }
-            if(m_supportsCubemapArrayTextures != other.m_supportsCubemapArrayTextures)
+#if UNITY_2020_1_OR_NEWER
+            if(m_supportsConservativeRaster != other.m_supportsConservativeRaster)
+            {
+                return false;
+            }
+#endif
+            if (m_supportsCubemapArrayTextures != other.m_supportsCubemapArrayTextures)
             {
                 return false;
             }
