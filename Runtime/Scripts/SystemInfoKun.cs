@@ -27,8 +27,6 @@ namespace Utj.UnityChoseKun.Engine
         BatteryStatus m_batteryStatus;
 #if UNITY_2020_3_OR_NEWER
         int m_constantBufferOffsetAlignment;
-#else
-        bool m_minConstantBufferOffsetAlignment;
 #endif
         UnityEngine.Rendering.CopyTextureSupport m_copyTextureSupport;
         string m_deviceModel;
@@ -68,6 +66,9 @@ namespace Utj.UnityChoseKun.Engine
         long m_maxGraphicsBufferSize;
 #endif
         int m_maxTextureSize;
+#if !UNITY_2020_3_OR_NEWER
+        bool m_minConstantBufferOffsetAlignment;
+#endif
 
         NPOTSupport m_npotSupport;
         string m_operatingSystem;
@@ -106,7 +107,7 @@ namespace Utj.UnityChoseKun.Engine
         bool m_supportsMipStreaming;
         bool m_supportsMotionVectors;
         bool m_supportsMultisampleAutoResolve;
-#if UNITY_2020_1_OR_NEWER        
+#if UNITY_2020_1_OR_NEWER
         bool m_supportsMultisampled2DArrayTextures;
 #endif
         int m_supportsMultisampledTextures;
@@ -142,6 +143,12 @@ namespace Utj.UnityChoseKun.Engine
             get { return instance.m_batteryStatus; }
         }
 
+#if UNITY_2020_3_OR_NEWER
+        public static int constantBufferOffsetAlignment
+        {
+            get { return instance.m_constantBufferOffsetAlignment; }
+        }
+#endif
         public static UnityEngine.Rendering.CopyTextureSupport copyTextureSupport
         {
             get { return instance.m_copyTextureSupport; }
@@ -306,12 +313,7 @@ namespace Utj.UnityChoseKun.Engine
             get { return instance.m_maxTextureSize; }
         }
 
-#if UNITY_2020_3_OR_NEWER
-        public static int constantBufferOffsetAlignment
-        {
-            get { return instance.m_constantBufferOffsetAlignment; }
-        }
-#else
+#if !UNITY_2020_3_OR_NEWER
         public static bool minConstantBufferOffsetAlignment
         {
             get {return instance.m_minConstantBufferOffsetAlignment;}
@@ -414,7 +416,7 @@ namespace Utj.UnityChoseKun.Engine
             get { return instance.m_supportsComputeShaders; }
         }
 
-#if UNITY_2020_1_OR_NEWER        
+#if UNITY_2020_1_OR_NEWER
         public static bool supportsConservativeRaster
         {
             get { return instance.m_supportsConservativeRaster; }
@@ -476,12 +478,12 @@ namespace Utj.UnityChoseKun.Engine
             get { return instance.m_supportsMultisampleAutoResolve; }
         }
 
-#if UNITY_2020_1_OR_NEWER        
+#if UNITY_2020_1_OR_NEWER
         public static bool supportsMultisampled2DArrayTextures
         {
             get { return instance.m_supportsMultisampled2DArrayTextures; }
         }
-#endif        
+#endif
         public static int supportsMultisampledTextures
         {
             get { return instance.m_supportsMultisampledTextures; }
@@ -577,8 +579,6 @@ namespace Utj.UnityChoseKun.Engine
                 m_batteryStatus = SystemInfo.batteryStatus;
 #if UNITY_2020_3_OR_NEWER
                 m_constantBufferOffsetAlignment = SystemInfo.constantBufferOffsetAlignment;
-#else
-                m_minConstantBufferOffsetAlignment = SystemInfo.minConstantBufferOffsetAlignment;
 #endif
                 m_copyTextureSupport = SystemInfo.copyTextureSupport;
                 m_deviceModel = SystemInfo.deviceModel;
@@ -616,9 +616,8 @@ namespace Utj.UnityChoseKun.Engine
                 m_maxGraphicsBufferSize = SystemInfo.maxGraphicsBufferSize;
 #endif
                 m_maxTextureSize = SystemInfo.maxTextureSize;
-#if UNITY_2020_1_OR_NEWER
-                m_constantBufferOffsetAlignment = SystemInfo.constantBufferOffsetAlignment;
-#else
+
+#if !UNITY_2020_3_OR_NEWER
                 m_minConstantBufferOffsetAlignment = SystemInfo.minConstantBufferOffsetAlignment;
 #endif
                 m_npotSupport = SystemInfo.npotSupport;
@@ -638,13 +637,13 @@ namespace Utj.UnityChoseKun.Engine
                 m_supportsAsyncCompute = SystemInfo.supportsAsyncCompute;
                 m_supportsAsyncGPUReadback = SystemInfo.supportsAsyncGPUReadback;
                 m_supportsAudio = SystemInfo.supportsAudio;
-#if UNITY_2020_1_OR_NEWER                
+#if UNITY_2020_1_OR_NEWER
                 m_supportsCompressed3DTextures = SystemInfo.supportsCompressed3DTextures;
 #endif
                 m_supportsComputeShaders = SystemInfo.supportsComputeShaders;
 #if UNITY_2020_1_OR_NEWER
                 m_supportsConservativeRaster = SystemInfo.supportsConservativeRaster;
-#endif                
+#endif
                 m_supportsCubemapArrayTextures = SystemInfo.supportsCubemapArrayTextures;
                 m_supportsGeometryShaders = SystemInfo.supportsGeometryShaders;
 #if UNITY_2020_1_OR_NEWER
@@ -700,6 +699,9 @@ namespace Utj.UnityChoseKun.Engine
         {            
             binaryWriter.Write(m_batteryLevel);
             binaryWriter.Write((int)m_batteryStatus);
+#if UNITY_2020_3_OR_NEWER
+            binaryWriter.Write(m_constantBufferOffsetAlignment);
+#endif
             binaryWriter.Write((int)m_copyTextureSupport);
             binaryWriter.Write(m_deviceModel);
             binaryWriter.Write(m_deviceName);
@@ -738,9 +740,7 @@ namespace Utj.UnityChoseKun.Engine
 #endif
 
             binaryWriter.Write(m_maxTextureSize);
-#if UNITY_2020_3_OR_NEWER
-            binaryWriter.Write(m_constantBufferOffsetAlignment);
-#else
+#if !UNITY_2020_3_OR_NEWER
             binaryWriter.Write(m_minConstantBufferOffsetAlignment);
 #endif
             binaryWriter.Write((int)m_npotSupport);
@@ -809,6 +809,9 @@ namespace Utj.UnityChoseKun.Engine
         {
             m_batteryLevel = binaryReader.ReadSingle();
             m_batteryStatus = (BatteryStatus)binaryReader.ReadInt32();
+#if UNITY_2020_3_OR_NEWER
+            m_constantBufferOffsetAlignment = binaryReader.ReadInt32();
+#endif
             m_copyTextureSupport = (UnityEngine.Rendering.CopyTextureSupport)binaryReader.ReadInt32();
             m_deviceModel = binaryReader.ReadString();
             m_deviceName = binaryReader.ReadString();
@@ -847,9 +850,7 @@ namespace Utj.UnityChoseKun.Engine
 #endif
 
             m_maxTextureSize = binaryReader.ReadInt32();
-#if UNITY_2020_3_OR_NEWER
-            m_constantBufferOffsetAlignment = binaryReader.ReadInt32();
-#else
+#if !UNITY_2020_3_OR_NEWER
             m_minConstantBufferOffsetAlignment = binaryReader.ReadBoolean();
 #endif
             m_npotSupport = (NPOTSupport)binaryReader.ReadInt32();
@@ -934,8 +935,13 @@ namespace Utj.UnityChoseKun.Engine
             {
                 return false;
             }
-
-            if(m_copyTextureSupport != other.m_copyTextureSupport)
+#if UNITY_2020_3_OR_NEWER
+            if (m_constantBufferOffsetAlignment != other.m_constantBufferOffsetAlignment)
+            {
+                return false;
+            }
+#endif
+            if (m_copyTextureSupport != other.m_copyTextureSupport)
             {
                 return false;
             }
@@ -1071,12 +1077,7 @@ namespace Utj.UnityChoseKun.Engine
             {
                 return false;
             }
-#if UNITY_2020_3_OR_NEWER
-            if(m_constantBufferOffsetAlignment != other.m_constantBufferOffsetAlignment)
-            {
-                return false;
-            }
-#else
+#if !UNITY_2020_3_OR_NEWER
             if(m_minConstantBufferOffsetAlignment != other.m_minConstantBufferOffsetAlignment)
             {
                 return false;

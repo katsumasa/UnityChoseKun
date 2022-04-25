@@ -18,6 +18,9 @@ namespace Utj.UnityChoseKun
             {
                 public static readonly GUIContent BatteryLevel = new GUIContent("batteryLevel", "The current battery level ");
                 public static readonly GUIContent BatteryStatus = new GUIContent("batteryStatus", "Returns the current status of the device's battery ");
+#if UNITY_2020_3_OR_NEWER
+                public static readonly GUIContent ConstantBufferOffsetAlignment = new GUIContent("constantBufferOffsetAlignment", "Minimum buffer offset (in bytes) when binding a constant buffer using Shader.SetConstantBuffer or Material.SetConstantBuffer.");
+#endif
                 public static readonly GUIContent CopyTextureSupport = new GUIContent("copyTextureSupport", "さまざまな Graphics.CopyTexture ケースをサポートします");
                 public static readonly GUIContent DeviceModel = new GUIContent("deviceModel", "デバイスのモデル");
                 public static readonly GUIContent DeviceName = new GUIContent("deviceName", "デバイス名");
@@ -55,10 +58,8 @@ namespace Utj.UnityChoseKun
 #endif                
 
                 public static readonly GUIContent MaxTextureSize = new GUIContent("maxTextureSize", "テクスチャの最大サイズ");
-#if UNITY_2020_3_OR_NEWER
-                public static readonly GUIContent ConstantBufferOffsetAlignment = new GUIContent("constantBufferOffsetAlignment", "Minimum buffer offset (in bytes) when binding a constant buffer using Shader.SetConstantBuffer or Material.SetConstantBuffer.");
-#else
-            public static readonly GUIContent MinConstantBufferOffsetAlignment = new GUIContent("minConstantBufferOffsetAlignment", "Minimum buffer offset (in bytes) when binding a constant buffer using Shader.SetConstantBuffer or Material.SetConstantBuffer.");
+#if !UNITY_2020_3_OR_NEWER
+                public static readonly GUIContent MinConstantBufferOffsetAlignment = new GUIContent("minConstantBufferOffsetAlignment", "Minimum buffer offset (in bytes) when binding a constant buffer using Shader.SetConstantBuffer or Material.SetConstantBuffer.");
 #endif
                 public static readonly GUIContent NpotSupport = new GUIContent("npotSupport", "GPU はどのような NPOT (2の2乗でない) テクスチャのサポートを提供するか。");
                 public static readonly GUIContent OperatingSystem = new GUIContent("operatingSystem", "OS 名とバージョン");
@@ -157,6 +158,13 @@ namespace Utj.UnityChoseKun
                 EditorGUILayout.LabelField(Styles.BatteryStatus);
                 EditorGUILayout.EnumPopup(SystemInfoKun.batteryStatus);
                 EditorGUILayout.EndHorizontal();
+
+#if UNITY_2020_3_OR_NEWER
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.ConstantBufferOffsetAlignment);
+                EditorGUILayout.IntField(SystemInfoKun.constantBufferOffsetAlignment);
+                EditorGUILayout.EndHorizontal();
+#endif
 
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField(Styles.CopyTextureSupport);
@@ -325,12 +333,7 @@ namespace Utj.UnityChoseKun
                 EditorGUILayout.IntField(SystemInfoKun.maxTextureSize);
                 EditorGUILayout.EndHorizontal();
 
-#if UNITY_2020_3_OR_NEWER
-                EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField(Styles.ConstantBufferOffsetAlignment);
-                EditorGUILayout.IntField(SystemInfoKun.constantBufferOffsetAlignment);
-                EditorGUILayout.EndHorizontal();
-#else
+#if !UNITY_2020_3_OR_NEWER
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField(Styles.MinConstantBufferOffsetAlignment);
                 EditorGUILayout.Toggle(SystemInfoKun.minConstantBufferOffsetAlignment,GUILayout.ExpandWidth(true));
