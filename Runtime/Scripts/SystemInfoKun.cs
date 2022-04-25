@@ -110,6 +110,9 @@ namespace Utj.UnityChoseKun.Engine
         bool m_supportsMultisampled2DArrayTextures;
 #endif
         int m_supportsMultisampledTextures;
+#if UNITY_2020_1_OR_NEWER
+        bool m_supportsMultiview;
+#endif
         bool m_supportsRawShadowDepthSampling;
         bool m_supportsRayTracing;
         bool m_supportsSeparatedRenderTargetsBlend;
@@ -469,6 +472,7 @@ namespace Utj.UnityChoseKun.Engine
         {
             get { return instance.m_supportsMultisampleAutoResolve; }
         }
+
 #if UNITY_2020_1_OR_NEWER        
         public static bool supportsMultisampled2DArrayTextures
         {
@@ -479,7 +483,14 @@ namespace Utj.UnityChoseKun.Engine
         {
             get { return instance.m_supportsMultisampledTextures; }
         }
-        
+
+#if UNITY_2020_1_OR_NEWER
+        public static bool supportsMultiview
+        {
+            get { return instance.m_supportsMultiview; }
+        }
+#endif
+
         public static bool supportsRawShadowDepthSampling
         {
             get { return instance.m_supportsRawShadowDepthSampling; }
@@ -643,6 +654,9 @@ namespace Utj.UnityChoseKun.Engine
                 m_supportsMultisampled2DArrayTextures = SystemInfo.supportsMultisampled2DArrayTextures;
 #endif
                 m_supportsMultisampledTextures = SystemInfo.supportsMultisampledTextures;
+#if UNITY_2020_1_OR_NEWER
+                m_supportsMultiview = SystemInfo.supportsMultiview;
+#endif
                 m_supportsRawShadowDepthSampling = SystemInfo.supportsRawShadowDepthSampling;
                 m_supportsRayTracing = SystemInfo.supportsRayTracing;
                 m_supportsSeparatedRenderTargetsBlend = SystemInfo.supportsSeparatedRenderTargetsBlend;
@@ -759,6 +773,9 @@ namespace Utj.UnityChoseKun.Engine
             binaryWriter.Write(m_supportsMultisampled2DArrayTextures);
 #endif
             binaryWriter.Write(m_supportsMultisampledTextures);
+#if UNITY_2020_1_OR_NEWER
+            binaryWriter.Write(m_supportsMultiview);
+#endif
             binaryWriter.Write(m_supportsRawShadowDepthSampling);
             binaryWriter.Write(m_supportsRayTracing);
             binaryWriter.Write(m_supportsSeparatedRenderTargetsBlend);
@@ -862,6 +879,9 @@ namespace Utj.UnityChoseKun.Engine
             m_supportsMultisampled2DArrayTextures = binaryReader.ReadBoolean();
 #endif
             m_supportsMultisampledTextures = binaryReader.ReadInt32();
+#if UNITY_2020_1_OR_NEWER
+            m_supportsMultiview = binaryReader.ReadBoolean();
+#endif
             m_supportsRawShadowDepthSampling = binaryReader.ReadBoolean();
             m_supportsRayTracing = binaryReader.ReadBoolean();
             m_supportsSeparatedRenderTargetsBlend = binaryReader.ReadBoolean();
@@ -1185,7 +1205,13 @@ namespace Utj.UnityChoseKun.Engine
             {
                 return false;
             }
-            if(m_supportsRawShadowDepthSampling != other.m_supportsRawShadowDepthSampling)
+#if UNITY_2020_1_OR_NEWER
+            if(m_supportsMultiview != other.m_supportsMultiview)
+            {
+                return false;
+            }
+#endif
+            if (m_supportsRawShadowDepthSampling != other.m_supportsRawShadowDepthSampling)
             {
                 return false;
             }

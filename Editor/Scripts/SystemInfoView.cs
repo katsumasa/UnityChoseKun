@@ -101,6 +101,9 @@ namespace Utj.UnityChoseKun
                 public static readonly GUIContent SupportsMultisampled2DArrayTextures = new GUIContent("supportsMultisampled2DArrayTextures", "Are multisampled texture arrays supported? (Read Only)");
 #endif
                 public static readonly GUIContent SupportsMultisampledTextures = new GUIContent("supportsMultisampledTextures", "Are multisampled textures supported?");
+#if UNITY_2020_1_OR_NEWER
+                public static readonly GUIContent SupportsMultiview = new GUIContent("supportsMultiview", "Boolean that indicates whether Multiview is supported (true if supported, false if not supported). (Read Only)");
+#endif
                 public static readonly GUIContent SupportsRawShadowDepthSampling = new GUIContent("supportsRawShadowDepthSampling", "サポートされているシャドウマップからのサンプリングは生のデプスか?");
                 public static readonly GUIContent SupportsRayTracing = new GUIContent("supportsRayTracing", "Checks if ray tracing is supported by the current configuration.");
                 public static readonly GUIContent SupportsSeparatedRenderTargetsBlend = new GUIContent("supportsSeparatedRenderTargetsBlend", "supportsSeparatedRenderTargetsBlend");
@@ -501,6 +504,13 @@ namespace Utj.UnityChoseKun
                 EditorGUILayout.LabelField(Styles.SupportsMultisampledTextures);
                 EditorGUILayout.IntField(SystemInfoKun.supportsMultisampledTextures);
                 EditorGUILayout.EndHorizontal();
+
+#if UNITY_2020_1_OR_NEWER
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.SupportsMultiview);
+                EditorGUILayout.Toggle(SystemInfoKun.supportsMultiview);
+                EditorGUILayout.EndHorizontal();
+#endif
 
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField(Styles.SupportsRawShadowDepthSampling);
