@@ -610,7 +610,7 @@ namespace Utj.UnityChoseKun.Engine
                 m_maxComputeWorkGroupSize = SystemInfo.maxComputeWorkGroupSize;
                 m_maxComputeWorkGroupSizeX = SystemInfo.maxComputeWorkGroupSizeX;
                 m_maxComputeWorkGroupSizeY = SystemInfo.maxComputeWorkGroupSizeY;
-                m_maxComputeWorkGroupSizeZ = SystemInfo.maxComputeWorkGroupSizeX;
+                m_maxComputeWorkGroupSizeZ = SystemInfo.maxComputeWorkGroupSizeZ;
                 m_maxCubemapSize = SystemInfo.maxCubemapSize;
 #if UNITY_2021_2_OR_NEWER
                 m_maxGraphicsBufferSize = SystemInfo.maxGraphicsBufferSize;
