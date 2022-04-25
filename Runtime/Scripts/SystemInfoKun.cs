@@ -95,6 +95,9 @@ namespace Utj.UnityChoseKun.Engine
 #endif
         bool m_supportsCubemapArrayTextures;
         bool m_supportsGeometryShaders;
+#if UNITY_2020_1_OR_NEWER
+        bool m_supportsGpuRecorder;
+#endif
         bool m_supportsGraphicsFence;
         bool m_supportsGyroscope;
         bool m_supportsHardwareQuadTopology;
@@ -418,7 +421,12 @@ namespace Utj.UnityChoseKun.Engine
         {
             get { return instance.m_supportsGeometryShaders; }
         }
-
+#if UNITY_2020_1_OR_NEWER
+        public static bool supportsGpuRecorder
+        {
+            get { return instance.m_supportsGpuRecorder; }
+        }
+#endif
         public static bool supportsGraphicsFence
         {
             get { return instance.m_supportsGraphicsFence; }
@@ -612,6 +620,9 @@ namespace Utj.UnityChoseKun.Engine
 #endif                
                 m_supportsCubemapArrayTextures = SystemInfo.supportsCubemapArrayTextures;
                 m_supportsGeometryShaders = SystemInfo.supportsGeometryShaders;
+#if UNITY_2020_1_OR_NEWER
+                m_supportsGpuRecorder = SystemInfo.supportsGpuRecorder;
+#endif
                 m_supportsGraphicsFence = SystemInfo.supportsGraphicsFence;
                 m_supportsGyroscope = SystemInfo.supportsGyroscope;
                 m_supportsHardwareQuadTopology = SystemInfo.supportsHardwareQuadTopology;
@@ -722,6 +733,9 @@ namespace Utj.UnityChoseKun.Engine
 #endif
             binaryWriter.Write(m_supportsCubemapArrayTextures);
             binaryWriter.Write(m_supportsGeometryShaders);
+#if UNITY_2020_1_OR_NEWER
+            binaryWriter.Write(m_supportsGpuRecorder);
+#endif
             binaryWriter.Write(m_supportsGraphicsFence);
             binaryWriter.Write(m_supportsGyroscope);
             binaryWriter.Write(m_supportsHardwareQuadTopology);
@@ -819,6 +833,9 @@ namespace Utj.UnityChoseKun.Engine
 #endif
             m_supportsCubemapArrayTextures = binaryReader.ReadBoolean();
             m_supportsGeometryShaders = binaryReader.ReadBoolean();
+#if UNITY_2020_1_OR_NEWER
+            m_supportsGpuRecorder = binaryReader.ReadBoolean();
+#endif
             m_supportsGraphicsFence = binaryReader.ReadBoolean();
             m_supportsGyroscope = binaryReader.ReadBoolean();
             m_supportsHardwareQuadTopology = binaryReader.ReadBoolean();
@@ -1103,7 +1120,13 @@ namespace Utj.UnityChoseKun.Engine
             {
                 return false;
             }
-            if(m_supportsGraphicsFence != other.m_supportsGraphicsFence)
+#if UNITY_2020_1_OR_NEWER
+            if(m_supportsGpuRecorder != other.m_supportsGpuRecorder)
+            {
+                return false;
+            }
+#endif
+            if (m_supportsGraphicsFence != other.m_supportsGraphicsFence)
             {
                 return false;
             }

@@ -87,6 +87,9 @@ namespace Utj.UnityChoseKun
                 public static readonly GUIContent SupportsCubemapArrayTextures = new GUIContent("supportsCubemapArrayTextures", "Are Cubemap Array textures supported?");
                 public static readonly GUIContent SupportsGeometryShaders = new GUIContent("supportsGeometryShaders", "Are geometry shaders supported? ");
                 public static readonly GUIContent SupportsGraphicsFence = new GUIContent("supportsGraphicsFence", "Returns true when the platform supports GraphicsFences, and false if otherwise.");
+#if UNITY_2020_1_OR_NEWER
+                public static readonly GUIContent SupportsGpuRecorder = new GUIContent("supportsGpuRecorder", "If the current platform supports the GPU Recorder, you could use the Recorder API to get GPU timing information.");
+#endif
                 public static readonly GUIContent SupportsGyroscope = new GUIContent("supportsGyroscope", "Returns true when the platform supports GraphicsFences, and false if otherwise.");
                 public static readonly GUIContent SupportsHardwareQuadTopology = new GUIContent("supportsHardwareQuadTopology", "Does the hardware support quad topology? (Read Only)");
                 public static readonly GUIContent SupportsInstancing = new GUIContent("supportsInstancing", "GPU ドローコールのインスタンス化がサポートされているかどうか");
@@ -435,10 +438,15 @@ namespace Utj.UnityChoseKun
                 EditorGUILayout.EndHorizontal();
 
                 EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.SupportsGpuRecorder);
+                EditorGUILayout.Toggle(SystemInfoKun.supportsGpuRecorder);
+                EditorGUILayout.EndHorizontal();
+#if UNITY_2020_1_OR_NEWER
+                EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField(Styles.SupportsGeometryShaders);
                 EditorGUILayout.Toggle(SystemInfoKun.supportsGeometryShaders);
                 EditorGUILayout.EndHorizontal();
-
+#endif
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField(Styles.SupportsGraphicsFence);
                 EditorGUILayout.Toggle(SystemInfoKun.supportsGraphicsFence);
