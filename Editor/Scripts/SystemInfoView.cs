@@ -102,6 +102,9 @@ namespace Utj.UnityChoseKun
                 public static readonly GUIContent SupportsMultisampled2DArrayTextures = new GUIContent("supportsMultisampled2DArrayTextures", "Are multisampled texture arrays supported? (Read Only)");
 #endif
                 public static readonly GUIContent SupportsMultisampledTextures = new GUIContent("supportsMultisampledTextures", "Are multisampled textures supported?");
+#if UNITY_2021_2_OR_NEWER
+                public static readonly GUIContent SupportsMultisampleResolveDepth = new GUIContent("supportsMultisampleResolveDepth ", "Returns true if the platform supports multisample resolve of depth textures.");
+#endif
 #if UNITY_2020_1_OR_NEWER
                 public static readonly GUIContent SupportsMultiview = new GUIContent("supportsMultiview", "Boolean that indicates whether Multiview is supported (true if supported, false if not supported). (Read Only)");
 #endif
@@ -510,6 +513,12 @@ namespace Utj.UnityChoseKun
                 EditorGUILayout.LabelField(Styles.SupportsMultisampledTextures);
                 EditorGUILayout.IntField(SystemInfoKun.supportsMultisampledTextures);
                 EditorGUILayout.EndHorizontal();
+#if UNITY_2021_2_OR_NEWER
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.SupportsMultisampleResolveDepth);
+                EditorGUILayout.Toggle(SystemInfoKun.supportsMultisampleResolveDepth);
+                EditorGUILayout.EndHorizontal();
+#endif
 
 #if UNITY_2020_1_OR_NEWER
                 EditorGUILayout.BeginHorizontal();

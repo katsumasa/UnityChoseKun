@@ -111,6 +111,9 @@ namespace Utj.UnityChoseKun.Engine
         bool m_supportsMultisampled2DArrayTextures;
 #endif
         int m_supportsMultisampledTextures;
+#if UNITY_2021_2_OR_NEWER
+        bool m_supportsMultisampleResolveDepth;
+#endif
 #if UNITY_2020_1_OR_NEWER
         bool m_supportsMultiview;
 #endif
@@ -488,7 +491,12 @@ namespace Utj.UnityChoseKun.Engine
         {
             get { return instance.m_supportsMultisampledTextures; }
         }
-
+#if UNITY_2021_2_OR_NEWER
+        public static bool supportsMultisampleResolveDepth
+        {
+            get { return instance.m_supportsMultisampleResolveDepth; }
+        }
+#endif
 #if UNITY_2020_1_OR_NEWER
         public static bool supportsMultiview
         {
@@ -661,6 +669,9 @@ namespace Utj.UnityChoseKun.Engine
                 m_supportsMultisampled2DArrayTextures = SystemInfo.supportsMultisampled2DArrayTextures;
 #endif
                 m_supportsMultisampledTextures = SystemInfo.supportsMultisampledTextures;
+#if UNITY_2021_2_OR_NEWER
+                m_supportsMultisampleResolveDepth = SystemInfo.supportsMultisampleResolveDepth;
+#endif
 #if UNITY_2020_1_OR_NEWER
                 m_supportsMultiview = SystemInfo.supportsMultiview;
 #endif
@@ -784,6 +795,9 @@ namespace Utj.UnityChoseKun.Engine
             binaryWriter.Write(m_supportsMultisampled2DArrayTextures);
 #endif
             binaryWriter.Write(m_supportsMultisampledTextures);
+#if UNITY_2021_2_OR_NEWER
+            binaryWriter.Write(m_supportsMultisampleResolveDepth);
+#endif
 #if UNITY_2020_1_OR_NEWER
             binaryWriter.Write(m_supportsMultiview);
 #endif
@@ -894,6 +908,9 @@ namespace Utj.UnityChoseKun.Engine
             m_supportsMultisampled2DArrayTextures = binaryReader.ReadBoolean();
 #endif
             m_supportsMultisampledTextures = binaryReader.ReadInt32();
+#if UNITY_2020_1_OR_NEWER
+            m_supportsMultisampleResolveDepth = binaryReader.ReadBoolean();
+#endif
 #if UNITY_2020_1_OR_NEWER
             m_supportsMultiview = binaryReader.ReadBoolean();
 #endif
@@ -1223,8 +1240,14 @@ namespace Utj.UnityChoseKun.Engine
             {
                 return false;
             }
+#if UNITY_2021_2_OR_NEWER
+            if(m_supportsMultisampleResolveDepth != other.m_supportsMultisampleResolveDepth)
+            {
+                return false;
+            }
+#endif
 #if UNITY_2020_1_OR_NEWER
-            if(m_supportsMultiview != other.m_supportsMultiview)
+            if (m_supportsMultiview != other.m_supportsMultiview)
             {
                 return false;
             }
