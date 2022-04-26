@@ -126,6 +126,9 @@ namespace Utj.UnityChoseKun.Engine
         bool m_supportsSetConstantBuffer;
         bool m_supportsShadows;
         bool m_supportsSparseTextures;
+#if UNITY_2021_1_OR_NEWER
+        bool m_supportsStoreAndResolveAction;
+#endif
         bool m_supportsTessellationShaders;
         int m_supportsTextureWrapMirrorOnce;
         bool m_supportsVibration;
@@ -538,7 +541,12 @@ namespace Utj.UnityChoseKun.Engine
         {
             get { return instance.m_supportsSparseTextures; }
         }
-        
+#if UNITY_2021_1_OR_NEWER
+        public static bool supportsStoreAndResolveAction
+        {
+            get { return instance.m_supportsStoreAndResolveAction; }
+        }
+#endif        
         public static bool supportsTessellationShaders
         {
             get { return instance.m_supportsTessellationShaders; }
@@ -684,6 +692,9 @@ namespace Utj.UnityChoseKun.Engine
                 m_supportsSetConstantBuffer = SystemInfo.supportsSetConstantBuffer;
                 m_supportsShadows = SystemInfo.supportsShadows;
                 m_supportsSparseTextures = SystemInfo.supportsSparseTextures;
+#if UNITY_2021_1_OR_NEWER
+                m_supportsStoreAndResolveAction = SystemInfo.supportsStoreAndResolveAction;
+#endif
                 m_supportsTessellationShaders = SystemInfo.supportsTessellationShaders;
                 m_supportsTextureWrapMirrorOnce = SystemInfo.supportsTextureWrapMirrorOnce;
                 m_supportsVibration = SystemInfo.supportsVibration;
@@ -810,6 +821,9 @@ namespace Utj.UnityChoseKun.Engine
             binaryWriter.Write(m_supportsSetConstantBuffer);
             binaryWriter.Write(m_supportsShadows);
             binaryWriter.Write(m_supportsSparseTextures);
+#if UNITY_2021_1_OR_NEWER
+            binaryWriter.Write(m_supportsStoreAndResolveAction);
+#endif
             binaryWriter.Write(m_supportsTessellationShaders);
             binaryWriter.Write(m_supportsTextureWrapMirrorOnce);
             binaryWriter.Write(m_supportsVibration);
@@ -923,6 +937,9 @@ namespace Utj.UnityChoseKun.Engine
             m_supportsSetConstantBuffer = binaryReader.ReadBoolean();
             m_supportsShadows = binaryReader.ReadBoolean();
             m_supportsSparseTextures = binaryReader.ReadBoolean();
+#if UNITY_2021_1_OR_NEWER
+            m_supportsStoreAndResolveAction = binaryReader.ReadBoolean();
+#endif
             m_supportsTessellationShaders = binaryReader.ReadBoolean();
             m_supportsTextureWrapMirrorOnce = binaryReader.ReadInt32();
             m_supportsVibration = binaryReader.ReadBoolean();
@@ -1282,7 +1299,13 @@ namespace Utj.UnityChoseKun.Engine
             {
                 return false;
             }
-            if(m_supportsTessellationShaders != other.m_supportsTessellationShaders)
+#if UNITY_2021_1_OR_NEWER
+            if(m_supportsStoreAndResolveAction != other.m_supportsStoreAndResolveAction)
+            {
+                return false;
+            }
+#endif
+            if (m_supportsTessellationShaders != other.m_supportsTessellationShaders)
             {
                 return false;
             }

@@ -117,6 +117,9 @@ namespace Utj.UnityChoseKun
                 public static readonly GUIContent SupportsSetConstantBuffer = new GUIContent("supportsSetConstantBuffer", "Does the current renderer support binding constant buffers directly?");
                 public static readonly GUIContent SupportsShadows = new GUIContent("SupportsShadows", "グラフィックスカードが影をサポートしているかどうか");
                 public static readonly GUIContent SupportsSparseTextures = new GUIContent("supportsSparseTextures", "スパーステクスチャはサポートされますか。");
+#if UNITY_2021_1_OR_NEWER
+                public static readonly GUIContent SupportsStoreAndResolveAction = new GUIContent("supportsStoreAndResolveAction", "	This property is true if the graphics API of the target build platform takes RenderBufferStoreAction.StoreAndResolve into account, false if otherwise.");
+#endif
                 public static readonly GUIContent SupportsTessellationShaders = new GUIContent("supportsTessellationShaders", "Are tessellation shaders supported? ");
                 public static readonly GUIContent SupportsTextureWrapMirrorOnce = new GUIContent("supportsTextureWrapMirrorOnce", "Returns true if the 'Mirror Once' texture wrap mode is supported. ");
                 public static readonly GUIContent SupportsVibration = new GUIContent("supportsVibration", "そのデバイスは振動によるユーザーの触覚フィードバックを提供することができるか。");
@@ -556,7 +559,12 @@ namespace Utj.UnityChoseKun
                 EditorGUILayout.LabelField(Styles.SupportsSparseTextures);
                 EditorGUILayout.Toggle(SystemInfoKun.supportsSparseTextures);
                 EditorGUILayout.EndHorizontal();
-
+#if UNITY_2021_1_OR_NEWER
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField(Styles.SupportsStoreAndResolveAction);
+                EditorGUILayout.Toggle(SystemInfoKun.supportsStoreAndResolveAction);
+                EditorGUILayout.EndHorizontal();
+#endif
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField(Styles.SupportsTessellationShaders);
                 EditorGUILayout.Toggle(SystemInfoKun.supportsTessellationShaders);
