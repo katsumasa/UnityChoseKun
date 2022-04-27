@@ -922,7 +922,7 @@ namespace Utj.UnityChoseKun.Engine
             m_supportsMultisampled2DArrayTextures = binaryReader.ReadBoolean();
 #endif
             m_supportsMultisampledTextures = binaryReader.ReadInt32();
-#if UNITY_2020_1_OR_NEWER
+#if UNITY_2021_2_OR_NEWER
             m_supportsMultisampleResolveDepth = binaryReader.ReadBoolean();
 #endif
 #if UNITY_2020_1_OR_NEWER
