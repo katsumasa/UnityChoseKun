@@ -42,17 +42,23 @@ namespace Utj.UnityChoseKun
 
         public AnimationCurveKun(AnimationCurve animationCurve)
         {
-            if(animationCurve.length != 0)
+            if (animationCurve != null)
             {
-                m_keys = new KeyframeKun[animationCurve.length];
-                for(var i = 0; i < m_keys .Length; i++)
+                if (animationCurve.length != 0)
                 {
-                    m_keys[i] = new KeyframeKun(animationCurve.keys[i]);
+                    m_keys = new KeyframeKun[animationCurve.length];
+                    for (var i = 0; i < m_keys.Length; i++)
+                    {
+                        m_keys[i] = new KeyframeKun(animationCurve.keys[i]);
+                    }
                 }
+                m_postWrapMode = animationCurve.postWrapMode;
+                m_preWrapMode = animationCurve.preWrapMode;
             }
-            m_postWrapMode = animationCurve.postWrapMode;
-            m_preWrapMode = animationCurve.preWrapMode;
         }
+
+
+        
 
         public virtual void Serialize(BinaryWriter binaryWriter)
         {
@@ -66,6 +72,18 @@ namespace Utj.UnityChoseKun
             m_keys =  SerializerKun.DesirializeObjects<KeyframeKun>(binaryReader);
             m_postWrapMode = (WrapMode)binaryReader.ReadInt32();
             m_preWrapMode = (WrapMode)binaryReader.ReadInt32();
+        }
+
+
+        public AnimationCurve GetAnimationCurve()
+        {
+            var keyFrames = new Keyframe[m_keys.Length];
+            for(var i = 0; i < m_keys.Length; i++)
+            {
+                keyFrames[i] = m_keys[i].GetKeyframe();
+            }
+            var animationCurve = new AnimationCurve(keyFrames);
+            return animationCurve;
         }
     }
 }

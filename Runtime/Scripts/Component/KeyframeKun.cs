@@ -81,6 +81,17 @@ namespace Utj.UnityChoseKun
             m_value = binaryReader.ReadSingle();
             m_weightedMode = (WeightedMode)binaryReader.ReadInt32();
         }
+
+        public Keyframe GetKeyframe()
+        {
+            var keyFrame = new Keyframe(m_time,m_value);
+            keyFrame.inTangent = m_inTangent;
+            keyFrame.inWeight = m_inWeight;
+            keyFrame.outTangent = m_outTangent;
+            keyFrame.outWeight = m_outWeight;
+            keyFrame.weightedMode = m_weightedMode;
+            return keyFrame;
+        }
     }
 
 }

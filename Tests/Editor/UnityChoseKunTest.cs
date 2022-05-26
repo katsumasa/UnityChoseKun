@@ -491,6 +491,25 @@ public class UnityChoseKunTest
     }
 #endif
 
+    
+
+    [Test]
+    public void LayerMaskTest()
+    {
+        for(var i = 0; i < 32; i++)
+        {
+            
+            var name = LayerMask.LayerToName(i);
+            var mask = LayerMask.GetMask(name);
+            if (string.IsNullOrEmpty(name))
+            {
+                name = "empty";
+            } 
+            Debug.Log($" {i}:{mask}:{name}");
+        }
+    }
+
+
 
     public void SerializerKunTest<T>(T objectKun, T cloneKun) where T : ISerializerKun
     {

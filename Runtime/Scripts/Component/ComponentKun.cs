@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using UnityEngine;
-
+using Utj.UnityChoseKun.Engine.Rendering;
+using Utj.UnityChoseKun.Engine.Rendering.Universal;
 
 namespace  Utj.UnityChoseKun.Engine
 {
-    using Utj.UnityChoseKun.Engine.Rendering.Universal;
+    
 
 
     /// <summary>
@@ -49,6 +50,8 @@ namespace  Utj.UnityChoseKun.Engine
             ParticleSystem,
             
             Canvas,
+
+            Volume,
 
             UniversalAdditionalCameraData,
             UniversalAdditionalLightData,
@@ -103,6 +106,10 @@ namespace  Utj.UnityChoseKun.Engine
             // === Not Build-in Class ===
             var t = component.GetType();
 
+            if(string.Compare(t.Name,"Volume") == 0)
+            {
+                return ComponentKunType.Volume;
+            }
             if (string.Compare(t.Name, "UniversalAdditionalCameraData") == 0)
             {
                 return ComponentKunType.UniversalAdditionalCameraData;
@@ -221,6 +228,13 @@ namespace  Utj.UnityChoseKun.Engine
                 case ComponentKunType.Canvas:
                     {
                         return new CanvasKun(component);
+                    }
+
+                // ====
+
+                case ComponentKunType.Volume:
+                    {
+                        return new VolumeKun(component);
                     }
 
                 case ComponentKunType.UniversalAdditionalCameraData:

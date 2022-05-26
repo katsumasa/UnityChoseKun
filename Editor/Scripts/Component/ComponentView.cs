@@ -4,13 +4,14 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEditor;
-
+using Utj.UnityChoseKun.Editor.Rendering;
+using Utj.UnityChoseKun.Editor.Rendering.Universal;
+using Utj.UnityChoseKun.Engine;
 
 
 namespace  Utj.UnityChoseKun.Editor
 {
-    using Utj.UnityChoseKun.Editor.Rendering.Universal;
-    using Utj.UnityChoseKun.Engine;
+    
     
 
     /// <summary>
@@ -44,6 +45,9 @@ namespace  Utj.UnityChoseKun.Editor
 
             {ComponentKun.ComponentKunType.Canvas,                  typeof(CanvasView) },
 
+            // ===
+
+            {ComponentKun.ComponentKunType.Volume,typeof(VolumeView) },
             {ComponentKun.ComponentKunType.UniversalAdditionalCameraData,   typeof(UniversalAdditionalCameraDataView) },
             {ComponentKun.ComponentKunType.UniversalAdditionalLightData,    typeof(UniversalAdditionalLightDataView)},
             {ComponentKun.ComponentKunType.MonoBehaviour,                   typeof(MonoBehaviourView)},
@@ -57,8 +61,14 @@ namespace  Utj.UnityChoseKun.Editor
         
 
         public static System.Type GetComponentViewSyetemType(BehaviourKun.ComponentKunType componentType)
-        {        
-            return componentViewTbls[componentType];
+        {
+            System.Type type;
+
+            if(componentViewTbls.TryGetValue(componentType, out type))
+            {
+                return type;
+            }
+            return typeof(ComponentView);            
         }
 
         private static class Styles
