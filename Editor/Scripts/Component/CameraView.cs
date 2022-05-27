@@ -221,9 +221,9 @@ namespace Utj.UnityChoseKun
 
             public void DrawCullingMask()
             {
-                LayerMask layerMask = cameraKun.cullingMask;
-                EditorGUI.BeginChangeCheck();
-                var cullingMask = LayerMaskField("Culling Mask", layerMask).value;
+                LayerMaskKun layerMaskKun = cameraKun.cullingMask;
+                EditorGUI.BeginChangeCheck();                
+                var cullingMask = LayerMaskKun.LayerMaskField(new GUIContent("Culling Mask"), layerMaskKun).value;
                 if (EditorGUI.EndChangeCheck())
                 {
                     cameraKun.cullingMask = cullingMask;
