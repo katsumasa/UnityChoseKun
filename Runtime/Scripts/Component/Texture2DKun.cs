@@ -70,13 +70,13 @@ namespace Utj.UnityChoseKun.Engine
         {
             get { return m_streamingMipmapsPriority; }
         }
-
+#if UNITY_2020_1_OR_NEWER
         public bool m_vtOnly;
         public bool vtOnly
         {
             get { return m_vtOnly; }
         }
-
+#endif
         public Texture2DKun() : base(null) { }
 
         public Texture2DKun(Texture2D texture2D) : base(texture2D)
@@ -93,7 +93,9 @@ namespace Utj.UnityChoseKun.Engine
                 m_requestedMipmapLevel = texture2D.requestedMipmapLevel;
                 m_streamingMipmaps = texture2D.streamingMipmaps;
                 m_streamingMipmapsPriority = texture2D.streamingMipmapsPriority;
+#if UNITY_2020_1_OR_NEWER
                 m_vtOnly = texture2D.vtOnly;
+#endif
             }
         }
 
@@ -128,7 +130,9 @@ namespace Utj.UnityChoseKun.Engine
             binaryWriter.Write(m_requestedMipmapLevel);
             binaryWriter.Write(m_streamingMipmaps);
             binaryWriter.Write(m_streamingMipmapsPriority);
+#if UNITY_2020_1_OR_NEWER
             binaryWriter.Write(m_vtOnly);
+#endif
         }
 
         public override void Deserialize(BinaryReader binaryReader)
@@ -145,7 +149,9 @@ namespace Utj.UnityChoseKun.Engine
             m_requestedMipmapLevel = binaryReader.ReadInt32();
             m_streamingMipmaps = binaryReader.ReadBoolean();
             m_streamingMipmapsPriority = binaryReader.ReadInt32();
+#if UNITY_2020_1_OR_NEWER
             m_vtOnly = binaryReader.ReadBoolean();
+#endif
         }
     }
 }

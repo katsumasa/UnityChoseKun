@@ -454,12 +454,12 @@ namespace Utj.UnityChoseKun
                 EditorGUILayout.LabelField(Styles.SupportsCubemapArrayTextures);
                 EditorGUILayout.Toggle(SystemInfoKun.supportsCubemapArrayTextures);
                 EditorGUILayout.EndHorizontal();
-
+#if UNITY_2020_1_OR_NEWER
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField(Styles.SupportsGpuRecorder);
                 EditorGUILayout.Toggle(SystemInfoKun.supportsGpuRecorder);
                 EditorGUILayout.EndHorizontal();
-#if UNITY_2020_1_OR_NEWER
+
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField(Styles.SupportsGeometryShaders);
                 EditorGUILayout.Toggle(SystemInfoKun.supportsGeometryShaders);
