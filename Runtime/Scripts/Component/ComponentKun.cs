@@ -1,10 +1,15 @@
-﻿namespace  Utj.UnityChoseKun 
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Runtime.InteropServices;
+using UnityEngine;
+using Utj.UnityChoseKun.Engine.Rendering;
+using Utj.UnityChoseKun.Engine.Rendering.Universal;
+
+namespace  Utj.UnityChoseKun.Engine
 {
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Runtime.InteropServices;
-    using UnityEngine;
+    
+
 
     /// <summary>
     ///  ComponentをSerialize/Deserializeする為のClass
@@ -46,6 +51,10 @@
             
             Canvas,
 
+            Volume,
+
+            UniversalAdditionalCameraData,
+            UniversalAdditionalLightData,
 
             MissingMono,    // Component == null
             MonoBehaviour,
@@ -55,52 +64,7 @@
             Max,
         };
 
-        
-        class ComponentPair {
-            public System.Type componentType;
-            public System.Type componenKunType;
-           
-            
-            public ComponentPair(System.Type componentType,System.Type componenKunType){
-                this.componentType = componentType;
-                this.componenKunType = componenKunType;
-            }
-        }
-
-        
-        static readonly Dictionary<ComponentKunType,ComponentPair> componentPairDict = new Dictionary<ComponentKunType, ComponentPair>() 
-        {
-            {ComponentKunType.Transform,new ComponentPair(typeof(Transform),typeof(TransformKun))},
-            {ComponentKunType.Camera,new ComponentPair(typeof(Camera),typeof(CameraKun))},
-            {ComponentKunType.Light,new ComponentPair(typeof(Light),typeof(LightKun))},
-
-            {ComponentKunType.SpriteRenderer,new ComponentPair(typeof(SpriteRenderer),typeof(SpriteRendererKun))},
-
-            {ComponentKunType.SkinnedMeshMeshRenderer,new ComponentPair(typeof(SkinnedMeshRenderer),typeof(SkinnedMeshRendererKun))},            
-            {ComponentKunType.MeshRenderer,new ComponentPair(typeof(MeshRenderer),typeof(MeshRendererKun))},
-            
-            {ComponentKunType.Renderer,new ComponentPair(typeof(Renderer),typeof(RendererKun))},
-            
-            {ComponentKunType.Rigidbody,new ComponentPair(typeof(Rigidbody),typeof(RigidbodyKun))},
-
-            {ComponentKunType.CapsuleCollider,new ComponentPair(typeof(CapsuleCollider),typeof(CapsuleColliderKun))},
-            {ComponentKunType.MeshCollider,new ComponentPair(typeof(MeshCollider),typeof(MeshColliderKun))},
-            {ComponentKunType.Collider,new ComponentPair(typeof(Collider),typeof(ColliderKun))},
-
-            {ComponentKunType.Animator,new ComponentPair(typeof(Animator),typeof(AnimatorKun)) },
-
-            {ComponentKunType.ParticleSystem,new ComponentPair(typeof(ParticleSystem),typeof(ParticleSystemKun)) },
-
-            {ComponentKunType.Canvas,new ComponentPair(typeof(Canvas),typeof(CanvasKun)) },
-
-
-            {ComponentKunType.MissingMono,new ComponentPair(typeof(MonoBehaviour),typeof(MonoBehaviourKun))},
-            {ComponentKunType.MonoBehaviour,new ComponentPair(typeof(MonoBehaviour),typeof(MonoBehaviourKun))},
-            {ComponentKunType.Behaviour,new ComponentPair(typeof(Behaviour),typeof(BehaviourKun))},
-            {ComponentKunType.Component,new ComponentPair(typeof(Component),typeof(ComponentKun))},
-            
-        };
-
+               
 
         /// <summary>
         /// ComponentのComponentKunTypeを取得する
@@ -138,60 +102,34 @@
 
             if (component is Canvas) { return ComponentKunType.Canvas; }
 
+
+            // === Not Build-in Class ===
+            var t = component.GetType();
+
+            if(string.Compare(t.Name,"Volume") == 0)
+            {
+                return ComponentKunType.Volume;
+            }
+            if (string.Compare(t.Name, "UniversalAdditionalCameraData") == 0)
+            {
+                return ComponentKunType.UniversalAdditionalCameraData;
+            }
+            if(string.Compare(t.Name, "UniversalAdditionalLightData") == 0)
+            {
+                return ComponentKunType.UniversalAdditionalLightData;
+            }
+            // ==========================
+
             if (component is MonoBehaviour){return ComponentKunType.MonoBehaviour;}
             if(component is Behaviour){return ComponentKunType.Behaviour;}
             if(component is Component){return ComponentKunType.Component;}
+            
+                        
+            
             return ComponentKunType.Invalid;
         }
 
 
-        /// <summary> 
-        /// ComponentのSystem.Typeを取得する 
-        /// </summary>
-        /// <params name="componentKunType">Componentと一致するComponentKunType</params>
-        /// <returns>ComponentのSystem.Type</returns>
-        public static System.Type GetComponentSystemType(ComponentKunType componentKunType)
-        {            
-            return componentPairDict[componentKunType].componentType;
-        }
-
-
-        /// <summary> 
-        /// ComponentのSystemTypeを取得する
-        /// </summary>
-        /// <params name="component">チェックされるComponent</param>
-        /// <returns>ComponentのSystem.Type</returns>
-        public static System.Type GetComponentSystemType(Component component)
-        {            
-            return GetComponentSystemType(GetComponentKunType(component));            
-        }
-
-
-        /// <summary>
-        /// ComponentKunTypeからComponentKunのSystem.Typeを取得する
-        /// </summary>
-        /// <params name="componentKunType">チェックするComponentKunType</params>
-        /// <returns>ComponentKunのSystem.Type</returns>
-        public static System.Type GetComponetKunSyetemType(ComponentKunType componentKunType)
-        {
-            if (!componentPairDict.ContainsKey(componentKunType))
-            {
-                UnityChoseKun.LogError("NotContainKey");
-            }
-
-            return componentPairDict[componentKunType].componenKunType;
-        }
-
-
-        /// <summary>
-        /// ComponentのSystem,Typeを取得する
-        /// </summary>
-        /// <params name="component">チェックするComponent</params>
-        /// <returns>ComponentのSystem.Type</returns>
-        public static System.Type GetComponetKunSyetemType(Component component)
-        {            
-            return GetComponetKunSyetemType(GetComponentKunType(component));           
-        }
 
 
         /// <summary>
@@ -199,99 +137,115 @@
         /// </summary>
         /// <param name="componentKunType"></param>
         /// <returns></returns>
-        public static ComponentKun Instantiate(ComponentKunType componentKunType)
+        public static ComponentKun Instantiate(ComponentKunType componentKunType,Component component = null)
         {
             switch (componentKunType)
             {
                 case ComponentKunType.Transform:
                     {
-                        return new TransformKun();
+                        return new TransformKun(component);
                     }
 
                 case ComponentKunType.Camera:
                     {
-                        return new CameraKun();
+                        return new CameraKun(component);
                     }
 
                 case ComponentKunType.Light:
                     {
-                        return new LightKun();
+                        return new LightKun(component);
                     }
 
                 case ComponentKunType.SpriteRenderer:
                     {
-                        return new SpriteRendererKun();
+                        return new SpriteRendererKun(component);
                     }
 
                 case ComponentKunType.SkinnedMeshMeshRenderer:
                     {
-                        return new SkinnedMeshRendererKun();
+                        return new SkinnedMeshRendererKun(component);
                     }
 
                 case ComponentKunType.MeshRenderer:
                     {
-                        return new MeshRendererKun();
+                        return new MeshRendererKun(component);
                     }
 
                 case ComponentKunType.Renderer:
                     {
-                        return new RendererKun();
+                        return new RendererKun(component);
                     }
 
                 case ComponentKunType.Rigidbody:
                     {
-                        return new RigidbodyKun();
+                        return new RigidbodyKun(component);
                     }
 
                 case ComponentKunType.CapsuleCollider:
                     {
-                        return new CapsuleColliderKun();
+                        return new CapsuleColliderKun(component);
                     }
 
                 case ComponentKunType.MeshCollider:
                     {
-                        return new MeshColliderKun();
+                        return new MeshColliderKun(component);
                     }
 
                 case ComponentKunType.Collider:
                     {
-                        return new ColliderKun();
+                        return new ColliderKun(component);
                     }
 
                 case ComponentKunType.Animator:
                     {
-                        return new AnimatorKun();
+                        return new AnimatorKun(component);
                     }
 
                 case ComponentKunType.ParticleSystem:
                     {
-                        return new ParticleSystemKun();
+                        return new ParticleSystemKun(component);
                     }
 
                 case ComponentKunType.MissingMono:
                     {
-                        return new MonoBehaviourKun();
+                        return new MonoBehaviourKun(component);
                     }
 
                 case ComponentKunType.MonoBehaviour:
                     {
-                        return new MonoBehaviourKun();
+                        return new MonoBehaviourKun(component);
                     }
 
                 case ComponentKunType.Behaviour:
                     {
-                        return new BehaviourKun();
+                        return new BehaviourKun(component);
                     }
                 case ComponentKunType.Component:
                     {
-                        return new ComponentKun();
+                        return new ComponentKun(component);
                     }
 
                 case ComponentKunType.Canvas:
                     {
-                        return new CanvasKun();
+                        return new CanvasKun(component);
                     }
 
+                // ====
+
+                case ComponentKunType.Volume:
+                    {
+                        return new VolumeKun(component);
+                    }
+
+                case ComponentKunType.UniversalAdditionalCameraData:
+                    {
+                        return new UniversalAdditionalCameraDataKun(component);
+                    }
+
+                case ComponentKunType.UniversalAdditionalLightData:
+                    {
+                        return new UniversalAdditionalLightDataKun(component);
+                    }
                 default:
                     {
                         return new BehaviourKun();

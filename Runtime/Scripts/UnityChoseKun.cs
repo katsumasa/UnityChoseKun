@@ -11,16 +11,15 @@
 //#define SERIALIZATION_JSON
 
 
+using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using UnityEngine;
+
+
 namespace Utj.UnityChoseKun
 {
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Reflection;
-    using System.Runtime.InteropServices;
-    using System.IO;
-    using System.Runtime.Serialization.Formatters.Binary;
-    using UnityEngine;   
-    using System;
+
 
     /// <summary>
     /// UnityChoseKunの共通パケット
@@ -42,29 +41,43 @@ namespace Utj.UnityChoseKun
         /// </summary>
         public enum MessageID
         {
-            ScreenPull,
-            ScreenPush,
-            TimePull,
-            TimePush,
-            GameObjectPull,
-            GameObjectPush,
-            ShaderPull,
-            TexturePull,
+            AndroidPull,
+            AndroidPush,
             ApplicationPull,
             ApplicationPush,
             ApplicationQuit,
-            AndroidPull,
-            AndroidPush,
+            GameObjectPull,
+            GameObjectPush,
+            GraphicsSettingsPull,
+            GraphicsSettingsPush,
+            HierarchyPull,
             HierarchyPush,
-            QualitySettingsPull,
-            QualitySettingsPush,
+            LayerMaskPull,
+            LayerMaskPush,
             OnDemandRenderingPull,
             OnDemandRenderingPush,
+            QualitySettingsPull,
+            QualitySettingsPush,
             ScalableBufferManagerPull,
             ScalableBufferManagerPush,
-            SystemInfoPull,
-            SpritePull,
+            ScreenPull,
+            ScreenPush,
+            ShaderPull,
+            ShaderPush,
             SortingLayerPull,
+            SortingLayerPush,
+            SpritePull,
+            SpritePush,
+            SystemInfoPull,
+            SystemInfoPush,
+            TexturePull,
+            TexturePush,
+            TimePull,
+            TimePush,
+            UniversalRenderPipelineGlobalSettingsPull,
+            UniversalRenderPipelineGlobalSettingsPush,
+            UniversalRenderPipelinePull,
+            UniversalRenderPipelinePush,                        
         }
 
 

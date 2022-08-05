@@ -37,14 +37,23 @@ UnityChoseKunは再ビルドを行うこと無く、UnityEditor上で開発機�
   - Unity2018.4.26f1 (一部、機能制限あり)
   - Unity2019.4.11f1
   - Unity2020.2.2f1
-  - Unity2020.3.18f1
-  - Unity2021.1.0a8
+  - Unity2020.3.27f1
+  - Unity2021.2.15f1
+  - Unity2021.3.1f1
 - プラットフォーム
   - Android
     - Pixel3XL
     - Pixel4XL
   - iOS
     - iPhone 6S
+
+Universal RPに関しては下記の組み合わせで動作確認を行っています。
+
+| Unity       | URP    |
+|:-----------:|:------:|
+| 2020.3.27f1 | 10.8.1 |
+| 2021.2.15f1 | 12.1.5 |
+| 2021.3.1f1  | 12.1.5 |
 
 ## 対応しているClassについて
 
@@ -61,11 +70,14 @@ UnityChoseKunは再ビルドを行うこと無く、UnityEditor上で開発機�
 - [Time](https://docs.unity3d.com/ja/ScriptReference/Time.html)
 - [Component](docs.unity3d.com/ja/ScriptReference/Component.html)
   - [Animator](https://docs.unity3d.com/ja/ScriptReference/Animator.html)
+  - AnimationCurve
   - [Behaviour](https://docs.unity3d.com/ja/current/ScriptReference/Behaviour.html)
   - [Bounds](https://docs.unity3d.com/ja/current/ScriptReference/Bounds.html)
   - [Camera](https://docs.unity3d.com/ja/ScriptReference/Camera.html)
   - [Collider](https://docs.unity3d.com/ja/ScriptReference/Collider.html)
+  - Keyframe
   - [Light](https://docs.unity3d.com/ja/ScriptReference/Light.html)
+  - LayerMask
   - [Material](https://docs.unity3d.com/ja/ScriptReference/Material.html)
   - [Matrix4x4](https://docs.unity3d.com/ja/current/ScriptReference/Matrix4x4.html)
   - [MeshRenderer](https://docs.unity3d.com/ja/current/ScriptReference/MeshRenderer.html)
@@ -80,12 +92,62 @@ UnityChoseKunは再ビルドを行うこと無く、UnityEditor上で開発機�
   - [Rigidbody](https://docs.unity3d.com/ja/ScriptReference/Rigidbody.html)
   - [SkinnedMeshRenderer](https://docs.unity3d.com/ja/ScriptReference/SkinnedMeshRenderer.html)
   - [SpriteRenderer](https://docs.unity3d.com/ja/current/ScriptReference/SpriteRenderer.html)
+  - TextureCurve
   - [Transform](https://docs.unity3d.com/ja/ScriptReference/Transform.html)
   - [Vector2](https://docs.unity3d.com/ja/ScriptReference/Vector2.html)
   - [Vector3](https://docs.unity3d.com/ja/ScriptReference/Vector3.html)
   - [Vector4](https://docs.unity3d.com/ja/ScriptReference/Vector4.html)
   - [UI](https://docs.unity3d.com/Packages/com.unity.ugui@1.0/manual/index.html)
     - [Canvas](https://docs.unity3d.com/Packages/com.unity.ugui@1.0/manual/class-Canvas.html)
+- Render Core Library
+  - Volume
+  - VolumeProfile
+  - VolumeComponent
+  - VolumeParameter
+    - [x] BoolParameter
+    - [x] LayerMaskParameter
+    - [x] IntParameter
+    - [x] NoInterpIntParameter
+    - [x] MinIntParameter
+    - [x] NoInterpMinIntParameter
+    - [x] MaxIntParameter
+    - [x] NoInterpMaxIntParameter
+    - [x] ClampedIntParameter
+    - [x] NoInterpClampedIntParameter
+    - [x] FloatParameter
+    - [x] NoInterpFloatParameter
+    - [x] MinFloatParameter
+    - [x] NoInterpMinFloatParameter
+    - [x] MaxFloatParameter
+    - [x] NoInterpMaxFloatParameter
+    - [x] ClampedFloatParameter
+    - [x] NoInterpClampedFloatParameter
+    - [x] FloatRangeParameter
+    - [x] NoInterpFloatRangeParameter
+    - [x] ColorParameter 
+    - [x] NoInterpColorParameter
+    - [x] Vector2Parameter
+    - [x] NoInterpVector2Parameter
+    - [x] Vector3Parameter
+    - [x] NoInterpVector3Parameter
+    - [x] Vector4Parameter
+    - [x] NoInterpVector4Parameter
+    - [ ] TextureParameter
+    - [ ] NoInterpTextureParameter
+    - [ ] Texture2DParameter
+    - [ ] Texture3DParameter
+    - [ ] RenderTextureParameter
+    - [ ] NoInterpRenderTextureParameter
+    - [ ] CubemapParameter
+    - [ ] NoInterpCubemapParameter
+    - [ ] AnimationCurveParameter
+    - [ ] TextureCurveParameter
+- Universal Render Pipeline
+  - ScriptableRenderData
+  - UniversalAdditionalCameraData
+  - UniversalAdditionalLightData
+  - UniversalRenderPipelineAsset
+  - UniversalRenderPipelineGlobal
 
 Classの追加方法に関してはこちらをご覧ください：
 [Howto_add_class.md](https://github.com/katsumasa/UnityChoseKun/blob/master/Howto_add_class.md)

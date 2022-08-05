@@ -1,11 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System;
 using UnityEngine;
 
 
-namespace Utj.UnityChoseKun {
+namespace Utj.UnityChoseKun.Engine 
+{
     
     // <summary>
     // AnimatorをSerialize/Deserializeする為のクラス

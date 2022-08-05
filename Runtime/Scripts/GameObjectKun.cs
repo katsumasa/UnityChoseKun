@@ -1,12 +1,13 @@
-﻿namespace Utj.UnityChoseKun
-{
-    using System.IO;
-    using System.Runtime.InteropServices;
-    using System.Runtime.Serialization.Formatters.Binary;
-    using UnityEngine;
-    using System;
-    using System.Collections.Generic;
+﻿using System.IO;
+using System.Runtime.InteropServices;
+using System.Runtime.Serialization.Formatters.Binary;
+using UnityEngine;
+using System;
+using System.Collections.Generic;
 
+
+namespace Utj.UnityChoseKun.Engine
+{
     /// <summary>
     /// GameObjectをSerialize/Deserializeする為のClass
     /// </summary>
@@ -110,8 +111,7 @@
             var i = 0;
             foreach (var component in components){                
                 componentKunTypes[i] = ComponentKun.GetComponentKunType(component);                
-                var systemType = ComponentKun.GetComponetKunSyetemType(componentKunTypes[i]);
-                componentKuns[i] = System.Activator.CreateInstance(systemType, new object[] { component }) as ComponentKun;
+                componentKuns[i] = ComponentKun.Instantiate(componentKunTypes[i], component);
                 componentKuns[i].gameObjectKun = this;
                 i++;                
             }                        

@@ -1,62 +1,65 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEditor;
 
 
-namespace Utj.UnityChoseKun{
-    /// <summary>
-    /// Behaviourを編集するクラス
-    /// Programed by Katsumasa.Kimura
-    /// </summary>
-    public class BehaviourView : ComponentView
+namespace Utj.UnityChoseKun
+{
+    using Engine;
+
+
+    namespace Editor
     {
-        private static class Styles
-        {
-            public static readonly Texture2D ComponentIcon = (Texture2D)EditorGUIUtility.Load("d_TextAsset Icon");
-        }
-
-        
-        protected BehaviourKun behaviourKun
-        {
-            get { return componentKun as BehaviourKun; }
-            set { componentKun = value as BehaviourKun; }
-        }
-
-                        
-
-        public BehaviourView():base()
-        {
-            mComponentIcon = Styles.ComponentIcon;
-            foldout = true;
-        }
-
-        /// <summary> 
-        /// OnGUIから呼び出す処理
+        /// <summary>
+        /// Behaviourを編集するクラス
+        /// Programed by Katsumasa.Kimura
         /// </summary>
-        public override bool OnGUI()
+        public class BehaviourView : ComponentView
         {
-            GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));            
-            EditorGUILayout.BeginHorizontal();
-            var iconContent = new GUIContent(mComponentIcon);
-            foldout = EditorGUILayout.Foldout(foldout, iconContent);                          // Foldout & Icon
-            
-            EditorGUI.BeginChangeCheck();
-            var content = new GUIContent(behaviourKun.name);
-
-            var rect = EditorGUILayout.GetControlRect();
-            behaviourKun.enabled = EditorGUI.ToggleLeft(new Rect(rect.x-24,rect.y,rect.width,rect.height), content,behaviourKun.enabled);            
-            if (EditorGUI.EndChangeCheck())
+            private static class Styles
             {
-                behaviourKun.dirty = true;
+                public static readonly Texture2D ComponentIcon = (Texture2D)EditorGUIUtility.Load("d_TextAsset Icon");
             }
-            GUILayout.FlexibleSpace();
-            EditorGUILayout.EndHorizontal();            
-            GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));
 
-            return foldout;            
-        }                  
+
+            protected BehaviourKun behaviourKun
+            {
+                get { return componentKun as BehaviourKun; }
+                set { componentKun = value as BehaviourKun; }
+            }
+
+
+
+            public BehaviourView() : base()
+            {
+                mComponentIcon = Styles.ComponentIcon;
+                foldout = true;
+            }
+
+            /// <summary> 
+            /// OnGUIから呼び出す処理
+            /// </summary>
+            public override bool OnGUI()
+            {
+                GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));
+                EditorGUILayout.BeginHorizontal();
+                var iconContent = new GUIContent(mComponentIcon);
+                foldout = EditorGUILayout.Foldout(foldout, iconContent);                          // Foldout & Icon
+
+                EditorGUI.BeginChangeCheck();
+                var content = new GUIContent(behaviourKun.name);
+
+                var rect = EditorGUILayout.GetControlRect();
+                behaviourKun.enabled = EditorGUI.ToggleLeft(new Rect(rect.x - 24, rect.y, rect.width, rect.height), content, behaviourKun.enabled);
+                if (EditorGUI.EndChangeCheck())
+                {
+                    behaviourKun.dirty = true;
+                }
+                GUILayout.FlexibleSpace();
+                EditorGUILayout.EndHorizontal();
+                GUILayout.Box("", GUILayout.ExpandWidth(true), GUILayout.Height(2));
+
+                return foldout;
+            }
+        }
     }
 }

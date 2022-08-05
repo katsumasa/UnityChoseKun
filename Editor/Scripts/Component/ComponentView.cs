@@ -1,12 +1,18 @@
-﻿namespace  Utj.UnityChoseKun
-{   
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Runtime.Serialization.Formatters.Binary;
-    using UnityEngine;
-    using UnityEditor;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using UnityEngine;
+using UnityEditor;
+using Utj.UnityChoseKun.Editor.Rendering;
+using Utj.UnityChoseKun.Editor.Rendering.Universal;
+using Utj.UnityChoseKun.Engine;
 
+
+namespace  Utj.UnityChoseKun.Editor
+{
+    
+    
 
     /// <summary>
     /// Componentの表示を行う基底クラス 
@@ -39,9 +45,14 @@
 
             {ComponentKun.ComponentKunType.Canvas,                  typeof(CanvasView) },
 
-            {ComponentKun.ComponentKunType.MonoBehaviour,           typeof(MonoBehaviourView)},
-            {ComponentKun.ComponentKunType.Behaviour,               typeof(BehaviourView)},
-            {ComponentKun.ComponentKunType.Component,               typeof(ComponentView)},
+            // ===
+
+            {ComponentKun.ComponentKunType.Volume,typeof(VolumeView) },
+            {ComponentKun.ComponentKunType.UniversalAdditionalCameraData,   typeof(UniversalAdditionalCameraDataView) },
+            {ComponentKun.ComponentKunType.UniversalAdditionalLightData,    typeof(UniversalAdditionalLightDataView)},
+            {ComponentKun.ComponentKunType.MonoBehaviour,                   typeof(MonoBehaviourView)},
+            {ComponentKun.ComponentKunType.Behaviour,                       typeof(BehaviourView)},
+            {ComponentKun.ComponentKunType.Component,                       typeof(ComponentView)},
             
             {ComponentKun.ComponentKunType.MissingMono,            typeof(MissingMonoView) },
 
@@ -50,8 +61,14 @@
         
 
         public static System.Type GetComponentViewSyetemType(BehaviourKun.ComponentKunType componentType)
-        {        
-            return componentViewTbls[componentType];
+        {
+            System.Type type;
+
+            if(componentViewTbls.TryGetValue(componentType, out type))
+            {
+                return type;
+            }
+            return typeof(ComponentView);            
         }
 
         private static class Styles

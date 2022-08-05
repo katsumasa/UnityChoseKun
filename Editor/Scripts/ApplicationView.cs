@@ -29,6 +29,19 @@ namespace Utj.UnityChoseKun
         }
 
 
+        static ApplicationView mInstance;
+        public static ApplicationView instance
+        {
+            get
+            {
+                if(mInstance == null)
+                {
+                    mInstance = new ApplicationView();
+                }
+                return mInstance;
+            }
+        }
+
         /// <summary>
         /// 
         /// </summary>

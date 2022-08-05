@@ -3,7 +3,8 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 
 
-namespace Utj.UnityChoseKun{
+namespace Utj.UnityChoseKun.Engine
+{
 
     /// <summary>
     /// MeshRendererをSerialize/Deserializeする為のClass

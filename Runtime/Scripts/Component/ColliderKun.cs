@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using UnityEngine;
 
-namespace Utj.UnityChoseKun
+namespace Utj.UnityChoseKun.Engine
 {
     /// <summary>
     /// Colliderオブジェクトをシリアライズ/デシリアライズする為のクラス
@@ -34,18 +34,22 @@ namespace Utj.UnityChoseKun
         /// コンストラクタ
         /// </summary>
         /// <param name="collider">元となるColliderオブジェクト</param>
-        public ColliderKun(Collider collider) : base(collider)
+        public ColliderKun(Component component) : base(component)
         {
             componentKunType = ComponentKunType.Collider;
-            boundsKun = new BoundsKun();
-            material = "None";
+            var collider = component as Collider;
             if (collider != null)
             {
-                boundsKun = new BoundsKun(collider.bounds);
-                contactOffset = collider.contactOffset;
-                enabled = collider.enabled;
-                isTrigger = collider.isTrigger;
-                material = collider.material.name;
+                boundsKun = new BoundsKun();
+                material = "None";
+                if (collider != null)
+                {
+                    boundsKun = new BoundsKun(collider.bounds);
+                    contactOffset = collider.contactOffset;
+                    enabled = collider.enabled;
+                    isTrigger = collider.isTrigger;
+                    material = collider.material.name;
+                }
             }
         }
 
@@ -171,17 +175,22 @@ namespace Utj.UnityChoseKun
         /// コンストラクタ
         /// </summary>
         /// <param name="collider">元となるCapuselCollider</param>
-        public CapsuleColliderKun(Collider collider) : base(collider)
+        public CapsuleColliderKun(Component component) : base(component)
         {
             componentKunType = ComponentKunType.CapsuleCollider;
-            m_center = new Vector3Kun();
-            var capsuleCollider = collider as CapsuleCollider;
-            if (capsuleCollider != null)
+            var collider = component as Collider;
+            if (collider != null)
             {
-                center = capsuleCollider.center;
-                direction = capsuleCollider.direction;
-                height = capsuleCollider.height;
-                radius = capsuleCollider.radius;
+
+                m_center = new Vector3Kun();
+                var capsuleCollider = collider as CapsuleCollider;
+                if (capsuleCollider != null)
+                {
+                    center = capsuleCollider.center;
+                    direction = capsuleCollider.direction;
+                    height = capsuleCollider.height;
+                    radius = capsuleCollider.radius;
+                }
             }
         }
 
@@ -298,11 +307,12 @@ namespace Utj.UnityChoseKun
         /// コンストラクタ
         /// </summary>
         /// <param name="collider">MeshColliderオブジェクト</param>
-        public MeshColliderKun(Collider collider) : base(collider)
+        public MeshColliderKun(Component component) : base(component)
         {
-            componentKunType = ComponentKunType.MeshCollider;
+            componentKunType = ComponentKunType.MeshCollider;            
             sharedMesh = "None";
-            MeshCollider meshCollider = collider as MeshCollider;
+            
+            var meshCollider = component as MeshCollider;
             if (meshCollider)
             {
                 convex = meshCollider.convex;

@@ -2,7 +2,9 @@
 using UnityEngine;
 
 
-namespace Utj.UnityChoseKun{
+namespace Utj.UnityChoseKun.Engine
+{
+
     [System.Serializable]
     public class MaterialKun : ObjectKun
     {

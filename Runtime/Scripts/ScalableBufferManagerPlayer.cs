@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace Utj.UnityChoseKun {
+namespace Utj.UnityChoseKun.Engine
+{
     public static class ScalableBufferManagerPlayer
     {
         public static void OnMessageEventPull(BinaryReader binaryReader)

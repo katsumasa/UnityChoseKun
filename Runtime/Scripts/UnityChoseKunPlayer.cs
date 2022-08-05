@@ -1,17 +1,19 @@
 ﻿
-namespace Utj.UnityChoseKun
-{    
-    using System.Collections.Generic;
-    using UnityEngine;
-    using UnityEngine.Events;
-    using UnityEngine.Networking.PlayerConnection;
-    using UnityEngine.SceneManagement;
-    using System;
-    using System.Text;
-    using System.IO;
-    using System.Reflection;
-    using System.Runtime.InteropServices;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.Networking.PlayerConnection;
+using UnityEngine.SceneManagement;
+using System;
+using System.Text;
+using System.IO;
+using System.Reflection;
+using System.Runtime.InteropServices;
 
+
+namespace Utj.UnityChoseKun.Engine
+{
+    using Rendering.Universal;
 
     /// <summary>
     /// UnityChoseKunのPlayer側Class
@@ -148,31 +150,39 @@ namespace Utj.UnityChoseKun
                 // MessageIDと対応するCBを登録する必要がある
                 onMessageFuncDict = new Dictionary<UnityChoseKun.MessageID, OnMessageFunc>()
                 {
-                    {UnityChoseKun.MessageID.ScreenPull,        playerScreen.OnMessageEventPull},
-                    {UnityChoseKun.MessageID.ScreenPush,        playerScreen.OnMessageEventPush},
-                    {UnityChoseKun.MessageID.TimePull,          playerTime.OnMessageEventPull},
-                    {UnityChoseKun.MessageID.TimePush,          playerTime.OnMessageEventPush},
-                    {UnityChoseKun.MessageID.GameObjectPull,    componentPlayer.OnMessageEventPull},
-                    {UnityChoseKun.MessageID.GameObjectPush,    componentPlayer.OnMessageEventPush },
-                    {UnityChoseKun.MessageID.ShaderPull,        shaderPlayer.OnMessageEventPull},
-                    {UnityChoseKun.MessageID.TexturePull,       texturePlayer.OnMessageEventPull},
+                    {UnityChoseKun.MessageID.AndroidPull,       androidPlayer.OnMessageEventPull},
+                    {UnityChoseKun.MessageID.AndroidPush,       androidPlayer.OnMessageEventPush},
                     {UnityChoseKun.MessageID.ApplicationPull,   applicationPlayer.OnMessageEventPull},
                     {UnityChoseKun.MessageID.ApplicationPush,   applicationPlayer.OnMessageEventPush},
                     {UnityChoseKun.MessageID.ApplicationQuit,   applicationPlayer.OnMessageEventQuit},
-                    {UnityChoseKun.MessageID.AndroidPull,       androidPlayer.OnMessageEventPull},
-                    {UnityChoseKun.MessageID.AndroidPush,       androidPlayer.OnMessageEventPush},
+                    {UnityChoseKun.MessageID.GameObjectPull,    componentPlayer.OnMessageEventPull},
+                    {UnityChoseKun.MessageID.GameObjectPush,    componentPlayer.OnMessageEventPush },
+                    {UnityChoseKun.MessageID.GraphicsSettingsPull,GraphicsSettingsPlayer.OnMessageEventPull },
+                    {UnityChoseKun.MessageID.GraphicsSettingsPush,GraphicsSettingsPlayer.OnMessageEventPush },
                     {UnityChoseKun.MessageID.HierarchyPush,     hierarchyPlayer.OnMessageEventPush },
-                    {UnityChoseKun.MessageID.QualitySettingsPull,qualitySettingsPlayer.OnMessageEventPull},
-                    {UnityChoseKun.MessageID.QualitySettingsPush,qualitySettingsPlayer.OnMessageEventPush},
+                    {UnityChoseKun.MessageID.LayerMaskPull,     LayerMaskPlayer.OnMessageEventPull },
                     {UnityChoseKun.MessageID.OnDemandRenderingPull, OnDemandRenderingPlayer.OnMessageEventPull},
                     {UnityChoseKun.MessageID.OnDemandRenderingPush,OnDemandRenderingPlayer.OnMessageEventPush},
+                    {UnityChoseKun.MessageID.QualitySettingsPull,qualitySettingsPlayer.OnMessageEventPull},
+                    {UnityChoseKun.MessageID.QualitySettingsPush,qualitySettingsPlayer.OnMessageEventPush},
                     {UnityChoseKun.MessageID.ScalableBufferManagerPull,ScalableBufferManagerPlayer.OnMessageEventPull },
                     {UnityChoseKun.MessageID.ScalableBufferManagerPush,ScalableBufferManagerPlayer.OnMessageEventPush },
-                    {UnityChoseKun.MessageID.SystemInfoPull,systemInfoPlayer.OnMessageEventPull},
-                    {UnityChoseKun.MessageID.SpritePull,spritePlayer.OnMessageEventPull},
+                    {UnityChoseKun.MessageID.ScreenPull,        playerScreen.OnMessageEventPull},
+                    {UnityChoseKun.MessageID.ScreenPush,        playerScreen.OnMessageEventPush},                                        
+                    {UnityChoseKun.MessageID.ShaderPull,        shaderPlayer.OnMessageEventPull},
                     {UnityChoseKun.MessageID.SortingLayerPull, sortingLayerPlayer.OnMessageEventPull},
-
-
+                    {UnityChoseKun.MessageID.SpritePull,spritePlayer.OnMessageEventPull},
+                    {UnityChoseKun.MessageID.SystemInfoPull,systemInfoPlayer.OnMessageEventPull},
+                    {UnityChoseKun.MessageID.TexturePull,       texturePlayer.OnMessageEventPull},
+                    {UnityChoseKun.MessageID.TimePull,          playerTime.OnMessageEventPull},
+                    {UnityChoseKun.MessageID.TimePush,          playerTime.OnMessageEventPush},
+                                      
+                    {UnityChoseKun.MessageID.UniversalRenderPipelinePull,UniversalRenderPipelinePlayer.OnMessageEventPull},
+                    {UnityChoseKun.MessageID.UniversalRenderPipelinePush,UniversalRenderPipelinePlayer.OnMessageEventPush},
+#if UNITY_2021_2_OR_NEWER
+                    {UnityChoseKun.MessageID.UniversalRenderPipelineGlobalSettingsPull,UniversalRenderPipelineGlobalSettingsPlayer.OnMessageEventPull},
+                    {UnityChoseKun.MessageID.UniversalRenderPipelineGlobalSettingsPush,UniversalRenderPipelineGlobalSettingsPlayer.OnMessageEventPush},
+#endif
             };
 
 

@@ -1,40 +1,58 @@
 ﻿using System.IO;
-using System.Text;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+
 namespace Utj.UnityChoseKun
 {
+    using Engine;
 
-    [System.Serializable]
-    public class SortingLayerView
+
+    namespace Editor
     {
-        public void OnGUI()
+        [System.Serializable]
+        public class SortingLayerView
         {
-            if(SortingLayerKun.layers != null)
+
+            static SortingLayerView mInstance;
+            public static SortingLayerView instance
             {
-                foreach(var layer in SortingLayerKun.layers)
+                get
                 {
-                    EditorGUILayout.BeginHorizontal();
-                    EditorGUILayout.LabelField("Layer  " + layer.id);
-                    EditorGUILayout.TextField(layer.name);
-                    EditorGUILayout.EndHorizontal();
+                    if(mInstance == null)
+                    {
+                        mInstance = new SortingLayerView();
+                    }
+                    return mInstance;
                 }
             }
-            if (GUILayout.Button("Pull"))
+
+
+            public void OnGUI()
+            {
+                if (SortingLayerKun.layers != null)
+                {
+                    foreach (var layer in SortingLayerKun.layers)
+                    {
+                        EditorGUILayout.BeginHorizontal();
+                        EditorGUILayout.LabelField("Layer  " + layer.id);
+                        EditorGUILayout.TextField(layer.name);
+                        EditorGUILayout.EndHorizontal();
+                    }
+                }
+                if (GUILayout.Button("Pull"))
+                {
+                    var packet = new SortingLayerPacket();
+                    UnityChoseKunEditor.SendMessage<SortingLayerPacket>(UnityChoseKun.MessageID.SortingLayerPull, packet);
+                }
+            }
+
+            public void OnMessageEvent(BinaryReader binaryReader)
             {
                 var packet = new SortingLayerPacket();
-                UnityChoseKunEditor.SendMessage<SortingLayerPacket>(UnityChoseKun.MessageID.SortingLayerPull, packet);
+                packet.Deserialize(binaryReader);
+                SortingLayerKun.layers = packet.layers;
             }
-        }
-
-        public void OnMessageEvent(BinaryReader binaryReader)
-        {
-            var packet = new SortingLayerPacket();
-            packet.Deserialize(binaryReader);
-            SortingLayerKun.layers = packet.layers;
         }
     }
 }

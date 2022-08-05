@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-namespace Utj.UnityChoseKun
+namespace Utj.UnityChoseKun.Engine
 {
 
     public class AssetPlayer<A, B> : BasePlayer

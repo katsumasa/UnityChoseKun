@@ -1,25 +1,25 @@
-﻿namespace Utj.UnityChoseKun
-{
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Runtime.Serialization.Formatters.Binary;
-    using System.IO;
-    using UnityEngine;
-    using UnityEditor;
-    using UnityEditor.Networking.PlayerConnection;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
+using UnityEngine;
+using UnityEditor;
+using UnityEditor.Networking.PlayerConnection;
 #if UNITY_2020_1_OR_NEWER
-    using UnityEngine.Networking.PlayerConnection;
-    using PlayerConnectionUtility = UnityEditor.Networking.PlayerConnection.PlayerConnectionGUIUtility;
-    using PlayerConnectionGUILayout = UnityEditor.Networking.PlayerConnection.PlayerConnectionGUILayout;
+using UnityEngine.Networking.PlayerConnection;
+using PlayerConnectionUtility = UnityEditor.Networking.PlayerConnection.PlayerConnectionGUIUtility;
+using PlayerConnectionGUILayout = UnityEditor.Networking.PlayerConnection.PlayerConnectionGUILayout;
 #else
     using UnityEngine.Experimental.Networking.PlayerConnection;
     using PlayerConnectionUtility = UnityEditor.Experimental.Networking.PlayerConnection.EditorGUIUtility;
     using PlayerConnectionGUILayout = UnityEditor.Experimental.Networking.PlayerConnection.EditorGUILayout;
 #endif
-    using System.Security.AccessControl;    
-    using System;
+using System.Security.AccessControl;
+using System;
 
 
+namespace Utj.UnityChoseKun.Editor
+{
     // UnityPlayerViewerKunのEditorEditor側の処理
     // Katsumasa Kimura
 
@@ -188,8 +188,6 @@
         // ----------------------------------------------------------------------------------------
         private void ChangeTitleContent()
         {
-            RuntimePlatform platform = RuntimePlatform.WindowsEditor;
-            Texture2D texture = null;
 
 #if UNITY_2019_1_OR_NEWER
             if (EditorWindow.HasOpenInstances<UnityChoseKunEditorWindow>())
@@ -198,89 +196,9 @@
 #endif
             {
                 var chosekunEdotorWindow = (UnityChoseKunEditorWindow)EditorWindow.GetWindow(typeof(UnityChoseKunEditorWindow));
-                if (chosekunEdotorWindow != null)
-                {
-                    platform = chosekunEdotorWindow.GetRuntimePlatform();
-                }
             }
-
-
-            
-            switch (platform)
-            {
-                case RuntimePlatform.IPhonePlayer:
-                    {
-                        texture = Style.IPHONE_ICON;
-                    }
-                    break;
-
-                case RuntimePlatform.Android:
-                    {
-                        texture = Style.ANDROID_ICON;
-                    }
-                    break;
-
-                case RuntimePlatform.Lumin:
-                    {
-                        texture = Style.LUMIN_ICON;
-                    }
-                    break;
-
-                case RuntimePlatform.Switch:
-                    {
-                        texture = Style.SWITCH_ICON;
-                    }
-                    break;
-
-                case RuntimePlatform.WSAPlayerARM:
-                case RuntimePlatform.WSAPlayerX64:
-                case RuntimePlatform.WSAPlayerX86:
-                    {
-                        texture = Style.MERTO_ICON;
-                    }
-                    break;
-
-                case RuntimePlatform.PS4:
-                    {
-                        texture = Style.PS4_ICON;
-                    }
-                    break;
-
-                case RuntimePlatform.WebGLPlayer:
-                    {
-                        texture = Style.WEBGL_ICON;
-                    }
-                    break;
-
-                case RuntimePlatform.tvOS:
-                    {
-                        texture = Style.TVOS_ICON;
-                    }
-                    break;
-#if UNITY_2019_1_OR_NEWER
-                case RuntimePlatform.Stadia:
-                    {
-                        texture = Style.STADIA_ICON;
-                    }
-                    break;
-#endif
-                case RuntimePlatform.XboxOne:
-                    {
-                        texture = Style.XBOXONE_ICON;
-                    }
-                    break;
-
-                default:
-                    {
-                        texture = Style.GAME_VIEW_ICON;
-                    }
-                    break;
-            }
-            if(texture == null)
-            {
-                texture = Style.GAME_VIEW_ICON;
-            }
-            window.titleContent = new GUIContent(new GUIContent("Player View", texture));
+                          
+            window.titleContent = new GUIContent(new GUIContent("Player View", Style.GAME_VIEW_ICON));
         }
 
 

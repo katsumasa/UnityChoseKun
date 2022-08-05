@@ -6,30 +6,33 @@ using UnityEngine;
 using UnityEditor;
 
 
-namespace Utj.UnityChoseKun{
-    [System.Serializable]
-    public class MonoBehaviourView : BehaviourView
+namespace Utj.UnityChoseKun
+{
+    using Engine;
+
+
+    namespace Editor
     {
-
-
-        static class Styles
+        [System.Serializable]
+        public class MonoBehaviourView : BehaviourView
         {
-            public static readonly Texture2D Icon = (Texture2D)EditorGUIUtility.Load("d_cs Script Icon");
+            static class Styles
+            {
+                public static readonly Texture2D Icon = (Texture2D)EditorGUIUtility.Load("d_cs Script Icon");
+            }
+
+
+            public MonoBehaviourView() : base()
+            {
+                componentIcon = Styles.Icon;
+            }
+
+
+            public override ComponentKun GetComponentKun()
+            {
+                return behaviourKun;
+            }
+
         }
-        
-        
-        public MonoBehaviourView():base()
-        {
-            componentIcon = Styles.Icon;
-        }
-
-
-        public override ComponentKun GetComponentKun()
-        {
-            return behaviourKun;
-        }
-
-
-        
     }
 }

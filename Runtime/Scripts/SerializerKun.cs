@@ -35,6 +35,24 @@ namespace Utj.UnityChoseKun
             }
         }
 
+
+        public static void Serialize(BinaryWriter binaryWriter, float[] values)
+        {
+            if (values == null)
+            {
+                binaryWriter.Write((Int32)(-1));
+            }
+            else
+            {
+                Int32 len = values.Length;
+                binaryWriter.Write(len);
+                for (var i = 0; i < len; i++)
+                {
+                    binaryWriter.Write(values[i]);
+                }
+            }
+        }
+
         public static void Serialize(BinaryWriter binaryWriter, bool[] values)
         {
             if(values == null)
@@ -172,6 +190,23 @@ namespace Utj.UnityChoseKun
             for (var i = 0; i < len; i++)
             {
                 arrays[i] = binaryReader.ReadInt32();
+            }
+            return arrays;
+        }
+
+
+
+        public static float[] DesirializeSingles(BinaryReader binaryReader)
+        {
+            var len = binaryReader.ReadInt32();
+            if(len == -1)
+            {
+                return null;
+            }
+            var arrays = new float[len];
+            for(var i = 0; i < len; i++)
+            {
+                arrays[i] = binaryReader.ReadSingle();
             }
             return arrays;
         }

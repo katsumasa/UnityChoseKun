@@ -6,8 +6,11 @@ using UnityEditor;
 using UnityEditor.IMGUI.Controls;
 
 
-namespace Utj.UnityChoseKun
+namespace Utj.UnityChoseKun.Editor
 {
+    using Utj.UnityChoseKun.Engine;
+
+
     /// <summary>
     /// Hierarchyを表示する為のClass
     /// Programed by Katsumasa.Kimura

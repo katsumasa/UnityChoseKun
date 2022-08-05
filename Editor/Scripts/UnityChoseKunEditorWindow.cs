@@ -1,32 +1,33 @@
-﻿namespace Utj.UnityChoseKun
-{
-    using System.IO;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using UnityEngine;
-    using UnityEditor;
-    using UnityEngine.Profiling;
+﻿using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+using UnityEditor;
+using UnityEngine.Profiling;
 #if UNITY_2018_1_OR_NEWER
-    using UnityEngine.Networking.PlayerConnection;
+using UnityEngine.Networking.PlayerConnection;
 
 #if UNITY_2020_1_OR_NEWER
-    using ConnectionUtility = UnityEditor.Networking.PlayerConnection.PlayerConnectionGUIUtility;
-    using ConnectionGUILayout = UnityEditor.Networking.PlayerConnection.PlayerConnectionGUILayout;
+using ConnectionUtility = UnityEditor.Networking.PlayerConnection.PlayerConnectionGUIUtility;
+using ConnectionGUILayout = UnityEditor.Networking.PlayerConnection.PlayerConnectionGUILayout;
 #else
     using ConnectionUtility = UnityEditor.Experimental.Networking.PlayerConnection.EditorGUIUtility;
     using ConnectionGUILayout = UnityEditor.Experimental.Networking.PlayerConnection.EditorGUILayout;
     using UnityEngine.Experimental.Networking.PlayerConnection;
 #endif
 
-    using UnityEditor.Networking.PlayerConnection;
-    using System;
-    using System.Text;
-    using System.Reflection;
-    using System.Runtime.InteropServices;
+using UnityEditor.Networking.PlayerConnection;
+using System;
+using System.Text;
+using System.Reflection;
+using System.Runtime.InteropServices;
 #endif
 
-   
+
+namespace Utj.UnityChoseKun.Editor
+{
+    using Utj.UnityChoseKun.Editor.Rendering;
+    using Utj.UnityChoseKun.Editor.Rendering.Universal;
 
     /// <summary>
     /// UnityChoseKunのEditorWindow
@@ -42,193 +43,14 @@
         delegate void OnMessageFunc(BinaryReader binaryReader);
         
                 
-        [SerializeField] int                toolbarIdx = 0;
-        [SerializeField] ScreenView         m_screenView;
-        [SerializeField] TimeView           m_timeView;
-        [SerializeField] InspectorView      m_inspectorView;
-        [SerializeField] ShadersView        m_shadersView;
-        [SerializeField] TexturesView       m_texturesView;
-        [SerializeField] ApplicationView    m_applicationView;
-        [SerializeField] AndroidView        m_androidView;        
+        [SerializeField] int                toolbarIdx = 0;                                
         [SerializeField] Vector2            scrollPos;
-        [SerializeField] ObjectCounterView  m_objectCounterView;
-        [SerializeField] QualitySettingsView m_qualitySettingsView;
-        [SerializeField] OnDemandRenderingView m_onDemandRenderingView;
-        [SerializeField] ScalableBufferManagerView m_scalableBufferManagerView;
-        [SerializeField] SystemInfoView m_systemInfoView;        
-        [SerializeField] SpritesView m_spritesView;
-        [SerializeField] SortingLayerView m_sortingLayerView;
 
         IConnectionState                                    m_attachProfilerState;
         Dictionary<UnityChoseKun.MessageID, OnMessageFunc>  onMessageFuncDict;
         Dictionary<string, Action>                          onGUILayoutFuncDict;
-
-
-        /// <summary>
-        /// ScreenView
-        /// </summary>
-        ScreenView screenView
-        {
-            get {
-                if(m_screenView == null ){
-                    m_screenView = new ScreenView();
-                }
-                return m_screenView;
-            }
-            set {
-                m_screenView = value;
-            }
-        }        
         
-
-        /// <summary>
-        /// TimeView
-        /// </summary>
-        TimeView timeView{
-            get {
-                if(m_timeView == null){
-                    m_timeView = new TimeView();
-                }
-                return m_timeView;
-            }
-            set {
-                m_timeView = value;
-            }
-        }        
-
-
-        /// <summary>
-        /// InspectorView
-        /// </summary>
-        InspectorView inspectorView {
-            get {if(m_inspectorView == null){m_inspectorView = new InspectorView();}return m_inspectorView;}
-        }
-        
-
-        /// <summary>
-        /// ShadersView
-        /// </summary>
-        ShadersView shaderView {
-            get{if(m_shadersView == null){m_shadersView = new ShadersView();}return m_shadersView;}
-        }
-        
-
-        /// <summary>
-        /// TexturesView
-        /// </summary>
-        TexturesView texturesView{
-            get{if(m_texturesView == null){m_texturesView = new TexturesView();}return m_texturesView;}            
-        }
-        
-        SpritesView spritesView
-        {
-            get
-            {
-                if (m_spritesView == null)
-                {
-                    m_spritesView = new SpritesView();
-                }
-                return m_spritesView;
-            }
-        }
-
-
-        SortingLayerView sortingLayerView
-        {
-            get
-            {
-                if(m_sortingLayerView == null)
-                {
-                    m_sortingLayerView = new SortingLayerView();
-                }
-                return m_sortingLayerView;
-            }
-        }
-
-        /// <summary>
-        /// ApplicationView
-        /// </summary>
-        public ApplicationView applicationView
-        {
-            get {
-                if (m_applicationView == null) {
-                    m_applicationView = new ApplicationView();
-                }
-                return m_applicationView;
-            }
-        }
-
-        /// <summary>
-        /// AndroidView
-        /// </summary>
-        public AndroidView androidView
-        {
-            get { if (m_androidView == null) { m_androidView = new AndroidView(); } return m_androidView; }            
-        }
-
-        public ObjectCounterView objectCounterView
-        {
-            get
-            {
-                if(m_objectCounterView == null)
-                {
-                    m_objectCounterView = new ObjectCounterView();
-                }
-                return m_objectCounterView;
-            }
-        }
-        
-        public QualitySettingsView qualitySettingsView
-        {
-            get
-            {
-                if(m_qualitySettingsView == null)
-                {
-                    m_qualitySettingsView = new QualitySettingsView();
-                }
-                return m_qualitySettingsView;
-            }
-        }
-
-
-        public OnDemandRenderingView onDemandRenderingView
-        {
-            get
-            {
-                if(m_onDemandRenderingView == null)
-                {
-                    m_onDemandRenderingView = new OnDemandRenderingView();
-                }
-                return m_onDemandRenderingView;
-            }
-        }
-
-        public SystemInfoView systemInfoView
-        {
-            get
-            {
-                if (m_systemInfoView == null)
-                {
-                    m_systemInfoView = new SystemInfoView();
-                }
-                return m_systemInfoView;
-            }
-        }
-
-
-        public ScalableBufferManagerView scalableBufferManagerView
-        {
-            get
-            {
-                if(m_scalableBufferManagerView == null)
-                {
-                    m_scalableBufferManagerView = new ScalableBufferManagerView();
-                }
-                return m_scalableBufferManagerView;
-            }
-        }
-
-
+                
         [MenuItem("Window/UTJ/UnityChoseKun/Player Inspector")]
         static void Inite()
         {            
@@ -239,19 +61,6 @@
             window.Show();
         }
 
-
-        /// <summary>
-        /// Platformを取得する
-        /// </summary>
-        /// <returns></returns>
-        public RuntimePlatform GetRuntimePlatform()
-        {
-            if (applicationView.applicationKun != null)
-            {
-                return applicationView.applicationKun.platform;
-            }
-            return RuntimePlatform.WindowsEditor;
-        }
 
         
         /// <summary>
@@ -354,42 +163,52 @@
 
             onGUILayoutFuncDict = new Dictionary<string, Action>()
             {
-                {"Inspector",   inspectorView.OnGUI},
-                {"Component",   objectCounterView.OnGUI },
-                {"Texture",     texturesView.OnGUI},
-                {"Shader",      shaderView.OnGUI},
-                {"Sprite", spritesView.OnGUI},
-                {"SortingLayer",sortingLayerView.OnGUI },
-                {"Screen",      screenView.OnGUI },
-                {"Time",        timeView.OnGUI},
-                {"Application", applicationView.OnGUI},
-                {"Android",     androidView.OnGUI},
-                {"Quality", qualitySettingsView.OnGUI },
-                {"OnDemandRendering",onDemandRenderingView.OnGUI },
-                {"ScalableBuffer", scalableBufferManagerView.OnGUI},
-                {"SystemInfo" ,systemInfoView.OnGUI},
-
+                {"Inspector",   InspectorView.instance.OnGUI},
+                {"UnityEngine.Application", ApplicationView.instance.OnGUI},
+                {"UnityEngine.Android.Permission",     AndroidView.instance.OnGUI},
+                {"UnityEngine.Component",   ObjectCounterView.instance.OnGUI },
+                {"UnityEngine.QualitySettings", QualitySettingsView.instance.OnGUI },                                
+                {"UnityEngine.Rendering.GraphicsSettings",GraphicsSettingsView.instance.OnGUI },
+                {"UnityEngine.Rendering.OnDemandRendering",OnDemandRenderingView.instance.OnGUI },
+#if UNITY_2021_2_OR_NEWER
+                {"UnityEngine.Rendering.Universal.UniversalRenderPipelineGlobalSettings",UniversalRenderPipelineGlobalSettingsView.instance.OnGUI},
+#endif
+                {"UnityEngine.ScalableBufferManager", ScalableBufferManagerView.instance.OnGUI},
+                {"UnityEngine.Screen",      ScreenView.instance.OnGUI },
+                {"UnityEngine.Shader",      ShadersView.instance.OnGUI},
+                {"UnityEngine.SortingLayer",SortingLayerView.instance.OnGUI },
+                {"UnityEngine.Sprite",      SpritesView.instance.OnGUI},
+                {"UnityEngine.SystemInfo" , SystemInfoView.instance.OnGUI},
+                {"UnityEngine.Texture",     TexturesView.instance.OnGUI},
+                {"UnityEngine.Time",        TimeView.instance.OnGUI},
 
 
                 // 機能をここに追加していく                                              
             };
-                        
+
             onMessageFuncDict = new Dictionary<UnityChoseKun.MessageID, OnMessageFunc>()
             {
-                {UnityChoseKun.MessageID.ScreenPull,        screenView.OnMessageEvent},
-                {UnityChoseKun.MessageID.TimePull,          timeView.OnMessageEvent },
-                {UnityChoseKun.MessageID.GameObjectPull,    inspectorView.OnMessageEvent},
-                {UnityChoseKun.MessageID.ShaderPull,        shaderView.OnMessageEvent},
-                {UnityChoseKun.MessageID.TexturePull,       texturesView.OnMessageEvent},
-                {UnityChoseKun.MessageID.ApplicationPull,   applicationView.OnMessageEvent },
-                {UnityChoseKun.MessageID.AndroidPull,       androidView.OnMessageEvent },
-                {UnityChoseKun.MessageID.QualitySettingsPull,   qualitySettingsView.OnMessageEvent},
-                {UnityChoseKun.MessageID.OnDemandRenderingPull,onDemandRenderingView.OnMessageEvent },
-                {UnityChoseKun.MessageID.ScalableBufferManagerPull,scalableBufferManagerView.OnMessageEvent },
-                {UnityChoseKun.MessageID.SystemInfoPull,systemInfoView.OnMessageEvent },
-                {UnityChoseKun.MessageID.SpritePull,spritesView.OnMessageEvent },
-                {UnityChoseKun.MessageID.SortingLayerPull,sortingLayerView.OnMessageEvent },
-                // 機能をここに追加していく                                              
+                {UnityChoseKun.MessageID.ScreenPull,                ScreenView.instance.OnMessageEvent},
+                {UnityChoseKun.MessageID.TimePull,                  TimeView.instance.OnMessageEvent },
+                {UnityChoseKun.MessageID.GameObjectPull,            InspectorView.instance.OnMessageEvent},
+                {UnityChoseKun.MessageID.ShaderPull,                ShadersView.instance.OnMessageEvent},
+                {UnityChoseKun.MessageID.TexturePull,               TexturesView.instance.OnMessageEvent},
+                {UnityChoseKun.MessageID.ApplicationPull,           ApplicationView.instance.OnMessageEvent },
+                {UnityChoseKun.MessageID.AndroidPull,               AndroidView.instance.OnMessageEvent },
+                {UnityChoseKun.MessageID.QualitySettingsPull,       QualitySettingsView.instance.OnMessageEvent},
+                {UnityChoseKun.MessageID.OnDemandRenderingPull,     OnDemandRenderingView.instance.OnMessageEvent },
+                {UnityChoseKun.MessageID.ScalableBufferManagerPull, ScalableBufferManagerView.instance.OnMessageEvent },
+                {UnityChoseKun.MessageID.SystemInfoPull,            SystemInfoView.instance.OnMessageEvent },
+                {UnityChoseKun.MessageID.SpritePull,                SpritesView.instance.OnMessageEvent },
+                {UnityChoseKun.MessageID.SortingLayerPull,          SortingLayerView.instance.OnMessageEvent },
+                {UnityChoseKun.MessageID.GraphicsSettingsPull,      Engine.Rendering.GraphicsSettingsKun.OnMessageEvent },
+#if UNITY_2019_1_OR_NEWER                
+                {UnityChoseKun.MessageID.UniversalRenderPipelinePull,Engine.Rendering.Universal.UniversalRenderPipelineKun.OnMessageEvent },
+#endif
+
+#if UNITY_2021_2_OR_NEWER
+                {UnityChoseKun.MessageID.UniversalRenderPipelineGlobalSettingsPull,UniversalRenderPipelineGlobalSettingsView.instance.OnMessageEvent},
+#endif
             };
             
         }

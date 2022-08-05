@@ -18,6 +18,20 @@ namespace Utj.UnityChoseKun
         bool isDone = false;
 
 
+        static TimeView mInstance;
+        public static TimeView instance
+        {
+            get
+            {
+                if(mInstance == null)
+                {
+                    mInstance = new TimeView();
+                }
+                return mInstance;
+            }
+        }
+
+
         TimeKun timeKun
         {
             get { if (m_timeKun == null) { m_timeKun = new TimeKun(); } return m_timeKun; }
