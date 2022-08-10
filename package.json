@@ -1,6 +1,6 @@
 {
   "name": "com.utj.unitychosekun",
-  "version": "0.2.",
+  "version": "0.2.3",
   "displayName": "UnityChoseKun",
   "description": "Have you ever experienced time being wasted to complete a build every time for a small setting changed in the GamObject? This tool not only allows to make changes to your GameObject without rebuilding every time, but also can while the actual device is running.",
   "unity": "2018.1",
