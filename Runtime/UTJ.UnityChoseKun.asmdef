@@ -1,6 +1,8 @@
 {
     "name": "UTJ.UnityChoseKun",
-    "references": [],
+    "references": [
+        "GUID:0e80379a029da2e44b192fcaf767e3af"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

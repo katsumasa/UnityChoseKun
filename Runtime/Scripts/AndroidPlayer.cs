@@ -6,13 +6,13 @@ namespace Utj.UnityChoseKun.Engine
     /// <summary>
     /// 
     /// </summary>
-    public class AndroidPlayer : BasePlayer
+    public static class AndroidPlayer
     {
         /// <summary>
         /// 
         /// </summary>
         /// <param name="binaryReader"></param>
-        public void OnMessageEventPull(BinaryReader binaryReader)
+        public static void OnMessageEventPull(BinaryReader binaryReader)
         {
             UnityChoseKunPlayer.SendMessage<AndroidKun>(UnityChoseKun.MessageID.AndroidPull, new AndroidKun());
         }
@@ -22,7 +22,7 @@ namespace Utj.UnityChoseKun.Engine
         /// 
         /// </summary>
         /// <param name="binaryReader"></param>
-        public void OnMessageEventPush(BinaryReader binaryReader)
+        public static void OnMessageEventPush(BinaryReader binaryReader)
         {         
             var androidKun = new AndroidKun();
             androidKun.Deserialize(binaryReader);

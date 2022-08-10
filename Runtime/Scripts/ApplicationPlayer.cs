@@ -4,13 +4,13 @@ using UnityEngine;
 namespace Utj.UnityChoseKun.Engine
 {
 
-    public class ApplicationPlayer : BasePlayer
+    public static class ApplicationPlayer
     {
         /// <summary>
         /// 
         /// </summary>
         /// <param name="binaryReader"></param>
-        public void OnMessageEventPull(BinaryReader binaryReader)
+        public static void OnMessageEventPull(BinaryReader binaryReader)
         {
             UnityChoseKunPlayer.SendMessage<ApplicationKun>(UnityChoseKun.MessageID.ApplicationPull, new ApplicationKun(true));
         }
@@ -20,7 +20,7 @@ namespace Utj.UnityChoseKun.Engine
         /// 
         /// </summary>
         /// <param name="binaryReader"></param>
-        public void OnMessageEventPush(BinaryReader binaryReader)
+        public static void OnMessageEventPush(BinaryReader binaryReader)
         {
             var applicationKun = new ApplicationKun();
             applicationKun.Deserialize(binaryReader);
@@ -32,7 +32,7 @@ namespace Utj.UnityChoseKun.Engine
         /// 
         /// </summary>
         /// <param name="binaryReader"></param>
-        public void OnMessageEventQuit(BinaryReader binaryReader)
+        public static void OnMessageEventQuit(BinaryReader binaryReader)
         {
             Application.Quit();
         }

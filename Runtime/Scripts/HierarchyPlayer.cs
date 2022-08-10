@@ -129,11 +129,11 @@ namespace Utj.UnityChoseKun.Engine
     /// <summary>
     /// HierarchyPlayer Class
     /// </summary>
-    public class HierarchyPlayer : BasePlayer
+    public static class HierarchyPlayer
     {
-        public void OnMessageEventPush(BinaryReader binaryReader)
+        public static void OnMessageEventPush(BinaryReader binaryReader)
         {
-            Debug.Log("OnMessageEventPush");
+
 
             HierarchyMessage message = new HierarchyMessage();
             message.Deserialize(binaryReader);
@@ -242,10 +242,7 @@ namespace Utj.UnityChoseKun.Engine
             UnityChoseKunPlayer.SendMessage<SceneManagerKun>(UnityChoseKun.MessageID.GameObjectPull, sceneManagerKun);
         }
 
-
-        
-
-
+       
         /// <summary>
         /// instanceIDをキーにしてScene内のGameObjectを検索する
         /// </summary>

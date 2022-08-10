@@ -75,9 +75,6 @@ namespace Utj.UnityChoseKun
             [SerializeField] HierarchyTreeView.SelectionChangedCB m_selectionChangedCB;
 
 
-#if ENABLE_PROFILER_STATES
-        IConnectionState m_attachProfilerState;
-#endif
 
             TreeViewState treeViewState
             {
@@ -154,10 +151,8 @@ namespace Utj.UnityChoseKun
                 var window = (PlayerHierarchyWindow)EditorWindow.GetWindow(typeof(PlayerHierarchyWindow));
                 window.titleContent = Styles.TitleContent;
                 window.wantsMouseMove = true;
-                window.autoRepaintOnSceneChange = true;
-                
+                window.autoRepaintOnSceneChange = true;                
                 window.OnEnable();
-
                 window.Show();
             }
 
@@ -196,32 +191,22 @@ namespace Utj.UnityChoseKun
                 this.wantsMouseMove = true;
                 this.autoRepaintOnSceneChange = true;
 
-
-#if ENABLE_PROFILER_STATES
-            m_attachProfilerState = ConnectionUtility.GetAttachToPlayerState(this);
-#endif
-
-                if (m_treeViewState == null)
-                {
-                    m_treeViewState = new TreeViewState();
-                }
+                m_treeViewState = new TreeViewState();                
                 m_hierarchyTreeView = new HierarchyTreeView(m_treeViewState);
 
 
                 Reload();
-                if (m_searchField == null)
-                {
-                    m_searchField = new SearchField();
-                    m_searchField.downOrUpArrowKeyPressed += hierarchyTreeView.SetFocusAndEnsureSelectedItem;
-                }
+                
+                m_searchField = new SearchField();
+                m_searchField.downOrUpArrowKeyPressed += hierarchyTreeView.SetFocusAndEnsureSelectedItem;                
             }
 
 
             private void OnDisable()
-            {
-#if ENABLE_PROFILER_STATES
-            m_attachProfilerState.Dispose();
-#endif
+            {            
+                m_treeViewState = null;
+                m_hierarchyTreeView = null;
+                m_searchField = null;
             }
 
 
@@ -293,71 +278,13 @@ namespace Utj.UnityChoseKun
                     }
                     EditorGUILayout.Space();
 
-#if ENABLE_PROFILER_STATES
-                contents = new GUIContent("Connect To");
-                v2 = EditorStyles.label.CalcSize(contents);
-                EditorGUILayout.LabelField(contents, GUILayout.Width(v2.x));
-                if (m_attachProfilerState != null){
-                    ConnectionGUILayout.AttachToPlayerDropdown(m_attachProfilerState, EditorStyles.toolbarDropDown);
-                    switch (m_attachProfilerState.connectedToTarget)
-                    {
-                        case ConnectionTarget.None:
-                            //This case can never happen within the Editor, since the Editor will always fall back onto a connection to itself.
-                            break;
-                        case ConnectionTarget.Player:
-                            Profiler.enabled = GUILayout.Toggle(Profiler.enabled, string.Format("Profile the attached Player ({0})", m_attachProfilerState.connectionName), EditorStyles.toolbarButton);
-                            break;
-                        case ConnectionTarget.Editor:
-                            // The name of the Editor or the PlayMode Player would be "Editor" so adding the connectionName here would not add anything.
-                            Profiler.enabled = GUILayout.Toggle(Profiler.enabled, "Profile the Player in the Editor", EditorStyles.toolbarButton);
-                            break;
-                        default:
-                            break;
-                    }
-                }
-#endif
-
                     hierarchyTreeView.searchString = m_searchField.OnToolbarGUI(hierarchyTreeView.searchString);
                 }
-
-#if ENABLE_PROFILER_STATES
-            var playerCount = EditorConnection.instance.ConnectedPlayers.Count;
-            StringBuilder builder = new StringBuilder();
-            builder.AppendLine(string.Format("{0} players connected.", playerCount));
-            int i = 0;
-            foreach (var p in EditorConnection.instance.ConnectedPlayers)
-            {
-                builder.AppendLine(string.Format("[{0}] - {1} {2}", i++, p.name, p.playerId));
-            }
-            EditorGUILayout.HelpBox(builder.ToString(), MessageType.Info);
-#endif
 
                 var rect = EditorGUILayout.GetControlRect(false, position.height - 16);
                 hierarchyTreeView.OnGUI(rect);
             }
 
-#if ENABLE_PROFILER_STATES
-        /// <summary>
-        /// 接続先選択用GUI
-        /// </summary>
-        private void GUILayoutConnect()
-        {
-            EditorGUILayout.BeginHorizontal();
-            EditorGUILayout.LabelField("Connect To");                        
-            ConnectionGUILayout.AttachToPlayerDropdown(m_attachProfilerState, EditorStyles.toolbarDropDown);            
-            EditorGUILayout.EndHorizontal();
-
-            var playerCount = EditorConnection.instance.ConnectedPlayers.Count;
-            StringBuilder builder = new StringBuilder();
-            builder.AppendLine(string.Format("{0} players connected.", playerCount));
-            int i = 0;
-            foreach (var p in EditorConnection.instance.ConnectedPlayers)
-            {
-                builder.AppendLine(string.Format("[{0}] - {1} {2}", i++, p.name, p.playerId));
-            }
-            EditorGUILayout.HelpBox(builder.ToString(), MessageType.Info);
-        }
-#endif
 
             private void CreateObjectCommon(HierarchyMessage.MessageID messageID, int instanceID)
             {

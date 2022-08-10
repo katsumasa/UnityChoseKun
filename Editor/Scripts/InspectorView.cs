@@ -164,7 +164,7 @@ namespace Utj.UnityChoseKun
 #if UNITY_2019_1_OR_NEWER
                 if (!EditorWindow.HasOpenInstances<PlayerHierarchyWindow>())
 #else
-            if (!HasOpenInstances<PlayerHierarchyWindow>())
+                if (!HasOpenInstances<PlayerHierarchyWindow>())
 #endif
                 {
                     PlayerHierarchyWindow.Create();

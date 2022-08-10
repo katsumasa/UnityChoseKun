@@ -9,7 +9,7 @@ namespace Utj.UnityChoseKun.Engine
     /// <summary>
     /// 
     /// </summary>
-    public class TexturePlayer : BasePlayer
+    public static class TexturePlayer
     {
         /// <summary>
         /// TextureKunPacket
@@ -166,17 +166,14 @@ namespace Utj.UnityChoseKun.Engine
         /// <summary>
         /// 
         /// </summary>
-        ~TexturePlayer(){
-            textureDict.Clear();
-            textureDict = null;
-        }
+        
 
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="bytes"></param>
-        public void OnMessageEventPull(BinaryReader binaryReader){
+        public static void OnMessageEventPull(BinaryReader binaryReader){
 
             var textureKunPacket = new TextureKunPacket();
             textureKunPacket.Deserialize(binaryReader);
@@ -201,7 +198,7 @@ namespace Utj.UnityChoseKun.Engine
         /// <summary>
         /// 
         /// </summary>
-        public void GetAllTextureInResources()
+        public static void GetAllTextureInResources()
         {
             var textures = Resources.FindObjectsOfTypeAll(typeof(Texture)) as Texture[];
             foreach(var texture in textures)
@@ -216,7 +213,7 @@ namespace Utj.UnityChoseKun.Engine
         /// <summary>
         /// 
         /// </summary>
-        public void GetAllTextureInScene()
+        public static void GetAllTextureInScene()
         {            
             #if UNITY_2019_1_OR_NEWER
             var scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
@@ -291,7 +288,7 @@ namespace Utj.UnityChoseKun.Engine
         /// <typeparam name="T"></typeparam>
         /// <param name="go"></param>
         /// <param name="components"></param>
-        void GetSComponentsInChildren<T>(GameObject go,List<T> components)
+        static void GetSComponentsInChildren<T>(GameObject go,List<T> components)
         {
             if (go != null)
             {

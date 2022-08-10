@@ -148,36 +148,41 @@ Classの追加方法に関してはこちらをご覧ください：
 - Materialが参照しているShader/Textureを変更する為にはTexture/ShaderのPullを先に実行する必要があります。
 - Unity2018では以下の機能に対応していません。
   - Materialが参照しているTextureの差し替え
-    
+
 ## セットアップ
 
-UnityChoseKunはGitHubのリポジトリで管理されています。本リポジトリの内容を組込み先のUnityProjectのAssetフォルダ以下に丸々配置して下さい。
+UnityChoseKunは別途RemoteConnectパッケージを使用します。UnityChoseKunと合わせて取得して下さい。
+取得したパッケージを任意のUnityプロジェクトへ追加することでセットアップは完了です。
+
+### パッケージの取得方法
+
+UnityChoseKunはGitHubのリポジトリで管理されています。
 セットアップ方法にはいくつかありますが、PackageManagerから取得する方法がもっとも簡単でお勧めです。
 
-
-### コンソールからリポジトリを取得する
+#### コンソールからリポジトリを取得する
 
 コンソールからリポジトリを取得する場合、下記のコマンドを実行します。
 
 ```:console
+git clone https://github.com/katsumasa/RemoteConnect.git
 git clone https://github.com/katsumasa/UnityChoseKun.git
 ```
 
-### GitHubから直接取得する
+#### GitHubから直接取得する
 
-1. Webブラウザーで[UnityChoseKun](https://github.com/katsumasa/UnityChoseKun)のWebページを開く
+1. Webブラウザーで[UnityChoseKun](https://github.com/katsumasa/UnityChoseKun)と[RemotoConnect](https://github.com/katsumasa/RemoteConnect)のWebページを開く
 2. 画面右上緑色の`Code`と記述されているプルダウンメニューから`Download ZIP`を選択しZIPファイルをダウンロード
 3. ZIPファイルを解凍しUnityProjectのAssetフォルダ以下へ配置する。
 
-
-### [お勧め]PackageManagerから取得する
+#### [お勧め]PackageManagerから取得する
 
 1. `Window > Package Manager`でPackage Managerを開く
 2. Package Manager左上の`+`のプルダウンメニューから`Add package form git URL...`を選択する
 3. ダイアログへhttps://github.com/katsumasa/UnityChoseKun.git を設定し、`Add`ボタンを押す
+4. Package Manager左上の`+`のプルダウンメニューから`Add package form git URL...`を選択する
+5. ダイアログへhttps://github.com/katsumasa/UnityChoseKun.git を設定し、`Add`ボタンを押す
 
 <img width="800" alt="image" src="https://user-images.githubusercontent.com/29646672/183788409-3c1e745a-ac84-49f0-96be-3c4d26ed369f.png">
-
 
 ### アプリケーションビルド時の設定
 
@@ -212,7 +217,6 @@ Window > UTJ > UnityChoseKun > Player Inspectorより起動します。
 
 <img width="400" alt="image" src="https://user-images.githubusercontent.com/29646672/183793924-afa0646c-5348-4c48-a19a-2934cc9bf5f3.png">
 
-
 #### Inspector
 
 Player Hierarchyで選択したGameObjectが持つComponentの内容を編集します。
@@ -244,7 +248,6 @@ Application Classのstaticメンバーに関する内容を確認することが
 
 - [Pull] : Android.Permissonのメンバーを取得します。
 
-
 #### UnityEngine.Component
 
 <img width="400" alt="image" src="https://user-images.githubusercontent.com/29646672/183796160-8bf2b10a-78ba-4b8b-b5cc-21ed4b071bfb.png">
@@ -262,7 +265,6 @@ QualitySettingの内容を確認することができます。（編集は出来
 
 - [Pull] : QualitySettingsのメンバーを取得します。
 
-
 #### UnityEngine.Rendering.GraphicsSettings
 
 <img width="400" alt="image" src="https://user-images.githubusercontent.com/29646672/183797004-c39e487e-7192-4fa7-a41b-956e6e1ab2de.png">
@@ -271,7 +273,6 @@ GraphicsSettingsの内容を確認することができます。（編集は出�
 
 - [Pull] : GraphicsSettingsのメンバーを取得します。
 
-
 ##### UnityEngine.Rendering.OnDemandRendering
 
 <img width="400" alt="image" src="https://user-images.githubusercontent.com/29646672/183797592-040a4d0b-fb93-47ea-982b-8d700e58eb47.png">
@@ -279,7 +280,6 @@ GraphicsSettingsの内容を確認することができます。（編集は出�
 OnDemandRenderingのパラメーターの内容の表示と編集を行うことが可能です。
 
 - [renderFrameInterval] : 現在のフレームレートの間隔を取得または設定します。Application.targetFrameRateまたはQualitySettings.vSyncCountの値にレンダリングを戻すには、これを0または1に設定します。
-
 
 #### ScalableBufferManager
 
@@ -300,7 +300,6 @@ ScalableBufferManagerを編集することが出来ます。
   - iOS/tvOS (Metal のみ)
   - Android (Vulkan のみ)
 
-
 ##### UnityEngine.Screen
 
 Screen Classのstaticメンバーに関する内容を編集することが出来ます。
@@ -320,7 +319,6 @@ Screen Classのstaticメンバーに関する内容を編集することが出�
 
 ※*Materialが参照しているShaderを変更する場合は、事前にPullを実行しておく必要があります。*
 
-
 #### UnityEngine.SortingLayer
 
 実機上の[SortingLayer.layers](https://docs.unity3d.com/ja/current/ScriptReference/SortingLayer-layers.html)を取得します。
@@ -330,7 +328,6 @@ Screen Classのstaticメンバーに関する内容を編集することが出�
 - [Pull] : アプリケーションで使用されているSorting Layerの値を取得します。
 
 ※SpriteRendererのSortingLayerを変更する場合、事前にPULLを実行する必要があります。
-
 
 ##### UnityEngine.Sprite
 
@@ -342,7 +339,6 @@ Screen Classのstaticメンバーに関する内容を編集することが出�
 
 ※SpriteRendererのSpriteを変更する場合事前にPullを実行する必要があります。
 
-
 #### UnityEngine.SystemInfo
 
 [SystemInfo](https://docs.unity3d.com/ja/current/ScriptReference/Device.SystemInfo.html)のメンバーの値を取得します。
@@ -350,7 +346,6 @@ Screen Classのstaticメンバーに関する内容を編集することが出�
 <img width="400" alt="image" src="https://user-images.githubusercontent.com/29646672/183801676-db187c2c-78b9-4dc0-87e8-6f6cda341808.png">
 
 - [Pull] : 実行中のアプリケーションからSystemInfoのメンバーの値を取得します。
-
 
 ##### UnityEngine.Texture
 
@@ -361,7 +356,6 @@ Scene内から参照されているTextureとResourcesに含まれているTextu
 - [Pull] : Scene上のGameObjectから参照及びResourcesに含まれるTextureの一覧を取得します。
   
 ※*Materialが参照しているTextureを変更する場合は、事前にPullを実行しておく必要があります。*
-
 
 ##### UnityEngine.Time
 
@@ -388,4 +382,3 @@ UnityChoseKunはアプリケーション上のHierarchyの情報及び必要最�
 
 - 要望・ご意見・不具合に関しては[Issue](https://github.com/katsumasa/UnityChoseKun/issues)から報告をお願いします。約束は出来ませんが可能な限り対応します。
 - 不具合報告に関してはそれを再現する為のプロジェクトの添付及び再現手順などの記述をお願いします。こちらで再現が取れない場合、対応出来ない場合があります。
-

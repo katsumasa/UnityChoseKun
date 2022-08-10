@@ -6,15 +6,15 @@ namespace Utj.UnityChoseKun.Engine
     /// <summary>
     /// QualitySettingsPlayerのClass
     /// </summary>
-    public class QualitySettingsPlayer : BasePlayer
+    public static class QualitySettingsPlayer
     {
-        public void OnMessageEventPull(BinaryReader binaryReader)
+        public static void OnMessageEventPull(BinaryReader binaryReader)
         {
             UnityChoseKunPlayer.SendMessage<QualitySettingsKun>(UnityChoseKun.MessageID.QualitySettingsPull, new QualitySettingsKun(true));
         }
 
 
-        public void OnMessageEventPush(BinaryReader binaryReader)
+        public static void OnMessageEventPush(BinaryReader binaryReader)
         {
             var qualitySettingsKun = new QualitySettingsKun();
             qualitySettingsKun.Deserialize(binaryReader);

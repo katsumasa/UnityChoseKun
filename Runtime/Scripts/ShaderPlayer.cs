@@ -103,38 +103,24 @@ namespace Utj.UnityChoseKun.Engine
     /// <summary>
     /// 
     /// </summary>
-    public class ShaderPlayer : BasePlayer
+    public static class ShaderPlayer
     {
-        Dictionary<string,Shader> m_shaderDict;
+        static Dictionary<string,Shader> m_shaderDict;
 
-        Dictionary<string,Shader> shaderDict{
+        static Dictionary<string,Shader> shaderDict{
             get{if(m_shaderDict == null){m_shaderDict = new Dictionary<string, Shader>();}return m_shaderDict;}
             set {m_shaderDict = value;}            
         }
 
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public ShaderPlayer():base(){
-            shaderDict = new Dictionary<string, Shader>();
-        }
-
-
-        /// <summary>
-        /// 
-        /// </summary>
-        ~ShaderPlayer()
-        {
-            shaderDict = null;
-        }
+        
 
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="bytes"></param>
-        public void OnMessageEventPull(BinaryReader binaryReader){
+        public static void OnMessageEventPull(BinaryReader binaryReader){
             GetAllShader();
             var shaderKuns = new ShaderKun[shaderDict.Count];
             var  i = 0;
@@ -151,7 +137,7 @@ namespace Utj.UnityChoseKun.Engine
         /// <summary>
         /// 
         /// </summary>
-        public void GetAllShader()
+        public static void GetAllShader()
         {
             GetAllShaderInResources();
             GetAllShaderInScene();
@@ -161,7 +147,7 @@ namespace Utj.UnityChoseKun.Engine
         /// <summary>
         /// 
         /// </summary>
-        public void GetAllShaderInResources()
+        public static void GetAllShaderInResources()
         {
             var shaders = Resources.FindObjectsOfTypeAll(typeof(Shader)) as Shader[];
             foreach(var shader in shaders)
@@ -176,7 +162,7 @@ namespace Utj.UnityChoseKun.Engine
         /// <summary>
         /// 
         /// </summary>
-        public void GetAllShaderInScene()
+        public static void GetAllShaderInScene()
         {            
             var scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
             var components = new List<Renderer>();
@@ -204,7 +190,7 @@ namespace Utj.UnityChoseKun.Engine
         /// <typeparam name="T"></typeparam>
         /// <param name="go"></param>
         /// <param name="components"></param>
-        void GetSComponentsInChildren<T>(GameObject go,List<T> components)
+        static void GetSComponentsInChildren<T>(GameObject go,List<T> components)
         {            
             go.GetComponents<T>(components);
             for(var i = 0; i < go.transform.childCount; i++)

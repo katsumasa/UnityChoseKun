@@ -6,13 +6,13 @@ namespace Utj.UnityChoseKun.Engine
     /// <summary>
     /// 
     /// </summary>
-    public class TimePlayer : BasePlayer
+    public static class TimePlayer
     {
         /// <summary>
         /// 
         /// </summary>
         /// <param name="binaryReader"></param>
-        public  void OnMessageEventPull(BinaryReader binaryReader)
+        public static void OnMessageEventPull(BinaryReader binaryReader)
         {
             var timeKun = new TimeKun(true);
             UnityChoseKunPlayer.SendMessage<TimeKun>(UnityChoseKun.MessageID.TimePull,timeKun);
@@ -23,7 +23,7 @@ namespace Utj.UnityChoseKun.Engine
         /// 
         /// </summary>
         /// <param name="binaryReader"></param>
-        public void OnMessageEventPush(BinaryReader binaryReader)
+        public static void OnMessageEventPush(BinaryReader binaryReader)
         {
             var timeKun = new TimeKun();
             timeKun.Deserialize(binaryReader);

@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using UnityEngine;
+
 
 namespace Utj.UnityChoseKun.Engine
 {
@@ -37,9 +36,9 @@ namespace Utj.UnityChoseKun.Engine
     }
 
 
-    public class SortingLayerPlayer : BasePlayer
+    public static class SortingLayerPlayer
     {
-        public void OnMessageEventPull(BinaryReader binaryReader)
+        public static void OnMessageEventPull(BinaryReader binaryReader)
         {
             var packet = new SortingLayerPacket(SortingLayer.layers);                   
             UnityChoseKunPlayer.SendMessage<SortingLayerPacket>(UnityChoseKun.MessageID.SortingLayerPull,packet);

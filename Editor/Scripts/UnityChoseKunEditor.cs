@@ -1,6 +1,4 @@
 ﻿using System.IO;
-using UnityEditor.Networking.PlayerConnection;
-
 
 namespace Utj.UnityChoseKun
 {    
@@ -10,42 +8,31 @@ namespace Utj.UnityChoseKun
     {
         public static void SendMessage<T>(UnityChoseKun.MessageID id,T obj) where T : ISerializerKun
         {
-            var memory = new MemoryStream();
-            var writer = new BinaryWriter(memory);
-
-            try
+            using (var memory = new MemoryStream())
             {
-                writer.Write((int)id);
-                if (obj != null)
+                using (var writer = new BinaryWriter(memory))
                 {
-                    obj.Serialize(writer);
+                    writer.Write((int)id);
+                    if (obj != null)
+                    {
+                        obj.Serialize(writer);
+                    }
+                    Utj.UnityChoseKun.Editor.UnityChoseKunEditorWindow.Send(memory.GetBuffer());
                 }
-                var bytes = memory.ToArray();
-                EditorConnection.instance.Send(UnityChoseKun.kMsgSendEditorToPlayer, bytes);
             }
-            finally
-            {
-                writer.Close();
-                memory.Close();
-            }            
         }
 
         public static void SendMessage(UnityChoseKun.MessageID id)
         {
-            var memory = new MemoryStream();
-            var writer = new BinaryWriter(memory);
-            try
+            using (var memory = new MemoryStream()) 
             {
-                writer.Write((int)id);
-                var bytes = memory.ToArray();
-                EditorConnection.instance.Send(UnityChoseKun.kMsgSendEditorToPlayer, bytes);
-            }
-            finally
-            {
-                writer.Close();
-                memory.Close();
+                using (var writer = new BinaryWriter(memory)){                    
+                    writer.Write((int)id);
+                    var bytes = memory.ToArray();
+                    Utj.UnityChoseKun.Editor.UnityChoseKunEditorWindow.Send(memory.GetBuffer());
+                }
+                
             }
         }
-
     }
 }
