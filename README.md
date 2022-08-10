@@ -376,11 +376,7 @@ Scene内から参照されているTextureとResourcesに含まれているTextu
 
 ## FAQ
 
-### Q. 
-
-[UnityPlayerSync]()と[UnityChoseKun]()の違いを教えて下さい。
-
-### A. 
+### [UnityPlayerSync](https://github.com/katsumasa/UnityPlayerSync)と[UnityChoseKun](https://github.com/katsumasa/UnityChoseKun)の違いを教えて下さい。
 
 UnityChoseKunはアプリケーション上のHierarchyの情報及び必要最低限のComponentの情報を取得し、その情報をアプリケーションへダイレクトに反映し、UnityPlayerSyncはアプリケーションのHierarchyをUnityEditor上にそのまま再現し、変更された内容をアプリケーションに反映します。
 その為、UnityPlayerSyncはUnityChoseKunよりも得られる情報量が多い一方、アプリケーションとUnityEditorの同期にかかる時間はUnityChoseKunの方が短くなっています。
@@ -388,8 +384,8 @@ UnityChoseKunはアプリケーション上のHierarchyの情報及び必要最�
 例えば、アプリケーションのパラメーターを調整してパフォーマンスチューニングや見た目の調整を行うような用途であればUnityChoseKunが適しています。
 一方、UnityPlayerSyncは通常のUnityEditorのワークフローと殆ど変わらないGUIで操作することが出来る為、エンジニア以外のクリエーターでも直観的に操作が出来るというメリットがあります。
 
+## その他
 
+- 要望・ご意見・不具合に関しては[Issue](https://github.com/katsumasa/UnityChoseKun/issues)から報告をお願いします。約束は出来ませんが可能な限り対応します。
+- 不具合報告に関してはそれを再現する為のプロジェクトの添付及び再現手順などの記述をお願いします。こちらで再現が取れない場合、対応出来ない場合があります。
 
-## 以上、FBやコメントを受けつけております
-
-## _木村 勝将：katsumasa@unity3d.com_
