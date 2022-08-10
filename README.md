@@ -230,7 +230,7 @@ Player Hierarchyで選択したGameObjectが持つComponentの内容を編集し
 
 #### UnityEngine.Application
 
-<img width="800" alt="Inspector_Application" src="https://user-images.githubusercontent.com/29646672/137237244-14fe2c38-e81d-4817-8eda-74bf5ab00661.png">
+<img width="400" alt="image" src="https://user-images.githubusercontent.com/29646672/183864921-576f98e7-012f-42a0-8d72-b70e17b9f89c.png">
 
 Application Classのstaticメンバーに関する内容を確認することが出来ます。（編集は出来ません)
 また、Application.Quit()を実行することが可能です。
