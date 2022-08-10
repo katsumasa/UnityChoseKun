@@ -209,8 +209,10 @@ namespace Utj.UnityChoseKun.Editor
 #if UNITY_2021_2_OR_NEWER
                 {UnityChoseKun.MessageID.UniversalRenderPipelineGlobalSettingsPull,UniversalRenderPipelineGlobalSettingsView.instance.OnMessageEvent},
 #endif
-            };
-            
+            };            
+            this.titleContent = Styles.TitleContent;
+            this.wantsMouseMove = true;
+            this.autoRepaintOnSceneChange = true;
         }
     
         private void OnDisable()
