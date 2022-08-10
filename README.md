@@ -179,138 +179,117 @@ git clone https://github.com/katsumasa/UnityChoseKun.git
 <img width="800" alt="image" src="https://user-images.githubusercontent.com/29646672/183788409-3c1e745a-ac84-49f0-96be-3c4d26ed369f.png">
 
 
-
-
 ### アプリケーションビルド時の設定
 
 - 調整を行うSceneに[UnityChoseKun.prefab](https://github.com/katsumasa/UnityChoseKun/blob/master/Player/Prefabs/UnityChoseKun.prefab)を配置する。
 - [Development BuildとAutoconnect Profiler](https://docs.unity3d.com/ja/current/Manual/BuildSettingsStandalone.html)にチェックを入れる。
 - URPなどPackageManagerで管理されているClassの調整を行う場合、[Scripting BackEnd](https://docs.unity3d.com/ja/2018.4/Manual/windowsstore-scriptingbackends.html)にはMonoを指定する必要があります。
 
-### 機能紹介
+## 機能紹介
 
-#### Player Hierarchy
+### Player Hierarchy
 
-![HierarchyView](https://user-images.githubusercontent.com/29646672/137240924-d089e4b6-9ff7-4bbe-ba31-f19cc7459aca.jpg)
+EditorのHierarchy同様にGameObjectの親子関係を変更したり、右クリックからのモーダルダイヤログでGameObjectを生成したり、基本的なComponentを追加することが出来ます。
+Window > UTJ > UnityChoseKun > Player Hierarchyより起動します。
 
-##### Reload
+<img width="400" alt="image" src="https://user-images.githubusercontent.com/29646672/137240924-d089e4b6-9ff7-4bbe-ba31-f19cc7459aca.jpg">
+
+#### Reload
 
 実機で実行されているアプリケーションのScene情報を分析し、Hierarchy Treeとして展開します。
 まず初めにReloadを実行し、Sceneの情報を取得することからスタートします。
-GameObjectが数万個存在するような複雑なSceneの場合、Reloadには時間がかかります。
 
-EditorのHierarchy同様にGameObjectの親子関係を変更したり、右クリックからのモーダルダイヤログでGameObjectを生成したり、基本的なComponentを追加することが出来ます。
+##### *NOTE*
 
-*NOTE* </br>
-アプリケーションに含まれていないComponentを追加するとエラーとなります。
+- GameObjectが数万個存在するような複雑なSceneの場合、Reloadには時間がかかることに注意して下さい。
+- アプリケーションに含まれていないComponentを追加するとエラーとなります。
 
-#### Player Inspector
+### Player Inspector
 
-実機で実行しているアプリケーションのオブジェクト及びUnithEngine内のいくつかのClassの内容を編集することが出来るWindowsです。
+実機で実行しているアプリケーションに対する情報の表示や内容の編集を行う為のWindowです。
+プルダウンメニューから表示する内容を切り替えて使用します。  
+Window > UTJ > UnityChoseKun > Player Inspectorより起動します。
 
-##### Inspector
+<img width="400" alt="image" src="https://user-images.githubusercontent.com/29646672/183793924-afa0646c-5348-4c48-a19a-2934cc9bf5f3.png">
+
+
+#### Inspector
 
 Player Hierarchyで選択したGameObjectが持つComponentの内容を編集します。
 すべてのComponetの内容を編集出来る訳ではなく、現時点では一部のComponentに限定されています。
 非対応のComponentに関しては、Componentのenableのみ編集可能となっています。
 
-![InspectorView](https://user-images.githubusercontent.com/29646672/137236992-9d2f6619-a2bd-4d03-b363-ac11fe5ac99c.jpg)
-
+<img width="400" alt="image" src="https://user-images.githubusercontent.com/29646672/183794558-9c8eccb9-9c4c-41e7-902a-71f1c27eb340.png">
 
 - [Connect To] : 接続先のデバイスを選択します。 Profilerと共有しています。
 - [Add Component] : GameObjectにComponentを追加します。(未実装)
 
-##### Component
+#### UnityEngine.Application
 
-![Inspector_Component](https://user-images.githubusercontent.com/29646672/137237020-38558ca0-e30f-4144-b3f1-fef26a69664f.jpg)
+<img width="800" alt="Inspector_Application" src="https://user-images.githubusercontent.com/29646672/137237244-14fe2c38-e81d-4817-8eda-74bf5ab00661.png">
+
+Application Classのstaticメンバーに関する内容を確認することが出来ます。（編集は出来ません)
+また、Application.Quit()を実行することが可能です。
+
+- [Pull] : Application Classのstaticメンバーを取得します。
+- [Quit] : Application.Quite()を実行します。
+
+<img width="400" alt="image" src="https://user-images.githubusercontent.com/29646672/183794833-2095509b-baf6-4bf8-a4ee-326b01c525e4.png">
+
+### UnityEngine.Android.Permisson
+
+プラットフォームがAndroidの場合、パーミッションの内容を確認することが出来ます。（編集は出来ません)
+
+<img width="400" alt="image" src="https://user-images.githubusercontent.com/29646672/183795746-54fefac2-22a5-4097-8b4c-435ba7d2839f.png">
+
+- [Pull] : Android.Permissonのメンバーを取得します。
+
+
+#### UnityEngine.Component
+
+<img width="400" alt="image" src="https://user-images.githubusercontent.com/29646672/183796160-8bf2b10a-78ba-4b8b-b5cc-21ed4b071bfb.png">
 
 Scene上に存在するComponentの種類と数をカウントします。
 本Editor拡張で未対応なComponentは規定Classにカウントします。
 
-##### Texture
+- [Analayze] : Player Hierarchyの情報からScene内のGameObjectに含まれているComponentを種類別にカウントします
 
-![Inspector_Texture](https://user-images.githubusercontent.com/29646672/137237036-ab8d310d-830b-415e-9e5a-a106b6a785e7.png)
+#### UnityEngine.QualitySettings
 
-実行中のアプリからScene内から参照されているTextureとResourcesに含まれているTextureの一覧表示します。
+<img width="400" alt="image" src="https://user-images.githubusercontent.com/29646672/183796486-5b495e59-b575-4240-ba53-044ee76abefb.png">
 
-- [Pull] : Scene上のGameObjectから参照及びResourcesに含まれるTextureの一覧を取得します。
-  
-※*Materialが参照しているTextureを変更する場合は、事前にPullを実行しておく必要があります。*
+QualitySettingの内容を確認することができます。（編集は出来ません)
 
-##### Sprite
+- [Pull] : QualitySettingsのメンバーを取得します。
 
-![image](https://user-images.githubusercontent.com/29646672/124558681-d4f07380-de75-11eb-9db4-8bc46445f2b7.png)
 
-実機で実行されているアプリのScene上から参照されているSprite及びResourcesに含まれるSpriteの一覧を表示します。
-SpriteRendererのSpriteを変更する場合事前にPullを実行する必要があります。
+#### UnityEngine.Rendering.GraphicsSettings
 
-#### Sorting Layer
+<img width="400" alt="image" src="https://user-images.githubusercontent.com/29646672/183797004-c39e487e-7192-4fa7-a41b-956e6e1ab2de.png">
 
-![image](https://user-images.githubusercontent.com/29646672/124559206-6f50b700-de76-11eb-92b0-2456ce9d6bdc.png)
+GraphicsSettingsの内容を確認することができます。（編集は出来ません）
 
-実機上の[SortingLayer.layers](https://docs.unity3d.com/ja/current/ScriptReference/SortingLayer-layers.html)を取得します。
-SpriteRendererのSortingLayerを変更する場合、事前にPULLを実行する必要があります。
+- [Pull] : GraphicsSettingsのメンバーを取得します。
 
-##### Shader
 
-![Inspector_Shader](https://user-images.githubusercontent.com/29646672/137237071-3a32615f-f566-492a-9c09-9cd56766b8fa.png)
+##### UnityEngine.Rendering.OnDemandRendering
 
-実機で実行されているアプリのScene上から参照されているShader及びResourcesに含まれるShaderの一覧を表示します。
+<img width="400" alt="image" src="https://user-images.githubusercontent.com/29646672/183797592-040a4d0b-fb93-47ea-982b-8d700e58eb47.png">
 
-- [Pull] : Scene上のGameObjectから参照及びResourcesに含まれるShaderの一覧を取得します。
+OnDemandRenderingのパラメーターの内容の表示と編集を行うことが可能です。
 
-※*Materialが参照しているShaderを変更する場合は、事前にPullを実行しておく必要があります。*
+- [renderFrameInterval] : 現在のフレームレートの間隔を取得または設定します。Application.targetFrameRateまたはQualitySettings.vSyncCountの値にレンダリングを戻すには、これを0または1に設定します。
 
-##### Screen
-
-![Inspector_Screen](https://user-images.githubusercontent.com/29646672/137237098-7ca68dd4-42d9-42f2-acd9-887429bfbada.jpg)
-
-Screen Classのstaticメンバーに関する内容を編集することが出来ます。
-
-- [Pull] : Screen Classのstaticメンバーを取得します。
-- [Push] : 編集した内容を実機上に書き戻します。
-
-##### Time
-
-![Inspector_Time](https://user-images.githubusercontent.com/29646672/137237225-6cfadb92-41c3-4a04-84b4-eb2bf6c5940e.jpg)
-
-Time Classのstaticメンバーに関する内容を編集することが出来ます。
-
-- [Pull] : Time Classのstaticメンバーを取得します。
-- [Push] : 編集した内容を実機上に書き戻します。
-
-##### Application
-
-<img width="800" alt="Inspector_Application" src="https://user-images.githubusercontent.com/29646672/137237244-14fe2c38-e81d-4817-8eda-74bf5ab00661.png">
-
-Application Classのstaticメンバーに関する内容を編集することが出来ます。
-また、Application.Quit()を実行することが可能です。
-
-- [Pull] : Application Classのstaticメンバーを取得します。
-- [Push] : 編集した内容を実機へ上書きします。
-- [Quit] : Application.Quite()を実行します。
-
-##### Android
-
-<img width="800" alt="Inspector_AndroidView" src="https://user-images.githubusercontent.com/29646672/137237284-3a9aa132-6794-464f-9cc3-b4995065c734.jpg">
-
-Androidデバイス固有の機能を編集することが出来ます。
-
-##### QualitySettings
-
-<img width="800" alt="QualitySettingsView" src="https://user-images.githubusercontent.com/29646672/137237300-f2db3084-1dc4-4ba3-bd17-870af7db40f9.jpg">
-
-QualitySettingを編集することが出来ます。
-
-##### OnDemandRendering
-
-renderFrameInterval を調整することが出来ます。
-Home画面等画面の動きが激しく無い場合、値を調整することで、バッテリー消費を抑えることが期待出来ます。
 
 #### ScalableBufferManager
 
+<img width="385" alt="image" src="https://user-images.githubusercontent.com/29646672/183798870-74027094-e9ac-4a57-a213-c23cb9c55deb.png">
+
 ScalableBufferManagerを編集することが出来ます。
-この機能を使用する場合、下記の条件を満たしている必要があります。
+
+- [Pull] : ScalableBufferManagerのパラメーターを取得します。
+
+*NOTE*:この機能を使用する場合、下記の条件を満たしている必要があります。  
 
 - Project Settings -> `Enable Frame Timing Stats`にチェックを入れた状態でアプリケーションをビルドしている。
 - CameraもしくはRenderTextureの[Allow Dynamic Resolution](https://docs.unity3d.com/ja/2018.4/uploads/Main/DynamicResolution.png)が有効になっている。
@@ -320,6 +299,96 @@ ScalableBufferManagerを編集することが出来ます。
   - Nintendo Switch
   - iOS/tvOS (Metal のみ)
   - Android (Vulkan のみ)
+
+
+##### UnityEngine.Screen
+
+Screen Classのstaticメンバーに関する内容を編集することが出来ます。
+
+<img width="400" alt="image" src="https://user-images.githubusercontent.com/29646672/183799340-576bbf10-1d98-4193-8451-d54a7fa1ae9d.png">
+
+- [Pull] : Screen Classのstaticメンバーを取得します。
+- [Push] : 編集した内容を実機上に書き戻します。
+
+##### UnityEngine.Shader
+
+アプリケーションから参照されているShader及びResourcesに含まれるShaderの一覧を表示します。
+
+<img width="400" alt="image" src="https://user-images.githubusercontent.com/29646672/183800592-298c8320-3ca9-41a1-aa63-b30509db0a3b.png">
+
+- [Pull] : Scene上のGameObjectから参照及びResourcesに含まれるShaderの一覧を取得します。
+
+※*Materialが参照しているShaderを変更する場合は、事前にPullを実行しておく必要があります。*
+
+
+#### UnityEngine.SortingLayer
+
+実機上の[SortingLayer.layers](https://docs.unity3d.com/ja/current/ScriptReference/SortingLayer-layers.html)を取得します。
+
+<img width="385" alt="image" src="https://user-images.githubusercontent.com/29646672/183801143-980cabdf-785e-416b-b8f8-3d4485c83138.png">
+
+- [Pull] : アプリケーションで使用されているSorting Layerの値を取得します。
+
+※SpriteRendererのSortingLayerを変更する場合、事前にPULLを実行する必要があります。
+
+
+##### UnityEngine.Sprite
+
+実機で実行されているアプリのScene上から参照されているSprite及びResourcesに含まれるSpriteの一覧を表示します。
+
+<img width="400" alt="image" src="https://user-images.githubusercontent.com/29646672/183801515-e9023ac3-ffde-497f-9bf0-73abacd63c2b.png">
+
+- [Pull] : アプリケーションで使用されているSpriteの一覧を取得します。
+
+※SpriteRendererのSpriteを変更する場合事前にPullを実行する必要があります。
+
+
+#### UnityEngine.SystemInfo
+
+[SystemInfo](https://docs.unity3d.com/ja/current/ScriptReference/Device.SystemInfo.html)のメンバーの値を取得します。
+
+<img width="400" alt="image" src="https://user-images.githubusercontent.com/29646672/183801676-db187c2c-78b9-4dc0-87e8-6f6cda341808.png">
+
+- [Pull] : 実行中のアプリケーションからSystemInfoのメンバーの値を取得します。
+
+
+##### UnityEngine.Texture
+
+Scene内から参照されているTextureとResourcesに含まれているTextureの一覧表示します。
+
+<img width="400" alt="image" src="https://user-images.githubusercontent.com/29646672/183800913-c036d071-1c75-4d69-929b-3327c1f0b09a.png">
+
+- [Pull] : Scene上のGameObjectから参照及びResourcesに含まれるTextureの一覧を取得します。
+  
+※*Materialが参照しているTextureを変更する場合は、事前にPullを実行しておく必要があります。*
+
+
+##### UnityEngine.Time
+
+<img width="385" alt="image" src="https://user-images.githubusercontent.com/29646672/183802337-3cd64b21-8b27-4111-b4b8-8b575e550ab5.png">
+
+[Time](https://docs.unity3d.com/ja/current/ScriptReference/Time.html) Classのstaticメンバーに関する内容を編集することが出来ます。
+
+- [Pull] : Time Classのstaticメンバーを取得します。
+- [Push] : 編集した内容を実機上に書き戻します。
+
+※編集可能なメンバーはRead Only以外のメンバーに限定されます。詳しくはスクリプトリファレンスをご確認下さい。
+
+## FAQ
+
+### Q. 
+
+[UnityPlayerSync]()と[UnityChoseKun]()の違いを教えて下さい。
+
+### A. 
+
+UnityChoseKunはアプリケーション上のHierarchyの情報及び必要最低限のComponentの情報を取得し、その情報をアプリケーションへダイレクトに反映し、UnityPlayerSyncはアプリケーションのHierarchyをUnityEditor上にそのまま再現し、変更された内容をアプリケーションに反映します。
+その為、UnityPlayerSyncはUnityChoseKunよりも得られる情報量が多い一方、アプリケーションとUnityEditorの同期にかかる時間はUnityChoseKunの方が短くなっています。
+
+例えば、アプリケーションのパラメーターを調整してパフォーマンスチューニングや見た目の調整を行うような用途であればUnityChoseKunが適しています。
+一方、UnityPlayerSyncは通常のUnityEditorのワークフローと殆ど変わらないGUIで操作することが出来る為、エンジニア以外のクリエーターでも直観的に操作が出来るというメリットがあります。
+
+
 
 ## 以上、FBやコメントを受けつけております
 
