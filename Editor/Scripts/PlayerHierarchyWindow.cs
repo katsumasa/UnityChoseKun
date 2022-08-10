@@ -155,8 +155,10 @@ namespace Utj.UnityChoseKun
                 window.titleContent = Styles.TitleContent;
                 window.wantsMouseMove = true;
                 window.autoRepaintOnSceneChange = true;
-                window.Show();
+                
                 window.OnEnable();
+
+                window.Show();
             }
 
 
@@ -188,6 +190,8 @@ namespace Utj.UnityChoseKun
 
             private void OnEnable()
             {
+                var window = (PlayerHierarchyWindow)EditorWindow.GetWindow(typeof(PlayerHierarchyWindow));
+
                 this.titleContent = Styles.TitleContent;
                 this.wantsMouseMove = true;
                 this.autoRepaintOnSceneChange = true;
