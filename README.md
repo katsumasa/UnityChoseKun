@@ -5,29 +5,17 @@
 
 [English Ver. README](Documentation~/UnityChoseKun.md)
 
-## はじめに
+## 概要
 
 Unityで開発したアプリを実機上で実行している時に、GameObjectの内容をほんの少しだけ変更したいだけなのに、ビルド完了迄長時間待たされることで、貴重な開発時間を無駄にして悔しい思いをした事は無いでしょうか。
 UnityChoseKunは再ビルドを行うこと無く、UnityEditor上で開発機で実行中のアプリの調整を行う為のEditor拡張です。
-開発機が物理的に遠い場所にある人向けに実機で時以降中の画面をUnity Editorで表示する機能も保有しています。
 
-## 概要
-
-実機上で実行しているアプリ内の画面をUnityEditorで表示たり、GameObjectをUnityEditorから調整する事が出来るEditor拡張です。
-
-実機で実行中のアプリ内のComponentを調整</br>
 <img width="800" alt="UnityChoseKunDemo02" src="https://user-images.githubusercontent.com/29646672/137236126-f7b9c064-3dcc-41d5-9ce6-9f9175d9d315.gif">
-
-実機(開発機)の画面をUnityEditorに表示</br>
-<img width="800" alt="UnityChoseKunDemo03" src="https://user-images.githubusercontent.com/29646672/137236618-7539f774-b200-45e9-a4d5-87e7ceb6b208.gif">
 
 ## このプロジェクトで出来ること
 
-本ツールは主に下記の３機能から構成されています。
-
-- 実機で再生されている画面を表示する(Player View)
 - 実機で再生されているSceneをHierarchy形式で表示(Player Hierarchy)
-- GameObjectに含まれるComponentの内容を編集し実機側へ反映させる。(Player Inspector)
+- GameObjectに含まれるComponentの内容等、アプリケーションの内容を編集し実機側へ反映させる。(Player Inspector)
 
 ## 動作環境
 
@@ -35,7 +23,7 @@ UnityChoseKunは再ビルドを行うこと無く、UnityEditor上で開発機�
 
 - Unityのバージョン
   - Unity2018.4.26f1 (一部、機能制限あり)
-  - Unity2019.4.11f1
+  - Unity2019.4.40f1
   - Unity2020.2.2f1
   - Unity2020.3.27f1
   - Unity2021.2.15f1
@@ -156,25 +144,48 @@ Classの追加方法に関してはこちらをご覧ください：
 
 - 万が一*不測の事態が起きても一切保証は出来ませんのでご注意下さい。*
 - Script Debuggingと併用できません。必ずScript DebuggingをOFFにした上でビルドを行ってください。
-- Player Viewを有効にすると*端末が高温になります。* また、画面解像度に応じてCPUリソースを消費します。PlayerViewの再生を行う前に、Player InspectorのScreenから画面解像度を変更することをお勧めします。Pixel4XLの場合、画面解像度を604x288迄落とした場合、CPUリソースにほぼ消費せずに実行できているようでした。
 - Texture,Shaderに関しては内容の確認のみで、変更を行うことは出来ません。
 - Materialが参照しているShader/Textureを変更する為にはTexture/ShaderのPullを先に実行する必要があります。
 - Unity2018では以下の機能に対応していません。
   - Materialが参照しているTextureの差し替え
-  - PlayerViewのAsync GPU Readback機能
-  
-  - ~~DeviceとUnityChoseKunが接続したままの状態で、UnityEditorを終了させると`EditorConnection.instance.DisconnectAll()`内でクラッシュが発生します。これを防ぐ為には、UnityChoseKunの接続先をEditorに変更するなどしてDeviceとの接続を解除する必要があります。~~
-  DisconectAll()の実行をコメントアウトしました。これでしばらく様子をみます。
+    
+## セットアップ
 
-## 使い方
+UnityChoseKunはGitHubのリポジトリで管理されています。本リポジトリの内容を組込み先のUnityProjectのAssetフォルダ以下に丸々配置して下さい。
+セットアップ方法にはいくつかありますが、PackageManagerから取得する方法がもっとも簡単でお勧めです。
 
-本リポジトリの内容を組込み先のUnityProjectのAssetフォルダ以下に丸々配置して下さい。
+
+### コンソールからリポジトリを取得する
+
+コンソールからリポジトリを取得する場合、下記のコマンドを実行します。
+
+```:console
+git clone https://github.com/katsumasa/UnityChoseKun.git
+```
+
+### GitHubから直接取得する
+
+1. Webブラウザーで[UnityChoseKun](https://github.com/katsumasa/UnityChoseKun)のWebページを開く
+2. 画面右上緑色の`Code`と記述されているプルダウンメニューから`Download ZIP`を選択しZIPファイルをダウンロード
+3. ZIPファイルを解凍しUnityProjectのAssetフォルダ以下へ配置する。
+
+
+### [お勧め]PackageManagerから取得する
+
+1. `Window > Package Manager`でPackage Managerを開く
+2. Package Manager左上の`+`のプルダウンメニューから`Add package form git URL...`を選択する
+3. ダイアログへhttps://github.com/katsumasa/UnityChoseKun.git を設定し、`Add`ボタンを押す
+
+<img width="800" alt="image" src="https://user-images.githubusercontent.com/29646672/183788409-3c1e745a-ac84-49f0-96be-3c4d26ed369f.png">
+
+
+
 
 ### アプリケーションビルド時の設定
 
-- 調整を行うSceneに[UnityChoseKun.prefab](https://github.com/katsumasa/UnityChoseKun/blob/master/Player/Prefabs/UnityChoseKun.prefab)を配置してからアプリをビルドする必要があります。
-- [Development BuildとAutoconnect Profiler](https://docs.unity3d.com/ja/current/Manual/BuildSettingsStandalone.html)にチェックを入れてる必要があります。
-- [Scripting BackEnd](https://docs.unity3d.com/ja/2018.4/Manual/windowsstore-scriptingbackends.html)にはIL2CPPを指定する必要があります。
+- 調整を行うSceneに[UnityChoseKun.prefab](https://github.com/katsumasa/UnityChoseKun/blob/master/Player/Prefabs/UnityChoseKun.prefab)を配置する。
+- [Development BuildとAutoconnect Profiler](https://docs.unity3d.com/ja/current/Manual/BuildSettingsStandalone.html)にチェックを入れる。
+- URPなどPackageManagerで管理されているClassの調整を行う場合、[Scripting BackEnd](https://docs.unity3d.com/ja/2018.4/Manual/windowsstore-scriptingbackends.html)にはMonoを指定する必要があります。
 
 ### 機能紹介
 
