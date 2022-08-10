@@ -58,7 +58,7 @@ namespace Utj.UnityChoseKun.Editor
             window.titleContent = Styles.TitleContent;
             window.wantsMouseMove = true;
             window.autoRepaintOnSceneChange = true;
-            window.Show();
+            window.Show();            
         }
 
 
@@ -149,7 +149,8 @@ namespace Utj.UnityChoseKun.Editor
 
         
         private void OnEnable()
-        {            
+        {
+            var window = (UnityChoseKunEditorWindow)EditorWindow.GetWindow(typeof(UnityChoseKunEditorWindow));
 #if UNITY_2020_1_OR_NEWER
             m_attachProfilerState = ConnectionUtility.GetConnectionState(this);
 #else
