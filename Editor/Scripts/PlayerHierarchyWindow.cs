@@ -44,7 +44,7 @@ namespace Utj.UnityChoseKun
         /// <summary>
         /// Hierarchyを表示する為のClass
         /// </summary>
-        [System.Serializable]
+        
         public class PlayerHierarchyWindow : EditorWindow
         {
             public static class Styles
@@ -69,10 +69,10 @@ namespace Utj.UnityChoseKun
             delegate void OnMessageFunc(string json);
 
 
-            [SerializeField] SearchField m_searchField;
-            [SerializeField] TreeViewState m_treeViewState;
+            SearchField m_searchField;
+            TreeViewState m_treeViewState;
             HierarchyTreeView m_hierarchyTreeView;
-            [SerializeField] HierarchyTreeView.SelectionChangedCB m_selectionChangedCB;
+            HierarchyTreeView.SelectionChangedCB m_selectionChangedCB;
 
 
 
