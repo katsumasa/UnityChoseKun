@@ -7,12 +7,12 @@ using UnityEngine;
 namespace Utj.UnityChoseKun.Engine
 {
 
-    public class AssetPlayer<A, B> : BasePlayer
+    public static class AssetPlayer<A, B>
         where A : UnityEngine.Object
         where B : ObjectKun, new()
     {
         static Dictionary<int, A> m_assetDict;
-        public Dictionary<int, A> assetDict
+        public static Dictionary<int, A> assetDict
         {
             get
             {
@@ -33,33 +33,10 @@ namespace Utj.UnityChoseKun.Engine
         {
             return (T)typeof(T).GetConstructor(new Type[] { typeof(ARG) }).Invoke(new object[] { arg });
         }
+               
 
 
-        UnityChoseKun.MessageID m_messageID;
-
-
-
-        public AssetPlayer(UnityChoseKun.MessageID messageID)
-        {
-            m_messageID = messageID;
-        }
-
-        ~AssetPlayer()
-        {
-            for (var i = 0; i < assetDict.Count; i++)
-            {
-                if (assetDict[i] != null)
-                {
-                    //Object.Destroy(assetDict[i]);
-                    assetDict[i] = null;
-                }
-            }
-            assetDict.Clear();
-            assetDict = null;
-        }
-
-
-        public void OnMessageEventPull(BinaryReader binaryReader)
+        public static void OnMessageEventPull(BinaryReader binaryReader)
         {
             var assetPacket = new AssetPacket<B>();
             assetPacket.Deserialize(binaryReader);
@@ -76,11 +53,18 @@ namespace Utj.UnityChoseKun.Engine
                 assetKuns[i++] = Constructer<B, A>(asset);                
             }
             assetPacket = new AssetPacket<B>(assetKuns);
-            UnityChoseKunPlayer.SendMessage<AssetPacket<B>>(m_messageID, assetPacket);
+
+            var messageID = UnityChoseKun.MessageID.SpritePull;
+            if (typeof(A)  ==  typeof(Sprite))
+            {
+                messageID = UnityChoseKun.MessageID.SpritePull;
+            }
+
+            UnityChoseKunPlayer.SendMessage<AssetPacket<B>>(messageID, assetPacket);
         }
 
 
-        public void GetAllAssetInResources()
+        public static void GetAllAssetInResources()
         {
             var assets = Resources.FindObjectsOfTypeAll<A>();
             foreach (var asset in assets)

@@ -9,13 +9,13 @@ namespace Utj.UnityChoseKun.Engine
     /// <summary>
     /// 
     /// </summary>
-    public class ComponentPlayer :  BasePlayer
+    public static class ComponentPlayer
     {                    
         /// <summary>
         /// 
         /// </summary>
         /// <param name="binaryReader"></param>
-        public void OnMessageEventPull(BinaryReader binaryReader)
+        public static void OnMessageEventPull(BinaryReader binaryReader)
         {            
             UnityChoseKunPlayer.SendMessage<SceneManagerKun>(UnityChoseKun.MessageID.GameObjectPull, new SceneManagerKun(true));
         }
@@ -25,7 +25,7 @@ namespace Utj.UnityChoseKun.Engine
         /// 
         /// </summary>
         /// <param name="bytes"></param>
-        public void OnMessageEventPush(BinaryReader binaryReader)
+        public static void OnMessageEventPush(BinaryReader binaryReader)
         {
             var gameObjectKun = new GameObjectKun();
             gameObjectKun.Deserialize(binaryReader);
@@ -42,7 +42,6 @@ namespace Utj.UnityChoseKun.Engine
                     }
                 }
             }
-
         }
 
         
@@ -52,7 +51,7 @@ namespace Utj.UnityChoseKun.Engine
         /// <param name="gameObject"></param>
         /// <param name="instanceID"></param>
         /// <returns></returns>
-        private GameObject FindGameObjectInChildren(GameObject gameObject,int instanceID)
+        private static GameObject FindGameObjectInChildren(GameObject gameObject,int instanceID)
         {
             if(gameObject == null){
                 return null;

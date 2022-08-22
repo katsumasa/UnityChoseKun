@@ -5,13 +5,13 @@ namespace Utj.UnityChoseKun.Engine
     /// <summary>
     /// 
     /// </summary>
-    public class ScreenPlayer : BasePlayer
+    public static class ScreenPlayer
     {
         /// <summary>
         /// 
         /// </summary>
         /// <param name="binaryReader"></param>
-        public void OnMessageEventPull(BinaryReader binaryReader)
+        public static void OnMessageEventPull(BinaryReader binaryReader)
         {
             var screenKun = new ScreenKun(true);
             UnityChoseKunPlayer.SendMessage<ScreenKun>(UnityChoseKun.MessageID.ScreenPull,screenKun);
@@ -22,7 +22,7 @@ namespace Utj.UnityChoseKun.Engine
         /// 
         /// </summary>
         /// <param name="binaryReader"></param>
-        public void OnMessageEventPush(BinaryReader binaryReader)
+        public static void OnMessageEventPush(BinaryReader binaryReader)
         {            
             var screenKun = new ScreenKun();
             screenKun.Deserialize(binaryReader);

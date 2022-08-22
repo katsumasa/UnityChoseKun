@@ -7,9 +7,9 @@ namespace Utj.UnityChoseKun.Engine
     /// <summary>
     /// 
     /// </summary>
-    public class SystemInfoPlayer : BasePlayer
+    public static class SystemInfoPlayer
     {
-        public void OnMessageEventPull(BinaryReader binaryReader)
+        public static void OnMessageEventPull(BinaryReader binaryReader)
         {
             UnityChoseKunPlayer.SendMessage<SystemInfoKun>(UnityChoseKun.MessageID.SystemInfoPull, new SystemInfoKun(true));
         }

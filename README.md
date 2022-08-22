@@ -5,29 +5,17 @@
 
 [English Ver. README](Documentation~/UnityChoseKun.md)
 
-## はじめに
+## 概要
 
 Unityで開発したアプリを実機上で実行している時に、GameObjectの内容をほんの少しだけ変更したいだけなのに、ビルド完了迄長時間待たされることで、貴重な開発時間を無駄にして悔しい思いをした事は無いでしょうか。
 UnityChoseKunは再ビルドを行うこと無く、UnityEditor上で開発機で実行中のアプリの調整を行う為のEditor拡張です。
-開発機が物理的に遠い場所にある人向けに実機で時以降中の画面をUnity Editorで表示する機能も保有しています。
 
-## 概要
-
-実機上で実行しているアプリ内の画面をUnityEditorで表示たり、GameObjectをUnityEditorから調整する事が出来るEditor拡張です。
-
-実機で実行中のアプリ内のComponentを調整</br>
 <img width="800" alt="UnityChoseKunDemo02" src="https://user-images.githubusercontent.com/29646672/137236126-f7b9c064-3dcc-41d5-9ce6-9f9175d9d315.gif">
-
-実機(開発機)の画面をUnityEditorに表示</br>
-<img width="800" alt="UnityChoseKunDemo03" src="https://user-images.githubusercontent.com/29646672/137236618-7539f774-b200-45e9-a4d5-87e7ceb6b208.gif">
 
 ## このプロジェクトで出来ること
 
-本ツールは主に下記の３機能から構成されています。
-
-- 実機で再生されている画面を表示する(Player View)
 - 実機で再生されているSceneをHierarchy形式で表示(Player Hierarchy)
-- GameObjectに含まれるComponentの内容を編集し実機側へ反映させる。(Player Inspector)
+- GameObjectに含まれるComponentの内容等、アプリケーションの内容を編集し実機側へ反映させる。(Player Inspector)
 
 ## 動作環境
 
@@ -35,7 +23,7 @@ UnityChoseKunは再ビルドを行うこと無く、UnityEditor上で開発機�
 
 - Unityのバージョン
   - Unity2018.4.26f1 (一部、機能制限あり)
-  - Unity2019.4.11f1
+  - Unity2019.4.40f1
   - Unity2020.2.2f1
   - Unity2020.3.27f1
   - Unity2021.2.15f1
@@ -156,201 +144,152 @@ Classの追加方法に関してはこちらをご覧ください：
 
 - 万が一*不測の事態が起きても一切保証は出来ませんのでご注意下さい。*
 - Script Debuggingと併用できません。必ずScript DebuggingをOFFにした上でビルドを行ってください。
-- Player Viewを有効にすると*端末が高温になります。* また、画面解像度に応じてCPUリソースを消費します。PlayerViewの再生を行う前に、Player InspectorのScreenから画面解像度を変更することをお勧めします。Pixel4XLの場合、画面解像度を604x288迄落とした場合、CPUリソースにほぼ消費せずに実行できているようでした。
 - Texture,Shaderに関しては内容の確認のみで、変更を行うことは出来ません。
 - Materialが参照しているShader/Textureを変更する為にはTexture/ShaderのPullを先に実行する必要があります。
 - Unity2018では以下の機能に対応していません。
   - Materialが参照しているTextureの差し替え
-  - PlayerViewのAsync GPU Readback機能
-  
-  - ~~DeviceとUnityChoseKunが接続したままの状態で、UnityEditorを終了させると`EditorConnection.instance.DisconnectAll()`内でクラッシュが発生します。これを防ぐ為には、UnityChoseKunの接続先をEditorに変更するなどしてDeviceとの接続を解除する必要があります。~~
-  DisconectAll()の実行をコメントアウトしました。これでしばらく様子をみます。
 
-## 使い方
+## セットアップ
 
-本リポジトリの内容を組込み先のUnityProjectのAssetフォルダ以下に丸々配置して下さい。
+UnityChoseKunは別途RemoteConnectパッケージを使用します。UnityChoseKunと合わせて取得して下さい。
+取得したパッケージを任意のUnityプロジェクトへ追加することでセットアップは完了です。
+
+### パッケージの取得方法
+
+UnityChoseKunはGitHubのリポジトリで管理されています。
+セットアップ方法にはいくつかありますが、PackageManagerから取得する方法がもっとも簡単でお勧めです。
+
+#### コンソールからリポジトリを取得する
+
+コンソールからリポジトリを取得する場合、下記のコマンドを実行します。
+
+```:console
+git clone https://github.com/katsumasa/RemoteConnect.git
+git clone https://github.com/katsumasa/UnityChoseKun.git
+```
+
+#### GitHubから直接取得する
+
+1. Webブラウザーで[UnityChoseKun](https://github.com/katsumasa/UnityChoseKun)と[RemotoConnect](https://github.com/katsumasa/RemoteConnect)のWebページを開く
+2. 画面右上緑色の`Code`と記述されているプルダウンメニューから`Download ZIP`を選択しZIPファイルをダウンロード
+3. ZIPファイルを解凍しUnityProjectのAssetフォルダ以下へ配置する。
+
+#### [お勧め]PackageManagerから取得する
+
+1. `Window > Package Manager`でPackage Managerを開く
+2. Package Manager左上の`+`のプルダウンメニューから`Add package form git URL...`を選択する
+3. ダイアログへhttps://github.com/katsumasa/UnityChoseKun.git を設定し、`Add`ボタンを押す
+4. Package Manager左上の`+`のプルダウンメニューから`Add package form git URL...`を選択する
+5. ダイアログへhttps://github.com/katsumasa/UnityChoseKun.git を設定し、`Add`ボタンを押す
+
+<img width="800" alt="image" src="https://user-images.githubusercontent.com/29646672/183788409-3c1e745a-ac84-49f0-96be-3c4d26ed369f.png">
 
 ### アプリケーションビルド時の設定
 
-- 調整を行うSceneに[UnityChoseKun.prefab](https://github.com/katsumasa/UnityChoseKun/blob/master/Player/Prefabs/UnityChoseKun.prefab)を配置してからアプリをビルドする必要があります。
-- [Development BuildとAutoconnect Profiler](https://docs.unity3d.com/ja/current/Manual/BuildSettingsStandalone.html)にチェックを入れてる必要があります。
-- [Scripting BackEnd](https://docs.unity3d.com/ja/2018.4/Manual/windowsstore-scriptingbackends.html)にはIL2CPPを指定する必要があります。
+- 調整を行うSceneに[UnityChoseKun.prefab](https://github.com/katsumasa/UnityChoseKun/blob/master/Player/Prefabs/UnityChoseKun.prefab)を配置する。
+- [Development BuildとAutoconnect Profiler](https://docs.unity3d.com/ja/current/Manual/BuildSettingsStandalone.html)にチェックを入れる。
+- URPなどPackageManagerで管理されているClassの調整を行う場合、[Scripting BackEnd](https://docs.unity3d.com/ja/2018.4/Manual/windowsstore-scriptingbackends.html)にはMonoを指定する必要があります。
 
-### 機能紹介
+## 機能紹介
 
-#### PlayerViewer
+### Player Hierarchy
 
-実機で表示している内容をUnityEditor上で再生するViewerです。
+EditorのHierarchy同様にGameObjectの親子関係を変更したり、右クリックからのモーダルダイヤログでGameObjectを生成したり、基本的なComponentを追加することが出来ます。
+Window > UTJ > UnityChoseKun > Player Hierarchyより起動します。
 
-<img width="800" alt="PlayerView" src="https://user-images.githubusercontent.com/29646672/137237372-637a0a77-5913-4bfc-835e-03737e0a5013.png">
+<img width="400" alt="image" src="https://user-images.githubusercontent.com/29646672/137240924-d089e4b6-9ff7-4bbe-ba31-f19cc7459aca.jpg">
 
-##### 起動方法
-
-MenuからWindow->UnityChoseKun->Player ViewでPlayerView Windowが表示されます。
-
-##### 操作方法
-
-###### Connect To
-
-接続先のデバイスを指定します。接続の仕組みはUnityProfilerと共有していますので、どちらかの接続先を切り替えると、もう片方の接続先も切り替わります。
-
-<img width="20" alt="PlayIcon" src="https://user-images.githubusercontent.com/29646672/137236748-d4c3ad04-c66c-4e42-81f4-547649720f02.png"> 再生の開始/終了</br>
-<img width="20" alt="RecIcon" src="https://user-images.githubusercontent.com/29646672/137236785-25596da8-ba35-4cf9-a622-5f2e014baa8a.png"> 録画の開始/終了</br>
-<img width="20" alt="ScreenShotIcon" src="https://user-images.githubusercontent.com/29646672/137236826-10a97a17-40b3-41c8-affd-d499e64e7475.png">スクリーンショットを保存する</br>
-<img width="20" alt="SaveFolderIcon" src="https://user-images.githubusercontent.com/29646672/137236850-d88a79ec-0e32-46a8-97cd-d736020dd659.png">録画結果の保存先を指定する</br>
-
-###### Enable Async GPU Readback
-
-[Async GPU Readback](https://docs.unity3d.com/ja/2018.4/ScriptReference/Rendering.AsyncGPUReadback.html)の機能を使用して画像処理を行う為、MainThareadの負荷が軽減される場合があります。
-
-###### Refresh Interval
-
-画像の転送処理を行う間隔を指定します。
-間隔を開けることでCPU負荷が軽減されます。
-
-###### Record Folder
-
-録画時にファイルを書き出す先のフォルダー
-
-###### Record Count Max
-
-録画に何コマ迄録画するかを指定出来ます。
-このコマまで録画を行うと録画は自動的に停止します。
-
-###### Record Count
-
-録画内容をSeekすることが出来ます。
-
-<img width="800" alt="UnityChoseKunDemo04" src="https://user-images.githubusercontent.com/29646672/137240645-7e4f1d5d-1214-4247-b846-971e09f852d1.gif">
-
-##### 注意事項
-
-- Player Viewerは非常に負荷の高い処理です。Player Inspector->Screen->SetScreenからwidthとheightを調整したり、Refresh Intervalで実行間隔を調整してから再生を実行することを*オススメ*します。
-
-#### Player Hierarchy
-
-![HierarchyView](https://user-images.githubusercontent.com/29646672/137240924-d089e4b6-9ff7-4bbe-ba31-f19cc7459aca.jpg)
-
-
-
-##### Reload
+#### Reload
 
 実機で実行されているアプリケーションのScene情報を分析し、Hierarchy Treeとして展開します。
 まず初めにReloadを実行し、Sceneの情報を取得することからスタートします。
-GameObjectが数万個存在するような複雑なSceneの場合、Reloadには時間がかかります。
 
-EditorのHierarchy同様にGameObjectの親子関係を変更したり、右クリックからのモーダルダイヤログでGameObjectを生成したり、基本的なComponentを追加することが出来ます。
+##### *NOTE*
 
-*NOTE* </br>
-アプリケーションに含まれていないComponentを追加するとエラーとなります。
+- GameObjectが数万個存在するような複雑なSceneの場合、Reloadには時間がかかることに注意して下さい。
+- アプリケーションに含まれていないComponentを追加するとエラーとなります。
 
-#### Player Inspector
+### Player Inspector
 
-実機で実行しているアプリケーションのオブジェクト及びUnithEngine内のいくつかのClassの内容を編集することが出来るWindowsです。
+実機で実行しているアプリケーションに対する情報の表示や内容の編集を行う為のWindowです。
+プルダウンメニューから表示する内容を切り替えて使用します。  
+Window > UTJ > UnityChoseKun > Player Inspectorより起動します。
 
-##### Inspector
+<img width="400" alt="image" src="https://user-images.githubusercontent.com/29646672/183793924-afa0646c-5348-4c48-a19a-2934cc9bf5f3.png">
+
+#### Inspector
 
 Player Hierarchyで選択したGameObjectが持つComponentの内容を編集します。
 すべてのComponetの内容を編集出来る訳ではなく、現時点では一部のComponentに限定されています。
 非対応のComponentに関しては、Componentのenableのみ編集可能となっています。
 
-![InspectorView](https://user-images.githubusercontent.com/29646672/137236992-9d2f6619-a2bd-4d03-b363-ac11fe5ac99c.jpg)
-
+<img width="400" alt="image" src="https://user-images.githubusercontent.com/29646672/183794558-9c8eccb9-9c4c-41e7-902a-71f1c27eb340.png">
 
 - [Connect To] : 接続先のデバイスを選択します。 Profilerと共有しています。
 - [Add Component] : GameObjectにComponentを追加します。(未実装)
 
-##### Component
+#### UnityEngine.Application
 
-![Inspector_Component](https://user-images.githubusercontent.com/29646672/137237020-38558ca0-e30f-4144-b3f1-fef26a69664f.jpg)
+<img width="400" alt="image" src="https://user-images.githubusercontent.com/29646672/183864921-576f98e7-012f-42a0-8d72-b70e17b9f89c.png">
+
+Application Classのstaticメンバーに関する内容を確認することが出来ます。（編集は出来ません)
+また、Application.Quit()を実行することが可能です。
+
+- [Pull] : Application Classのstaticメンバーを取得します。
+- [Quit] : Application.Quite()を実行します。
+
+<img width="400" alt="image" src="https://user-images.githubusercontent.com/29646672/183794833-2095509b-baf6-4bf8-a4ee-326b01c525e4.png">
+
+### UnityEngine.Android.Permisson
+
+プラットフォームがAndroidの場合、パーミッションの内容を確認することが出来ます。（編集は出来ません)
+
+<img width="400" alt="image" src="https://user-images.githubusercontent.com/29646672/183795746-54fefac2-22a5-4097-8b4c-435ba7d2839f.png">
+
+- [Pull] : Android.Permissonのメンバーを取得します。
+
+#### UnityEngine.Component
+
+<img width="400" alt="image" src="https://user-images.githubusercontent.com/29646672/183796160-8bf2b10a-78ba-4b8b-b5cc-21ed4b071bfb.png">
 
 Scene上に存在するComponentの種類と数をカウントします。
 本Editor拡張で未対応なComponentは規定Classにカウントします。
 
-##### Texture
+- [Analayze] : Player Hierarchyの情報からScene内のGameObjectに含まれているComponentを種類別にカウントします
 
-![Inspector_Texture](https://user-images.githubusercontent.com/29646672/137237036-ab8d310d-830b-415e-9e5a-a106b6a785e7.png)
+#### UnityEngine.QualitySettings
 
-実行中のアプリからScene内から参照されているTextureとResourcesに含まれているTextureの一覧表示します。
+<img width="400" alt="image" src="https://user-images.githubusercontent.com/29646672/183796486-5b495e59-b575-4240-ba53-044ee76abefb.png">
 
-- [Pull] : Scene上のGameObjectから参照及びResourcesに含まれるTextureの一覧を取得します。
-  
-※*Materialが参照しているTextureを変更する場合は、事前にPullを実行しておく必要があります。*
+QualitySettingの内容を確認することができます。（編集は出来ません)
 
-##### Sprite
+- [Pull] : QualitySettingsのメンバーを取得します。
 
-![image](https://user-images.githubusercontent.com/29646672/124558681-d4f07380-de75-11eb-9db4-8bc46445f2b7.png)
+#### UnityEngine.Rendering.GraphicsSettings
 
-実機で実行されているアプリのScene上から参照されているSprite及びResourcesに含まれるSpriteの一覧を表示します。
-SpriteRendererのSpriteを変更する場合事前にPullを実行する必要があります。
+<img width="400" alt="image" src="https://user-images.githubusercontent.com/29646672/183797004-c39e487e-7192-4fa7-a41b-956e6e1ab2de.png">
 
-#### Sorting Layer
+GraphicsSettingsの内容を確認することができます。（編集は出来ません）
 
-![image](https://user-images.githubusercontent.com/29646672/124559206-6f50b700-de76-11eb-92b0-2456ce9d6bdc.png)
+- [Pull] : GraphicsSettingsのメンバーを取得します。
 
-実機上の[SortingLayer.layers](https://docs.unity3d.com/ja/current/ScriptReference/SortingLayer-layers.html)を取得します。
-SpriteRendererのSortingLayerを変更する場合、事前にPULLを実行する必要があります。
+##### UnityEngine.Rendering.OnDemandRendering
 
-##### Shader
+<img width="400" alt="image" src="https://user-images.githubusercontent.com/29646672/183797592-040a4d0b-fb93-47ea-982b-8d700e58eb47.png">
 
-![Inspector_Shader](https://user-images.githubusercontent.com/29646672/137237071-3a32615f-f566-492a-9c09-9cd56766b8fa.png)
+OnDemandRenderingのパラメーターの内容の表示と編集を行うことが可能です。
 
-実機で実行されているアプリのScene上から参照されているShader及びResourcesに含まれるShaderの一覧を表示します。
-
-- [Pull] : Scene上のGameObjectから参照及びResourcesに含まれるShaderの一覧を取得します。
-
-※*Materialが参照しているShaderを変更する場合は、事前にPullを実行しておく必要があります。*
-
-##### Screen
-
-![Inspector_Screen](https://user-images.githubusercontent.com/29646672/137237098-7ca68dd4-42d9-42f2-acd9-887429bfbada.jpg)
-
-Screen Classのstaticメンバーに関する内容を編集することが出来ます。
-
-- [Pull] : Screen Classのstaticメンバーを取得します。
-- [Push] : 編集した内容を実機上に書き戻します。
-
-##### Time
-
-![Inspector_Time](https://user-images.githubusercontent.com/29646672/137237225-6cfadb92-41c3-4a04-84b4-eb2bf6c5940e.jpg)
-
-Time Classのstaticメンバーに関する内容を編集することが出来ます。
-
-- [Pull] : Time Classのstaticメンバーを取得します。
-- [Push] : 編集した内容を実機上に書き戻します。
-
-##### Application
-
-<img width="800" alt="Inspector_Application" src="https://user-images.githubusercontent.com/29646672/137237244-14fe2c38-e81d-4817-8eda-74bf5ab00661.png">
-
-Application Classのstaticメンバーに関する内容を編集することが出来ます。
-また、Application.Quit()を実行することが可能です。
-
-- [Pull] : Application Classのstaticメンバーを取得します。
-- [Push] : 編集した内容を実機へ上書きします。
-- [Quit] : Application.Quite()を実行します。
-
-##### Android
-
-<img width="800" alt="Inspector_AndroidView" src="https://user-images.githubusercontent.com/29646672/137237284-3a9aa132-6794-464f-9cc3-b4995065c734.jpg">
-
-Androidデバイス固有の機能を編集することが出来ます。
-
-##### QualitySettings
-
-<img width="800" alt="QualitySettingsView" src="https://user-images.githubusercontent.com/29646672/137237300-f2db3084-1dc4-4ba3-bd17-870af7db40f9.jpg">
-
-QualitySettingを編集することが出来ます。
-
-##### OnDemandRendering
-
-renderFrameInterval を調整することが出来ます。
-Home画面等画面の動きが激しく無い場合、値を調整することで、バッテリー消費を抑えることが期待出来ます。
+- [renderFrameInterval] : 現在のフレームレートの間隔を取得または設定します。Application.targetFrameRateまたはQualitySettings.vSyncCountの値にレンダリングを戻すには、これを0または1に設定します。
 
 #### ScalableBufferManager
 
+<img width="385" alt="image" src="https://user-images.githubusercontent.com/29646672/183798870-74027094-e9ac-4a57-a213-c23cb9c55deb.png">
+
 ScalableBufferManagerを編集することが出来ます。
-この機能を使用する場合、下記の条件を満たしている必要があります。
+
+- [Pull] : ScalableBufferManagerのパラメーターを取得します。
+
+*NOTE*:この機能を使用する場合、下記の条件を満たしている必要があります。  
 
 - Project Settings -> `Enable Frame Timing Stats`にチェックを入れた状態でアプリケーションをビルドしている。
 - CameraもしくはRenderTextureの[Allow Dynamic Resolution](https://docs.unity3d.com/ja/2018.4/uploads/Main/DynamicResolution.png)が有効になっている。
@@ -361,6 +300,85 @@ ScalableBufferManagerを編集することが出来ます。
   - iOS/tvOS (Metal のみ)
   - Android (Vulkan のみ)
 
-## 以上、FBやコメントを受けつけております
+##### UnityEngine.Screen
 
-## _木村 勝将：katsumasa@unity3d.com_
+Screen Classのstaticメンバーに関する内容を編集することが出来ます。
+
+<img width="400" alt="image" src="https://user-images.githubusercontent.com/29646672/183799340-576bbf10-1d98-4193-8451-d54a7fa1ae9d.png">
+
+- [Pull] : Screen Classのstaticメンバーを取得します。
+- [Push] : 編集した内容を実機上に書き戻します。
+
+##### UnityEngine.Shader
+
+アプリケーションから参照されているShader及びResourcesに含まれるShaderの一覧を表示します。
+
+<img width="400" alt="image" src="https://user-images.githubusercontent.com/29646672/183800592-298c8320-3ca9-41a1-aa63-b30509db0a3b.png">
+
+- [Pull] : Scene上のGameObjectから参照及びResourcesに含まれるShaderの一覧を取得します。
+
+※*Materialが参照しているShaderを変更する場合は、事前にPullを実行しておく必要があります。*
+
+#### UnityEngine.SortingLayer
+
+実機上の[SortingLayer.layers](https://docs.unity3d.com/ja/current/ScriptReference/SortingLayer-layers.html)を取得します。
+
+<img width="385" alt="image" src="https://user-images.githubusercontent.com/29646672/183801143-980cabdf-785e-416b-b8f8-3d4485c83138.png">
+
+- [Pull] : アプリケーションで使用されているSorting Layerの値を取得します。
+
+※SpriteRendererのSortingLayerを変更する場合、事前にPULLを実行する必要があります。
+
+##### UnityEngine.Sprite
+
+実機で実行されているアプリのScene上から参照されているSprite及びResourcesに含まれるSpriteの一覧を表示します。
+
+<img width="400" alt="image" src="https://user-images.githubusercontent.com/29646672/183801515-e9023ac3-ffde-497f-9bf0-73abacd63c2b.png">
+
+- [Pull] : アプリケーションで使用されているSpriteの一覧を取得します。
+
+※SpriteRendererのSpriteを変更する場合事前にPullを実行する必要があります。
+
+#### UnityEngine.SystemInfo
+
+[SystemInfo](https://docs.unity3d.com/ja/current/ScriptReference/Device.SystemInfo.html)のメンバーの値を取得します。
+
+<img width="400" alt="image" src="https://user-images.githubusercontent.com/29646672/183801676-db187c2c-78b9-4dc0-87e8-6f6cda341808.png">
+
+- [Pull] : 実行中のアプリケーションからSystemInfoのメンバーの値を取得します。
+
+##### UnityEngine.Texture
+
+Scene内から参照されているTextureとResourcesに含まれているTextureの一覧表示します。
+
+<img width="400" alt="image" src="https://user-images.githubusercontent.com/29646672/183800913-c036d071-1c75-4d69-929b-3327c1f0b09a.png">
+
+- [Pull] : Scene上のGameObjectから参照及びResourcesに含まれるTextureの一覧を取得します。
+  
+※*Materialが参照しているTextureを変更する場合は、事前にPullを実行しておく必要があります。*
+
+##### UnityEngine.Time
+
+<img width="385" alt="image" src="https://user-images.githubusercontent.com/29646672/183802337-3cd64b21-8b27-4111-b4b8-8b575e550ab5.png">
+
+[Time](https://docs.unity3d.com/ja/current/ScriptReference/Time.html) Classのstaticメンバーに関する内容を編集することが出来ます。
+
+- [Pull] : Time Classのstaticメンバーを取得します。
+- [Push] : 編集した内容を実機上に書き戻します。
+
+※編集可能なメンバーはRead Only以外のメンバーに限定されます。詳しくはスクリプトリファレンスをご確認下さい。
+
+## FAQ
+
+### [UnityPlayerSync](https://github.com/katsumasa/UnityPlayerSync)と[UnityChoseKun](https://github.com/katsumasa/UnityChoseKun)の違いを教えて下さい。
+
+UnityChoseKunはアプリケーション上のHierarchyの情報及び必要最低限のComponentの情報を取得し、その情報をアプリケーションへダイレクトに反映し、UnityPlayerSyncはアプリケーションのHierarchyをUnityEditor上にそのまま再現し、変更された内容をアプリケーションに反映します。
+その為、UnityPlayerSyncはUnityChoseKunよりも得られる情報量が多い一方、アプリケーションとUnityEditorの同期にかかる時間はUnityChoseKunの方が短くなっています。
+
+例えば、アプリケーションのパラメーターを調整してパフォーマンスチューニングや見た目の調整を行うような用途であればUnityChoseKunが適しています。
+一方、UnityPlayerSyncは通常のUnityEditorのワークフローと殆ど変わらないGUIで操作することが出来る為、エンジニア以外のクリエーターでも直観的に操作が出来るというメリットがあります。
+
+## その他
+
+- 要望・ご意見・不具合に関しては[Issue](https://github.com/katsumasa/UnityChoseKun/issues)から報告をお願いします。約束は出来ませんが可能な限り対応します。
+- 不具合報告に関してはそれを再現する為のプロジェクトの添付及び再現手順などの記述をお願いします。こちらで再現が取れない場合、対応出来ない場合があります。

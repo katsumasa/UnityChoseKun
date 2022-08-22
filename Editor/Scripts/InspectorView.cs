@@ -161,14 +161,16 @@ namespace Utj.UnityChoseKun
 
             public InspectorView()
             {
+#if false
 #if UNITY_2019_1_OR_NEWER
                 if (!EditorWindow.HasOpenInstances<PlayerHierarchyWindow>())
 #else
-            if (!HasOpenInstances<PlayerHierarchyWindow>())
+                if (!HasOpenInstances<PlayerHierarchyWindow>())
 #endif
                 {
                     PlayerHierarchyWindow.Create();
                 }
+#endif
                 var window = (PlayerHierarchyWindow)EditorWindow.GetWindow(typeof(PlayerHierarchyWindow));
                 if (window != null)
                 {

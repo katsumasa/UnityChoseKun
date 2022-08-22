@@ -92,10 +92,6 @@ namespace Utj.UnityChoseKun
             {
                 UnityChoseKunEditor.SendMessage(UnityChoseKun.MessageID.AndroidPull);
             }
-            if (GUILayout.Button("Push")) {
-                UnityChoseKunEditor.SendMessage<AndroidKun>(UnityChoseKun.MessageID.AndroidPush, androidKun);
-                
-            }
             EditorGUILayout.EndHorizontal();
 
         }
