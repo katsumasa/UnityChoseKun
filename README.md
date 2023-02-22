@@ -10,7 +10,12 @@
 Unityで開発したアプリを実機上で実行している時に、GameObjectの内容をほんの少しだけ変更したいだけなのに、ビルド完了迄長時間待たされることで、貴重な開発時間を無駄にして悔しい思いをした事は無いでしょうか。
 UnityChoseKunは再ビルドを行うこと無く、UnityEditor上で開発機で実行中のアプリの調整を行う為のEditor拡張です。
 
-<img width="800" alt="UnityChoseKunDemo02" src="https://user-images.githubusercontent.com/29646672/137236126-f7b9c064-3dcc-41d5-9ce6-9f9175d9d315.gif">
+<img width="852" alt="UnityChoseKunDemo02" src="https://user-images.githubusercontent.com/29646672/137236126-f7b9c064-3dcc-41d5-9ce6-9f9175d9d315.gif">
+
+## Demo
+
+https://user-images.githubusercontent.com/29646672/220570479-85ea8eff-75cf-401b-92bb-4cb5ae4cd205.mp4
+
 
 ## このプロジェクトで出来ること
 
