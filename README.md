@@ -33,6 +33,7 @@ https://user-images.githubusercontent.com/29646672/220570479-85ea8eff-75cf-401b-
   - Unity2020.3.27f1
   - Unity2021.2.15f1
   - Unity2021.3.1f1
+  - Unity2022.3.0f1
 - プラットフォーム
   - Android
     - Pixel3XL
