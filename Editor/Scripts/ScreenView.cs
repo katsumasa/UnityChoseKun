@@ -80,7 +80,16 @@ namespace Utj.UnityChoseKun
                     EditorGUI.indentLevel++;
                     EditorGUILayout.IntField("width", screenKun.currentResolutionWidth);
                     EditorGUILayout.IntField("height", screenKun.currentResolutionHeight);
+#if UNITY_2022_1_OR_NEWER
+                    EditorGUILayout.LabelField("RefreshRate");
+                    EditorGUI.indentLevel++;
+                    EditorGUILayout.LongField("numerator", screenKun.currentRefreshRateRatio.numerator);
+                    EditorGUILayout.LongField("denominator", screenKun.currentRefreshRateRatio.denominator);
+                    EditorGUI.indentLevel--;
+
+#else
                     EditorGUILayout.IntField("refreshRate", screenKun.currentResolutionRefreshRate);
+#endif
                     EditorGUI.indentLevel--;
                     EditorGUILayout.Space();
 
@@ -115,7 +124,15 @@ namespace Utj.UnityChoseKun
                                 EditorGUILayout.BeginHorizontal();
                                 EditorGUILayout.LabelField("width       " + screenKun.resolutions[i].width);
                                 EditorGUILayout.LabelField("height      " + screenKun.resolutions[i].height);
+#if UNITY_2022_1_OR_NEWER
+                                EditorGUILayout.LabelField("RefreshRate");
+                                EditorGUI.indentLevel++;
+                                EditorGUILayout.LongField("numerator", screenKun.resolutions[i].refreshRateRatio.numerator);
+                                EditorGUILayout.LongField("denominator", screenKun.resolutions[i].refreshRateRatio.denominator);
+                                EditorGUI.indentLevel--;
+#else
                                 EditorGUILayout.LabelField("refreshRate " + screenKun.resolutions[i].refreshRate);
+#endif
                                 EditorGUILayout.EndHorizontal();
                                 EditorGUILayout.Space();
                             }
@@ -134,7 +151,23 @@ namespace Utj.UnityChoseKun
                     screenKun.width = EditorGUILayout.IntField("width", screenKun.width);
                     screenKun.height = EditorGUILayout.IntField("height", screenKun.height);
                     screenKun.fullScreenMode = (FullScreenMode)EditorGUILayout.EnumPopup("fullScreenMode", screenKun.fullScreenMode);
+#if UNITY_2022_1_OR_NEWER
+                    EditorGUILayout.LabelField("RefreshRate");
+                    EditorGUI.indentLevel++;
+                    uint numerator = (uint)EditorGUILayout.LongField("numerator ", screenKun.preferredRefreshRateRatio.numerator);
+                    uint denominator = (uint)EditorGUILayout.LongField("denominator ", screenKun.preferredRefreshRateRatio.denominator);
+                    if (numerator != screenKun.preferredRefreshRateRatio.numerator || denominator != screenKun.preferredRefreshRateRatio.denominator)
+                    {
+                        var refreshRate = new RefreshRate();
+                        refreshRate.numerator = numerator;
+                        refreshRate.denominator = denominator;
+                        screenKun.preferredRefreshRateRatio = refreshRate;
+                    }
+
+                    EditorGUI.indentLevel--;
+#else
                     screenKun.preferredRefreshRate = EditorGUILayout.IntField("preferredRefreshRate", screenKun.preferredRefreshRate);
+#endif
                     EditorGUI.indentLevel--;
                     EditorGUILayout.Space();
                     EditorGUILayout.EndScrollView();

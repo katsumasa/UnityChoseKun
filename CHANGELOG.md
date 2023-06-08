@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.2.4] - 2023-06-08
+
+### Fixed
+    
+- ScreenViewでCutoutとResolutionが正しく表示されていなかった不具合を修正
+
+### Changed
+
+ - Unity2023対応
+
+
 ## [0.2.3] - 2022-08-10
 
 ### Fixed

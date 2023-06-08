@@ -7,14 +7,85 @@ namespace Utj.UnityChoseKun {
     public class ResolutionKun : ISerializerKun{
         [SerializeField] public int width;
         [SerializeField] public int height;
+#if UNITY_2022_1_OR_NEWER
+        [SerializeField] public RefreshRate refreshRateRatio;
+#else
         [SerializeField] public int refreshRate;
+#endif
 
 
         /// <summary>
         /// 
         /// </summary>
-        public ResolutionKun() : this(256, 256, 60) { }
+#if UNITY_2022_1_OR_NEWER
+        public ResolutionKun()
+        {
+            this.width = 256;
+            this.height = 256;
+            this.refreshRateRatio = new RefreshRate();
+            this.refreshRateRatio.numerator = 60;
+            this.refreshRateRatio.denominator = 0;
+        }
 
+        public ResolutionKun(int width, int height, RefreshRate refreshRateRatio)
+        {
+            this.width = width;
+            this.height = height;
+            this.refreshRateRatio = refreshRateRatio;            
+        }
+
+        public ResolutionKun(Resolution resolution) : this(resolution.width, resolution.height, resolution.refreshRateRatio) { }
+
+        public Resolution GetResolution()
+        {
+            var resolution = new Resolution();
+            resolution.width = width;
+            resolution.height = height;
+            resolution.refreshRateRatio = refreshRateRatio;
+            return resolution;
+        }
+
+        public virtual void Serialize(BinaryWriter binaryWriter)
+        {
+            binaryWriter.Write(width);
+            binaryWriter.Write(height);
+            binaryWriter.Write(refreshRateRatio.numerator);
+            binaryWriter.Write(refreshRateRatio.denominator);
+        }
+
+
+        public virtual void Deserialize(BinaryReader binaryReader)
+        {
+            width = binaryReader.ReadInt32();
+            height = binaryReader.ReadInt32();
+            refreshRateRatio = new RefreshRate();
+            refreshRateRatio.numerator = binaryReader.ReadUInt32();
+            refreshRateRatio.denominator = binaryReader.ReadUInt32();            
+        }
+
+        public override bool Equals(object obj)
+        {
+            var other = obj as ResolutionKun;
+            if (other == null)
+            {
+                return false;
+            }
+            if (!int.Equals(width, other.width))
+            {
+                return false;
+            }
+            if (!int.Equals(height, other.height))
+            {
+                return false;
+            }
+            if (!int.Equals(refreshRateRatio, other.refreshRateRatio))
+            {
+                return false;
+            }
+            return true;
+        }
+#else
+        public ResolutionKun() : this(256, 256, 60) { }
 
         /// <summary>
         /// 
@@ -29,18 +100,8 @@ namespace Utj.UnityChoseKun {
             this.refreshRate = refreshRate;
         }
 
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="resolution"></param>
         public ResolutionKun(Resolution resolution) : this(resolution.width, resolution.height, resolution.refreshRate) { }
-        
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
         public Resolution GetResolution()
         {
             var resolution = new Resolution();
@@ -51,10 +112,6 @@ namespace Utj.UnityChoseKun {
         }
 
 
-        /// <summary>
-        /// Serialize
-        /// </summary>
-        /// <param name="binaryWriter">BinaryWriter</param>
         public virtual void Serialize(BinaryWriter binaryWriter)
         {
             binaryWriter.Write(width);
@@ -62,11 +119,6 @@ namespace Utj.UnityChoseKun {
             binaryWriter.Write(refreshRate);
         }
 
-
-        /// <summary>
-        /// Deserialize
-        /// </summary>
-        /// <param name="binaryReader">BinaryReader</param>
         public virtual void Deserialize(BinaryReader binaryReader)
         {
             width = binaryReader.ReadInt32();
@@ -75,11 +127,6 @@ namespace Utj.UnityChoseKun {
         }
 
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
         public override bool Equals(object obj)
         {
             var other = obj as ResolutionKun;
@@ -101,7 +148,7 @@ namespace Utj.UnityChoseKun {
             }
             return true;
         }
-
+#endif       
 
         /// <summary>
         /// 

@@ -286,9 +286,24 @@ public class UnityChoseKunTest
     }
 
     [Test]
+    public void ScreenKunTest()
+    {
+        var screenKun = new ScreenKun(true);
+        SerializerKunTest<ScreenKun>(screenKun, new ScreenKun());
+    }
+
+    [Test]
     public void ResolutionKunTest()
     {
+#if UNITY_2022_1_OR_NEWER
+        var refreshRateRatio = new RefreshRate();
+        refreshRateRatio.numerator = 30;
+        refreshRateRatio.denominator = 1;
+        SerializerKunTest<ResolutionKun>(new ResolutionKun(128, 128, refreshRateRatio), new ResolutionKun());
+
+#else
         SerializerKunTest<ResolutionKun>(new ResolutionKun(128,128,30), new ResolutionKun());
+#endif
     }
 
 
