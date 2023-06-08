@@ -128,7 +128,9 @@ namespace Utj.UnityChoseKun
             (int)RenderingPath.Forward,
             (int)RenderingPath.DeferredShading,
             (int)RenderingPath.VertexLit,
+#if !UNITY_2022_1_OR_NEWER
             (int)RenderingPath.DeferredLighting
+#endif
         };
 
 
@@ -222,7 +224,7 @@ namespace Utj.UnityChoseKun
             public void DrawCullingMask()
             {
                 LayerMaskKun layerMaskKun = cameraKun.cullingMask;
-                EditorGUI.BeginChangeCheck();                
+                EditorGUI.BeginChangeCheck();
                 var cullingMask = LayerMaskKun.LayerMaskField(new GUIContent("Culling Mask"), layerMaskKun).value;
                 if (EditorGUI.EndChangeCheck())
                 {
@@ -453,25 +455,25 @@ namespace Utj.UnityChoseKun
 
 
             public override bool OnGUI()
-            {                
+            {
                 if (base.OnGUI())
                 {
 #if UNITY_2019_1_OR_NEWER
 
                     var additonalCameraKun = cameraKun.transformKun.gameObjectKun.GetComponentKun<UniversalAdditionalCameraDataKun>();
-                    if(additonalCameraKun == null)
+                    if (additonalCameraKun == null)
                     {
                         DrawCameraContents();
-                    } 
+                    }
                     else
                     {
-                        if(mUniversalAdditionalCameraDataView == null)
+                        if (mUniversalAdditionalCameraDataView == null)
                         {
-                            mUniversalAdditionalCameraDataView = new UniversalAdditionalCameraDataView();                            
+                            mUniversalAdditionalCameraDataView = new UniversalAdditionalCameraDataView();
                         }
                         mUniversalAdditionalCameraDataView.universalAdditionalCameraDataKun = additonalCameraKun;
                         mUniversalAdditionalCameraDataView.DrawContents();
-                    }                    
+                    }
 #else
                     DrawCameraContents();
 #endif
@@ -482,7 +484,7 @@ namespace Utj.UnityChoseKun
 
 
             void DrawCameraContents()
-            {             
+            {
                 using (new EditorGUI.IndentLevelScope())
                 {
                     DrawClearFlags();
@@ -498,7 +500,7 @@ namespace Utj.UnityChoseKun
                     DrawMSAA();
                     DrawDynamicResolution();
                     DrawTargetEye();
-                }             
+                }
             }
 
         }

@@ -32,7 +32,12 @@ namespace Utj.UnityChoseKun
             [SerializeField] bool m_billboardsFaceCameraPosition;
             [SerializeField] ColorSpace m_desiredColorSpace;
             [SerializeField] float m_lodBias;
-            [SerializeField] int m_masterTextureLimit;
+#if UNITY_2022_1_OR_NEWER
+            [SerializeField] public int m_globalTextureMipmapLimit;
+#else
+
+            [SerializeField] public int m_masterTextureLimit;
+#endif
             [SerializeField] int m_maximumLODLevel;
             [SerializeField] int m_maxQueuedFrames;
             [SerializeField] string[] m_names;
@@ -223,6 +228,20 @@ namespace Utj.UnityChoseKun
                 }
             }
 
+#if UNITY_2022_1_OR_NEWER
+            public static int globalTextureMipmapLimit
+            {
+                get
+                {
+                    return instance.m_globalTextureMipmapLimit;
+                }
+                set
+                {
+                    instance.m_globalTextureMipmapLimit = value;
+                    instance.m_dirty = true;
+                }
+            }
+#else
             public static int masterTextureLimit
             {
                 get
@@ -236,6 +255,7 @@ namespace Utj.UnityChoseKun
                     instance.m_dirty = true;
                 }
             }
+#endif
 
             public static int maximumLODLevel
             {
@@ -667,7 +687,11 @@ namespace Utj.UnityChoseKun
                     m_billboardsFaceCameraPosition = QualitySettings.billboardsFaceCameraPosition;
                     m_desiredColorSpace = QualitySettings.desiredColorSpace;
                     m_lodBias = QualitySettings.lodBias;
+#if UNITY_2022_1_OR_NEWER
+                    m_globalTextureMipmapLimit = QualitySettings.globalTextureMipmapLimit;
+#else
                     m_masterTextureLimit = QualitySettings.masterTextureLimit;
+#endif
                     m_maximumLODLevel = QualitySettings.maximumLODLevel;
                     m_maxQueuedFrames = QualitySettings.maxQueuedFrames;
                     m_names = QualitySettings.names;
@@ -717,7 +741,11 @@ namespace Utj.UnityChoseKun
                     QualitySettings.asyncUploadTimeSlice = m_asyncUploadTimeSlice;
                     QualitySettings.billboardsFaceCameraPosition = m_billboardsFaceCameraPosition;
                     QualitySettings.lodBias = m_lodBias;
+#if UNITY_2022_1_OR_NEWER
+                    QualitySettings.globalTextureMipmapLimit = m_globalTextureMipmapLimit;
+#else
                     QualitySettings.masterTextureLimit = m_masterTextureLimit;
+#endif
                     QualitySettings.maximumLODLevel = m_maximumLODLevel;
                     QualitySettings.maxQueuedFrames = m_maxQueuedFrames;
                     QualitySettings.particleRaycastBudget = m_particleRaycastBudget;
@@ -776,7 +804,11 @@ namespace Utj.UnityChoseKun
                 binaryWriter.Write(m_billboardsFaceCameraPosition);
                 binaryWriter.Write((int)m_desiredColorSpace);
                 binaryWriter.Write(m_lodBias);
+#if UNITY_2022_1_OR_NEWER
+                binaryWriter.Write(m_globalTextureMipmapLimit);
+#else
                 binaryWriter.Write(m_masterTextureLimit);
+#endif
                 binaryWriter.Write(m_maximumLODLevel);
                 binaryWriter.Write(m_maxQueuedFrames);
                 SerializerKun.Serialize(binaryWriter, m_names);
@@ -836,7 +868,12 @@ namespace Utj.UnityChoseKun
                 m_billboardsFaceCameraPosition = binaryReader.ReadBoolean();
                 m_desiredColorSpace = (ColorSpace)binaryReader.ReadInt32();
                 m_lodBias = binaryReader.ReadSingle();
+#if UNITY_2022_1_OR_NEWER
+                m_globalTextureMipmapLimit = binaryReader.ReadInt32();
+#else
                 m_masterTextureLimit = binaryReader.ReadInt32();
+#endif
+
                 m_maximumLODLevel = binaryReader.ReadInt32();
                 m_maxQueuedFrames = binaryReader.ReadInt32();
                 m_names = SerializerKun.DesirializeStrings(binaryReader);
@@ -924,10 +961,17 @@ namespace Utj.UnityChoseKun
                 {
                     return false;
                 }
+#if UNITY_2022_1_OR_NEWER
+                if(m_globalTextureMipmapLimit.Equals(clone.m_globalTextureMipmapLimit) == false)
+                {
+                    return false;
+                }
+#else
                 if (m_masterTextureLimit.Equals(clone.m_masterTextureLimit) == false)
                 {
                     return false;
                 }
+#endif
                 if (m_maximumLODLevel.Equals(clone.m_maximumLODLevel) == false)
                 {
                     return false;
