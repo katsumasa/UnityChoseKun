@@ -184,7 +184,7 @@ git clone https://github.com/katsumasa/UnityChoseKun.git
 
 1. `Window > Package Manager`でPackage Managerを開く
 2. Package Manager左上の`+`のプルダウンメニューから`Add package form git URL...`を選択する
-3. ダイアログへhttps://github.com/katsumasa/UnityChoseKun.git を設定し、`Add`ボタンを押す
+3. ダイアログへhttps://github.com/katsumasa/RemoteConnect.git を設定し、`Add`ボタンを押す
 4. Package Manager左上の`+`のプルダウンメニューから`Add package form git URL...`を選択する
 5. ダイアログへhttps://github.com/katsumasa/UnityChoseKun.git を設定し、`Add`ボタンを押す
 
