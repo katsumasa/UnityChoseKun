@@ -32,7 +32,7 @@ The following tasks can be performed in the UnityEditor
   - Unity2020.3.27f1
   - Unity2021.2.15f1
   - Unity2021.3.1f1
-  - Unity2023.3.0f1
+  - Unity2022.3.0f1
 - Platform
   - Android
     - Pixel3XL
