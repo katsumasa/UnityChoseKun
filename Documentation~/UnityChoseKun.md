@@ -95,6 +95,15 @@ Here is a step on how to add new component/class:
 - If you quit Unity Editor while the device and UnityChoseKun remain connected, crash will occur inside `EditorConnection.instance.DisconnectAll()`
 To prevent that, disconnect from the device by changing the access point of UnityChoseKun to the Editor.
 
+## Setup
+
+UnityChoseKun uses a separate RemoteConnect package. Please obtain it together with UnityChoseKun. Setup is completed by adding the obtained package to any Unity project.
+
+```
+git clone https://github.com/katsumasa/RemoteConnect.git
+git clone https://github.com/katsumasa/UnityChoseKun.git
+```
+
 ## How to use
 Place the entire contents of this repository under the Asset folder of the UnityProject.
 
