@@ -97,16 +97,7 @@ namespace Utj.UnityChoseKun
                 set { m_hierarchyTreeView = value; }
             }
 
-
-            public HierarchyTreeView.SelectionChangedCB selectionChangedCB
-            {
-                private get { return m_selectionChangedCB; }
-                set
-                {
-                    m_selectionChangedCB = value;
-                    hierarchyTreeView.selectionChangeCB = value;
-                }
-            }
+            
 
             public SceneManagerKun sceneManagerKun
             {
@@ -176,7 +167,10 @@ namespace Utj.UnityChoseKun
 
                 if (hierarchyTreeView != null)
                 {
-                    hierarchyTreeView.selectionChangeCB = selectionChangedCB;
+                    if (InspectorView.instance != null)
+                    {
+                        hierarchyTreeView.selectionChangeCB = InspectorView.instance.SelectionChangedCB;
+                    }
                     hierarchyTreeView.Reload();
                 }
                 Repaint();

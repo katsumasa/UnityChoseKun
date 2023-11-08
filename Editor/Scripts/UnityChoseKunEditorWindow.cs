@@ -149,7 +149,7 @@ namespace Utj.UnityChoseKun.Editor
             
             this.titleContent = Styles.TitleContent;
             this.wantsMouseMove = true;
-            this.autoRepaintOnSceneChange = true;
+            this.autoRepaintOnSceneChange = true;            
         }
     
         protected override void OnDisable()
