@@ -278,7 +278,10 @@ namespace Utj.UnityChoseKun
                     }
                     EditorGUILayout.Space();
 
-                    hierarchyTreeView.searchString = m_searchField.OnToolbarGUI(hierarchyTreeView.searchString);
+                    if (m_searchField != null)
+                    {
+                        hierarchyTreeView.searchString = m_searchField.OnToolbarGUI(hierarchyTreeView.searchString);
+                    }
                 }
 
                 var rect = EditorGUILayout.GetControlRect(false, position.height - 16);
