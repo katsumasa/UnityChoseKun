@@ -153,7 +153,14 @@ namespace Utj.UnityChoseKun
                     if (mInstance == null)
                     {
                         mInstance = new InspectorView();
+                        var window = (PlayerHierarchyWindow)EditorWindow.GetWindow(typeof(PlayerHierarchyWindow));
+                        if (window != null)
+                        {
+                            window.selectionChangedCB = mInstance.SelectionChangedCB;
+                        }
                     }
+                    
+
                     return mInstance;
                 }
             }
@@ -170,12 +177,7 @@ namespace Utj.UnityChoseKun
                 {
                     PlayerHierarchyWindow.Create();
                 }
-#endif
-                var window = (PlayerHierarchyWindow)EditorWindow.GetWindow(typeof(PlayerHierarchyWindow));
-                if (window != null)
-                {
-                    window.selectionChangedCB = SelectionChangedCB;
-                }
+#endif                
                 m_selectGameObujectKunID = -1;
             }
 
