@@ -33,9 +33,13 @@ namespace Utj.UnityChoseKun.Editor
 
     /// <summary>
     /// UnityChoseKunのEditorWindow
-    /// </summary>
+    /// </summary>   
     public class UnityChoseKunEditorWindow : RemoteConnectEditorWindow
     {
+        delegate void Task();
+        delegate void OnMessageFunc(BinaryReader binaryReader);
+
+
         private static class Styles
         {                    
             public static readonly GUIContent TitleContent = new GUIContent("Player Inspector", (Texture2D)EditorGUIUtility.Load("d_UnityEditor.InspectorWindow"));
@@ -88,36 +92,56 @@ namespace Utj.UnityChoseKun.Editor
 #endif
         };
 
-        static UnityChoseKunEditorWindow m_Instance;
+        [SerializeReference] static UnityChoseKunEditorWindow m_Instance;
         public static UnityChoseKunEditorWindow Instance
         {
             get
-            {
-                m_Instance = (UnityChoseKunEditorWindow)EditorWindow.GetWindow(typeof(UnityChoseKunEditorWindow));
+            {         
+                if(m_Instance == null)
+                {                    
+                    m_Instance = EditorWindow.CreateWindow<UnityChoseKunEditorWindow>();
+                }                
                 return m_Instance;
             }
         }
-
-
-        delegate void Task();
-        delegate void OnMessageFunc(BinaryReader binaryReader);
-        
-                
-        int                m_ToolBarIdx = 0;                                
-        Vector2            m_ScrollPos;
+                       
+        [SerializeField] int m_ToolBarIdx = 0;
+        [SerializeField] Vector2 m_ScrollPos;
 
 
         [MenuItem("Window/UTJ/UnityChoseKun/Player Inspector")]
-        static void Inite()
-        {
-            m_Instance = (UnityChoseKunEditorWindow)EditorWindow.GetWindow(typeof(UnityChoseKunEditorWindow));
-            m_Instance.titleContent = Styles.TitleContent;
-            m_Instance.wantsMouseMove = true;
-            m_Instance.autoRepaintOnSceneChange = true;
-            m_Instance.Show();            
+        public static void Inite()
+        {            
+            Instance.Show();            
+            Instance.Focus();
         }
 
-        
+        void Awake()
+        {            
+            if(m_Instance != null)             
+            {
+                Close();
+            }            
+        }
+
+        private void Update()
+        {
+            // 自身のClassに変更があるとSerializeReferenceを使用していてもホットリロードが出来ない。(m_Instanceがnullになる)
+            // そこでm_Instanceと自身が異なっている場合は変更前のClassである筈なのでこのクラスを閉じる
+            if (m_Instance != this)
+            {
+                Close();
+            }
+        }
+
+        void OnDestroy()
+        {           
+            if(m_Instance == this)
+            {
+                m_Instance = null;
+            }
+        }
+
         /// <summary>
         /// 描画処理
         /// </summary>
@@ -149,9 +173,10 @@ namespace Utj.UnityChoseKun.Editor
             
             this.titleContent = Styles.TitleContent;
             this.wantsMouseMove = true;
-            this.autoRepaintOnSceneChange = true;
+            this.autoRepaintOnSceneChange = true;            
         }
     
+
         protected override void OnDisable()
         {            
             base.OnDisable();

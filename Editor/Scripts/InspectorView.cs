@@ -154,6 +154,8 @@ namespace Utj.UnityChoseKun
                     {
                         mInstance = new InspectorView();
                     }
+
+
                     return mInstance;
                 }
             }
@@ -171,11 +173,6 @@ namespace Utj.UnityChoseKun
                     PlayerHierarchyWindow.Create();
                 }
 #endif
-                var window = (PlayerHierarchyWindow)EditorWindow.GetWindow(typeof(PlayerHierarchyWindow));
-                if (window != null)
-                {
-                    window.selectionChangedCB = SelectionChangedCB;
-                }
                 m_selectGameObujectKunID = -1;
             }
 
@@ -285,12 +282,10 @@ namespace Utj.UnityChoseKun
                 }
                 var window = (PlayerHierarchyWindow)EditorWindow.GetWindow(typeof(PlayerHierarchyWindow));
                 if (window != null)
-                {
-                    window.selectionChangedCB = SelectionChangedCB;
+                {                    
                     window.sceneManagerKun = sceneManagerKun;
                     window.Reload();
                 }
-
             }
 
 
@@ -298,7 +293,7 @@ namespace Utj.UnityChoseKun
             /// 
             /// </summary>
             /// <param name="selectedIds"></param>
-            void SelectionChangedCB(IList<int> selectedIds)
+            public void SelectionChangedCB(IList<int> selectedIds)
             {
 #if UNITY_2019_1_OR_NEWER
                 if (!EditorWindow.HasOpenInstances<PlayerHierarchyWindow>())

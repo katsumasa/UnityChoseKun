@@ -37,14 +37,14 @@ namespace Utj.UnityChoseKun
     using Engine;
     using Engine.Rendering;
     using Engine.Rendering.Universal;
+    using UnityEditor.PackageManager.UI;
 
 
     namespace Editor
-    {
+    {  
         /// <summary>
         /// Hierarchyを表示する為のClass
-        /// </summary>
-        
+        /// </summary>        
         public class PlayerHierarchyWindow : EditorWindow
         {
             public static class Styles
@@ -53,7 +53,7 @@ namespace Utj.UnityChoseKun
 #if UNITY_2019_1_OR_NEWER
                 public static readonly GUIContent NetworkMessages = new GUIContent("Reload", (Texture2D)EditorGUIUtility.Load("d_Profiler.NetworkMessages@2x"), "Hierarchyの情報を取得");
 #else
-            public static readonly GUIContent NetworkMessages = new GUIContent("Reload","Hierarchyの情報を取得");
+                public static readonly GUIContent NetworkMessages = new GUIContent("Reload","Hierarchyの情報を取得");
 #endif
                 public static readonly GUIContent Rename = new GUIContent("Rename");
                 public static readonly GUIContent Duplicate = new GUIContent("Duplicate");
@@ -68,13 +68,23 @@ namespace Utj.UnityChoseKun
             delegate void Task();
             delegate void OnMessageFunc(string json);
 
+            [SerializeReference] static PlayerHierarchyWindow m_instance;
+
+            public static PlayerHierarchyWindow Instance 
+            {
+                get
+                {
+                    if (m_instance == null)
+                    {
+                        m_instance = EditorWindow.CreateWindow<PlayerHierarchyWindow>();
+                    }
+                    return m_instance;
+                }
+            }
 
             SearchField m_searchField;
-            TreeViewState m_treeViewState;
-            HierarchyTreeView m_hierarchyTreeView;
-            HierarchyTreeView.SelectionChangedCB m_selectionChangedCB;
-
-
+            [SerializeReference] TreeViewState m_treeViewState;
+            [SerializeReference] HierarchyTreeView m_hierarchyTreeView;
 
             TreeViewState treeViewState
             {
@@ -94,19 +104,12 @@ namespace Utj.UnityChoseKun
                     return m_hierarchyTreeView;
                 }
 
-                set { m_hierarchyTreeView = value; }
-            }
-
-
-            public HierarchyTreeView.SelectionChangedCB selectionChangedCB
-            {
-                private get { return m_selectionChangedCB; }
-                set
-                {
-                    m_selectionChangedCB = value;
-                    hierarchyTreeView.selectionChangeCB = value;
+                set 
+                { 
+                    m_hierarchyTreeView = value; 
                 }
             }
+            
 
             public SceneManagerKun sceneManagerKun
             {
@@ -126,7 +129,6 @@ namespace Utj.UnityChoseKun
             }
 
 
-
             public int lastClickedID
             {
                 get
@@ -137,8 +139,7 @@ namespace Utj.UnityChoseKun
                     }
                     return treeViewState.lastClickedID;
                 }
-            }
-
+            }            
 
             // 関数の定義
 
@@ -148,12 +149,40 @@ namespace Utj.UnityChoseKun
             [MenuItem("Window/UTJ/UnityChoseKun/Player Hierarchy")]
             public static void Create()
             {
-                var window = (PlayerHierarchyWindow)EditorWindow.GetWindow(typeof(PlayerHierarchyWindow));
-                window.titleContent = Styles.TitleContent;
-                window.wantsMouseMove = true;
-                window.autoRepaintOnSceneChange = true;                
-                window.OnEnable();
-                window.Show();
+                Instance.Show();
+                Instance.Focus();
+            }
+
+
+            private void Awake()
+            {
+                if (m_instance != null)                
+                {
+                    Close();
+                }
+            }
+
+
+            private void Update()
+            {
+                // 自身のClassに変更があるとSerializeReferenceを使用していてもホットリロードが出来ない。(m_Instanceがnullになる)
+                // そこでm_Instanceと自身が異なっている場合は変更前のClassである筈なのでこのクラスを閉じる
+                if (m_instance != this)
+                {
+                    Close();
+                }
+            }
+
+
+            void OnDestroy()
+            {
+                if(m_instance == this)
+                {
+                    m_treeViewState = null;
+                    m_hierarchyTreeView = null;
+                    m_searchField = null;
+                    m_instance = null;
+                }
             }
 
 
@@ -161,44 +190,35 @@ namespace Utj.UnityChoseKun
             /// 表示内容のリロード
             /// </summary>
             public void Reload()
-            {
-                //if(GraphicsSettingsKun.instance == null)
-                {
-                    Debug.Log("Reload");
-                    UnityChoseKunEditor.SendMessage<LayerMaskKun>(UnityChoseKun.MessageID.LayerMaskPull, null);
-                    UnityChoseKunEditor.SendMessage<GraphicsSettingsKun>(UnityChoseKun.MessageID.GraphicsSettingsPull, null);
+            {                
+                UnityChoseKunEditor.SendMessage<LayerMaskKun>(UnityChoseKun.MessageID.LayerMaskPull, null);
+                UnityChoseKunEditor.SendMessage<GraphicsSettingsKun>(UnityChoseKun.MessageID.GraphicsSettingsPull, null);
 #if UNITY_2021_2_OR_NEWER
-                    UnityChoseKunEditor.SendMessage<UniversalRenderPipelineGlobalSettingsKun>(UnityChoseKun.MessageID.UniversalRenderPipelineGlobalSettingsPull,null);
+                UnityChoseKunEditor.SendMessage<UniversalRenderPipelineGlobalSettingsKun>(UnityChoseKun.MessageID.UniversalRenderPipelineGlobalSettingsPull,null);
 #endif
-                    UnityChoseKunEditor.SendMessage<UniversalRenderPipelineKun>(UnityChoseKun.MessageID.UniversalRenderPipelinePull, null);
-                }
+                UnityChoseKunEditor.SendMessage<UniversalRenderPipelineKun>(UnityChoseKun.MessageID.UniversalRenderPipelinePull, null);                
                 
-
                 if (hierarchyTreeView != null)
                 {
-                    hierarchyTreeView.selectionChangeCB = selectionChangedCB;
+                    hierarchyTreeView.selectionChangeCB = InspectorView.instance.SelectionChangedCB;                    
                     hierarchyTreeView.Reload();
                 }
                 Repaint();
             }
 
 
-            private void OnEnable()
-            {
-                var window = (PlayerHierarchyWindow)EditorWindow.GetWindow(typeof(PlayerHierarchyWindow));
+            public void OnEnable()
+            {                
+                m_treeViewState = new TreeViewState();                
+                m_hierarchyTreeView = new HierarchyTreeView(m_treeViewState);
+                // Reloadの前にSearchFieldを生成する必要がある
+                m_searchField = new SearchField();
+                m_searchField.downOrUpArrowKeyPressed += hierarchyTreeView.SetFocusAndEnsureSelectedItem;
+                Reload();
 
                 this.titleContent = Styles.TitleContent;
                 this.wantsMouseMove = true;
                 this.autoRepaintOnSceneChange = true;
-
-                m_treeViewState = new TreeViewState();                
-                m_hierarchyTreeView = new HierarchyTreeView(m_treeViewState);
-
-
-                Reload();
-                
-                m_searchField = new SearchField();
-                m_searchField.downOrUpArrowKeyPressed += hierarchyTreeView.SetFocusAndEnsureSelectedItem;                
             }
 
 
@@ -206,13 +226,8 @@ namespace Utj.UnityChoseKun
             {            
                 m_treeViewState = null;
                 m_hierarchyTreeView = null;
-                m_searchField = null;
-            }
-
-
-            private void OnDestroy()
-            {
-            }
+                m_searchField = null;                
+            }            
 
 
             private void OnGUI()
@@ -221,13 +236,12 @@ namespace Utj.UnityChoseKun
                 var evt = Event.current;
                 if (evt.type == EventType.ContextClick)
                 {
-                    // MouseがWindow無いに入っていればMenuを表示する
-                    var window = (PlayerHierarchyWindow)EditorWindow.GetWindow(typeof(PlayerHierarchyWindow));
+                    // MouseがWindow無いに入っていればMenuを表示する                    
 #if UNITY_2019_1_OR_NEWER
-                    if (window.rootVisualElement.localBound.Contains(evt.mousePosition))
+                    if (Instance.rootVisualElement.localBound.Contains(evt.mousePosition))
 #else
                 
-                if (this.GetRootVisualContainer().localBound.Contains(evt.mousePosition))
+                    if (this.GetRootVisualContainer().localBound.Contains(evt.mousePosition))
 #endif
                     {
                         var menu = new GenericMenu();
@@ -271,32 +285,30 @@ namespace Utj.UnityChoseKun
                     var contents = new GUIContent(Styles.NetworkMessages);
                     var v2 = EditorStyles.label.CalcSize(contents);
                     if (GUILayout.Button(contents, EditorStyles.toolbarButton, GUILayout.Width(v2.x + 8)))
-                    {
-                        // ChoseKunWindowを開く
-                        EditorWindow.GetWindow(typeof(UnityChoseKunEditorWindow));
+                    {                        
                         UnityChoseKunEditor.SendMessage(UnityChoseKun.MessageID.GameObjectPull);
                     }
                     EditorGUILayout.Space();
 
-                    hierarchyTreeView.searchString = m_searchField.OnToolbarGUI(hierarchyTreeView.searchString);
+                    if (m_searchField != null)
+                    {
+                        hierarchyTreeView.searchString = m_searchField.OnToolbarGUI(hierarchyTreeView.searchString);
+                    }
                 }
 
                 var rect = EditorGUILayout.GetControlRect(false, position.height - 16);
-                hierarchyTreeView.OnGUI(rect);
+                if (hierarchyTreeView != null) {
+                    hierarchyTreeView.OnGUI(rect);
+                }
             }
 
-
             private void CreateObjectCommon(HierarchyMessage.MessageID messageID, int instanceID)
-            {
-                // ChoseKunWindowを開く
-                EditorWindow.GetWindow(typeof(UnityChoseKunEditorWindow));
-
+            {                
                 var message = new HierarchyMessage();
                 message.messageID = messageID;
                 message.baseID = instanceID;
                 UnityChoseKunEditor.SendMessage<HierarchyMessage>(UnityChoseKun.MessageID.HierarchyPush, message);
             }
-
 
             /// <summary>
             /// Duplicate
@@ -307,17 +319,14 @@ namespace Utj.UnityChoseKun
                 CreateObjectCommon(HierarchyMessage.MessageID.Duplicate, (int)obj);
             }
 
-
             /// <summary>
             /// Delete
             /// </summary>
             /// <param name="obj"></param>
             private void DeleteCB(object obj)
             {
-
                 CreateObjectCommon(HierarchyMessage.MessageID.Delete, (int)obj);
             }
-
 
             /// <summary>
             /// Create
@@ -328,12 +337,10 @@ namespace Utj.UnityChoseKun
                 CreateObjectCommon(HierarchyMessage.MessageID.CreateEmpty, (int)obj);
             }
 
-
             private void CreateParticleSystem(object obj)
             {
                 CreateClassCommon(typeof(ParticleSystem), (int)obj);
             }
-
 
             private void CreateClassCommon(System.Type type, int instanceID)
             {
@@ -353,10 +360,6 @@ namespace Utj.UnityChoseKun
             /// <param name="primitiveType"></param>
             private void CreatePrimitiveCommon(HierarchyMessage.MessageID messageID, int instanceID, PrimitiveType primitiveType)
             {
-                // ChoseKunWindowを開く
-                EditorWindow.GetWindow(typeof(UnityChoseKunEditorWindow));
-
-
                 var message = new HierarchyMessage();
                 message.messageID = HierarchyMessage.MessageID.CreatePrimitive;
                 message.baseID = instanceID;

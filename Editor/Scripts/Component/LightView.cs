@@ -514,21 +514,6 @@ namespace Utj.UnityChoseKun
                 EditorGUI.BeginChangeCheck();
                 DrawType(true);
 
-
-#if !UNITY_2023_1_OR_NEWER
-                // Enlightenの特殊処理
-                // Unity2023以降ではEnlightenが廃止になった
-#if UNITY_2020_1_OR_NEWER
-#pragma warning disable 618
-                if (Lightmapping.lightingSettings.lightmapper == UnityEngine.LightingSettings.Lightmapper.Enlighten && lightKun.type == LightType.Disc)
-#pragma warning restore 618
-                    EditorGUILayout.HelpBox(StylesEx.noDiscLightInEnlighten.text, MessageType.Warning);
-#else
-                if (LightmapEditorSettings.lightmapper == LightmapEditorSettings.Lightmapper.Enlighten && lightKun.type == LightType.Disc)
-                    EditorGUILayout.HelpBox(StylesEx.noDiscLightInEnlighten.text, MessageType.Warning);
-#endif
-#endif
-
                 EditorGUILayout.Space();
 
                 if (lightKun.type == LightType.Spot)
