@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.5] - 2023-11-10
+
+### Fixed
+
+- SceneにLightmapが存在しない場合、Light Viewで例外が発生していた不具合を修正
+- PlayerInspecterWindowやPlayerHierarchyWindowが複数表示されてしまう場合、強制的に閉じる処理を追加
+- その他、軽微な不具合を修正
+
 ## [0.2.4] - 2023-06-08
 
 ### Fixed
