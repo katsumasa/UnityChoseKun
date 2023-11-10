@@ -106,9 +106,16 @@ namespace Utj.UnityChoseKun.Engine
             {
                 using (BinaryReader binaryReader = new BinaryReader(memory))
                 {                   
-                    var messageID = (UnityChoseKun.MessageID)binaryReader.ReadInt32();                        
-                    var func = onMessageFuncDict[messageID];
-                    func(binaryReader);                 
+                    var messageID = (UnityChoseKun.MessageID)binaryReader.ReadInt32();
+                    if (onMessageFuncDict.ContainsKey(messageID))
+                    {
+                        var func = onMessageFuncDict[messageID];
+                        func(binaryReader);
+                    }
+                    else
+                    {
+                        Debug.Log($"Invalid messageID:{messageID}");
+                    }
                 }
             }            
         }

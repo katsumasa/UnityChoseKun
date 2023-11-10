@@ -9,7 +9,7 @@ using UnityEditor.IMGUI.Controls;
 namespace Utj.UnityChoseKun.Editor
 {
     using Utj.UnityChoseKun.Engine;
-
+      
 
     /// <summary>
     /// Hierarchyを表示する為のClass
@@ -17,6 +17,7 @@ namespace Utj.UnityChoseKun.Editor
     /// https://docs.unity3d.com/ja/2019.4/Manual/TreeViewAPI.html
     /// https://docs.unity3d.com/ja/2019.4/ScriptReference/IMGUI.Controls.TreeView.html
     /// </summary>
+    [System.Serializable]
     public class HierarchyTreeView : TreeView
     {
         public delegate void SelectionChangedCB(IList<int> selectedIds);
@@ -36,9 +37,8 @@ namespace Utj.UnityChoseKun.Editor
 
 
         
-        [SerializeField] SelectionChangedCB m_selectionChangeCB;
-
-        SceneManagerKun m_sceneManagerKun;
+        [SerializeReference] SelectionChangedCB m_selectionChangeCB;
+        [SerializeReference] SceneManagerKun m_sceneManagerKun;
 
         public SceneManagerKun sceneManagerKun
         {
