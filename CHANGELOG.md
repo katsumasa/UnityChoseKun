@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.2.6] - 2024-08-30
+
+### Fixed
+
+
+### Changed
+
+- UnityEngine.Profiling.Profilerモードを追加
+
 ## [0.2.5] - 2023-11-10
 
 ### Fixed
