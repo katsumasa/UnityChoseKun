@@ -4,6 +4,7 @@
 
 ### Fixed
 
+- UnityEngine.Rendering.GraphicsSettingsのViewが壊れていた不具合を修正
 
 ### Changed
 

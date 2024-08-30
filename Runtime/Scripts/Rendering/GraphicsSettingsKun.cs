@@ -229,6 +229,7 @@ namespace Utj.UnityChoseKun
                 public GraphicsSettingsKun(bool isSet)
                 {
                     dirty = false;
+                    mTransparencySortAxis = new Vector3Kun();
                     if (isSet)
                     {
 #if UNITY_2019_1_OR_NEWER
