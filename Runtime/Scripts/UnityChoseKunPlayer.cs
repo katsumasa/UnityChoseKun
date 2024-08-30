@@ -50,6 +50,7 @@ namespace Utj.UnityChoseKun.Engine
             {UnityChoseKun.MessageID.UniversalRenderPipelineGlobalSettingsPull,UniversalRenderPipelineGlobalSettingsPlayer.OnMessageEventPull},
             {UnityChoseKun.MessageID.UniversalRenderPipelineGlobalSettingsPush,UniversalRenderPipelineGlobalSettingsPlayer.OnMessageEventPush},
 #endif
+            {UnityChoseKun.MessageID.ProfilerPlayerPull, ProfilerPlayer.OnMessageEventPull},
         };
 
 

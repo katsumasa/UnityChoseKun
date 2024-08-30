@@ -65,6 +65,7 @@ namespace Utj.UnityChoseKun.Editor
             { "UnityEngine.SystemInfo" , SystemInfoView.instance.OnGUI},
             { "UnityEngine.Texture",     TexturesView.instance.OnGUI},
             { "UnityEngine.Time",        TimeView.instance.OnGUI},
+            { "UnityEngine.Profiling.Profiler",    ProfilerView.instance.OnGUI},
             // 機能をここに追加していく                                              
         };
 
@@ -90,6 +91,7 @@ namespace Utj.UnityChoseKun.Editor
 #if UNITY_2021_2_OR_NEWER
             {UnityChoseKun.MessageID.UniversalRenderPipelineGlobalSettingsPull,UniversalRenderPipelineGlobalSettingsView.instance.OnMessageEvent},
 #endif
+            {UnityChoseKun.MessageID.ProfilerPlayerPull,   ProfilerView.instance.OnMessageEvent},
         };
 
         [SerializeReference] static UnityChoseKunEditorWindow m_Instance;

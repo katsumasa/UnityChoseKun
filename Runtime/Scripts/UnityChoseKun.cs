@@ -77,7 +77,8 @@ namespace Utj.UnityChoseKun
             UniversalRenderPipelineGlobalSettingsPull,
             UniversalRenderPipelineGlobalSettingsPush,
             UniversalRenderPipelinePull,
-            UniversalRenderPipelinePush,                        
+            UniversalRenderPipelinePush,
+            ProfilerPlayerPull,
         }
 
 

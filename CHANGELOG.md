@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.2.6] - 2024-08-30
+
+### Fixed
+
+- UnityEngine.Rendering.GraphicsSettingsのViewが壊れていた不具合を修正
+
+### Changed
+
+- UnityEngine.Profiling.Profilerモードを追加
+
 ## [0.2.5] - 2023-11-10
 
 ### Fixed

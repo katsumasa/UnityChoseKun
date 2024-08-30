@@ -33,7 +33,7 @@ https://user-images.githubusercontent.com/29646672/220570479-85ea8eff-75cf-401b-
   - Unity2020.3.27f1
   - Unity2021.2.15f1
   - Unity2021.3.1f1
-  - Unity2022.3.0f1
+  - Unity2022.3.43f1
 - プラットフォーム
   - Android
     - Pixel3XL
@@ -373,6 +373,16 @@ Scene内から参照されているTextureとResourcesに含まれているTextu
 - [Push] : 編集した内容を実機上に書き戻します。
 
 ※編集可能なメンバーはRead Only以外のメンバーに限定されます。詳しくはスクリプトリファレンスをご確認下さい。
+
+#### UnityEngine.Profiling.Profiler
+
+UnityEngine.Profiling.ProfilerクラスのAPIを使用してMemory関連の情報を取得します。
+
+<img width="400" alt="image" src="https://github.com/user-attachments/assets/cef5ef47-0d27-4f75-a6de-8cbac1d01476">
+
+- [Pull] : 実行中にのアプリケーションからMemory関連の情報を取得します。
+- [Export Objects RuntimeMemory] : `Resources.FindObjectsOfTypeAll(typeof(UnityEngine.Object))` で取得した全てのUnityEngine.Objectに対する`Profiler.GetRuntimeMemorySizeLong`の結果をCSV形式で出力します。
+
 
 ## FAQ
 
