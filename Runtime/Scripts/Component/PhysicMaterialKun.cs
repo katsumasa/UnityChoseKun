@@ -8,10 +8,18 @@ namespace Utj.UnityChoseKun
     [System.Serializable]
     public class PhysicMaterialKun : ObjectKun
     {
+#if UNITY_6000_0_OR_NEWER
+        [SerializeField] public PhysicsMaterialCombine bounceCombine;
+#else
         [SerializeField] public PhysicMaterialCombine bounceCombine;
+#endif
         [SerializeField] public float bounciness;
         [SerializeField] public float dynamicFriction;
+#if UNITY_6000_0_OR_NEWER
+        [SerializeField] public PhysicsMaterialCombine frictionCombine;
+#else
         [SerializeField] public PhysicMaterialCombine frictionCombine;
+#endif
         [SerializeField] public float staticFriction;
 
 
@@ -25,7 +33,11 @@ namespace Utj.UnityChoseKun
         /// コンストラクタ
         /// </summary>
         /// <param name="physicMaterial">PhysicMaterialオブジェクト</param>
+#if UNITY_6000_0_OR_NEWER
+        public PhysicMaterialKun(PhysicsMaterial physicMaterial):base(physicMaterial)
+#else
         public PhysicMaterialKun(PhysicMaterial physicMaterial):base(physicMaterial)
+#endif
         {
             if (physicMaterial != null)
             {
@@ -47,7 +59,11 @@ namespace Utj.UnityChoseKun
         {
             if (WriteBack(obj))
             {
+#if UNITY_6000_0_OR_NEWER
+                var physicMaterial = obj as PhysicsMaterial;
+#else
                 var physicMaterial = obj as PhysicMaterial;
+#endif
                 if (physicMaterial)
                 {
                     physicMaterial.bounceCombine = bounceCombine;
@@ -80,10 +96,18 @@ namespace Utj.UnityChoseKun
         public override void Deserialize(BinaryReader binaryReader)
         {
             base.Deserialize(binaryReader);
+#if UNITY_6000_0_OR_NEWER
+            bounceCombine = (PhysicsMaterialCombine)binaryReader.ReadInt32();
+#else
             bounceCombine = (PhysicMaterialCombine)binaryReader.ReadInt32();
+#endif
             bounciness = binaryReader.ReadSingle();
             dynamicFriction = binaryReader.ReadSingle();
+#if UNITY_6000_0_OR_NEWER
+            frictionCombine = (PhysicsMaterialCombine)binaryReader.ReadInt32();
+#else
             frictionCombine = (PhysicMaterialCombine)binaryReader.ReadInt32();
+#endif
             staticFriction = binaryReader.ReadSingle();
         }
 

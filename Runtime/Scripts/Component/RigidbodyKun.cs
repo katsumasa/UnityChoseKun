@@ -8,8 +8,14 @@ namespace Utj.UnityChoseKun.Engine
     public class RigidbodyKun : ComponentKun
     {        
         [SerializeField] public float mass;
+#if UNITY_6000_0_OR_NEWER
+        [SerializeField] public float linearDamping;
+        [SerializeField] public float angularDamping;
+
+#else
         [SerializeField] public float drag;
         [SerializeField] public float angularDrag;
+#endif
         [SerializeField] public bool useGravity;
         [SerializeField] public bool isKinematic;
         [SerializeField] public RigidbodyInterpolation interpolation;
@@ -34,8 +40,13 @@ namespace Utj.UnityChoseKun.Engine
             if (rigidbody)
             {
                 mass = rigidbody.mass;
+#if UNITY_6000_0_OR_NEWER
+                linearDamping = rigidbody.linearDamping;
+                angularDamping = rigidbody.angularDamping;
+#else
                 drag = rigidbody.drag;
                 angularDrag = rigidbody.angularDrag;
+#endif
                 useGravity = rigidbody.useGravity;
                 isKinematic = rigidbody.isKinematic;
                 interpolation = rigidbody.interpolation;
@@ -56,8 +67,13 @@ namespace Utj.UnityChoseKun.Engine
             {
                 Rigidbody rigidbody = component as Rigidbody;
                 rigidbody.mass = mass;
-                rigidbody.drag = drag;
-                rigidbody.angularDrag = angularDrag;
+#if UNITY_6000_0_OR_NEWER
+                rigidbody.linearDamping = linearDamping;
+                rigidbody.angularDamping = angularDamping;
+#else
+                rigidbody.linearDamping = drag;
+                rigidbody.angularDamping = angularDrag;
+#endif
                 rigidbody.useGravity = useGravity;
                 rigidbody.isKinematic = isKinematic;
                 rigidbody.interpolation = interpolation;
@@ -77,8 +93,14 @@ namespace Utj.UnityChoseKun.Engine
         {
             base.Serialize(binaryWriter);
             binaryWriter.Write(mass);
+#if UNITY_6000_0_OR_NEWER
+            binaryWriter.Write(linearDamping);
+            binaryWriter.Write(angularDamping);
+
+#else
             binaryWriter.Write(drag);
             binaryWriter.Write(angularDrag);
+#endif
             binaryWriter.Write(useGravity);
             binaryWriter.Write(isKinematic);
             binaryWriter.Write((int)interpolation);
@@ -96,8 +118,13 @@ namespace Utj.UnityChoseKun.Engine
             base.Deserialize(binaryReader);
 
             mass = binaryReader.ReadSingle();
+#if UNITY_6000_0_OR_NEWER
+            linearDamping = binaryReader.ReadSingle();
+            angularDamping = binaryReader.ReadSingle();
+#else
             drag = binaryReader.ReadSingle();
             angularDrag = binaryReader.ReadSingle();
+#endif
             useGravity = binaryReader.ReadBoolean();
             isKinematic = binaryReader.ReadBoolean();
             interpolation = (RigidbodyInterpolation)binaryReader.ReadInt32();
@@ -122,6 +149,16 @@ namespace Utj.UnityChoseKun.Engine
             {
                 return false;
             }
+#if UNITY_6000_0_OR_NEWER
+            if (linearDamping.Equals(other.linearDamping) == false)
+            {
+                return false;
+            }
+            if (angularDamping.Equals(other.angularDamping) == false)
+            {
+                return false;
+            }
+#else
             if (drag.Equals(other.drag) == false)
             {
                 return false;
@@ -130,6 +167,7 @@ namespace Utj.UnityChoseKun.Engine
             {
                 return false;
             }
+#endif
             if (useGravity.Equals(other.useGravity) == false)
             {
                 return false;
