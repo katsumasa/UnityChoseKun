@@ -16,7 +16,7 @@ namespace Utj.UnityChoseKun.Engine
         [SerializeField] public int sortingLayerID;
         [SerializeField] public string sortingLayerName;
 
-        public CanvasKun() : this(null) { }
+        public CanvasKun() : this(null) { sortingLayerName = ""; }
 
         public CanvasKun(Component component):base(component)
         {

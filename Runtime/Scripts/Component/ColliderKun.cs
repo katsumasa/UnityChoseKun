@@ -27,7 +27,7 @@ namespace Utj.UnityChoseKun.Engine
         /// <summary>
         /// コンストラクタ
         /// </summary>
-        public ColliderKun() : this(null) { }
+        public ColliderKun() : this(null) { m_bounds = new BoundsKun(); material = ""; }
 
 
         /// <summary>

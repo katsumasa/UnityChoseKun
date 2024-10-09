@@ -609,9 +609,12 @@ namespace Utj.UnityChoseKun
                 {
                     return false;
                 }
-                if (mCookie.Equals(otherKun.mCookie) == false)
+                if (mCookie != null)
                 {
-                    return false;
+                    if (mCookie.Equals(otherKun.mCookie) == false)
+                    {
+                        return false;
+                    }
                 }
                 if (mShadows.Equals(otherKun.mShadows) == false)
                 {
