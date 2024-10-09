@@ -68,8 +68,13 @@ namespace Utj.UnityChoseKun
                     using (new EditorGUI.IndentLevelScope())
                     {
                         rigidbodyKun.mass = EditorGUILayout.FloatField(Styles.Mass, rigidbodyKun.mass);
+#if UNITY_6000_0_OR_NEWER
+                        rigidbodyKun.linearDamping = EditorGUILayout.FloatField(Styles.Drag, rigidbodyKun.linearDamping);
+                        rigidbodyKun.angularDamping = EditorGUILayout.FloatField(Styles.AngularDrag, rigidbodyKun.angularDamping);
+#else
                         rigidbodyKun.drag = EditorGUILayout.FloatField(Styles.Drag, rigidbodyKun.drag);
                         rigidbodyKun.angularDrag = EditorGUILayout.FloatField(Styles.AngularDrag, rigidbodyKun.angularDrag);
+#endif
                         rigidbodyKun.useGravity = EditorGUILayout.Toggle(Styles.UseGravity, rigidbodyKun.useGravity);
                         rigidbodyKun.isKinematic = EditorGUILayout.Toggle(Styles.IsKinematic, rigidbodyKun.isKinematic);
                         rigidbodyKun.interpolation = (RigidbodyInterpolation)EditorGUILayout.EnumPopup(Styles.Interpolate, rigidbodyKun.interpolation);

@@ -235,7 +235,15 @@ namespace Utj.UnityChoseKun
 #if UNITY_2019_1_OR_NEWER
                         mCurrentRenderPipelineIdx = -1;
                         mDefaultRenderPipelineIdx = -1;
-
+#if UNITY_6000_0_OR_NEWER
+                        if (GraphicsSettings.defaultRenderPipeline == null)
+                        {
+                            mRenderPipelineAssetType = RenderPipelineAssetType.NONE;
+                        } 
+                        else
+                        {
+                            var type = GraphicsSettings.defaultRenderPipeline.GetType();
+#else
                         if (GraphicsSettings.renderPipelineAsset == null)
                         {
                             mRenderPipelineAssetType = RenderPipelineAssetType.NONE;
@@ -243,7 +251,7 @@ namespace Utj.UnityChoseKun
                         else
                         {
                             var type = GraphicsSettings.renderPipelineAsset.GetType();
-
+#endif
                             if (type.Name == "UniversalRenderPipelineAsset")
                             {
                                 mRenderPipelineAssetType = RenderPipelineAssetType.URP;
@@ -284,7 +292,7 @@ namespace Utj.UnityChoseKun
 #endif
 
 #if UNITY_2020_1_OR_NEWER
-                        mVideoShadersIncludeMode = GraphicsSettings.videoShadersIncludeMode;
+                            mVideoShadersIncludeMode = GraphicsSettings.videoShadersIncludeMode;
 #endif
 
 #if UNITY_2020_2_OR_NEWER
