@@ -132,8 +132,12 @@ namespace Utj.UnityChoseKun.Engine
         /// <param name="instanceID"></param>
         /// <returns></returns>
         public Transform GetTransform(int instanceID)
-        {            
+        {
+#if UNITY_2023_1_OR_NEWER
+            var transform = Transform.FindObjectsByType(typeof(Transform),FindObjectsSortMode.None).FirstOrDefault(q => q.GetInstanceID() == instanceID) as Transform;
+#else
             var transform = Transform.FindObjectsOfType<Transform>().FirstOrDefault(q => q.GetInstanceID() == instanceID);
+#endif
             return transform;
         }
 
