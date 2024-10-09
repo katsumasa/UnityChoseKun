@@ -408,6 +408,8 @@ namespace Utj.UnityChoseKun
             public void DrawRenderingLayerMask()
             {
 #if UNITY_2019_1_OR_NEWER
+#if !UNITY_6000_0_OR_NEWER
+
                 var srpAsset = Engine.Rendering.GraphicsSettingsKun.currentRenderPipeline;
                 bool usingSRP = srpAsset != null;
                 if (!usingSRP)
@@ -423,6 +425,7 @@ namespace Utj.UnityChoseKun
                 {
                     lightKun.renderingLayerMask = renderingLayerMask;
                 }
+#endif
 #endif
             }
 
