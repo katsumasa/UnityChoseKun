@@ -150,7 +150,9 @@ namespace Utj.UnityChoseKun
             LightShadowCasterMode mLightShadowCasterMode;
             int mShadowCustomResolution;
 #if UNITY_2019_1_OR_NEWER
+#if !UNITY_2023_1_OR_NEWER
             LightShape mLightShape;
+#endif
             float mColorTemperature;
             bool mUseColorTemperature;
             int mRenderingLayerMask;
@@ -203,11 +205,13 @@ namespace Utj.UnityChoseKun
 
 
 #if UNITY_2019_1_OR_NEWER
+#if !UNITY_2023_1_OR_NEWER
             public LightShape lightShape
             {
                 get { return mLightShape; }
                 set { mLightShape = value; dirty = true; }
             }
+#endif
             public float colorTemperature
             {
                 get { return mColorTemperature; }
@@ -347,7 +351,9 @@ namespace Utj.UnityChoseKun
                     mShadowCustomResolution = light.shadowCustomResolution;
 
 #if UNITY_2019_1_OR_NEWER
+#if !UNITY_2023_1_OR_NEWER
                     mLightShape = light.shape;
+#endif
                     mUseColorTemperature = light.useColorTemperature;
                     mColorTemperature = light.colorTemperature;
                     mRenderingLayerMask = light.renderingLayerMask;
@@ -399,7 +405,9 @@ namespace Utj.UnityChoseKun
                         light.lightShadowCasterMode = mLightShadowCasterMode;
                         light.shadowCustomResolution = mShadowCustomResolution;
 #if UNITY_2019_1_OR_NEWER
+#if !UNITY_2023_1_OR_NEWER
                         light.shape = mLightShape;
+#endif
                         light.renderingLayerMask = mRenderingLayerMask;
                         light.colorTemperature = mColorTemperature;
                         light.useColorTemperature = mUseColorTemperature;
@@ -453,7 +461,9 @@ namespace Utj.UnityChoseKun
                 binaryWriter.Write((int)mLightShadowCasterMode);
                 binaryWriter.Write(mShadowCustomResolution);
 #if UNITY_2019_1_OR_NEWER
+#if !UNITY_2023_1_OR_NEWER
                 binaryWriter.Write((int)mLightShape);
+#endif
                 binaryWriter.Write(mColorTemperature);
                 binaryWriter.Write(mUseColorTemperature);
                 binaryWriter.Write(mRenderingLayerMask);
@@ -496,7 +506,9 @@ namespace Utj.UnityChoseKun
                 mLightShadowCasterMode = (LightShadowCasterMode)binaryReader.ReadInt32();
                 mShadowCustomResolution = binaryReader.ReadInt32();
 #if UNITY_2019_1_OR_NEWER
+#if !UNITY_2023_1_OR_NEWER
                 mLightShape = (LightShape)binaryReader.ReadInt32();
+#endif
                 mColorTemperature = binaryReader.ReadSingle();
                 mUseColorTemperature = binaryReader.ReadBoolean();
                 mRenderingLayerMask = binaryReader.ReadInt32();
@@ -546,10 +558,12 @@ namespace Utj.UnityChoseKun
                     return false;
                 }
 #if UNITY_2019_1_OR_NEWER
+#if !UNITY_2023_1_OR_NEWER
                 if (mLightShape != otherKun.mLightShape)
                 {
                     return false;
                 }
+#endif
                 if (mColorTemperature.Equals(otherKun.mColorTemperature) == false)
                 {
                     return false;
@@ -595,9 +609,12 @@ namespace Utj.UnityChoseKun
                 {
                     return false;
                 }
-                if (mCookie.Equals(otherKun.mCookie) == false)
+                if (mCookie != null)
                 {
-                    return false;
+                    if (mCookie.Equals(otherKun.mCookie) == false)
+                    {
+                        return false;
+                    }
                 }
                 if (mShadows.Equals(otherKun.mShadows) == false)
                 {

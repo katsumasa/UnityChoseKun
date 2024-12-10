@@ -406,9 +406,12 @@ namespace  Utj.UnityChoseKun.Engine
             {
                 return false;
             }
-            if(m_sensorSize.Equals(other.m_sensorSize) == false)            
+            if (m_sensorSize != null)
             {
-                return false;
+                if (m_sensorSize.Equals(other.m_sensorSize) == false)
+                {
+                    return false;
+                }
             }
             if (m_lensShift.Equals(other.m_lensShift) == false)
             {

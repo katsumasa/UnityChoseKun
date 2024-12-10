@@ -71,8 +71,8 @@ namespace Utj.UnityChoseKun.Engine
                 rigidbody.linearDamping = linearDamping;
                 rigidbody.angularDamping = angularDamping;
 #else
-                rigidbody.linearDamping = drag;
-                rigidbody.angularDamping = angularDrag;
+                rigidbody.drag = drag;
+                rigidbody.angularDrag = angularDrag;
 #endif
                 rigidbody.useGravity = useGravity;
                 rigidbody.isKinematic = isKinematic;

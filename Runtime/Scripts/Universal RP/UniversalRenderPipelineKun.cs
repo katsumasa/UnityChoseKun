@@ -49,9 +49,13 @@ namespace Utj.UnityChoseKun.Engine.Rendering
 
             public static int maxPerObjectLights
             {
+#if UNITY_2023_1_OR_NEWER
+                get => 8;
+#else
                 // No support to bitfield mask and int[] in gles2. Can't index fast more than 4 lights.
                 // Check Lighting.hlsl for more details.
                 get => (SystemInfoKun.graphicsDeviceType == GraphicsDeviceType.OpenGLES2) ? 4 : 8;
+#endif
             }
 
 

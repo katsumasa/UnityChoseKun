@@ -143,8 +143,12 @@ public class UnityChoseKunTest
     [Test]
     public void MaterialKunTest()
     {
-        UnityEditor.SceneManagement.EditorSceneManager.OpenScene("Assets/Scenes/Character Setup.unity");       
+        UnityEditor.SceneManagement.EditorSceneManager.OpenScene("Assets/Scenes/Character Setup.unity");
+#if UNITY_6000_0_OR_NEWER
+        var renderers = UnityEngine.Component.FindObjectsByType<Renderer>(FindObjectsSortMode.None);
+#else
         var renderers = UnityEngine.Component.FindObjectsOfType<Renderer>();
+#endif
         foreach (var renderer in renderers)
         {
             SerializerKunTest<MaterialKun>(new MaterialKun(renderer.sharedMaterial), new MaterialKun());
@@ -191,7 +195,11 @@ public class UnityChoseKunTest
     public void ShaderKunTest()
     {
         UnityEditor.SceneManagement.EditorSceneManager.OpenScene(mTestSceneName);
+#if UNITY_6000_0_OR_NEWER
+        var renderers = UnityEngine.Component.FindObjectsByType<Renderer>(FindObjectsSortMode.None);
+#else
         var renderers = UnityEngine.Component.FindObjectsOfType<Renderer>();
+#endif
         foreach (var renderer in renderers)
         {
             SerializerKunTest<ShaderKun>(new ShaderKun(renderer.sharedMaterial.shader), new ShaderKun());            
@@ -204,7 +212,11 @@ public class UnityChoseKunTest
     {
         UnityEditor.SceneManagement.EditorSceneManager.OpenScene(mTestSceneName);
         var scene = UnityEngine.SceneManagement.SceneManager.GetActiveScene();
+#if UNITY_6000_0_OR_NEWER
+        var transforms = UnityEngine.Component.FindObjectsByType<UnityEngine.Transform>(FindObjectsSortMode.None);
+#else
         var transforms = UnityEngine.Component.FindObjectsOfType<UnityEngine.Transform>();
+#endif
         foreach (var transform in transforms)
         {
             SerializerKunTest<TransformKun>(new TransformKun(transform), new TransformKun());
@@ -215,8 +227,12 @@ public class UnityChoseKunTest
     [Test]
     public void SkinnedMeshRendererKunTest()
     {
-        var scene = UnityEditor.SceneManagement.EditorSceneManager.OpenScene(mTestSceneName);        
+        var scene = UnityEditor.SceneManagement.EditorSceneManager.OpenScene(mTestSceneName);
+#if UNITY_6000_0_OR_NEWER
+        var components = UnityEngine.Component.FindObjectsByType<UnityEngine.SkinnedMeshRenderer>(FindObjectsSortMode.None);
+#else
         var components = UnityEngine.Component.FindObjectsOfType<UnityEngine.SkinnedMeshRenderer>();
+#endif
 
         foreach (var component in components)
         {
@@ -240,8 +256,11 @@ public class UnityChoseKunTest
     public void MeshRendererKunTest()
     {
         var scene = UnityEditor.SceneManagement.EditorSceneManager.OpenScene(mTestSceneName);
+#if UNITY_6000_0_OR_NEWER
+        var meshRendererskinnedMeshRenderer = UnityEngine.Component.FindFirstObjectByType<UnityEngine.MeshRenderer>();
+#else
         var meshRendererskinnedMeshRenderer = UnityEngine.Component.FindObjectOfType<UnityEngine.MeshRenderer>();
-
+#endif
         UnityEngine.Assertions.Assert.IsNotNull(meshRendererskinnedMeshRenderer);
         SerializerKunTest<MeshRendererKun>(new MeshRendererKun(meshRendererskinnedMeshRenderer),new MeshRendererKun());
     }
@@ -257,8 +276,11 @@ public class UnityChoseKunTest
     public void ParticleSystemKunTest()
     {
         var scene = UnityEditor.SceneManagement.EditorSceneManager.OpenScene(mTestSceneName);
+#if UNITY_6000_0_OR_NEWER
+        var components = UnityEngine.Component.FindObjectsByType<UnityEngine.ParticleSystem>(FindObjectsSortMode.None);
+#else
         var components = UnityEngine.Component.FindObjectsOfType<UnityEngine.ParticleSystem>();
-
+#endif
         foreach (var component in components)
         {
             SerializerKunTest<ParticleSystemKun>(new ParticleSystemKun(component), new ParticleSystemKun());

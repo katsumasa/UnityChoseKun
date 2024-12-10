@@ -26,11 +26,9 @@ namespace Utj.UnityChoseKun
             /// </summary>
             public class RenderPipelineAssetKun : ScriptableObjectKun
             {
-                
-
-
+#if !UNITY_6000_0_OR_NEWER
                 [SerializeField] public string[] renderingLayerMaskNames;
-
+#endif
                 [SerializeField] public MaterialKun defaultMaterial;
 
                 [SerializeField] public ShaderKun autodeskInteractiveShader;
@@ -75,7 +73,9 @@ namespace Utj.UnityChoseKun
                 {
                     if (renderPipelineAsset)
                     {
+#if !UNITY_6000_0_OR_NEWER
                         renderingLayerMaskNames = renderPipelineAsset.renderingLayerMaskNames;
+#endif
                         defaultMaterial = new MaterialKun(renderPipelineAsset.defaultMaterial);
                         autodeskInteractiveShader = new ShaderKun(renderPipelineAsset.autodeskInteractiveShader);
                         autodeskInteractiveTransparentShader = new ShaderKun(renderPipelineAsset.autodeskInteractiveTransparentShader);
@@ -105,7 +105,9 @@ namespace Utj.UnityChoseKun
                 public override void Deserialize(BinaryReader binaryReader)
                 {
                     base.Deserialize(binaryReader);
+#if !UNITY_6000_0_OR_NEWER
                     renderingLayerMaskNames = SerializerKun.DesirializeStrings(binaryReader);
+#endif
                     defaultMaterial = SerializerKun.DesirializeObject<MaterialKun>(binaryReader);
                     autodeskInteractiveShader = SerializerKun.DesirializeObject<ShaderKun>(binaryReader);
                     autodeskInteractiveTransparentShader = SerializerKun.DesirializeObject<ShaderKun>(binaryReader);
@@ -129,7 +131,9 @@ namespace Utj.UnityChoseKun
                 public override void Serialize(BinaryWriter binaryWriter)
                 {
                     base.Serialize(binaryWriter);
+#if !UNITY_6000_0_OR_NEWER
                     SerializerKun.Serialize(binaryWriter, renderingLayerMaskNames);
+#endif
                     SerializerKun.Serialize<MaterialKun>(binaryWriter, defaultMaterial);
                     SerializerKun.Serialize<ShaderKun>(binaryWriter, autodeskInteractiveShader);
                     SerializerKun.Serialize<ShaderKun>(binaryWriter, autodeskInteractiveTransparentShader);
@@ -164,11 +168,12 @@ namespace Utj.UnityChoseKun
                     {
                         return false;
                     }
-
+#if !UNITY_6000_0_OR_NEWER
                     if (renderingLayerMaskNames.Length != clone.renderingLayerMaskNames.Length)
                     {
                         return false;
                     }
+
                     for (var i = 0; i < renderingLayerMaskNames.Length; i++)
                     {
                         if (renderingLayerMaskNames[i] != clone.renderingLayerMaskNames[i])
@@ -176,7 +181,7 @@ namespace Utj.UnityChoseKun
                             return false;
                         }
                     }
-
+#endif
 
                     if (defaultMaterial.Equals(clone.defaultMaterial) == false)
                     {
